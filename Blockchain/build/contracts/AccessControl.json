@@ -1,0 +1,104 @@
+{
+  "contractName": "AccessControl",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/AccessControl.sol\":\"AccessControl\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/AccessControl.sol\":{\"keccak256\":\"0xe106c00676416c790e7530c598feeed79e2e3160f71ea8c4d26f42026eb4845b\",\"urls\":[\"bzzr://09ba6ac37b438c6027e7cf5b3459f400e8b51a893b49e77b265aba3eeed55021\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3fe6080604052600080fdfea165627a7a723058200d9040c36c26f32fd14f46929e16f69776a16f018f2aa1911f6faff98ac4f8720029",
+  "deployedBytecode": "0x6080604052600080fdfea165627a7a723058200d9040c36c26f32fd14f46929e16f69776a16f018f2aa1911f6faff98ac4f8720029",
+  "sourceMap": "28:33:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:33:0;;;;;;;",
+  "deployedSourceMap": "28:33:0:-;;;;;",
+  "source": "pragma solidity = 0.5.0;\r\n\r\ncontract AccessControl {\r\n    \r\n}",
+  "sourcePath": "C:/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/AccessControl.sol",
+  "ast": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/AccessControl.sol",
+    "exportedSymbols": {
+      "AccessControl": [
+        2
+      ]
+    },
+    "id": 3,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:0"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 2,
+        "linearizedBaseContracts": [
+          2
+        ],
+        "name": "AccessControl",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 3,
+        "src": "28:33:0"
+      }
+    ],
+    "src": "0:61:0"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/AccessControl.sol",
+    "exportedSymbols": {
+      "AccessControl": [
+        2
+      ]
+    },
+    "id": 3,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:0"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 2,
+        "linearizedBaseContracts": [
+          2
+        ],
+        "name": "AccessControl",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 3,
+        "src": "28:33:0"
+      }
+    ],
+    "src": "0:61:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.8",
+  "updatedAt": "2019-08-12T09:42:04.428Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

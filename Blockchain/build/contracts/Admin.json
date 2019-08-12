@@ -1,25 +1,25 @@
 {
   "contractName": "Admin",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol\":\"Admin\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol\":{\"keccak256\":\"0x99089483860815bd23f605ee4963d2f026f025bf30f186e1195b45fbf382cc02\",\"urls\":[\"bzzr://23ce67c203fb81024f3124f811e1e50179a552d36c200b8cd14d15a3616c936f\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3fe6080604052600080fdfea165627a7a72305820db18ab7954f85c9a77ae5c7ea19d55a1b580f134329968bf290b326a5d6b82c80029",
-  "deployedBytecode": "0x6080604052600080fdfea165627a7a72305820db18ab7954f85c9a77ae5c7ea19d55a1b580f134329968bf290b326a5d6b82c80029",
-  "sourceMap": "28:21:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:21:0;;;;;;;",
-  "deployedSourceMap": "28:21:0:-;;;;;",
-  "source": "pragma solidity = 0.5.0;\r\n\r\ncontract Admin {\r\n\r\n}",
-  "sourcePath": "C:/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Admin.sol\":\"Admin\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Admin.sol\":{\"keccak256\":\"0x3f1dd28fd1c7b20a545ecf086d2db09426975102bcdad7d8ed9d50a32e80fff0\",\"urls\":[\"bzzr://30acf52b5ce1be53d067418174c93a5b7ea8b6a74b3f0540b86bddf52e3b4202\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3fe6080604052600080fdfea165627a7a72305820d0500d6952378bfe50b70d13ed5836f602611c33f9fc7f38f4eee920eb427bbe0029",
+  "deployedBytecode": "0x6080604052600080fdfea165627a7a72305820d0500d6952378bfe50b70d13ed5836f602611c33f9fc7f38f4eee920eb427bbe0029",
+  "sourceMap": "28:25:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:25:1;;;;;;;",
+  "deployedSourceMap": "28:25:1:-;;;;;",
+  "source": "pragma solidity = 0.5.0;\r\n\r\ncontract Admin {\r\n    \r\n}",
+  "sourcePath": "C:/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Admin.sol",
   "ast": {
-    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol",
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Admin.sol",
     "exportedSymbols": {
       "Admin": [
-        2
+        5
       ]
     },
-    "id": 3,
+    "id": 6,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1,
+        "id": 4,
         "literals": [
           "solidity",
           "=",
@@ -27,7 +27,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:0"
+        "src": "0:24:1"
       },
       {
         "baseContracts": [],
@@ -35,31 +35,31 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 2,
+        "id": 5,
         "linearizedBaseContracts": [
-          2
+          5
         ],
         "name": "Admin",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 3,
-        "src": "28:21:0"
+        "scope": 6,
+        "src": "28:25:1"
       }
     ],
-    "src": "0:49:0"
+    "src": "0:53:1"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol",
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Admin.sol",
     "exportedSymbols": {
       "Admin": [
-        2
+        5
       ]
     },
-    "id": 3,
+    "id": 6,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1,
+        "id": 4,
         "literals": [
           "solidity",
           "=",
@@ -67,7 +67,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:0"
+        "src": "0:24:1"
       },
       {
         "baseContracts": [],
@@ -75,18 +75,18 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 2,
+        "id": 5,
         "linearizedBaseContracts": [
-          2
+          5
         ],
         "name": "Admin",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 3,
-        "src": "28:21:0"
+        "scope": 6,
+        "src": "28:25:1"
       }
     ],
-    "src": "0:49:0"
+    "src": "0:53:1"
   },
   "compiler": {
     "name": "solc",
@@ -94,7 +94,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.8",
-  "updatedAt": "2019-08-12T08:50:47.638Z",
+  "updatedAt": "2019-08-12T09:42:04.436Z",
   "devdoc": {
     "methods": {}
   },

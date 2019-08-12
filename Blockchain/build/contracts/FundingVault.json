@@ -1,0 +1,104 @@
+{
+  "contractName": "FundingVault",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/FundingVault.sol\":\"FundingVault\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/FundingVault.sol\":{\"keccak256\":\"0x9963cd40cc90213f5b9442befb3f10c252fc9d234e11b6a34843078f1d39606c\",\"urls\":[\"bzzr://85a6fd1e653e3ecf3aa0e31ef07c74e38ad638e32ff31acbcbb31714b996d5b4\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3fe6080604052600080fdfea165627a7a72305820eff3ae3d249d72ec9953031b98c83aaf5a625fe9fbf37bf05826884d3f6604300029",
+  "deployedBytecode": "0x6080604052600080fdfea165627a7a72305820eff3ae3d249d72ec9953031b98c83aaf5a625fe9fbf37bf05826884d3f6604300029",
+  "sourceMap": "28:32:2:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:32:2;;;;;;;",
+  "deployedSourceMap": "28:32:2:-;;;;;",
+  "source": "pragma solidity = 0.5.0;\r\n\r\ncontract FundingVault {\r\n    \r\n}",
+  "sourcePath": "C:/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/FundingVault.sol",
+  "ast": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/FundingVault.sol",
+    "exportedSymbols": {
+      "FundingVault": [
+        8
+      ]
+    },
+    "id": 9,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 7,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 8,
+        "linearizedBaseContracts": [
+          8
+        ],
+        "name": "FundingVault",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 9,
+        "src": "28:32:2"
+      }
+    ],
+    "src": "0:60:2"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/FundingVault.sol",
+    "exportedSymbols": {
+      "FundingVault": [
+        8
+      ]
+    },
+    "id": 9,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 7,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 8,
+        "linearizedBaseContracts": [
+          8
+        ],
+        "name": "FundingVault",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 9,
+        "src": "28:32:2"
+      }
+    ],
+    "src": "0:60:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.8",
+  "updatedAt": "2019-08-12T09:42:04.440Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

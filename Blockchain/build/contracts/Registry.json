@@ -1,0 +1,104 @@
+{
+  "contractName": "Registry",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry.sol\":\"Registry\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry.sol\":{\"keccak256\":\"0x3c8ed0c78ffa0abab99726602a4623393993fe69a10ce5d737887186433df6f9\",\"urls\":[\"bzzr://be51dc91fc79a4a86f86b0899485fadc6d9fc6283ec1726fc2ca2fc66d642880\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3fe6080604052600080fdfea165627a7a72305820b0289a7c6570fffa52b0a902a4e46ffff5910ecd18152d725048c8289ddfed790029",
+  "deployedBytecode": "0x6080604052600080fdfea165627a7a72305820b0289a7c6570fffa52b0a902a4e46ffff5910ecd18152d725048c8289ddfed790029",
+  "sourceMap": "28:28:4:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:28:4;;;;;;;",
+  "deployedSourceMap": "28:28:4:-;;;;;",
+  "source": "pragma solidity = 0.5.0;\r\n\r\ncontract Registry {\r\n    \r\n}",
+  "sourcePath": "C:/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry.sol",
+  "ast": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry.sol",
+    "exportedSymbols": {
+      "Registry": [
+        68
+      ]
+    },
+    "id": 69,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 67,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:4"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 68,
+        "linearizedBaseContracts": [
+          68
+        ],
+        "name": "Registry",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 69,
+        "src": "28:28:4"
+      }
+    ],
+    "src": "0:56:4"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry.sol",
+    "exportedSymbols": {
+      "Registry": [
+        68
+      ]
+    },
+    "id": 69,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 67,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:4"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 68,
+        "linearizedBaseContracts": [
+          68
+        ],
+        "name": "Registry",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 69,
+        "src": "28:28:4"
+      }
+    ],
+    "src": "0:56:4"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.8",
+  "updatedAt": "2019-08-12T09:42:04.453Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

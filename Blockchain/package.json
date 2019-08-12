@@ -7,8 +7,13 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "truffle compile && truffle test",
+    "build-err": "rmdir build /s && truffle compile",
+    "test": "truffle test"
   },
   "author": "@vonnie610",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "openzeppelin-solidity": "^2.3.0"
+  }
 }
