@@ -18,12 +18,14 @@ contract Registry is IRegistry {
 
     mapping(address => UserInfo) private _users;
 
-    function registerUser(address _newAddress, Role _role) public {
+    function registerUser(address _newAddress, Role _role) external {
         // Checking the msg.sender has the permissions to add a user
-        
+
         
         // Saving users role to user address
         _users[_newAddress].role = _role;
 
     }
+
+    
 }
