@@ -1,0 +1,104 @@
+{
+  "contractName": "Admin",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol\":\"Admin\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol\":{\"keccak256\":\"0x99089483860815bd23f605ee4963d2f026f025bf30f186e1195b45fbf382cc02\",\"urls\":[\"bzzr://23ce67c203fb81024f3124f811e1e50179a552d36c200b8cd14d15a3616c936f\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3fe6080604052600080fdfea165627a7a72305820db18ab7954f85c9a77ae5c7ea19d55a1b580f134329968bf290b326a5d6b82c80029",
+  "deployedBytecode": "0x6080604052600080fdfea165627a7a72305820db18ab7954f85c9a77ae5c7ea19d55a1b580f134329968bf290b326a5d6b82c80029",
+  "sourceMap": "28:21:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:21:0;;;;;;;",
+  "deployedSourceMap": "28:21:0:-;;;;;",
+  "source": "pragma solidity = 0.5.0;\r\n\r\ncontract Admin {\r\n\r\n}",
+  "sourcePath": "C:/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol",
+  "ast": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol",
+    "exportedSymbols": {
+      "Admin": [
+        2
+      ]
+    },
+    "id": 3,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:0"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 2,
+        "linearizedBaseContracts": [
+          2
+        ],
+        "name": "Admin",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 3,
+        "src": "28:21:0"
+      }
+    ],
+    "src": "0:49:0"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/InsensitivesAlpha-/Blockchain/contracts/Admin.sol",
+    "exportedSymbols": {
+      "Admin": [
+        2
+      ]
+    },
+    "id": 3,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:0"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 2,
+        "linearizedBaseContracts": [
+          2
+        ],
+        "name": "Admin",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 3,
+        "src": "28:21:0"
+      }
+    ],
+    "src": "0:49:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.8",
+  "updatedAt": "2019-08-12T08:50:47.638Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
