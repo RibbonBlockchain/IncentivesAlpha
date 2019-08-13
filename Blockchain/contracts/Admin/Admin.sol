@@ -1,6 +1,6 @@
 pragma solidity = 0.5.0;
 
-import "@openzeppelin-solidity/contracts/access/roles/WhitelistAdminRole.sol";
+import "./WhitelistAdminRole.sol";
 import "./IAdmin.sol";
 import "../Vault/IFundingVault.sol";
 import "../Registry/IRegistry.sol";

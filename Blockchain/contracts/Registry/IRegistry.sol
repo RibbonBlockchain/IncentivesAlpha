@@ -28,12 +28,12 @@ contract IRegistry {
       * @dev This function allows the admin contact or a CHW to add new 
       *      addresses to the registry.
       */
-    function registerUser(address _newAddress, Role _role) external; 
+    function registerUser(address _newAddress, uint8 _role) external; 
 
     /**
       * @dev Allows the admin to update the role of a user
       */
-    function updateRole(address _user, Role _newRole) external;
+    function updateRole(address _user, uint8 _newRole) external;
 
     /**
       * @dev Allows the admin contract to remove a user

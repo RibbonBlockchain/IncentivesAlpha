@@ -23,8 +23,11 @@ contract Registry is IRegistry {
     // Users to their roles
     mapping(address => UserInfo) private _users;
 
-    constructor(address _adminContract) public {
-        _adminContract = IAdmin(_adminContract);
+    /**
+      * @dev Sets the address of the admin contract
+      */
+    constructor(address _admin) public {
+        _adminContract = IAdmin(_admin);
     }
 
     /**
@@ -32,21 +35,26 @@ contract Registry is IRegistry {
       */
     modifier onlyAdmin() { 
         require(
-            _adminContract.isWhitelistAdmin(msg.sender) ||
+            // _adminContract.isWhitelistAdmin(msg.sender) ||
             msg.sender == address(_adminContract),
             "This functionality is restricted to admin addresses"
         );
+        _;
     }
 
+    /**
+      * @dev This allows admin addresses to update/set the address of the 
+      *      vault contract
+      */
     function setVault(address _vault) external onlyAdmin() {
         _vaultContract = IFundingVault(_vault);
     }
    
-    function registerUser(address _newAddress, Role _role) external {
+    function registerUser(address _newAddress, uint8 _role) external {
         // Checking the msg.sender has the permissions to add a user
 
         
         // Saving users role to user address
-        _users[_newAddress].role = _role;
+        _users[_newAddress].role = Role(_role);
     }
 }

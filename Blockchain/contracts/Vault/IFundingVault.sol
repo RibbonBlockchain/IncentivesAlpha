@@ -15,4 +15,9 @@ contract IFundingVault {
       *         contact.
       */
     function kill(bool _switch) external;
+
+    // TODO:
+    // 1. Functionality to approve an address to spend vault funds (onlyAdmin)
+    // 2. Payout functionality 
+    // 3. 
 }
