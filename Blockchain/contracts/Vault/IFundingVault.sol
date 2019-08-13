@@ -1,6 +1,12 @@
 pragma solidity = 0.5.0;
 
 contract IFundingVault {
+
+    /**
+      * @dev Allows the admin contract to update/set the address of the vault
+      * @notice This can only be called by the admin contract
+      */
+    function setRegistry(address _registry) external;
     
     /**
       * @dev This function allows the admin contract to disable payouts and 

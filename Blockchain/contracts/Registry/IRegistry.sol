@@ -7,6 +7,12 @@ pragma solidity = 0.5.0;
 contract IRegistry {
 
     /**
+      * @dev Allows the admin contract to update/set the address of the vault
+      * @notice This can only be called by the admin contract
+      */
+    function setVault(address _vault) external;
+
+    /**
       * @dev Allows the admin contract to update the access control contract
       */
     function updateAccessControl(address _newAccessControl) external;
@@ -25,17 +31,13 @@ contract IRegistry {
     function registerUser(address _newAddress, Role _role) external; 
 
     /**
-      * @dev This function allows the admin contact to batch add new 
-      *      addresses to the registry.
-      */
-    function registerUser(address[10] _newAddress, Role _role) external; 
-
-    /**
       * @dev Allows the admin to update the role of a user
       */
     function updateRole(address _user, Role _newRole) external;
 
+    /**
+      * @dev Allows the admin contract to remove a user
+      */
     function removeUser(address _user) external;
 
-    function removeUsers(address[10] _users) external;
 }
