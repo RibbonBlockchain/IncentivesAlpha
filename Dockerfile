@@ -1,9 +1,15 @@
+#Set up Docker Container
 FROM node:10-alpine
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-WORKDIR /home/node/app
-COPY package*.json ./
-USER node
+
+#Make directory to store API and copy config files
+RUN mkdir /home/API
+WORKDIR /home/API
+COPY . .
+
+#Install required packages and build API
 RUN npm install
-COPY --chown=node:node . .
+RUN npm run build
+
+#start API container
 EXPOSE 3000
-CMD [ "node", "app.js" ]
+CMD [ "npm","run", "start" ]

@@ -10,10 +10,6 @@
     "start": "nodemon ./dist/server.js",
     "prod": "npm run build && npm run start"
   },
-  "keywords": [
-    "Dale",
-    "Nguyen"
-  ],
   "author": "Ribbon Blockchain",
   "license": "MIT",
   "dependencies": {
@@ -21,6 +17,8 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.4.7",
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.18.9",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.6.2"
   }
 }

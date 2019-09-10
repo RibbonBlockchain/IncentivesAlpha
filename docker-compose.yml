@@ -1,4 +1,4 @@
-version: "2.1"
+version: "3"
 
 services:
   incentives_api:
@@ -11,10 +11,12 @@ services:
       - mongodb
     networks:
       - backbone
+    restart: unless-stopped
 
   mongodb:
-    image: mongo:3.6
-    command: mongod
+    image: mongo:3.4
+    ports: 
+      - "27017:27017"
     networks:
       - backbone
     volumes:
