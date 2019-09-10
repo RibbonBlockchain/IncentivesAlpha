@@ -1,9 +1,9 @@
 import {Request, Response, NextFunction} from "express";
-import { ContactController } from "../controllers/crmController";
+import { WalletController } from "../controllers/walletController";
 
 export class Routes { 
     
-    public contactController: ContactController = new ContactController() 
+    public walletController: WalletController = new WalletController() 
     
     public routes(app): void {   
         
@@ -14,8 +14,8 @@ export class Routes {
             })
         })
         
-        // Contact 
-        app.route('/contact')
+        // Wallet 
+        app.route('/wallet')
         .get((req: Request, res: Response, next: NextFunction) => {
             // middleware
             console.log(`Request from: ${req.originalUrl}`);
@@ -25,17 +25,17 @@ export class Routes {
             } else {
                 next();
             }                        
-        }, this.contactController.getContacts)        
+        }, this.walletController.getWallets)        
 
         // POST endpoint
-        .post(this.contactController.addNewContact);
+        .post(this.walletController.addNewWallet);
 
-        // Contact detail
-        app.route('/contact/:contactId')
-        // get specific contact
-        .get(this.contactController.getContactWithID)
-        .put(this.contactController.updateContact)
-        .delete(this.contactController.deleteContact)
+        // Wallet detail
+        app.route('/wallet/:walletId')
+        // get specific wallet
+        .get(this.walletController.getWalletWithID)
+        .put(this.walletController.updateWallet)
+        .delete(this.walletController.deleteWallet)
 
     }
 }

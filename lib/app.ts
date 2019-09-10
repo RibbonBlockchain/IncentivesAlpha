@@ -1,13 +1,13 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import { Routes } from "./routes/crmRoutes";
+import { Routes } from "./routes/walletRoutes";
 import * as mongoose from "mongoose";
 
 class App {
   public app: express.Application = express();
   public routePrv: Routes = new Routes();
-  // public mongoUrl: string = 'mongodb://localhost/CRMdb';
-  public mongoUrl: string = "mongodb://mongodb:27017/CRMdb";
+  // public mongoUrl: string = 'mongodb://localhost/WALLETdb';
+  public mongoUrl: string = "mongodb://mongodb:27017/WALLETdb";
 
   constructor() {
     this.config();
