@@ -1,6 +1,7 @@
 node_modules
 dist
 /mongodata
+./mongodata
 _build
 _static
 _templates
