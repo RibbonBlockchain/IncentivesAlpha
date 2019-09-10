@@ -1,0 +1,25 @@
+version: "2.1"
+
+services:
+  incentives_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    networks:
+      - backbone
+
+  mongodb:
+    image: mongo:3.6
+    command: mongod
+    networks:
+      - backbone
+    volumes:
+      - ./mongodata:/data/db
+
+networks:
+  backbone:
+    driver: bridge
