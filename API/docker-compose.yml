@@ -3,9 +3,10 @@ version: "3"
 services:
   incentives_api:
     container_name: incentives_api
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: ribbonblockchain/incentives-alpha-api
     ports:
       - "3000:3000"
     links:
@@ -14,26 +15,23 @@ services:
       - mongodb
     networks:
       - backbone
-    restart: unless-stopped
-    env_file: .env
-    # environment:
-      # - MONGO_USERNAME=$MONGO_USERNAME
-      # - MONGO_PASSWORD=$MONGO_PASSWORD
-      # - MONGO_HOSTNAME=db
-      # - MONGO_PORT=$MONGO_PORT
-      # - MONGO_DB=$MONGO_DB 
-    # volumes:
-    #   - .:/home/node/app
-    #   - node_modules:/home/node/app/node_modules
+    restart: always
+    # env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=mongodata
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB 
 
   mongodb:
     image: mongo:3.4
     container_name: mongodb
-    restart: unless-stopped
-    env_file: .env
-    # environment:
-      # - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
-      # - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    restart: always
+    # env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
     ports: 
       - "27017:27017"
     networks:
@@ -46,5 +44,4 @@ networks:
     driver: bridge
 
 volumes:
-  mongodata:
-  node_modules: 
+  mongodata: 

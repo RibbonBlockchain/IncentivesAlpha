@@ -41,3 +41,23 @@ Run in production mode
 
 ```
 npm run prod
+```
+
+## Docker-compose
+```
+docker-compose up
+```
+
+
+## Kuberneties run within your local enviroment
+
+update the kuberneties files from the docker-compose.
+```
+kubectl apply -f incentives-api-service.yaml,incentives-api-deployment.yaml,incentives-api-env-configmap.yaml,mongodb-service.yaml,mongodb-deployment.yaml,mongodb-env-configmap.yaml,mongodata-persistentvolumeclaim.yaml,secret.yaml
+```
+
+Run the kuberneties tunnel to connect to localhost
+```
+minikube tunnel
+```
+

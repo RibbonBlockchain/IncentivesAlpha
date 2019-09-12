@@ -35,7 +35,7 @@ class App {
         function(err) {
           if (err) {
             console.error(
-              "Failed to connect to mongo on startup - retrying in 1 sec",
+              "Failed to connect to mongodb on startup - retrying in 1 sec",
               err
             );
             setTimeout(connectWithRetry, 1000);
