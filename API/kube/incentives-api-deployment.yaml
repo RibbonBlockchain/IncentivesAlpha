@@ -25,7 +25,7 @@ spec:
         - name: MONGO_PASSWORD
         - name: MONGO_PORT
         - name: MONGO_USERNAME
-        image: ribbonblockchain/incentives-alpha-api
+        image: ribbonblockchain/incentives-alpha-api:staging
         name: incentives-api
         ports:
         - containerPort: 3000

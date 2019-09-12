@@ -61,3 +61,11 @@ Run the kuberneties tunnel to connect to localhost
 minikube tunnel
 ```
 
+Creation of Argo CD config
+```
+argocd app create incentives-api \
+  --repo https://github.com/RibbonBlockchain/IncentivesAlpha \
+  --path API \
+  --dest-server https://kubernetes.default.svc \
+  --dest-namespace default
+```
