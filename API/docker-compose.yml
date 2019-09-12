@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  incentives_api:
-    container_name: incentives_api
+  incentives-api:
+    container_name: incentives-api
     # build:
     #   context: .
     #   dockerfile: Dockerfile

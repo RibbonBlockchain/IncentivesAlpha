@@ -6,8 +6,8 @@ import * as mongoose from "mongoose";
 class App {
   public app: express.Application = express();
   public routePrv: Routes = new Routes();
-  // public mongoUrl: string = 'mongodb://localhost/WALLETdb';
-  public mongoUrl: string = "mongodb://mongodb:27017/WALLETdb";
+  // public mongoUrl: string = 'mongodb://localhost/Ribbon-Incentives-API-DB';
+  public mongoUrl: string = "mongodb://mongodb:27017/Ribbon-Incentives-API-DB";
 
   constructor() {
     this.config();
