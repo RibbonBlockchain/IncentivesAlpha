@@ -6,7 +6,7 @@ services:
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    image: ribbonblockchain/incentives-alpha-api
+    image: ribbonblockchain/incentives-alpha-api:latest
     ports:
       - "3000:3000"
     links:
