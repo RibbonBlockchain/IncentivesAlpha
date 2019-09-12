@@ -2,6 +2,7 @@ version: "3"
 
 services:
   incentives_api:
+    container_name: incentives_api
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,16 +15,36 @@ services:
     networks:
       - backbone
     restart: unless-stopped
+    env_file: .env
+    # environment:
+      # - MONGO_USERNAME=$MONGO_USERNAME
+      # - MONGO_PASSWORD=$MONGO_PASSWORD
+      # - MONGO_HOSTNAME=db
+      # - MONGO_PORT=$MONGO_PORT
+      # - MONGO_DB=$MONGO_DB 
+    # volumes:
+    #   - .:/home/node/app
+    #   - node_modules:/home/node/app/node_modules
 
   mongodb:
     image: mongo:3.4
+    container_name: mongodb
+    restart: unless-stopped
+    env_file: .env
+    # environment:
+      # - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      # - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
     ports: 
       - "27017:27017"
     networks:
       - backbone
     volumes:
-      - ./mongodata:/data/db
+      - mongodata:/data/db   
 
 networks:
   backbone:
     driver: bridge
+
+volumes:
+  mongodata:
+  node_modules: 
