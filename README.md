@@ -68,16 +68,10 @@ We happily await your pull requests and/or involvement in our [issues page](http
 
 ## Packages
 
-### Published
-
-| Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------- |
-
-
-| [`@ribbonblockchain/api`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/api) | A module for interacting with RibbonBlockchain's smart contracts. A core dependency of most RibbonBlockchain projects. |
-
-| [`@ribbonblockchain/incentives`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/incentives) | An interface to consume our apis. It allows users to see communicate with the smart contracts through our apis. See it live at [dapp.ribbonblockchain.com](https://dapp.ribbonblockchain.com)
-|
+| Name                                                                                                                  | Description                                                                                                                                                                                   |
+| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@ribbonblockchain/api`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/api)               | A module for interacting with RibbonBlockchain's smart contracts. A core dependency of most RibbonBlockchain projects.                                                                        |
+| [`@ribbonblockchain/incentives`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/incentives) | An interface to consume our apis. It allows users to see communicate with the smart contracts through our apis. See it live at [dapp.ribbonblockchain.com](https://dapp.ribbonblockchain.com) |
 
 ## Resources
 
