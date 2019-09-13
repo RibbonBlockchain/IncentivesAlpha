@@ -10,13 +10,20 @@
     "prepare": "lerna run build --stream",
     "release:dry-run": "lerna publish --exact --skip-git --skip-npm --cd-version prerelease --conventional-commits --yes",
     "release:alpha": "lerna publish --exact --cd-version prerelease --conventional-commits",
-    "start": "lerna run --stream --no-sort --concurrency=999 start"
+    "start": "lerna run --stream --no-sort --concurrency=999 start",
+    "commit": "npx git-cz"
   },
   "devDependencies": {
+    "commitizen": "^4.0.3",
     "lerna": "^3.13.1"
   },
   "version": "1.0.0",
   "repository": "https://github.com/RibbonBlockchain/IncentivesAlpha.git",
   "author": "RibbonBlockchain Engineers",
-  "license": "MIT"
+  "license": "MIT",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
