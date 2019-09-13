@@ -76,6 +76,9 @@ We happily await your pull requests and/or involvement in our [issues page](http
 
 | [`@ribbonblockchain/api`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/api) | A module for interacting with RibbonBlockchain's smart contracts. A core dependency of most RibbonBlockchain projects. |
 
+| [`@ribbonblockchain/incentives`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/incentives) | An interface to consume our apis. It allows users to see communicate with the smart contracts through our apis. See it live at [dapp.ribbonblockchain.com](https://dapp.ribbonblockchain.com)
+|
+
 ## Resources
 
 To get a full idea of what RibbonBlockchain is about, be sure to take a look at these other resources:

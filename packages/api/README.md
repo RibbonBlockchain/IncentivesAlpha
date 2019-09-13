@@ -18,18 +18,6 @@ You should install [MongoDB](https://docs.mongodb.com/manual/administration/inst
 
 After that, you will have to replace the mongoURL with your MongoDB address in _lib/app.ts_
 
-## Clone this repository
-
-```
-git clone git@github.com:dalenguyen/rest-api-node-typescript.git .
-```
-
-Then install the dependencies
-
-```
-npm install
-```
-
 ## Start the server
 
 Run in development mode
