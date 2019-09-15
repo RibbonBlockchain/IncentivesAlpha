@@ -2,11 +2,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.18.0 (06a2e56)
-    flux.weave.works/automated: 'true'
-  creationTimestamp:
   labels:
     io.kompose.service: incentives-api
   name: incentives-api
