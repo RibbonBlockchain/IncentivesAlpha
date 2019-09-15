@@ -1,0 +1,10 @@
+node_modules
+dist
+/mongodata
+./mongodata
+_build
+_static
+_templates
+.env
+secret.yaml
+key.txt
