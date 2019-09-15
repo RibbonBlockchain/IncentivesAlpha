@@ -7,3 +7,4 @@ _static
 _templates
 .env
 secret.yaml
+key.txt

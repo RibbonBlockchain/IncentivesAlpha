@@ -3,11 +3,20 @@ import * as bodyParser from "body-parser";
 import { Routes } from "./routes/walletRoutes";
 import * as mongoose from "mongoose";
 
+const {
+  MONGO_USERNAME,
+  MONGO_PASSWORD,
+  MONGO_HOSTNAME,
+  MONGO_PORT,
+  MONGO_DB
+} = process.env;
+
 class App {
   public app: express.Application = express();
   public routePrv: Routes = new Routes();
   // public mongoUrl: string = 'mongodb://localhost/Ribbon-Incentives-API-DB';
-  public mongoUrl: string = "mongodb://mongodb:27017/Ribbon-Incentives-API-DB";
+  // public mongoUrl: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
+  public mongoUrl: string = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
 
   constructor() {
     this.config();

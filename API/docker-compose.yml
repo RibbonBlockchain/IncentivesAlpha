@@ -3,10 +3,10 @@ version: "3"
 services:
   incentives-api:
     container_name: incentives-api
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    image: ribbonblockchain/incentives-alpha-api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: ribbonblockchain/incentives-alpha-api:latest
     ports:
       - "3000:3000"
     links:
@@ -20,7 +20,7 @@ services:
     environment:
       - MONGO_USERNAME=$MONGO_USERNAME
       - MONGO_PASSWORD=$MONGO_PASSWORD
-      - MONGO_HOSTNAME=mongodata
+      - MONGO_HOSTNAME=$MONGO_HOSTNAME
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB 
 
