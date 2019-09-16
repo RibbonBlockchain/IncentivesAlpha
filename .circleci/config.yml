@@ -31,20 +31,23 @@ jobs:
   #         cache-key: package.json
   #         # Ignore non-checksum cache hits
   #         use-strict-cache: true
-  Build-Push-Image-Docker:
-    description: Build and push image to Google Container Registry
+  build-and-publish-docker-image:
+    description: Build and push image to Docker Hub Container Registry
     machine: true
-    # working_directory: ~/IncentivesAlpha/API
     steps:
-      - checkout
-      - gcr/gcr-auth
-      - gcr/build-image:
-          image: incentives-api
-          path-to-dockerfile: ./API
-      - gcr/push-image:
-          image: incentives-api
+      - docker/publish:
+        image: ribbonblockchain/incentives-alpha-api:latest
+    # working_directory: ~/IncentivesAlpha/API
+    # steps:
+    #   - checkout
+    #   - gcr/gcr-auth
+    #   - gcr/build-image:
+    #       image: incentives-api
+    #       path-to-dockerfile: ./API
+    #   - gcr/push-image:
+    #       image: incentives-api
     
-  deploy:
+  deploy-kubernetes:
     description: Deploy application to Google Kubernetes Engine
     machine: true
     # working_directory: ~/IncentivesAlpha/API
@@ -63,9 +66,9 @@ workflows:
   build_update_deploy:
     jobs:
       # - build
-      # - Build-Push-Image-Docker
+      - build-and-publish-docker-image
           # requires:
           #   - build
-      - deploy
-          # requires:
-          #   - Build-Push-Image-Docker
+      - deploy-kubernetes
+          requires:
+            - build-and-publish-docker-image
