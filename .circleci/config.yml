@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@1.0.1
-  gcp-gke: circleci/gcp-gke@0.1.0
+  gcp-gke: circleci/gcp-gke@0.2.0
   gcr: circleci/gcp-gcr@0.0.2
 jobs:
   # build:
@@ -53,17 +53,18 @@ jobs:
       # Initialize the `gcloud` CLI.
       - gcp-gke/init
       # Update a deployment Docker image.
-      - gcp-gke/rollout-image:
-          deployment: incentives-api-staging
+      - gcp-gke/publish-and-rollout-image:
+          cluster: incentives-api-staging  
+          deployment: incentives-api
           container: incentives-api
           image: gcr.io/ribbonblockchain/incentives-api # change version when updating
 workflows:
   build_update_deploy:
     jobs:
       # - build
-      - Build-Push-Image-Docker
+      # - Build-Push-Image-Docker
           # requires:
           #   - build
-      - deploy:
-          requires:
-            - Build-Push-Image-Docker
+      - deploy
+          # requires:
+          #   - Build-Push-Image-Docker
