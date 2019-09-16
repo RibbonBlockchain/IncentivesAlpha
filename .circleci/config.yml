@@ -4,29 +4,85 @@ orbs:
   gcp-gke: circleci/gcp-gke@0.2.0
   docker: circleci/docker@0.5.13
   k8s: circleci/kubernetes@0.1.0
-jobs:  
-  deploy-kubernetes:
-    description: Deploy application to Google Kubernetes Engine
+jobs:
+  build-publish-image-staging:
+    description: Build and deploy a Docker image for staging
     machine: true
     steps:
-      # Install `gcloud` and `kubectl` if not already installed.
-      - gcp-gke/install
-      # Initialize the `gcloud` CLI.
-      - gcp-gke/init
-      # Update a deployment Docker image.
-      - gcp-gke/rollout-image:
-          cluster: incentives-api-staging  
-          deployment: incentives-api
-          container: incentives-api
-          image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:latest
-workflows:
-  build_update_deploy:
-    jobs:
-      - docker/publish:
+      - checkout
+      - docker/check:
+          docker-password: DOCKER_PASSWORD
+          docker-username: DOCKER_LOGIN
+      - docker/build:
+          dockerfile: Dockerfile
+          image: ribbonblockchain/incentives-alpha-api
+          path: ./API
+          tag: staging-$(echo $CIRCLE_SHA1 | cut -c -7)
+      - docker/push:
           image: ribbonblockchain/incentives-alpha-api
           tag: staging-$(echo $CIRCLE_SHA1 | cut -c -7)
+  build-publish-image-production:
+    description: Build and deploy a Docker image for production
+    machine: true
+    steps:
+      - checkout
+      - docker/check:
+          docker-password: DOCKER_PASSWORD
+          docker-username: DOCKER_LOGIN
+      - docker/build:
+          dockerfile: Dockerfile
+          image: ribbonblockchain/incentives-alpha-api
           path: ./API
-          deploy: true
-      - deploy-kubernetes:
+          tag: ${VERSION}
+      - docker/push:
+          image: ribbonblockchain/incentives-alpha-api
+          tag: ${VERSION}
+  deploy-kubernetes-staging:
+    description: Deploy application to Google Kubernetes Engine Staging
+    machine: true
+    steps:
+      - gcp-gke/install
+      - gcp-gke/init
+      - gcp-gke/rollout-image:
+          cluster: incentives-api-staging
+          deployment: incentives-api
+          container: incentives-api
+          image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:staging-$(echo $CIRCLE_SHA1 | cut -c -7)
+  deploy-kubernetes-production:
+    description: Deploy application to Google Kubernetes Engine Production
+    machine: true
+    steps:
+      - gcp-gke/install
+      - gcp-gke/init
+      - gcp-gke/rollout-image:
+          cluster: incentives-api-production
+          deployment: incentives-api
+          container: incentives-api
+          image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:${VERSION}
+workflows:
+  build-update-deploy:
+    jobs:
+      - build-publish-image-staging:
+          filters:
+              branches:
+                only:
+                  - dev
+      - build-publish-image-production:
+          filters:
+                  branches:
+                    only:
+                      - master
+      - deploy-kubernetes-staging:
+          filters:
+              branches:
+                only:
+                  - dev
           requires:
-            - docker/publish
+            - build-publish-image-staging
+      - deploy-kubernetes-production:
+          filters:
+              branches:
+                only:
+                  - master
+          requires:
+            - build-publish-image-production
