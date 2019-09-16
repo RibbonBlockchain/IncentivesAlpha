@@ -39,7 +39,7 @@ jobs:
       - gcr/gcr-auth
       - gcr/build-image:
           image: incentives-api
-          tag: "v2" #Change version number e.g to 'v3' when updating application
+          path-to-dockerfile: ./API
       - gcr/push-image:
           image: incentives-api
           tag: "v2" #Change version number e.g to 'v3' when updating application
