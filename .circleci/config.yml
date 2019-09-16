@@ -66,17 +66,17 @@ workflows:
           filters:
               branches:
                 only:
-                  - dev
+                  - staging
       - build-publish-image-production:
           filters:
-                  branches:
-                    only:
-                      - master
+              branches:
+                only:
+                  - master
       - deploy-kubernetes-staging:
           filters:
               branches:
                 only:
-                  - dev
+                  - staging
           requires:
             - build-publish-image-staging
       - deploy-kubernetes-production:
