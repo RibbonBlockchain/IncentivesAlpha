@@ -3,58 +3,11 @@ orbs:
   gcloud: circleci/gcp-cli@1.0.6
   gcp-gke: circleci/gcp-gke@0.2.0
   docker: circleci/docker@0.5.13
-  # gcr: circleci/gcp-gcr@0.0.2
   k8s: circleci/kubernetes@0.1.0
-jobs:
-  # build:
-  #   description: Install npm
-  #   # machine option runs your jobs in a dedicated, ephemeral VM that has the following specifications:
-  #   machine: true
-  #   working_directory: ~/IncentivesAlpha
-  #   steps:
-  #     - checkout
-  #     # Install node
-  #     - node/install
-  #     # Install npm
-  #     - node/install-npm
-  #     # Download and cache dependencies
-  #     - node/with-cache:
-  #         steps:
-  #           - run:
-  #               name: Install application dependencies
-  #               command: |
-  #                 pwd
-  #                 ls
-  #                 cd API
-  #                 ls
-  #                 npm install
-  #         # Save cache
-  #         cache-key: package.json
-  #         # Ignore non-checksum cache hits
-  #         use-strict-cache: true
-  # build-and-publish-docker-image:
-  #   description: Build and push image to Docker Hub Container Registry
-  #   machine: true
-  #   steps:
-  #     - checkout
-  #     - docker/check #Sanity check to make sure you can build a Docker image.
-  #     - docker/install-docker-tools
-  #     - docker/publish:
-  #       image: ribbonblockchain/incentives-alpha-api:latest
-    # working_directory: ~/IncentivesAlpha/API
-    # steps:
-    #   - checkout
-    #   - gcr/gcr-auth
-    #   - gcr/build-image:
-    #       image: incentives-api
-    #       path-to-dockerfile: ./API
-    #   - gcr/push-image:
-    #       image: incentives-api
-    
+jobs:  
   deploy-kubernetes:
     description: Deploy application to Google Kubernetes Engine
     machine: true
-    # working_directory: ~/IncentivesAlpha/API
     steps:
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
@@ -66,18 +19,12 @@ jobs:
           deployment: incentives-api
           container: incentives-api
           image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:latest
-          # tag: latest
-          # registry-url: registry.hub.docker.com
 workflows:
   build_update_deploy:
     jobs:
-      # - build
-      # - build-and-publish-docker-image
-          # requires:
-          #   - build
       - docker/publish:
           image: ribbonblockchain/incentives-alpha-api
-          tag: latest
+          tag: ${CIRCLE_SHA1}
           path: ./API
           deploy: true
       - deploy-kubernetes:
