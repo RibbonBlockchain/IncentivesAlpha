@@ -8,7 +8,7 @@ jobs:
     description: Install npm
     # machine option runs your jobs in a dedicated, ephemeral VM that has the following specifications:
     machine: true
-    working_directory: ./API
+    working_directory: ~/IncentivesAlpha/API
     steps:
       - checkout
       # Install node
@@ -20,7 +20,9 @@ jobs:
           steps:
             - run:
                 name: Install application dependencies
-                command: npm install
+                command: |
+                  pwd
+                  npm install
           # Save cache
           cache-key: package.json
           # Ignore non-checksum cache hits
@@ -28,7 +30,7 @@ jobs:
   Build-Push-Image-Docker:
     description: Build and push image to Google Container Registry
     machine: true
-    working_directory: ./API
+    working_directory: ~/IncentivesAlpha/API
     steps:
       - checkout
       - gcr/gcr-auth
@@ -42,7 +44,7 @@ jobs:
   deploy:
     description: Deploy application to Google Kubernetes Engine
     machine: true
-    working_directory: ./API
+    working_directory: ~/IncentivesAlpha/API
     steps:
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
