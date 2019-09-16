@@ -2,7 +2,8 @@ version: 2.1
 orbs:
   gcloud: circleci/gcp-cli@1.0.6
   gcp-gke: circleci/gcp-gke@0.2.0
-  gcr: circleci/gcp-gcr@0.0.2
+  docker: circleci/docker@0.5.13
+  # gcr: circleci/gcp-gcr@0.0.2
   k8s: circleci/kubernetes@0.1.0
 jobs:
   # build:
@@ -35,6 +36,9 @@ jobs:
     description: Build and push image to Docker Hub Container Registry
     machine: true
     steps:
+      - checkout
+      - docker/check #Sanity check to make sure you can build a Docker image.
+      - docker/install-docker-tools
       - docker/publish:
         image: ribbonblockchain/incentives-alpha-api:latest
     # working_directory: ~/IncentivesAlpha/API
@@ -69,6 +73,6 @@ workflows:
       - build-and-publish-docker-image
           # requires:
           #   - build
-      - deploy-kubernetes
+      - deploy-kubernetes:
           requires:
             - build-and-publish-docker-image
