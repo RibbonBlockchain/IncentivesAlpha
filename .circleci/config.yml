@@ -58,7 +58,7 @@ jobs:
           cluster: incentives-api-staging  
           deployment: incentives-api
           container: incentives-api
-          image: gcr.io/ribbonblockchain/incentives-api:latest
+          image: ribbonblockchain/incentives-alpha-api:latest
 workflows:
   build_update_deploy:
     jobs:
