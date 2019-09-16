@@ -8,6 +8,7 @@ jobs:
     description: Install npm
     # machine option runs your jobs in a dedicated, ephemeral VM that has the following specifications:
     machine: true
+    - working_directory: ~/incentivesAlpha/API
     steps:
       - checkout
       # Install node
@@ -19,9 +20,7 @@ jobs:
           steps:
             - run:
                 name: Install application dependencies
-                command: |
-                  cd API
-                  npm install
+                command: npm install
           # Save cache
           cache-key: package.json
           # Ignore non-checksum cache hits
