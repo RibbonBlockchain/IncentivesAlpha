@@ -65,7 +65,7 @@ jobs:
           cluster: incentives-api-staging  
           deployment: incentives-api
           container: incentives-api
-          image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api
+          image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:latest
           # tag: latest
           # registry-url: registry.hub.docker.com
 workflows:
