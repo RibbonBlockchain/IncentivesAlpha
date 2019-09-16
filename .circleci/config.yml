@@ -24,7 +24,7 @@ workflows:
     jobs:
       - docker/publish:
           image: ribbonblockchain/incentives-alpha-api
-          tag: ${CIRCLE_SHA1}
+          tag: staging-$(echo $CIRCLE_SHA1 | cut -c -7)
           path: ./API
           deploy: true
       - deploy-kubernetes:
