@@ -33,10 +33,10 @@ jobs:
           dockerfile: Dockerfile
           image: ribbonblockchain/incentives-alpha-api
           path: ./API
-          tag: ${VERSION}
+          tag: latest
       - docker/push:
           image: ribbonblockchain/incentives-alpha-api
-          tag: ${VERSION}
+          tag: latest
   deploy-kubernetes-staging:
     description: Deploy application to Google Kubernetes Engine Staging
     machine: true
@@ -58,7 +58,7 @@ jobs:
           cluster: incentives-api-production
           deployment: incentives-api
           container: incentives-api
-          image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:${VERSION}
+          image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:latest
 workflows:
   build-update-deploy:
     jobs:
