@@ -32,15 +32,15 @@ jobs:
   #         cache-key: package.json
   #         # Ignore non-checksum cache hits
   #         use-strict-cache: true
-  build-and-publish-docker-image:
-    description: Build and push image to Docker Hub Container Registry
-    machine: true
-    steps:
-      - checkout
-      - docker/check #Sanity check to make sure you can build a Docker image.
-      - docker/install-docker-tools
-      - docker/publish:
-        image: ribbonblockchain/incentives-alpha-api:latest
+  # build-and-publish-docker-image:
+  #   description: Build and push image to Docker Hub Container Registry
+  #   machine: true
+  #   steps:
+  #     - checkout
+  #     - docker/check #Sanity check to make sure you can build a Docker image.
+  #     - docker/install-docker-tools
+  #     - docker/publish:
+  #       image: ribbonblockchain/incentives-alpha-api:latest
     # working_directory: ~/IncentivesAlpha/API
     # steps:
     #   - checkout
@@ -70,9 +70,11 @@ workflows:
   build_update_deploy:
     jobs:
       # - build
-      - build-and-publish-docker-image
+      # - build-and-publish-docker-image
           # requires:
           #   - build
+      - docker/publish:
+          image: ribbonblockchain/incentives-alpha-api:latest
       - deploy-kubernetes:
           requires:
-            - build-and-publish-docker-image
+            - docker/publish
