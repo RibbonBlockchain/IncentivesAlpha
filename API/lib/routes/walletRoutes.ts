@@ -10,7 +10,7 @@ export class Routes {
         app.route('/')
         .get((req: Request, res: Response) => {            
             res.status(200).send({
-                message: 'GET request successfulll!!!!??<..🔥..>'
+                message: 'GET request successfulll!!!!??<...🔥...>'
             })
         })
         
