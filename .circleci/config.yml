@@ -4,32 +4,32 @@ orbs:
   gcp-gke: circleci/gcp-gke@0.1.0
   gcr: circleci/gcp-gcr@0.0.2
 jobs:
-  build:
-    description: Install npm
-    # machine option runs your jobs in a dedicated, ephemeral VM that has the following specifications:
-    machine: true
-    # working_directory: ~/IncentivesAlpha/API
-    steps:
-      - checkout
-      # Install node
-      - node/install
-      # Install npm
-      - node/install-npm
-      # Download and cache dependencies
-      - node/with-cache:
-          steps:
-            - run:
-                name: Install application dependencies
-                command: |
-                  pwd
-                  ls
-                  cd API
-                  ls
-                  npm install
-          # Save cache
-          cache-key: package.json
-          # Ignore non-checksum cache hits
-          use-strict-cache: true
+  # build:
+  #   description: Install npm
+  #   # machine option runs your jobs in a dedicated, ephemeral VM that has the following specifications:
+  #   machine: true
+  #   working_directory: ~/IncentivesAlpha
+  #   steps:
+  #     - checkout
+  #     # Install node
+  #     - node/install
+  #     # Install npm
+  #     - node/install-npm
+  #     # Download and cache dependencies
+  #     - node/with-cache:
+  #         steps:
+  #           - run:
+  #               name: Install application dependencies
+  #               command: |
+  #                 pwd
+  #                 ls
+  #                 cd API
+  #                 ls
+  #                 npm install
+  #         # Save cache
+  #         cache-key: package.json
+  #         # Ignore non-checksum cache hits
+  #         use-strict-cache: true
   Build-Push-Image-Docker:
     description: Build and push image to Google Container Registry
     machine: true
@@ -61,7 +61,7 @@ jobs:
 workflows:
   build_update_deploy:
     jobs:
-      - build
+      # - build
       - Build-Push-Image-Docker:
           requires:
             - build
