@@ -28,6 +28,7 @@ jobs:
   Build-Push-Image-Docker:
     description: Build and push image to Google Container Registry
     machine: true
+    working_directory: ~/API
     steps:
       - checkout
       - gcr/gcr-auth
@@ -41,6 +42,7 @@ jobs:
   deploy:
     description: Deploy application to Google Kubernetes Engine
     machine: true
+    working_directory: ~/API
     steps:
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
