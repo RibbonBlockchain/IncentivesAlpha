@@ -62,7 +62,7 @@ workflows:
   build_update_deploy:
     jobs:
       # - build
-      - Build-Push-Image-Docker:
+      - Build-Push-Image-Docker
           # requires:
           #   - build
       - deploy:
