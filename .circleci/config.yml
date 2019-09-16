@@ -55,7 +55,7 @@ jobs:
       # Update a deployment Docker image.
       - gcp-gke/rollout-image:
           deployment: incentives-api-staging
-          container: dominic-backend
+          container: incentives-api
           image: gcr.io/ribbonblockchain/incentives-api:v2 # change version when updating
 workflows:
   build_update_deploy:
