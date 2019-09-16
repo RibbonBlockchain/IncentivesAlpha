@@ -1,8 +1,9 @@
 version: 2.1
 orbs:
-  node: circleci/node@1.0.1
+  gcloud: circleci/gcp-cli@1.0.6
   gcp-gke: circleci/gcp-gke@0.2.0
   gcr: circleci/gcp-gcr@0.0.2
+  k8s: circleci/kubernetes@0.1.0
 jobs:
   # build:
   #   description: Install npm
@@ -53,7 +54,7 @@ jobs:
       # Initialize the `gcloud` CLI.
       - gcp-gke/init
       # Update a deployment Docker image.
-      - gcp-gke/publish-and-rollout-image:
+      - gcp-gke/rollout-image:
           cluster: incentives-api-staging  
           deployment: incentives-api
           container: incentives-api
