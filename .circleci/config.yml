@@ -42,7 +42,6 @@ jobs:
           path-to-dockerfile: ./API
       - gcr/push-image:
           image: incentives-api
-          tag: "v2" #Change version number e.g to 'v3' when updating application
     
   deploy:
     description: Deploy application to Google Kubernetes Engine
