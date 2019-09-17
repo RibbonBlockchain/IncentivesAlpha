@@ -7,7 +7,6 @@ _static
 _templates
 .env
 secret.yaml
-<<<<<<< HEAD
 .DS_Store
 lerna-debug.log
 package-lock.json
@@ -26,6 +25,4 @@ yarn-error.log
 .idea
 .vscode
 .cache
-=======
 key.txt
->>>>>>> dev
