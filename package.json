@@ -1,0 +1,37 @@
+{
+  "name": "ribbonblockchain",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build --stream",
+    "clean": "lerna clean --yes && rm -rf node_modules",
+    "prepare": "lerna run build --stream",
+    "release:dry-run": "lerna publish --exact --skip-git --skip-npm --cd-version prerelease --conventional-commits --yes",
+    "release:alpha": "lerna publish --exact --cd-version prerelease --conventional-commits",
+    "start": "lerna run --stream --no-sort --concurrency=999 start",
+    "cz": "npx git-cz"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "commitizen": "^4.0.3",
+    "husky": "^3.0.5",
+    "lerna": "^3.13.1",
+    "prettier": "1.18.2",
+    "pretty-quick": "^1.11.1"
+  },
+  "version": "1.0.0",
+  "repository": "https://github.com/RibbonBlockchain/IncentivesAlpha.git",
+  "author": "RibbonBlockchain Engineers",
+  "license": "MIT",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
