@@ -1,6 +1,6 @@
-<!-- show-on-docup
-<br />
--->
+
+[The RibbonBlockchain Website](https://ribbonblockchain.com)
+[![CircleCI](https://circleci.com/gh/RibbonBlockchain/IncentivesAlpha/tree/master.svg?style=svg)](https://circleci.com/gh/RibbonBlockchain/IncentivesAlpha/tree/master)
 
 [![RibbonBlockchain](https://d33wubrfki0l68.cloudfront.net/acc4bad7b8baf69c0a595a8887e51c474aeb5491/998d2/img/logo.png)](https://ribbonblockchain.com)
 
@@ -24,6 +24,7 @@ This monorepo contains JavaScript tools and applications that interact with Ribb
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Contributing](#contributing)
@@ -76,5 +77,3 @@ We happily await your pull requests and/or involvement in our [issues page](http
 ## Resources
 
 To get a full idea of what RibbonBlockchain is about, be sure to take a look at these other resources:
-
-- 🌐 [The RibbonBlockchain Website](https://ribbonblockchain.com)

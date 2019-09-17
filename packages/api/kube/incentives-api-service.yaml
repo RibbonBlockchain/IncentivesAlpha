@@ -1,12 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.18.0 (06a2e56)
   creationTimestamp: null
-  labels:
-    io.kompose.service: incentives-api
   name: incentives-api
 spec:
   type: LoadBalancer
