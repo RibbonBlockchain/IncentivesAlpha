@@ -11,10 +11,6 @@ secret.yaml
 lerna-debug.log
 package-lock.json
 yarn.lock
-**/*/main
-**/*/dist
-**/*/bin
-**/*/build
 coverage
 .nyc_output
 yarn-error.log
