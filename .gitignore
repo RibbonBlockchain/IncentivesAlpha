@@ -7,4 +7,17 @@ _static
 _templates
 .env
 secret.yaml
+.DS_Store
+lerna-debug.log
+package-lock.json
+yarn.lock
+coverage
+.nyc_output
+yarn-error.log
+.env*.local
+.poosh.cache
+
+.idea
+.vscode
+.cache
 key.txt

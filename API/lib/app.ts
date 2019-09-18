@@ -3,6 +3,8 @@ import * as bodyParser from "body-parser";
 import { Routes } from "./routes/walletRoutes";
 import * as mongoose from "mongoose";
 
+const isDocker = require("is-docker");
+
 const {
   MONGO_USERNAME,
   MONGO_PASSWORD,
@@ -16,9 +18,17 @@ class App {
   public routePrv: Routes = new Routes();
   // public mongoUrl: string = 'mongodb://localhost/Ribbon-Incentives-API-DB';
   // public mongoUrl: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
-  public mongoUrl: string = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
+  public mongoUrl: string;
 
   constructor() {
+    if (isDocker()) {
+      this.mongoUrl = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
+      console.log("Running in docker mode");
+    } else {
+      this.mongoUrl = `mongodb://35.228.153.27:27017/Ribbon-Incentives-API-DB`;
+      console.log("Running in development mode. Will connect to staging DB");
+    }
+
     this.config();
     this.mongoSetup();
     this.routePrv.routes(this.app);
