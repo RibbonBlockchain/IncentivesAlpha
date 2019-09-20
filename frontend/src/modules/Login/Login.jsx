@@ -11,7 +11,7 @@ import Logo from "../../common/components/Logo";
 import styles from "./Login.module.scss";
 import { SHOW_ALERT } from "../../common/constants/alert";
 
-function Login() {
+function Login({ history }) {
   const dispatch = useDispatch();
   return (
     <>
@@ -47,6 +47,7 @@ function Login() {
                     type: APP_INITIALIZED,
                     payload: new Web3(provider)
                   });
+                  history.push("/dashboard");
                 }}
                 onClose={() => {
                   dispatch({
