@@ -1,0 +1,14 @@
+.button_lg {
+  width: 100%;
+}
+.btn_with_logo {
+  img {
+    width: calculateRem(30);
+    height: calculateRem(30);
+  }
+}
+
+.MetaMask {
+  background-color: $metamask;
+  color: $text-color;
+}
