@@ -1,0 +1,50 @@
+@import "../../common/styles/variables";
+
+.container {
+  font-family: $font;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+
+  .login_bg {
+    background-image: url("../../common/assets/login_bg.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .login_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .form {
+      .headline {
+        margin-bottom: calculateRem(30);
+        h4 {
+          text-align: center;
+          margin: 0;
+          small {
+            color: $background;
+          }
+        }
+      }
+    }
+  }
+  .logo {
+    position: absolute;
+    right: calculateRem(100);
+    bottom: calculateRem(20);
+  }
+}
+
+@media (max-width: $desktop) {
+  .container {
+    grid-template-columns: 0fr 1fr;
+
+    .login_box {
+      .form {
+        padding: 0;
+      }
+    }
+  }
+}
