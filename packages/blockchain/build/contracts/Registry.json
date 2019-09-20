@@ -1,0 +1,2153 @@
+{
+  "contractName": "Registry",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_switch",
+          "type": "bool"
+        }
+      ],
+      "name": "kill",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_user",
+          "type": "address"
+        },
+        {
+          "name": "_newRole",
+          "type": "uint8"
+        }
+      ],
+      "name": "updateRole",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_user",
+          "type": "address"
+        }
+      ],
+      "name": "removeUser",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newAccessControl",
+          "type": "address"
+        }
+      ],
+      "name": "updateAccessControl",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_admin",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_vault",
+          "type": "address"
+        }
+      ],
+      "name": "setVault",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newAddress",
+          "type": "address"
+        },
+        {
+          "name": "_role",
+          "type": "uint8"
+        }
+      ],
+      "name": "registerUser",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity = 0.5.0;\r\n\r\nimport \"./IRegistry.sol\";\r\nimport \"../Admin/IAdmin.sol\";\r\nimport \"../Vault/IFundingVault.sol\";\r\n\r\n/**\r\n  * @dev The registry contract. Conforms to it's interface\r\n  * @author @vonnie610 (GitHub)\r\n  */\r\ncontract Registry is IRegistry {\r\n    // The users role in transactions\r\n    enum Role {PRACTITIONER, PATIENT, CHW}\r\n    // The live instance of the admin contract\r\n    IAdmin private _adminContract;\r\n    // The live instance of the vault contract\r\n    IFundingVault private _vaultContract;\r\n    // Storage of roles and previous payout timestamps\r\n    struct UserInfo {\r\n        Role role;\r\n        uint256 lastPayout;\r\n    }\r\n    // Users to their roles\r\n    mapping(address => UserInfo) private _users;\r\n\r\n    /**\r\n      * @dev Sets the address of the admin contract\r\n      */\r\n    constructor(address _admin) public {\r\n        _adminContract = IAdmin(_admin);\r\n    }\r\n\r\n    /**\r\n      * @dev Ensures that only the admin contract/admin can use functions\r\n      */\r\n    modifier onlyAdmin() { \r\n        require(\r\n            // _adminContract.isWhitelistAdmin(msg.sender) ||\r\n            msg.sender == address(_adminContract),\r\n            \"This functionality is restricted to admin addresses\"\r\n        );\r\n        _;\r\n    }\r\n\r\n    /**\r\n      * @dev This allows admin addresses to update/set the address of the \r\n      *      vault contract\r\n      */\r\n    function setVault(address _vault) external onlyAdmin() {\r\n        _vaultContract = IFundingVault(_vault);\r\n    }\r\n   \r\n    function registerUser(address _newAddress, uint8 _role) external {\r\n        // Checking the msg.sender has the permissions to add a user\r\n\r\n        \r\n        // Saving users role to user address\r\n        _users[_newAddress].role = Role(_role);\r\n    }\r\n}",
+  "sourcePath": "C:/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry/Registry.sol",
+  "ast": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry/Registry.sol",
+    "exportedSymbols": {
+      "Registry": [
+        520
+      ]
+    },
+    "id": 521,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 440,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:8"
+      },
+      {
+        "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+        "file": "./IRegistry.sol",
+        "id": 441,
+        "nodeType": "ImportDirective",
+        "scope": 521,
+        "sourceUnit": 439,
+        "src": "28:25:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Admin/IAdmin.sol",
+        "file": "../Admin/IAdmin.sol",
+        "id": 442,
+        "nodeType": "ImportDirective",
+        "scope": 521,
+        "sourceUnit": 160,
+        "src": "55:29:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Vault/IFundingVault.sol",
+        "file": "../Vault/IFundingVault.sol",
+        "id": 443,
+        "nodeType": "ImportDirective",
+        "scope": 521,
+        "sourceUnit": 674,
+        "src": "86:36:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 444,
+              "name": "IRegistry",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 438,
+              "src": "251:9:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IRegistry_$438",
+                "typeString": "contract IRegistry"
+              }
+            },
+            "id": 445,
+            "nodeType": "InheritanceSpecifier",
+            "src": "251:9:8"
+          }
+        ],
+        "contractDependencies": [
+          438
+        ],
+        "contractKind": "contract",
+        "documentation": "@dev The registry contract. Conforms to it's interface\r\n@author @vonnie610 (GitHub)\r",
+        "fullyImplemented": false,
+        "id": 520,
+        "linearizedBaseContracts": [
+          520,
+          438
+        ],
+        "name": "Registry",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "Registry.Role",
+            "id": 449,
+            "members": [
+              {
+                "id": 446,
+                "name": "PRACTITIONER",
+                "nodeType": "EnumValue",
+                "src": "318:12:8"
+              },
+              {
+                "id": 447,
+                "name": "PATIENT",
+                "nodeType": "EnumValue",
+                "src": "332:7:8"
+              },
+              {
+                "id": 448,
+                "name": "CHW",
+                "nodeType": "EnumValue",
+                "src": "341:3:8"
+              }
+            ],
+            "name": "Role",
+            "nodeType": "EnumDefinition",
+            "src": "307:38:8"
+          },
+          {
+            "constant": false,
+            "id": 451,
+            "name": "_adminContract",
+            "nodeType": "VariableDeclaration",
+            "scope": 520,
+            "src": "399:29:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IAdmin_$159",
+              "typeString": "contract IAdmin"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 450,
+              "name": "IAdmin",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 159,
+              "src": "399:6:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IAdmin_$159",
+                "typeString": "contract IAdmin"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "constant": false,
+            "id": 453,
+            "name": "_vaultContract",
+            "nodeType": "VariableDeclaration",
+            "scope": 520,
+            "src": "483:36:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IFundingVault_$673",
+              "typeString": "contract IFundingVault"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 452,
+              "name": "IFundingVault",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 673,
+              "src": "483:13:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IFundingVault_$673",
+                "typeString": "contract IFundingVault"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "canonicalName": "Registry.UserInfo",
+            "id": 458,
+            "members": [
+              {
+                "constant": false,
+                "id": 455,
+                "name": "role",
+                "nodeType": "VariableDeclaration",
+                "scope": 458,
+                "src": "609:9:8",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_Role_$449",
+                  "typeString": "enum Registry.Role"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 454,
+                  "name": "Role",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 449,
+                  "src": "609:4:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_Role_$449",
+                    "typeString": "enum Registry.Role"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 457,
+                "name": "lastPayout",
+                "nodeType": "VariableDeclaration",
+                "scope": 458,
+                "src": "629:18:8",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 456,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "629:7:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "UserInfo",
+            "nodeType": "StructDefinition",
+            "scope": 520,
+            "src": "582:73:8",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 462,
+            "name": "_users",
+            "nodeType": "VariableDeclaration",
+            "scope": 520,
+            "src": "690:43:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UserInfo_$458_storage_$",
+              "typeString": "mapping(address => struct Registry.UserInfo)"
+            },
+            "typeName": {
+              "id": 461,
+              "keyType": {
+                "id": 459,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "698:7:8",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "690:28:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UserInfo_$458_storage_$",
+                "typeString": "mapping(address => struct Registry.UserInfo)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 460,
+                "name": "UserInfo",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 458,
+                "src": "709:8:8",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_UserInfo_$458_storage_ptr",
+                  "typeString": "struct Registry.UserInfo"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "body": {
+              "id": 473,
+              "nodeType": "Block",
+              "src": "849:50:8",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 471,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 467,
+                      "name": "_adminContract",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 451,
+                      "src": "860:14:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IAdmin_$159",
+                        "typeString": "contract IAdmin"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 469,
+                          "name": "_admin",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 464,
+                          "src": "884:6:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 468,
+                        "name": "IAdmin",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 159,
+                        "src": "877:6:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_IAdmin_$159_$",
+                          "typeString": "type(contract IAdmin)"
+                        }
+                      },
+                      "id": 470,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "877:14:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IAdmin_$159",
+                        "typeString": "contract IAdmin"
+                      }
+                    },
+                    "src": "860:31:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IAdmin_$159",
+                      "typeString": "contract IAdmin"
+                    }
+                  },
+                  "id": 472,
+                  "nodeType": "ExpressionStatement",
+                  "src": "860:31:8"
+                }
+              ]
+            },
+            "documentation": "@dev Sets the address of the admin contract\r",
+            "id": 474,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 465,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 464,
+                  "name": "_admin",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 474,
+                  "src": "826:14:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 463,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "826:7:8",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "825:16:8"
+            },
+            "returnParameters": {
+              "id": 466,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "849:0:8"
+            },
+            "scope": 520,
+            "src": "814:85:8",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 487,
+              "nodeType": "Block",
+              "src": "1022:233:8",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 482,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 477,
+                            "name": "msg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 688,
+                            "src": "1119:3:8",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_message",
+                              "typeString": "msg"
+                            }
+                          },
+                          "id": 478,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "sender",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": null,
+                          "src": "1119:10:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address_payable",
+                            "typeString": "address payable"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 480,
+                              "name": "_adminContract",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 451,
+                              "src": "1141:14:8",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_IAdmin_$159",
+                                "typeString": "contract IAdmin"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_IAdmin_$159",
+                                "typeString": "contract IAdmin"
+                              }
+                            ],
+                            "id": 479,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1133:7:8",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 481,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1133:23:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "1119:37:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "546869732066756e6374696f6e616c697479206973207265737472696374656420746f2061646d696e20616464726573736573",
+                        "id": 483,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1171:53:8",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_e4f25aa0c608132f3a45f94cf02282ca6b02f4470ca1ecdbfec86eafaebc31d2",
+                          "typeString": "literal_string \"This functionality is restricted to admin addresses\""
+                        },
+                        "value": "This functionality is restricted to admin addresses"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_e4f25aa0c608132f3a45f94cf02282ca6b02f4470ca1ecdbfec86eafaebc31d2",
+                          "typeString": "literal_string \"This functionality is restricted to admin addresses\""
+                        }
+                      ],
+                      "id": 476,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        691,
+                        692
+                      ],
+                      "referencedDeclaration": 692,
+                      "src": "1034:7:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 484,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1034:201:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 485,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1034:201:8"
+                },
+                {
+                  "id": 486,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "1246:1:8"
+                }
+              ]
+            },
+            "documentation": "@dev Ensures that only the admin contract/admin can use functions\r",
+            "id": 488,
+            "name": "onlyAdmin",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 475,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1019:2:8"
+            },
+            "src": "1001:254:8",
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 501,
+              "nodeType": "Block",
+              "src": "1442:57:8",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 499,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 495,
+                      "name": "_vaultContract",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 453,
+                      "src": "1453:14:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IFundingVault_$673",
+                        "typeString": "contract IFundingVault"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 497,
+                          "name": "_vault",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 490,
+                          "src": "1484:6:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 496,
+                        "name": "IFundingVault",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 673,
+                        "src": "1470:13:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_IFundingVault_$673_$",
+                          "typeString": "type(contract IFundingVault)"
+                        }
+                      },
+                      "id": 498,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1470:21:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IFundingVault_$673",
+                        "typeString": "contract IFundingVault"
+                      }
+                    },
+                    "src": "1453:38:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IFundingVault_$673",
+                      "typeString": "contract IFundingVault"
+                    }
+                  },
+                  "id": 500,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1453:38:8"
+                }
+              ]
+            },
+            "documentation": "@dev This allows admin addresses to update/set the address of the \r\n     vault contract\r",
+            "id": 502,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "arguments": [],
+                "id": 493,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 492,
+                  "name": "onlyAdmin",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 488,
+                  "src": "1430:9:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1430:11:8"
+              }
+            ],
+            "name": "setVault",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 491,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 490,
+                  "name": "_vault",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 502,
+                  "src": "1405:14:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 489,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1405:7:8",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1404:16:8"
+            },
+            "returnParameters": {
+              "id": 494,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1442:0:8"
+            },
+            "scope": 520,
+            "src": "1387:112:8",
+            "stateMutability": "nonpayable",
+            "superFunction": 408,
+            "visibility": "external"
+          },
+          {
+            "body": {
+              "id": 518,
+              "nodeType": "Block",
+              "src": "1575:185:8",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 516,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 509,
+                          "name": "_users",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 462,
+                          "src": "1714:6:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UserInfo_$458_storage_$",
+                            "typeString": "mapping(address => struct Registry.UserInfo storage ref)"
+                          }
+                        },
+                        "id": 511,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 510,
+                          "name": "_newAddress",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 504,
+                          "src": "1721:11:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1714:19:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_UserInfo_$458_storage",
+                          "typeString": "struct Registry.UserInfo storage ref"
+                        }
+                      },
+                      "id": 512,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "role",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 455,
+                      "src": "1714:24:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_enum$_Role_$449",
+                        "typeString": "enum Registry.Role"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 514,
+                          "name": "_role",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 506,
+                          "src": "1746:5:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint8",
+                            "typeString": "uint8"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_uint8",
+                            "typeString": "uint8"
+                          }
+                        ],
+                        "id": 513,
+                        "name": "Role",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 449,
+                        "src": "1741:4:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_enum$_Role_$449_$",
+                          "typeString": "type(enum Registry.Role)"
+                        }
+                      },
+                      "id": 515,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1741:11:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_enum$_Role_$449",
+                        "typeString": "enum Registry.Role"
+                      }
+                    },
+                    "src": "1714:38:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_enum$_Role_$449",
+                      "typeString": "enum Registry.Role"
+                    }
+                  },
+                  "id": 517,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1714:38:8"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 519,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "registerUser",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 507,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 504,
+                  "name": "_newAddress",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 519,
+                  "src": "1532:19:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 503,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1532:7:8",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 506,
+                  "name": "_role",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 519,
+                  "src": "1553:11:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 505,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1553:5:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1531:34:8"
+            },
+            "returnParameters": {
+              "id": 508,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1575:0:8"
+            },
+            "scope": 520,
+            "src": "1510:250:8",
+            "stateMutability": "nonpayable",
+            "superFunction": 425,
+            "visibility": "external"
+          }
+        ],
+        "scope": 521,
+        "src": "230:1533:8"
+      }
+    ],
+    "src": "0:1763:8"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry/Registry.sol",
+    "exportedSymbols": {
+      "Registry": [
+        520
+      ]
+    },
+    "id": 521,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 440,
+        "literals": [
+          "solidity",
+          "=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:8"
+      },
+      {
+        "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+        "file": "./IRegistry.sol",
+        "id": 441,
+        "nodeType": "ImportDirective",
+        "scope": 521,
+        "sourceUnit": 439,
+        "src": "28:25:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Admin/IAdmin.sol",
+        "file": "../Admin/IAdmin.sol",
+        "id": 442,
+        "nodeType": "ImportDirective",
+        "scope": 521,
+        "sourceUnit": 160,
+        "src": "55:29:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/Users/Veronica Coutts/Desktop/Desktop/Work/Ribbon/projects/IncentivesAlpha/Blockchain/contracts/Vault/IFundingVault.sol",
+        "file": "../Vault/IFundingVault.sol",
+        "id": 443,
+        "nodeType": "ImportDirective",
+        "scope": 521,
+        "sourceUnit": 674,
+        "src": "86:36:8",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 444,
+              "name": "IRegistry",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 438,
+              "src": "251:9:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IRegistry_$438",
+                "typeString": "contract IRegistry"
+              }
+            },
+            "id": 445,
+            "nodeType": "InheritanceSpecifier",
+            "src": "251:9:8"
+          }
+        ],
+        "contractDependencies": [
+          438
+        ],
+        "contractKind": "contract",
+        "documentation": "@dev The registry contract. Conforms to it's interface\r\n@author @vonnie610 (GitHub)\r",
+        "fullyImplemented": false,
+        "id": 520,
+        "linearizedBaseContracts": [
+          520,
+          438
+        ],
+        "name": "Registry",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "Registry.Role",
+            "id": 449,
+            "members": [
+              {
+                "id": 446,
+                "name": "PRACTITIONER",
+                "nodeType": "EnumValue",
+                "src": "318:12:8"
+              },
+              {
+                "id": 447,
+                "name": "PATIENT",
+                "nodeType": "EnumValue",
+                "src": "332:7:8"
+              },
+              {
+                "id": 448,
+                "name": "CHW",
+                "nodeType": "EnumValue",
+                "src": "341:3:8"
+              }
+            ],
+            "name": "Role",
+            "nodeType": "EnumDefinition",
+            "src": "307:38:8"
+          },
+          {
+            "constant": false,
+            "id": 451,
+            "name": "_adminContract",
+            "nodeType": "VariableDeclaration",
+            "scope": 520,
+            "src": "399:29:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IAdmin_$159",
+              "typeString": "contract IAdmin"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 450,
+              "name": "IAdmin",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 159,
+              "src": "399:6:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IAdmin_$159",
+                "typeString": "contract IAdmin"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "constant": false,
+            "id": 453,
+            "name": "_vaultContract",
+            "nodeType": "VariableDeclaration",
+            "scope": 520,
+            "src": "483:36:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IFundingVault_$673",
+              "typeString": "contract IFundingVault"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 452,
+              "name": "IFundingVault",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 673,
+              "src": "483:13:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IFundingVault_$673",
+                "typeString": "contract IFundingVault"
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "canonicalName": "Registry.UserInfo",
+            "id": 458,
+            "members": [
+              {
+                "constant": false,
+                "id": 455,
+                "name": "role",
+                "nodeType": "VariableDeclaration",
+                "scope": 458,
+                "src": "609:9:8",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_Role_$449",
+                  "typeString": "enum Registry.Role"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 454,
+                  "name": "Role",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 449,
+                  "src": "609:4:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_Role_$449",
+                    "typeString": "enum Registry.Role"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 457,
+                "name": "lastPayout",
+                "nodeType": "VariableDeclaration",
+                "scope": 458,
+                "src": "629:18:8",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 456,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "629:7:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "UserInfo",
+            "nodeType": "StructDefinition",
+            "scope": 520,
+            "src": "582:73:8",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 462,
+            "name": "_users",
+            "nodeType": "VariableDeclaration",
+            "scope": 520,
+            "src": "690:43:8",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UserInfo_$458_storage_$",
+              "typeString": "mapping(address => struct Registry.UserInfo)"
+            },
+            "typeName": {
+              "id": 461,
+              "keyType": {
+                "id": 459,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "698:7:8",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "690:28:8",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UserInfo_$458_storage_$",
+                "typeString": "mapping(address => struct Registry.UserInfo)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 460,
+                "name": "UserInfo",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 458,
+                "src": "709:8:8",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_UserInfo_$458_storage_ptr",
+                  "typeString": "struct Registry.UserInfo"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "private"
+          },
+          {
+            "body": {
+              "id": 473,
+              "nodeType": "Block",
+              "src": "849:50:8",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 471,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 467,
+                      "name": "_adminContract",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 451,
+                      "src": "860:14:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IAdmin_$159",
+                        "typeString": "contract IAdmin"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 469,
+                          "name": "_admin",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 464,
+                          "src": "884:6:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 468,
+                        "name": "IAdmin",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 159,
+                        "src": "877:6:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_IAdmin_$159_$",
+                          "typeString": "type(contract IAdmin)"
+                        }
+                      },
+                      "id": 470,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "877:14:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IAdmin_$159",
+                        "typeString": "contract IAdmin"
+                      }
+                    },
+                    "src": "860:31:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IAdmin_$159",
+                      "typeString": "contract IAdmin"
+                    }
+                  },
+                  "id": 472,
+                  "nodeType": "ExpressionStatement",
+                  "src": "860:31:8"
+                }
+              ]
+            },
+            "documentation": "@dev Sets the address of the admin contract\r",
+            "id": 474,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 465,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 464,
+                  "name": "_admin",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 474,
+                  "src": "826:14:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 463,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "826:7:8",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "825:16:8"
+            },
+            "returnParameters": {
+              "id": 466,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "849:0:8"
+            },
+            "scope": 520,
+            "src": "814:85:8",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 487,
+              "nodeType": "Block",
+              "src": "1022:233:8",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 482,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 477,
+                            "name": "msg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 688,
+                            "src": "1119:3:8",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_message",
+                              "typeString": "msg"
+                            }
+                          },
+                          "id": 478,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "sender",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": null,
+                          "src": "1119:10:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address_payable",
+                            "typeString": "address payable"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 480,
+                              "name": "_adminContract",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 451,
+                              "src": "1141:14:8",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_IAdmin_$159",
+                                "typeString": "contract IAdmin"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_IAdmin_$159",
+                                "typeString": "contract IAdmin"
+                              }
+                            ],
+                            "id": 479,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1133:7:8",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 481,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1133:23:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "1119:37:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "546869732066756e6374696f6e616c697479206973207265737472696374656420746f2061646d696e20616464726573736573",
+                        "id": 483,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1171:53:8",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_e4f25aa0c608132f3a45f94cf02282ca6b02f4470ca1ecdbfec86eafaebc31d2",
+                          "typeString": "literal_string \"This functionality is restricted to admin addresses\""
+                        },
+                        "value": "This functionality is restricted to admin addresses"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_e4f25aa0c608132f3a45f94cf02282ca6b02f4470ca1ecdbfec86eafaebc31d2",
+                          "typeString": "literal_string \"This functionality is restricted to admin addresses\""
+                        }
+                      ],
+                      "id": 476,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        691,
+                        692
+                      ],
+                      "referencedDeclaration": 692,
+                      "src": "1034:7:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 484,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1034:201:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 485,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1034:201:8"
+                },
+                {
+                  "id": 486,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "1246:1:8"
+                }
+              ]
+            },
+            "documentation": "@dev Ensures that only the admin contract/admin can use functions\r",
+            "id": 488,
+            "name": "onlyAdmin",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 475,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1019:2:8"
+            },
+            "src": "1001:254:8",
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 501,
+              "nodeType": "Block",
+              "src": "1442:57:8",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 499,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 495,
+                      "name": "_vaultContract",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 453,
+                      "src": "1453:14:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IFundingVault_$673",
+                        "typeString": "contract IFundingVault"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 497,
+                          "name": "_vault",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 490,
+                          "src": "1484:6:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 496,
+                        "name": "IFundingVault",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 673,
+                        "src": "1470:13:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_IFundingVault_$673_$",
+                          "typeString": "type(contract IFundingVault)"
+                        }
+                      },
+                      "id": 498,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1470:21:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_IFundingVault_$673",
+                        "typeString": "contract IFundingVault"
+                      }
+                    },
+                    "src": "1453:38:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IFundingVault_$673",
+                      "typeString": "contract IFundingVault"
+                    }
+                  },
+                  "id": 500,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1453:38:8"
+                }
+              ]
+            },
+            "documentation": "@dev This allows admin addresses to update/set the address of the \r\n     vault contract\r",
+            "id": 502,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "arguments": [],
+                "id": 493,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 492,
+                  "name": "onlyAdmin",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 488,
+                  "src": "1430:9:8",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1430:11:8"
+              }
+            ],
+            "name": "setVault",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 491,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 490,
+                  "name": "_vault",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 502,
+                  "src": "1405:14:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 489,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1405:7:8",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1404:16:8"
+            },
+            "returnParameters": {
+              "id": 494,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1442:0:8"
+            },
+            "scope": 520,
+            "src": "1387:112:8",
+            "stateMutability": "nonpayable",
+            "superFunction": 408,
+            "visibility": "external"
+          },
+          {
+            "body": {
+              "id": 518,
+              "nodeType": "Block",
+              "src": "1575:185:8",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 516,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "baseExpression": {
+                          "argumentTypes": null,
+                          "id": 509,
+                          "name": "_users",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 462,
+                          "src": "1714:6:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_UserInfo_$458_storage_$",
+                            "typeString": "mapping(address => struct Registry.UserInfo storage ref)"
+                          }
+                        },
+                        "id": 511,
+                        "indexExpression": {
+                          "argumentTypes": null,
+                          "id": 510,
+                          "name": "_newAddress",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 504,
+                          "src": "1721:11:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1714:19:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_UserInfo_$458_storage",
+                          "typeString": "struct Registry.UserInfo storage ref"
+                        }
+                      },
+                      "id": 512,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "role",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 455,
+                      "src": "1714:24:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_enum$_Role_$449",
+                        "typeString": "enum Registry.Role"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 514,
+                          "name": "_role",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 506,
+                          "src": "1746:5:8",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint8",
+                            "typeString": "uint8"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_uint8",
+                            "typeString": "uint8"
+                          }
+                        ],
+                        "id": 513,
+                        "name": "Role",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 449,
+                        "src": "1741:4:8",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_enum$_Role_$449_$",
+                          "typeString": "type(enum Registry.Role)"
+                        }
+                      },
+                      "id": 515,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1741:11:8",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_enum$_Role_$449",
+                        "typeString": "enum Registry.Role"
+                      }
+                    },
+                    "src": "1714:38:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_enum$_Role_$449",
+                      "typeString": "enum Registry.Role"
+                    }
+                  },
+                  "id": 517,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1714:38:8"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 519,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "registerUser",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 507,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 504,
+                  "name": "_newAddress",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 519,
+                  "src": "1532:19:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 503,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1532:7:8",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 506,
+                  "name": "_role",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 519,
+                  "src": "1553:11:8",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 505,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1553:5:8",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1531:34:8"
+            },
+            "returnParameters": {
+              "id": 508,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1575:0:8"
+            },
+            "scope": 520,
+            "src": "1510:250:8",
+            "stateMutability": "nonpayable",
+            "superFunction": 425,
+            "visibility": "external"
+          }
+        ],
+        "scope": 521,
+        "src": "230:1533:8"
+      }
+    ],
+    "src": "0:1763:8"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.11",
+  "updatedAt": "2019-08-13T16:43:50.691Z",
+  "devdoc": {
+    "author": "@vonnie610 (GitHub)\r",
+    "details": "The registry contract. Conforms to it's interface\r",
+    "methods": {
+      "constructor": {
+        "details": "Sets the address of the admin contract\r"
+      },
+      "kill(bool)": {
+        "details": "Allows the admin contract to kill the access control contract\r"
+      },
+      "removeUser(address)": {
+        "details": "Allows the admin contract to remove a user\r"
+      },
+      "setVault(address)": {
+        "details": "This allows admin addresses to update/set the address of the \r     vault contract\r"
+      },
+      "updateAccessControl(address)": {
+        "details": "Allows the admin contract to update the access control contract\r"
+      },
+      "updateRole(address,uint8)": {
+        "details": "Allows the admin to update the role of a user\r"
+      }
+    }
+  },
+  "userdoc": {
+    "methods": {
+      "kill(bool)": {
+        "notice": "The access control contract will not self destruct, but all \r        functionality will be haulted. \r"
+      }
+    }
+  }
+}
