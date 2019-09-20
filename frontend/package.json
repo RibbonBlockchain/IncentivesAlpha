@@ -20,7 +20,6 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "web3": "^1.2.1",
-    "web3-react": "^5.0.4",
     "web3connect": "^1.0.0-beta.22"
   },
   "scripts": {

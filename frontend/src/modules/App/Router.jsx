@@ -1,21 +1,54 @@
-import React, { useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import Alert from "../Alert";
 import Login from "../Login";
 
-import web3Connect from "../../common/utils/web3/Connectors";
+import Home from "../Home";
+
+function AuthenticatedRoute({ component: C, appProps, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        appProps.currentProvider && appProps.currentProvider.selectedAddress ? (
+          <C {...props} {...appProps} />
+        ) : (
+          <Redirect to="/" />
+        )
+      }
+    />
+  );
+}
+
+function UnAuthenticated({ component: C, appProps, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        !appProps.currentProvider ? (
+          <C {...props} {...appProps} />
+        ) : (
+          <Redirect to="/dashboard" />
+        )
+      }
+    />
+  );
+}
 
 function Router() {
-  useEffect(() => {
-    web3Connect.on("connect", provider => {
-      console.log(provider);
-    });
-  });
+  const web3 = useSelector(state => state.web3);
+
   return (
     <>
       <Switch>
-        <Route exact path="/" component={Login} />
+        <UnAuthenticated appProps={web3} path="/" component={Login} exact />
+        <AuthenticatedRoute
+          appProps={web3}
+          path="/dashboard"
+          component={Home}
+        />
       </Switch>
       <Alert />
     </>
