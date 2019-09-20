@@ -1,0 +1,15 @@
+@import "../../styles/variables";
+.button {
+  outline: none;
+  border: none;
+  border-radius: calculateRem(10);
+  padding: calculateRem(8) calculateRem(32);
+  cursor: pointer;
+  display: flex;
+  span {
+    align-self: center;
+    font-weight: 600;
+	text-transform: capitalize;
+	margin-left: calculateRem(20);
+  }
+}
