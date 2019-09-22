@@ -1,5 +1,11 @@
 # Blockchain 
 
+## Index
+[1. Getting started](#1-getting-started)
+[2. Trouble shooting](#2-trouble-shooting)
+[3. Security considerations](#3-security-considerations)
+[Contract architecture](#contract-architecture)
+
 ## 1. Getting started
 To set up dependencies run:
 ```
@@ -33,3 +39,7 @@ address private _contract;
 // Secure 
 InterfaceOfContract private _contractInstance;
 ```
+
+# Contract architecture
+
+
