@@ -1,4 +1,4 @@
-pragma solidity = 0.5.0;
+pragma solidity = 0.5.10;
 
 import "./WhitelistAdminRole.sol";
 import "./IAdmin.sol";
@@ -21,7 +21,7 @@ contract Admin is WhitelistAdminRole, IAdmin {
       * @dev Sets up the addresses for the vault and registry.
       * @notice This allows the admin to act as admin over these contracts.
       */
-    function init(address _vault, address _registry) 
+    constructor(address _vault, address _registry) 
         public
         onlyWhitelistAdmin()
     {
