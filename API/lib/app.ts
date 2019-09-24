@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Routes } from "./routes/walletRoutes";
+import { UserRoutes } from "./routes/userRoutes";
 import * as mongoose from "mongoose";
 
 const isDocker = require("is-docker");
@@ -16,6 +17,7 @@ const {
 class App {
   public app: express.Application = express();
   public routePrv: Routes = new Routes();
+  public userRoutes: UserRoutes = new UserRoutes();
   // public mongoUrl: string = 'mongodb://localhost/Ribbon-Incentives-API-DB';
   // public mongoUrl: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
   public mongoUrl: string;
@@ -32,11 +34,12 @@ class App {
     this.config();
     this.mongoSetup();
     this.routePrv.routes(this.app);
+    this.userRoutes.routes(this.app);
   }
 
   private config(): void {
-    this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
     // serving static files
     this.app.use(express.static("public"));
   }
