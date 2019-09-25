@@ -2,6 +2,8 @@ pragma solidity 0.5.10;
 
 interface IAdmin {
 
+    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }
+
     /**
       * @notice Sends funds to the vault.
       */
@@ -29,5 +31,4 @@ interface IAdmin {
       *         the vault and the registry.
       */
     function kill() external;
-
 }

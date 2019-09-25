@@ -1,11 +1,12 @@
 pragma solidity 0.5.10;
 
-import { IVault } from "./IVault.sol"; 
-import { WhiteListAdminRole } from "../Support/WhiteListAdminRole.sol";
-import { ERC20 } from "../Support/token/ERC20.sol";
+import { IVault } from "./IVault.sol";
+import { IRegistry } from "../Registry/IRegistry.sol";
+import { IAdmin } from "../AdminDAO/IAdmin.sol";
+import { WhiteListAdminRole } from "../Support/WhitelistAdminRole.sol";
 import { SafeMath } from "../Support/math/SafeMath.sol";
 
-contract Vault is IVault, ERC20, WhiteListAdminRole {
+contract Vault is IVault, WhiteListAdminRole {
     using SafeMath for uint256;
 
     // The ERC20 colalteral token
@@ -13,7 +14,22 @@ contract Vault is IVault, ERC20, WhiteListAdminRole {
     // The active state of the contract
     bool internal _active;
     // The admin of the admin contract
-    address internal _admin;
+    IAdmin internal _adminInstance;
+    // The contract instance of the registry
+    IRegistry internal _registryInstance;
+    // Creator address
+    address internal _creator;
+
+    constructor(
+        address _admin,
+        address _collateral
+    )
+        public
+        WhiteListAdminRole()
+    {
+        _collateralToken = IERC20(_collateral);
+        _adminInstance = IAdmin(_admin);
+    }
 
     /**
       * @dev Ensures that only the admin contract/admin can use functions
@@ -26,15 +42,12 @@ contract Vault is IVault, ERC20, WhiteListAdminRole {
         _;
     }
 
-    constructor(
-        address _admin,
-        address _collateral
-    )
-        public
-        WhiteListAdminRole()
-    {
-        _collateralToken = IERC20(_collateral);
-        _admin = _admin;
+    modifier onlyAdminContract() {
+        require(
+            msg.sender == address(_adminInstance),
+            "Permission denied, only admin contract can use functionality"
+        );
+        _;
     }
 
     /**
@@ -42,7 +55,7 @@ contract Vault is IVault, ERC20, WhiteListAdminRole {
       *      of the vault contract
       */
     function init(address _registry) external onlyWhitelistAdmin() {
-        _registryContract = IRegistry(_registry);
+        _registryInstance = IRegistry(_registry);
     }
 
     /**
@@ -50,9 +63,8 @@ contract Vault is IVault, ERC20, WhiteListAdminRole {
       *         will mint tokens that will be owned by the vault until they are
       *         spent as payouts.
       */
-    function donateFunds() external payable onlyWhitelistAdmin() isActive() {
-        _collateralSupply.add(msg.value);
-        _mint(address(this), msg.value.mul(10));
+    function donateFunds() external payable onlyAdminContract() isActive() {
+        
     }
 
     function payout(
@@ -64,15 +76,26 @@ contract Vault is IVault, ERC20, WhiteListAdminRole {
         external
         isActive()
     {
+        uint256 balance = address(this).balance;
         // check with registry that msg.sender is chw
         require(
-            _amountEach.mul(3) >= _totalSupply,
-            "Insuficient balance to compleate payout"
+            _amountEach.mul(3) >= balance,
+            "Insuficient balance in vault to compleate payout"
+        );
+        require(
+            _registryInstance.getUserRole(_patient) != UserRole.INACTIVE &&
+            _registryInstance.getUserRole(_practitioner) != UserRole.INACTIVE &&
+            _registryInstance.getUserRole(_CHW) != UserRole.INACTIVE
+            ,"Revert, a user in the payout was inactive"
         );
 
-        _mint(_patient, _amountEach);
-        _mint(_practitioner, _amountEach);
-        _mint(_CHW, _amountEach);
+        _patient.transfer(_amountEach);
+        _practitioner.transfer(_amountEach);
+        _CHW.transfer(_amountEach);
+
+        _registryInstance.recordPayout(_patient, _amountEach);
+        _registryInstance.recordPayout(_practitioner, _amountEach);
+        _registryInstance.recordPayout(_CHW, _amountEach);
     }
 
     /**
@@ -83,8 +106,7 @@ contract Vault is IVault, ERC20, WhiteListAdminRole {
     function kill() external onlyWhitelistAdmin() isActive() {
         _active = false;
 
-        _burn(address(this), _totalSupply);
-        uint256 balance = _collateralToken.balanceOf(address(this));
-        _collateralToken.transfer(_admin, balance);
+        uint256 balance = address(this).balance;
+        _creator.transfer(balance);
     }
 }

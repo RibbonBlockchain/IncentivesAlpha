@@ -26,7 +26,7 @@ interface IVault {
       * @dev    The vault will not function untill this function has been
       *         called. This function is called from the admin contract.
       */
-    function init(address _registry) external
+    function init(address _registry) external;
 
     /**
       * @notice Allows the admin contract to kill the vault. This will make the

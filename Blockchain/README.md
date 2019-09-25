@@ -66,7 +66,7 @@ Allows the admin contract to update the role of the user.
 `kill()`
 Allows the admin of the admin contract to kill the eco-system. This will send all remaining collateral in the vault to the admin as well as burning all the tokens. This function will kill the vault and the registry. 
 
-### `FundingVault.sol`
+### `Vault.sol`
 
 This contract is an ERC20 contract. Each token is worth 1/10 of the collateral token. 
 
