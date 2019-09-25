@@ -23,7 +23,9 @@ contract Registry is IRegistry, WhiteListAdminRole {
         uint256 _balance;
     }
 
-
+    /**
+      * @notice Sets up the registries variables.
+      */
     constructor(address _vault, address _admin) public WhiteListAdminRole() {
         _vaultInstance = IVault(_vault);
         _adminInstance = IAdmin(_admin);
