@@ -1,10 +1,12 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import Logo from "../../common/components/Logo";
 import Balance from "../../common/components/Balance";
 import User from "../../common/components/User";
 import styles from "./Home.module.scss";
 import Footer from "../../common/components/Footer/Footer";
+import WalletModal from "../Wallet";
 
 import Dashboard from "../Dashboard/Dashboard";
 import CreateInteraction from "../Interactions/Create";
@@ -21,7 +23,16 @@ import ListHealthWorker from "../HealthWorker/List";
 
 import Profile from "../Profile";
 
+import { SHOW_WALLET } from "../../common/constants/wallet";
+
 function Home() {
+  const dispatch = useDispatch();
+
+  function showWallet() {
+    dispatch({
+      type: SHOW_WALLET,
+    });
+  }
   return (
     <>
       <div className={styles.admin}>
@@ -33,7 +44,7 @@ function Home() {
             <div></div>
             <div className={styles.actions}>
               <Balance />
-              <User />
+              <User onClick={showWallet} />
             </div>
           </div>
         </header>
@@ -94,11 +105,6 @@ function Home() {
               </NavLink>
             </li>
           </ul>
-          <div className={[styles.menu_logout].join(" ")}>
-            <button className={[styles.btn, styles.btn__primary].join(" ")}>
-              Logout
-            </button>
-          </div>
         </nav>
         <main className={styles.admin__main}>
           <Switch>
@@ -121,6 +127,7 @@ function Home() {
             <Route path="/app/profile" component={Profile} />
             <Redirect from="*" to="/app/home" />
           </Switch>
+          <WalletModal />
         </main>
         <Footer />
       </div>
