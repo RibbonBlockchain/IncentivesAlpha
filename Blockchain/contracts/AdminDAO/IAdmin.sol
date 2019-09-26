@@ -12,7 +12,7 @@ interface IAdmin {
     /**
       * @notice Allows the admin contract to add a user as any user role.
       */
-    function addUser(address _user, UserRole _userRole) external;
+    function addUser(address _user, uint8 _userRole) external;
 
     /**
       * @notice Allows the admin contract to remove a user.
@@ -22,7 +22,7 @@ interface IAdmin {
     /**
       * @notice Allows the admin contract to update the role of the user.
       */
-    function updateUser(address _user, UserRole _newUserRole) external;
+    function updateUser(address _user, uint8 _newUserRole) external;
 
     /**
       * @notice Allows the admin of the admin contract to kill the eco-system.

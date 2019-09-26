@@ -10,7 +10,7 @@ interface IRegistry {
       *         If the `msg.sender` is a CHW, only patients and practitioners
       *         may be added.
       */
-    function addUser(address _user, UserRole _userRole) external;
+    function addUser(address _user, uint8 _userRole) external;
     
     /**
       * @notice Allows the admin contract to remove a user.
@@ -20,7 +20,7 @@ interface IRegistry {
     /**
       * @notice Allows the admin contract to update the role of the user.
       */
-    function updateUser(address _user, UserRole _newUserRole) external;
+    function updateUser(address _user, uint8 _newUserRole) external;
 
     /**
       * @notice Allows the vault contract to record a payout.

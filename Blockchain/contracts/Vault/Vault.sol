@@ -3,14 +3,12 @@ pragma solidity 0.5.10;
 import { IVault } from "./IVault.sol";
 import { IRegistry } from "../Registry/IRegistry.sol";
 import { IAdmin } from "../AdminDAO/IAdmin.sol";
-import { WhiteListAdminRole } from "../Support/WhitelistAdminRole.sol";
+import { WhitelistAdminRole } from "../Support/WhitelistAdminRole.sol";
 import { SafeMath } from "../Support/math/SafeMath.sol";
 
-contract Vault is IVault, WhiteListAdminRole {
+contract Vault is IVault, WhitelistAdminRole {
     using SafeMath for uint256;
-
-    // The ERC20 colalteral token
-    IERC20 internal _collateralToken;
+    
     // The active state of the contract
     bool internal _active;
     // The admin of the admin contract
@@ -18,16 +16,14 @@ contract Vault is IVault, WhiteListAdminRole {
     // The contract instance of the registry
     IRegistry internal _registryInstance;
     // Creator address
-    address internal _creator;
+    address payable internal _creator;
 
     constructor(
-        address _admin,
-        address _collateral
+        address _admin
     )
         public
-        WhiteListAdminRole()
+        WhitelistAdminRole()
     {
-        _collateralToken = IERC20(_collateral);
         _adminInstance = IAdmin(_admin);
     }
 
@@ -68,9 +64,9 @@ contract Vault is IVault, WhiteListAdminRole {
     }
 
     function payout(
-        address _patient,
-        address _practitioner,
-        address _CHW,
+        address payable _patient,
+        address payable _practitioner,
+        address payable _CHW,
         uint256 _amountEach
     )
         external
@@ -83,9 +79,9 @@ contract Vault is IVault, WhiteListAdminRole {
             "Insuficient balance in vault to compleate payout"
         );
         require(
-            _registryInstance.getUserRole(_patient) != UserRole.INACTIVE &&
-            _registryInstance.getUserRole(_practitioner) != UserRole.INACTIVE &&
-            _registryInstance.getUserRole(_CHW) != UserRole.INACTIVE
+            uint8(_registryInstance.getUserRole(_patient)) != uint8(UserRole.INACTIVE) &&
+            uint8(_registryInstance.getUserRole(_practitioner)) != uint8(UserRole.INACTIVE) &&
+            uint8(_registryInstance.getUserRole(_CHW)) != uint8(UserRole.INACTIVE)
             ,"Revert, a user in the payout was inactive"
         );
 

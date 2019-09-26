@@ -2,11 +2,11 @@ pragma solidity 0.5.10;
 
 import { IVault } from "../Vault/IVault.sol";
 import { IAdmin } from "../AdminDAO/IAdmin.sol";
-import { WhiteListAdminRole } from "../Support/WhitelistAdminRole.sol";
+import { WhitelistAdminRole } from "../Support/WhitelistAdminRole.sol";
 import { SafeMath } from "../Support/math/SafeMath.sol";
 import { IRegistry } from "./IRegistry.sol";
 
-contract Registry is IRegistry, WhiteListAdminRole {
+contract Registry is IRegistry, WhitelistAdminRole {
     using SafeMath for uint256;
 
     // The contract instance of the vault contract
@@ -26,7 +26,7 @@ contract Registry is IRegistry, WhiteListAdminRole {
     /**
       * @notice Sets up the registries variables.
       */
-    constructor(address _vault, address _admin) public WhiteListAdminRole() {
+    constructor(address _vault, address _admin) public WhitelistAdminRole() {
         _vaultInstance = IVault(_vault);
         _adminInstance = IAdmin(_admin);
     }
@@ -58,20 +58,20 @@ contract Registry is IRegistry, WhiteListAdminRole {
       *         If the `msg.sender` is a CHW, only patients and practitioners
       *         may be added.
       */
-    function addUser(address _user, UserRole _newUserRole) external isActive() {
+    function addUser(address _user, uint8 _newUserRole) external isActive() {
         if(_userDetails[msg.sender]._userRole == UserRole.CHW) {
             // Ensuring the CHW only adds roles it has permission to add
             require(
-                _newUserRole != UserRole.ADMIN && _newUserRole != UserRole.CHW,
+                _newUserRole != uint8(UserRole.ADMIN) && _newUserRole != uint8(UserRole.CHW),
                 "Permission denied, CHW cannot add admin or CHW"
             );
             // Adding the user
-            _userDetails[_user]._userRole = _newUserRole;
+            _userDetails[_user]._userRole = UserRole(_newUserRole);
             _userDetails[_user]._balance = 0;
 
         } else if(msg.sender == address(_adminInstance)) {
             // Adding the user
-            _userDetails[_user]._userRole = _newUserRole;
+            _userDetails[_user]._userRole = UserRole(_newUserRole);
             _userDetails[_user]._balance = 0;
 
         } else {
@@ -94,12 +94,12 @@ contract Registry is IRegistry, WhiteListAdminRole {
       */
     function updateUser(
         address _user,
-        UserRole _newUserRole
+        uint8 _newUserRole
     )
         external
         onlyAdminContract()
     {
-        _userDetails[_user]._userRole = _newUserRole;
+        _userDetails[_user]._userRole = UserRole(_newUserRole);
     }
 
     /**

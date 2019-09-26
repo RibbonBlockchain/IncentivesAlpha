@@ -2,6 +2,8 @@ pragma solidity 0.5.10;
 
 interface IVault {
 
+    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }
+    
     /**
       * @notice Allows the vault to receive funds from the admin contract. This
       *         will mint tokens that will be owned by the vault until they are
@@ -14,9 +16,9 @@ interface IVault {
       *         against the registry.
       */
     function payout(
-        address _patient,
-        address _practitioner,
-        address _CHW,
+        address payable _patient,
+        address payable _practitioner,
+        address payable _CHW,
         uint256 _amountEach
     )
         external;
