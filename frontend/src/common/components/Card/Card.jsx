@@ -3,6 +3,6 @@ import styles from "./Card.module.scss";
 
 export default function Card({ children, classNames }) {
   return (
-    <div className={[styles.card, classNames]}>{children && children}</div>
+    <div className={[styles.card, classNames].join(" ")}>{children && children}</div>
   );
 }
