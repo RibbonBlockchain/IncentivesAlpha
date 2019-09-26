@@ -5,7 +5,6 @@ import styles from "./Dashboard.module.scss";
 export default function Dashboard() {
   return (
     <>
-      <h2>Title here</h2>
       <div className={styles.dashboard}>
         {/* <div className={styles.dashboard__item}>
           <Card>

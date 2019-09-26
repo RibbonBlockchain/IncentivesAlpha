@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+
+.address {
+  background-color: #76808f;
+  color: #ffffff;
+  margin-left: calculateRem(20);
+  border-radius: calculateRem(40);
+  cursor: pointer;
+  &:hover {
+    background-color: #1f222d;
+  }
+  p {
+    width: calculateRem(150);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 calculateRem(10);
+  }
+}
