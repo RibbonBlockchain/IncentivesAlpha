@@ -6,6 +6,10 @@ $font: "Inter";
 $base-font-size: 16;
 $desktop: 830px;
 
+$dashboard-header-height: 70px;
+$dashboard-footer-height: 70px;
+$dashboard-nav-width: 250px;
+
 @import "functions";
 @import "form";
 @import "links";
