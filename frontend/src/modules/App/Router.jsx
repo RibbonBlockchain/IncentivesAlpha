@@ -30,7 +30,7 @@ function UnAuthenticated({ component: C, appProps, ...rest }) {
         !appProps.currentProvider ? (
           <C {...props} {...appProps} />
         ) : (
-          <Redirect to="/dashboard" />
+          <Redirect to="/app" />
         )
       }
     />
@@ -44,11 +44,7 @@ function Router() {
     <>
       <Switch>
         <UnAuthenticated appProps={web3} path="/" component={Login} exact />
-        <AuthenticatedRoute
-          appProps={web3}
-          path="/dashboard"
-          component={Home}
-        />
+        <Route appProps={web3} path="/app" component={Home} />
       </Switch>
       <Alert />
     </>

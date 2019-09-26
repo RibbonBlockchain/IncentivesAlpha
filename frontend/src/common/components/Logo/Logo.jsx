@@ -5,7 +5,7 @@ import logoImage from "../../assets/logo.svg";
 
 import styles from "./Logo.module.scss";
 
-function Logo() {
+function Logo({ logoClass }) {
   return (
     <>
       <ReactImageFallback
@@ -13,7 +13,7 @@ function Logo() {
         fallbackImage={logoImage}
         initialImage={logoImage}
         alt="Ribbon Blockchain Company Logo"
-        className={styles.logo}
+        className={[styles.logo, logoClass].join(" ")}
       />
     </>
   );

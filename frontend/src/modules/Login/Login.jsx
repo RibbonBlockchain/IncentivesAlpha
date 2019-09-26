@@ -7,6 +7,7 @@ import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
 import { APP_INITIALIZED } from "../../common/constants/web3";
 import Logo from "../../common/components/Logo";
+import { Link } from "react-router-dom";
 
 import styles from "./Login.module.scss";
 import { SHOW_ALERT } from "../../common/constants/alert";
@@ -62,6 +63,7 @@ function Login({ history }) {
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit
               </small>
             </div>
+            <Link to="/app">Dashboard</Link>
           </div>
           <div className={styles.logo}>
             <Logo />
