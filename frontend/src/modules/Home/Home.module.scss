@@ -36,6 +36,11 @@
     background-color: #313541;
   }
 
+  .actions {
+	display: flex;
+	justify-content: space-between;
+  }
+
   &__main {
     flex: 1;
     grid-area: main;
@@ -147,12 +152,16 @@ img {
     color: #76808f;
     text-decoration: none;
 
-    &:hover,
-    &:focus {
+    &:hover {
       color: #fff;
       background-color: #1f222d;
     }
   }
+}
+
+.active {
+  color: #fff;
+  background-color: #1f222d;
 }
 
 .card {
@@ -167,12 +176,9 @@ img {
 
 .btn {
   display: inline-block;
-  border-radius: 5em;
   border: 0;
-  padding: 0.5rem 1rem;
-  white-space: nowrap;
-
-  &--primary {
+  padding: calculateRem(20);
+  &__primary {
     color: #fff;
     background-color: #56bf89;
   }

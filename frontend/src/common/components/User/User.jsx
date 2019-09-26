@@ -4,7 +4,10 @@ import styles from "./User.module.scss";
 export default function User() {
   return (
     <>
-      <p>User here</p>
+      <div className={styles.address}>
+		  {/* Todo show address as 0x00000...0000 */}
+        <p>0x9A8A9958ac1B70c49ccE9693CCb0230f13F63505</p>
+      </div>
     </>
   );
 }
