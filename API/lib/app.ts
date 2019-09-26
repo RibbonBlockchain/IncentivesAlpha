@@ -3,6 +3,7 @@ import * as fileUpload from "express-fileupload";
 import * as bodyParser from "body-parser";
 import { Routes } from "./routes/walletRoutes";
 import { UserRoutes } from "./routes/userRoutes";
+import { AuthRoutes } from "./routes/authRoute";
 import * as mongoose from "mongoose";
 import * as cors from "cors";
 
@@ -20,6 +21,7 @@ class App {
   public app: express.Application = express();
   public routePrv: Routes = new Routes();
   public userRoutes: UserRoutes = new UserRoutes();
+  public authRoutes: AuthRoutes = new AuthRoutes();
   // public mongoUrl: string = 'mongodb://localhost/Ribbon-Incentives-API-DB';
   // public mongoUrl: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
   public mongoUrl: string;
@@ -37,6 +39,7 @@ class App {
     this.mongoSetup();
     this.routePrv.routes(this.app);
     this.userRoutes.routes(this.app);
+    this.authRoutes.routes(this.app);
   }
 
   private config(): void {

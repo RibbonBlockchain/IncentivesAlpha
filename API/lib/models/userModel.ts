@@ -15,7 +15,7 @@ export const UserSchema = new Schema({
     type: Number,
     required: "Nonce is required"
   },
-  walletAddress: {
+  publicAddress: {
     type: String,
     required: true
   },
