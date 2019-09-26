@@ -1,0 +1,12 @@
+@import "../../common/styles/variables";
+
+.modalWindow {
+  //   height: 100%;
+  background: #313541;
+  color: #ffffff;
+}
+
+.cnt {
+  font-family: $font;
+  padding: calculateRem(20);
+}
