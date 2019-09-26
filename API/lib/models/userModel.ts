@@ -11,6 +11,10 @@ export const UserSchema = new Schema({
     type: String,
     required: "Enter a user's last name"
   },
+  nonce: {
+    type: Number,
+    required: "Nonce is required"
+  },
   walletAddress: {
     type: String,
     required: true
