@@ -1,8 +1,10 @@
 import * as express from "express";
+import * as fileUpload from "express-fileupload";
 import * as bodyParser from "body-parser";
 import { Routes } from "./routes/walletRoutes";
 import { UserRoutes } from "./routes/userRoutes";
 import * as mongoose from "mongoose";
+import * as cors from "cors";
 
 const isDocker = require("is-docker");
 
@@ -40,6 +42,8 @@ class App {
   private config(): void {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(fileUpload());
+    this.app.use(cors());
     // serving static files
     this.app.use(express.static("public"));
   }
