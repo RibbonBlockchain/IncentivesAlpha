@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import Logo from "../../common/components/Logo";
-import Balance from "../../common/components/Balance";
 import User from "../../common/components/User";
 import styles from "./Home.module.scss";
 import Footer from "../../common/components/Footer/Footer";
@@ -25,12 +24,14 @@ import Profile from "../Profile";
 
 import { SHOW_WALLET } from "../../common/constants/wallet";
 
-function Home() {
+function Home(props) {
+  // to be removed when I start fetching data from backend and metamask
+  let address = "0x9A8A9958ac1B70c49ccE9693CCb0230f13F63505";
   const dispatch = useDispatch();
 
   function showWallet() {
     dispatch({
-      type: SHOW_WALLET,
+      type: SHOW_WALLET
     });
   }
   return (
@@ -43,8 +44,7 @@ function Home() {
           <div className={styles.toolbar}>
             <div></div>
             <div className={styles.actions}>
-              <Balance />
-              <User onClick={showWallet} />
+              <User onClick={showWallet} address={address} />
             </div>
           </div>
         </header>
@@ -96,13 +96,9 @@ function Home() {
               </NavLink>
             </li>
             <li className={styles.menu__item}>
-              <NavLink
-                activeClassName={styles.active}
-                className={styles.menu__link}
-                to="/app/profile"
-              >
+              <div className={styles.menu__link} onClick={showWallet}>
                 My Profile
-              </NavLink>
+              </div>
             </li>
           </ul>
         </nav>
@@ -127,7 +123,7 @@ function Home() {
             <Route path="/app/profile" component={Profile} />
             <Redirect from="*" to="/app/home" />
           </Switch>
-          <WalletModal />
+          <WalletModal {...props} />
         </main>
         <Footer />
       </div>

@@ -1,53 +1,5 @@
 @import "../../common/styles/variables";
 
-.dashboard {
-  --column-count: 2;
-
-  // Flexbox Fallback
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 calc(var(--spacing) * -0.5);
-
-  // Grid
-  display: grid;
-  grid-template-columns: repeat(var(--column-count), 1fr);
-  grid-gap: var(--spacing);
-
-  &__item {
-    // By default, items span 2 columns
-    flex: 1 1 50%;
-    grid-column-end: span 2;
-    padding: calc(var(--spacing) / 2);
-
-    // these span the full width
-    &--full {
-      flex-basis: 100%;
-      grid-column: 1 / -1;
-    }
-
-    // these span only one column
-    &--col {
-      flex-basis: calc(100% / var(--column-count));
-      grid-column-end: span 1;
-    }
-  }
-
-  // Switch to 4-col grid on larger screens
-  @media screen and (min-width: 48rem) {
-    --column-count: 4;
-  }
-
-  // If we have grid support, reset the margins and paddings;
-  // grid-gap handles the spacing for us.
-  @supports (display: grid) {
-    margin: 0;
-
-    &__item {
-      padding: 0;
-    }
-  }
-}
-
 a {
   color: #dc5a60;
   text-decoration: none;
