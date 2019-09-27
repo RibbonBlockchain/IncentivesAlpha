@@ -37,8 +37,8 @@
   }
 
   .actions {
-	display: flex;
-	justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
   }
 
   &__main {
@@ -193,6 +193,12 @@ img {
 
   &__item {
     margin-right: 1rem;
+  }
+}
+
+li {
+  div {
+    cursor: pointer;
   }
 }
 
