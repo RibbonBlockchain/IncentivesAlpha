@@ -1,60 +1,146 @@
-pragma solidity = 0.5.0;
+pragma solidity 0.5.10;
 
-import "./IRegistry.sol";
-import "../Admin/IAdmin.sol";
-import "../Vault/IFundingVault.sol";
+import { IVault } from "../Vault/IVault.sol";
+import { IAdmin } from "../AdminDAO/IAdmin.sol";
+import { WhitelistAdminRole } from "../Support/WhitelistAdminRole.sol";
+import { SafeMath } from "../Support/math/SafeMath.sol";
+import { IRegistry } from "./IRegistry.sol";
 
-/**
-  * @dev The registry contract. Conforms to it's interface
-  * @author @vonnie610 (GitHub)
-  */
-contract Registry is IRegistry {
-    // The users role in transactions
-    enum Role {PRACTITIONER, PATIENT, CHW}
-    // The live instance of the admin contract
-    IAdmin private _adminContract;
-    // The live instance of the vault contract
-    IFundingVault private _vaultContract;
-    // Storage of roles and previous payout timestamps
+contract Registry is IRegistry, WhitelistAdminRole {
+    using SafeMath for uint256;
+
+    // The contract instance of the vault contract
+    IVault internal _vaultInstance;
+    // The contract instance of the admin contract
+    IAdmin internal _adminInstance;
+    // The storage of uses and their roles
+    mapping(address => UserInfo) internal _userDetails;
+    // The active state of the registry
+    bool internal _active = true;
+
     struct UserInfo {
-        Role role;
-        uint256 lastPayout;
-    }
-    // Users to their roles
-    mapping(address => UserInfo) private _users;
-
-    /**
-      * @dev Sets the address of the admin contract
-      */
-    constructor(address _admin) public {
-        _adminContract = IAdmin(_admin);
+        UserRole _userRole;
+        uint256 _balance;
     }
 
     /**
-      * @dev Ensures that only the admin contract/admin can use functions
+      * @notice Sets up the registries variables.
       */
-    modifier onlyAdmin() { 
+    constructor(address _vault, address _admin) public WhitelistAdminRole() {
+        _vaultInstance = IVault(_vault);
+        _adminInstance = IAdmin(_admin);
+    }
+
+    modifier onlyAdminContract() {
         require(
-            // _adminContract.isWhitelistAdmin(msg.sender) ||
-            msg.sender == address(_adminContract),
-            "This functionality is restricted to admin addresses"
+            msg.sender == address(_adminInstance),
+            "Permission denied, only admin contract can use functionality"
         );
         _;
     }
 
-    /**
-      * @dev This allows admin addresses to update/set the address of the 
-      *      vault contract
-      */
-    function setVault(address _vault) external onlyAdmin() {
-        _vaultContract = IFundingVault(_vault);
+    modifier onlyVaultContract() {
+        require(
+            msg.sender == address(_vaultInstance),
+            "Permission denied, only admin contract can use functionality"
+        );
+        _;
     }
-   
-    function registerUser(address _newAddress, uint8 _role) external {
-        // Checking the msg.sender has the permissions to add a user
 
+    modifier isActive() {
+        require(_active, "Registry is not active");
+        _;
+    }
+
+    /**
+      * @notice Allows the adding of a user as any user role. If the
+      *         `msg.sender` is the admin contract, any user role may be added.
+      *         If the `msg.sender` is a CHW, only patients and practitioners
+      *         may be added.
+      */
+    function addUser(address _user, uint8 _newUserRole) external isActive() {
+        if(_userDetails[msg.sender]._userRole == UserRole.CHW) {
+            // Ensuring the CHW only adds roles it has permission to add
+            require(
+                _newUserRole != uint8(UserRole.ADMIN) && _newUserRole != uint8(UserRole.CHW),
+                "Permission denied, CHW cannot add admin or CHW"
+            );
+            // Adding the user
+            _userDetails[_user]._userRole = UserRole(_newUserRole);
+            _userDetails[_user]._balance = 0;
+
+        } else if(msg.sender == address(_adminInstance)) {
+            // Adding the user
+            _userDetails[_user]._userRole = UserRole(_newUserRole);
+            _userDetails[_user]._balance = 0;
+
+        } else {
+            require(
+                false,
+                "Permission denied, only admin contract & CHW can use function"
+            );
+        }
+    }
+    
+    /**
+      * @notice Allows the admin contract to remove a user.
+      */
+    function removeUser(address _user) external onlyAdminContract() isActive() {
+        _userDetails[_user]._userRole = UserRole.INACTIVE;
+    }
+    
+    /**
+      * @notice Allows the admin contract to update the role of the user.
+      */
+    function updateUser(
+        address _user,
+        uint8 _newUserRole
+    )
+        external
+        onlyAdminContract()
+    {
+        _userDetails[_user]._userRole = UserRole(_newUserRole);
+    }
+
+    /**
+      * @notice Allows the vault contract to record a payout.
+      */
+    function recordPayout(
+        address _user,
+        uint256 _amount
+    )
+        external
+        onlyVaultContract()
+        isActive()
+    {
+        require(
+            _userDetails[_user]._userRole != UserRole.INACTIVE,
+            "Revert, user role inactive"
+        );
         
-        // Saving users role to user address
-        _users[_newAddress].role = Role(_role);
+        _userDetails[_user]._balance = _userDetails[_user]
+            ._balance.add(_amount);
+    }
+
+    /**
+      * @notice Returns the role of the user.
+      */
+    function getUserRole(address _user) external returns(UserRole) {
+        return _userDetails[_user]._userRole;
+    }
+
+    /**
+      * @notice Returns the balance of the user.
+      */
+    function balanceOf(address _user) external returns(uint256) {
+        return _userDetails[_user]._balance;
+    }
+    
+    /**
+      * @notice Allows the admin contract to kill the registry, which will
+      *         prevent any users from being added or removed.
+      */
+    function kill() external onlyAdminContract() {
+        _active = false;
     }
 }

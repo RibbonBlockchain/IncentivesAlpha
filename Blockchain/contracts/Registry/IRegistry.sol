@@ -1,43 +1,45 @@
-pragma solidity = 0.5.0;
+pragma solidity 0.5.10;
 
-/**
-  * @dev An interface for the registry contract
-  * @author @vonnie610 (GitHub)
-  */
-contract IRegistry {
+interface IRegistry {
+
+    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }
 
     /**
-      * @dev Allows the admin contract to update/set the address of the vault
-      * @notice This can only be called by the admin contract
+      * @notice Allows the adding of a user as any user role. If the
+      *         `msg.sender` is the admin contract, any user role may be added.
+      *         If the `msg.sender` is a CHW, only patients and practitioners
+      *         may be added.
       */
-    function setVault(address _vault) external;
-
+    function addUser(address _user, uint8 _userRole) external;
+    
     /**
-      * @dev Allows the admin contract to update the access control contract
-      */
-    function updateAccessControl(address _newAccessControl) external;
-
-    /**
-      * @dev Allows the admin contract to kill the access control contract
-      * @notice The access control contract will not self destruct, but all 
-      *         functionality will be haulted. 
-      */
-    function kill(bool _switch) external;
-
-    /**
-      * @dev This function allows the admin contact or a CHW to add new 
-      *      addresses to the registry.
-      */
-    function registerUser(address _newAddress, uint8 _role) external; 
-
-    /**
-      * @dev Allows the admin to update the role of a user
-      */
-    function updateRole(address _user, uint8 _newRole) external;
-
-    /**
-      * @dev Allows the admin contract to remove a user
+      * @notice Allows the admin contract to remove a user.
       */
     function removeUser(address _user) external;
+    
+    /**
+      * @notice Allows the admin contract to update the role of the user.
+      */
+    function updateUser(address _user, uint8 _newUserRole) external;
 
+    /**
+      * @notice Allows the vault contract to record a payout.
+      */
+    function recordPayout(address _user, uint256 _amount) external;
+    
+    /**
+      * @notice Returns the role of the user.
+      */
+    function getUserRole(address _user) external returns(UserRole);
+
+    /**
+      * @notice Returns the balance of the user.
+      */
+    function balanceOf(address _user) external returns(uint256);
+    
+    /**
+      * @notice Allows the admin contract to kill the registry, which will
+      *         prevent any users from being added or removed.
+      */
+    function kill() external;
 }
