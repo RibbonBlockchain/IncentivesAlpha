@@ -14,10 +14,19 @@ const defaultConfigs = {
 };
 
 const deploy = async (network, secret) => {
+  console.log("Running Deployment on network: ", network);
   //set up the deployer
+  let networkRPC = "";
+  if (network == "local") {
+    networkRPC = "http://localhost:8545/";
+  }
+  if (network == "sokol") {
+    networkRPC = "https://sokol.poa.network";
+  }
+
   const deployer = new etherlime.JSONRPCPrivateKeyDeployer(
     DEPLOYER_PRIVATE_KEY,
-    "http://localhost:8545/",
+    networkRPC,
     defaultConfigs
   );
 
@@ -41,6 +50,11 @@ const deploy = async (network, secret) => {
   //init the admin
   const initAdminTx = await adminDeployed.init(
     vaultDeployed.contract.address,
+    registryDeployed.contract.address
+  );
+
+  //init the vault
+  const initVaultTx = await vaultDeployed.init(
     registryDeployed.contract.address
   );
 };
