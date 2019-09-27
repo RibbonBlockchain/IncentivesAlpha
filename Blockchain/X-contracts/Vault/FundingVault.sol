@@ -33,6 +33,10 @@ contract FundingVault is IFundingVault {
         _;
     }
 
+	function addFunding() external onlyAdmin() {
+		
+	}
+
     /**
       * @dev This allows admin addresses/contract to update/set the address
       *      of the vault contract
