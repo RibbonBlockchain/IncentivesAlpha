@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 import Alert from "../Alert";
+import QR from "../QR";
 import Login from "../Login";
 
 import Home from "../Home";
@@ -47,6 +48,7 @@ function Router() {
         <Route appProps={web3} path="/app" component={Home} />
       </Switch>
       <Alert />
+      <QR />
     </>
   );
 }

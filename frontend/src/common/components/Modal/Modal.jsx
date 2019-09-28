@@ -16,9 +16,11 @@ export default function Modal({
       }`}
     >
       <div className={`${styles.window} ${windowClassName}`}>
-        <div className={styles.close} onClick={onClickClose}>
-          +
-        </div>
+        {onClickClose && (
+          <div className={styles.close} onClick={onClickClose}>
+            +
+          </div>
+        )}
         <div className={contentClassName}>{visible && children}</div>
       </div>
     </div>
