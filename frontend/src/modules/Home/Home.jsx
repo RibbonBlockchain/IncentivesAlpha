@@ -3,8 +3,6 @@ import { useDispatch } from "react-redux";
 import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import Logo from "../../common/components/Logo";
 import User from "../../common/components/User";
-import styles from "./Home.module.scss";
-import Footer from "../../common/components/Footer/Footer";
 import WalletModal from "../Wallet";
 
 import Dashboard from "../Dashboard/Dashboard";
@@ -21,6 +19,8 @@ import CreateHealthWorker from "../HealthWorker/Create";
 import ListHealthWorker from "../HealthWorker/List";
 
 import Profile from "../Profile";
+
+import styles from "./Home.module.scss";
 
 import { SHOW_WALLET } from "../../common/constants/wallet";
 
@@ -125,7 +125,6 @@ function Home(props) {
           </Switch>
           <WalletModal {...props} />
         </main>
-        <Footer />
       </div>
     </>
   );

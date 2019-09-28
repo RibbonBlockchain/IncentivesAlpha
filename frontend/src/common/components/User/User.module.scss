@@ -15,16 +15,27 @@
   }
   span {
     white-space: nowrap;
-	overflow: hidden;
-	font-size: calculateRem(12);
+    overflow: hidden;
+    font-size: calculateRem(12);
     text-overflow: ellipsis;
     padding: 0 calculateRem(10);
   }
 }
 
 .avatar {
-	width: 10px !important;
-	height: 30px !important;
-	border-radius: calculateRem(20);
-    margin: 0 calculateRem(10);
+  width: 10px !important;
+  height: 30px !important;
+  border-radius: calculateRem(20);
+  margin: 0 calculateRem(10);
+}
+
+@media (max-width: $desktop) {
+  .address {
+    padding: calculateRem(5) 0;
+
+    .avatar {
+      width: 10px !important;
+      height: 30px !important;
+    }
+  }
 }
