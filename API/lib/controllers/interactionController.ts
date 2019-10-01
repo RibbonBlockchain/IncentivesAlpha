@@ -28,21 +28,20 @@ export class InteractionListController {
     });
   }
 
-  //   public updateInteractionDetails(req: Request, res: Response) {
-  //     interactionList.updateOne(
-  //       { publicAddress: req.params.userAddress },
-  //       {
-  //         $set: {
-  //           firstName: req.body.firstName,
-  //           lastName: req.body.lastName
-  //         }
-  //       },
-  //       (err, user) => {
-  //         if (err) {
-  //           res.send(err);
-  //         }
-  //         res.json({ status: 200, data: user });
-  //       }
-  //     );
-  //   }
+  public updateInteractionDetails(req: Request, res: Response) {
+    interactionList.updateOne(
+      { interactionId: req.params.interactionId },
+      {
+        $set: {
+          interactionReward: req.body.interactionReward
+        }
+      },
+      (err, interaction) => {
+        if (err) {
+          res.send(err);
+        }
+        res.json({ status: 200, data: interaction });
+      }
+    );
+  }
 }

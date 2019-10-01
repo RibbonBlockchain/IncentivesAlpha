@@ -13,10 +13,10 @@ export class InteractionListRoutes {
       // POST endpoint
       .post(this.interactionListController.addInteraction);
 
-    // app
-    //   .route("/api/v1/users/:userAddress")
+    app
+      .route("/api/v1/interactions/:interactionId")
 
-    //   // UPDATE endpoint
-    //   .patch(this.userController.updateUserDetails);
+      // UPDATE endpoint
+      .patch(this.interactionListController.updateInteractionDetails);
   }
 }
