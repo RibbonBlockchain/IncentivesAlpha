@@ -1,3 +1,8 @@
+/**
+ * @file Manages RibbonBlockchain API requests
+ * @author RibbonBlockchain engineers
+ */
+
 import * as axios from "axios";
 import { config } from "../../constants/config";
 
@@ -13,16 +18,46 @@ export default class HTTP {
     this.getRequest = this.getRequest.bind();
   }
 
-  async postRequest(url, body, headers = "") {
+  /**
+   * Post Request
+   *
+   * @async
+   * @method postRequest
+   * @param {String} [url]
+   * @param {Object} [body]
+   * @param {Object} [headers]
+   * @returns {Promise.<Object>}
+   */
+  async postRequest(url, body, headers = {}) {
     let endpoint = `${config.API_ENDPOINT}/${url}`;
     return await handleRequest("POST", endpoint, { body, headers });
   }
 
+  /**
+   * Patch Request
+   *
+   * @async
+   * @method patchRequest
+   * @param {String} [url]
+   * @param {Object} [body]
+   * @param {Object} [headers]
+   * @returns {Promise.<Object>}
+   */
   async patchRequest(url, body, headers = "") {
     let endpoint = `${config.API_ENDPOINT}/${url}`;
     return await handleRequest("PATCH", endpoint, { body, headers });
   }
 
+  /**
+   * Get Request
+   *
+   * @async
+   * @method getRequest
+   * @param {String} [url]
+   * @param {Object} [body]
+   * @param {Object} [headers]
+   * @returns {Promise.<Object>}
+   */
   async getRequest(url, headers = "") {
     let endpoint = `${config.API_ENDPOINT}/${url}`;
     return await handleRequest("GET", endpoint, { headers });
