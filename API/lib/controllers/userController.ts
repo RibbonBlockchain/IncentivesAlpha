@@ -30,12 +30,30 @@ export class UserController {
     });
   }
 
-  //   public getWalletWithID(req: Request, res: Response) {
-  //     Wallet.findById(req.params.walletId, (err, wallet) => {
-  //       if (err) {
-  //         res.send(err);
-  //       }
-  //       res.json(wallet);
-  //     });
-  //   }
+  public getUserByWalletAddress(req: Request, res: Response) {
+    User.find({ publicAddress: req.params.userAddress }, (err, user) => {
+      if (err) {
+        res.send(err);
+      }
+      res.json({ status: 200, data: user });
+    });
+  }
+
+  public updateUserDetails(req: Request, res: Response) {
+    User.updateOne(
+      { publicAddress: req.params.userAddress },
+      {
+        $set: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName
+        }
+      },
+      (err, user) => {
+        if (err) {
+          res.send(err);
+        }
+        res.json({ status: 200, data: user });
+      }
+    );
+  }
 }

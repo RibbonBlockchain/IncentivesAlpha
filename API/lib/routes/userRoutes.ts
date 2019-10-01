@@ -12,5 +12,12 @@ export class UserRoutes {
 
       // POST endpoint
       .post(this.userController.addNewUser);
+
+    app
+      .route("/api/v1/users/:userAddress")
+      .get(this.userController.getUserByWalletAddress)
+
+      // UPDATE endpoint
+      .patch(this.userController.updateUserDetails);
   }
 }
