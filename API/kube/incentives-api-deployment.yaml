@@ -25,11 +25,11 @@ spec:
           name: incentives-api
           volumeMounts:
             - name: ca-pemstore
-              mountPath: /home/API/cert.pem
+              mountPath: /home/API/config/cert.pem
               subPath: cert.pem
               readOnly: false
-            - name: ca-pemstore
-              mountPath: /home/API/key.pem
+            - name: key-pemstore
+              mountPath: /home/API/config/key.pem
               subPath: key.pem
               readOnly: false
           ports:
