@@ -33,7 +33,7 @@ spec:
               subPath: key.pem
               readOnly: false
           ports:
-            - containerPort: 3000
+            - containerPort: 2053
           resources: {}
       restartPolicy: Always
       volumes:
