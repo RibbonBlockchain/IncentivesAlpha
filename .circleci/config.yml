@@ -62,27 +62,27 @@ jobs:
 workflows:
   build-update-deploy:
     jobs:
-      - build-publish-image-staging:
-          filters:
-              branches:
-                only:
-                  - staging
+      - build-publish-image-staging
+      # filters:
+      #     branches:
+      #       only:
+      #         - staging
       - build-publish-image-production:
           filters:
-              branches:
-                only:
-                  - master
+            branches:
+              only:
+                - master
       - deploy-kubernetes-staging:
-          filters:
-              branches:
-                only:
-                  - staging
+          # filters:
+          #     branches:
+          #       only:
+          #         - staging
           requires:
             - build-publish-image-staging
       - deploy-kubernetes-production:
           filters:
-              branches:
-                only:
-                  - master
+            branches:
+              only:
+                - master
           requires:
             - build-publish-image-production
