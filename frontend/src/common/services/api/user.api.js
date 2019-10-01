@@ -6,53 +6,23 @@ export default class SuperAdmin extends HTTP {
   }
 
   async listUsers() {
-    return await this.getRequest("users")
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        return error;
-      });
+    return await this.getRequest("users");
   }
 
   async createUser(data) {
-    return await this.postRequest("users", data)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        return error;
-      });
+    return await this.postRequest("users", data);
   }
 
   async getUserByAddress(address) {
-    return await this.getRequest(`users/${address.toLowerCase()}`)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        return error;
-      });
+    return await this.getRequest(`users/${address.toLowerCase()}`);
   }
 
   async listUsersByRole(role) {
-    return await this.getRequest(`users/${role.toLowerCase()}`)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        return error;
-      });
+    return await this.getRequest(`users/${role.toLowerCase()}`);
   }
 
   async updateUser(data) {
-    return await this.patchRequest(`users/${data.address.toLowerCase()}`, data)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        return error;
-      });
+    return await this.patchRequest(`users/${data.address.toLowerCase()}`, data);
   }
 
   async deactivateUser() {}

@@ -14,7 +14,6 @@ export async function authenticateUser(provider) {
       )}`;
       let sig = await signer.signMessage(nonce);
       let ethAddress = await signer.getAddress();
-      // let hash = await ethers.utils.keccak256(ethAddress);
 
       let recover = ethers.utils.verifyMessage(nonce, sig);
       if (recover != ethAddress) {
@@ -23,19 +22,10 @@ export async function authenticateUser(provider) {
           type: "error"
         };
       }
-      return authAPI
-        .authenticate({
-          publicAddress: ethAddress,
-          signature: sig
-        })
-        .then(auth => {
-          console.log("Auth ", auth);
-          return auth;
-        })
-        .catch(err => {
-          console.log("Error ", err);
-          return err;
-        });
+      return authAPI.authenticate({
+        publicAddress: ethAddress,
+        signature: sig
+      });
     })
     .catch(err => {
       return {

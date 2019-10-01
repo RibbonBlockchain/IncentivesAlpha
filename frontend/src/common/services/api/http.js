@@ -8,26 +8,29 @@ const DEFAULT_HEADERS = {
 
 export default class HTTP {
   constructor() {
-    this.BASE_URL = config.API_ENDPOINT;
+    this.postRequest = this.postRequest.bind();
+    this.patchRequest = this.patchRequest.bind();
+    this.getRequest = this.getRequest.bind();
   }
+
   async postRequest(url, body, headers = "") {
-    let endpoint = `${this.BASE_URL}/${url}`;
-    return handleRequest("POST", endpoint, { body, headers });
+    let endpoint = `${config.API_ENDPOINT}/${url}`;
+    return await handleRequest("POST", endpoint, { body, headers });
   }
 
   async patchRequest(url, body, headers = "") {
-    let endpoint = `${this.BASE_URL}/${url}`;
-    return handleRequest("PATCH", endpoint, { body, headers });
+    let endpoint = `${config.API_ENDPOINT}/${url}`;
+    return await handleRequest("PATCH", endpoint, { body, headers });
   }
 
   async getRequest(url, headers = "") {
-    let endpoint = `${this.BASE_URL}/${url}`;
-    return handleRequest("GET", endpoint, { headers });
+    let endpoint = `${config.API_ENDPOINT}/${url}`;
+    return await handleRequest("GET", endpoint, { headers });
   }
 }
 
 const handleRequest = async function(method, url, reqStruct) {
-  return axios({
+  return await axios({
     method,
     url,
     data: {

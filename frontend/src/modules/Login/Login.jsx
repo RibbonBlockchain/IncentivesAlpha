@@ -18,9 +18,21 @@ function Login({ history }) {
   function processLogin(provider) {
     authenticateUser(provider)
       .then(response => {
-        console.log(response);
+        if (response.type === "success") {
+          history.push("/app");
+        } else {
+          dispatch({
+            type: SHOW_ALERT,
+            payload: response.msg.toString()
+          });
+        }
       })
-      .catch(err => console.log("Errror", err));
+      .catch(err =>
+        dispatch({
+          type: SHOW_ALERT,
+          payload: err.toString()
+        })
+      );
   }
   const dispatch = useDispatch();
   return (

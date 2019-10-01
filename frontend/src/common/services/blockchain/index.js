@@ -5,7 +5,7 @@ const { POA_RPC, PRIVATE_KEY } = config;
 
 const init = function(provider) {
   let providerEngine =
-    typeof provider != "undefined"
+    typeof provider != "undefined" && provider.hasOwnProperty("selectedAddress")
       ? new ethers.providers.Web3Provider(provider)
       : new ethers.providers.JsonRpcProvider({
           url: POA_RPC

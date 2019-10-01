@@ -8,7 +8,7 @@ let adminAddress = config.ADMIN_CONTRACT_ADDRESS;
 export default class AdminContract extends BlockchainService {
   constructor() {
     super();
-    this.blockchainService = new BlockchainService();
+    // this.blockchainService = new BlockchainService();
     this.contract = this.initializeContract(adminAddress, IAdmin);
     this.addUser = this.addUser.bind(this);
     this.address = this.address.bind(this);

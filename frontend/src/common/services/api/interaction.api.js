@@ -6,23 +6,11 @@ export default class Interactions extends HTTP {
   }
 
   async listInteractions() {
-    return await this.getRequest("interactions")
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        return error;
-      });
+    return await this.getRequest("interactions");
   }
 
   async createInteraction(data) {
     return await this.postRequest("interactions", data)
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        return error;
-      });
   }
 
   async updateInteraction(data) {
@@ -30,11 +18,5 @@ export default class Interactions extends HTTP {
       `interactions/${data.address.toLowerCase()}`,
       data
     )
-      .then(result => {
-        return result;
-      })
-      .catch(error => {
-        return error;
-      });
   }
 }
