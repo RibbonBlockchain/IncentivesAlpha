@@ -15,6 +15,7 @@ export const config = {
 
   NETWORK: process.env.REACT_APP_NETWORK || "kovan",
   // Auth
+  API_ENDPOINT: process.env.REACT_APP_API_ENDPOINT || "localhost:3100/api/v1",
   WALLET_CONNECT:
     process.env.REACT_APP_INFURA_ID || "ad774db213544e6a805541dbd3719d36",
   PORTIS: process.env.REACT_APP_PORTIS_ID || "",

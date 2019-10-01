@@ -1,4 +1,5 @@
 import * as axios from "axios";
+import { config } from "../../constants/config";
 
 const DEFAULT_HEADERS = {
   Accept: "application/json",
@@ -6,12 +7,22 @@ const DEFAULT_HEADERS = {
 };
 
 export default class HTTP {
-  static async postRequest(url, body, headers = "") {
-    return handleRequest("POST", url, { body, headers });
+  constructor() {
+    this.BASE_URL = config.API_ENDPOINT;
+  }
+  async postRequest(url, body, headers = "") {
+    let endpoint = `${this.BASE_URL}/${url}`;
+    return handleRequest("POST", endpoint, { body, headers });
   }
 
-  static async getRequest(url, headers = "") {
-    return handleRequest("GET", url, { headers });
+  async patchRequest(url, body, headers = "") {
+    let endpoint = `${this.BASE_URL}/${url}`;
+    return handleRequest("PATCH", endpoint, { body, headers });
+  }
+
+  async getRequest(url, headers = "") {
+    let endpoint = `${this.BASE_URL}/${url}`;
+    return handleRequest("GET", endpoint, { headers });
   }
 }
 

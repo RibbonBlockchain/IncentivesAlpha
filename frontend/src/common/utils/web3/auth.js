@@ -1,7 +1,9 @@
 import IRegistry from "../../services/blockchain/apps/registry";
+import AuthAPI from "../../services/api/auth.api";
 
-export async function signMessage(provider) {
+export async function authenticateUser(provider) {
   let contract = new IRegistry(provider);
+  let authAPI = new AuthAPI();
 
   return await contract
     .getInstance(provider)
@@ -21,10 +23,19 @@ export async function signMessage(provider) {
           type: "error"
         };
       }
-      return {
-        msg: ethAddress,
-        type: "success"
-      };
+      return authAPI
+        .authenticate({
+          publicAddress: ethAddress,
+          signature: sig
+        })
+        .then(auth => {
+          console.log("Auth ", auth);
+          return auth;
+        })
+        .catch(err => {
+          console.log("Error ", err);
+          return err;
+        });
     })
     .catch(err => {
       return {
@@ -32,9 +43,4 @@ export async function signMessage(provider) {
         type: "error"
       };
     });
-}
-
-export async function login() {
-  // process api authentication here
-  return true;
 }
