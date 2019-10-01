@@ -7,6 +7,7 @@ import { AuthRoutes } from "./routes/authRoute";
 import { InteractionListRoutes } from "./routes/interactionListRoutes";
 import * as mongoose from "mongoose";
 import * as cors from "cors";
+require("dotenv").config();
 
 const isDocker = require("is-docker");
 
