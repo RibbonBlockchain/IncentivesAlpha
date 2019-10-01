@@ -1,0 +1,46 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: incentives-api
+  name: incentives-api
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: incentives-api
+    spec:
+      containers:
+        - env:
+            - name: MONGO_DB
+            - name: MONGO_HOSTNAME
+              value: mongodata
+            - name: MONGO_PASSWORD
+            - name: MONGO_PORT
+            - name: MONGO_USERNAME
+          image: ribbonblockchain/incentives-alpha-api:latest
+          name: incentives-api
+          volumeMounts:
+            - name: ca-pemstore
+              mountPath: /home/API/cert.pem
+              subPath: cert.pem
+              readOnly: false
+            - name: ca-pemstore
+              mountPath: /home/API/key.pem
+              subPath: key.pem
+              readOnly: false
+          ports:
+            - containerPort: 2053
+          resources: {}
+      restartPolicy: Always
+      volumes:
+        - name: ca-pemstore
+          configMap:
+            name: ca-pemstore
+        - name: key-pemstore
+          configMap:
+            name: key-pemstore
+status: {}
