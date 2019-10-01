@@ -11,5 +11,12 @@ export const config = {
     "0x96a4cF99592af8bFD11d9bC2491b684f55D17Ad3",
   PRIVATE_KEY:
     process.env.REACT_APP_PRIVATE_KEY ||
-    "0x190f12957983e77f3750d8a3529eaa4775abac27f21c30e11cc018f682905dca"
+    "0x190f12957983e77f3750d8a3529eaa4775abac27f21c30e11cc018f682905dca",
+
+  NETWORK: process.env.REACT_APP_NETWORK || "kovan",
+  // Auth
+  WALLET_CONNECT:
+    process.env.REACT_APP_INFURA_ID || "ad774db213544e6a805541dbd3719d36",
+  PORTIS: process.env.REACT_APP_PORTIS_ID || "",
+  FORTMATIC: process.env.REACT_APP_FORTMATIC_ID || ""
 };

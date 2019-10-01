@@ -1,8 +1,7 @@
-import BlockchainService from "../blockchain";
+import BlockchainService from "../index";
 import IAdmin from "../abis/IAdmin.json";
 
 import { config } from "../../../constants/config";
-import { toHex } from "../../../utils";
 
 let adminAddress = config.ADMIN_CONTRACT_ADDRESS;
 
@@ -19,9 +18,8 @@ export default class AdminContract extends BlockchainService {
   }
 
   async addUser(address, role) {
-    let uint8Role = `0x${toHex(role)}`;
     return await this.contract.then(contract =>
-      contract.addUser(address, uint8Role)
+      contract.addUser(address, role)
     );
   }
 

@@ -1,4 +1,4 @@
-import BlockchainService from "../blockchain";
+import BlockchainService from "../index";
 import IVault from "../abis/IVault.json";
 
 import { config } from "../../../constants/config";

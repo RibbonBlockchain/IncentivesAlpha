@@ -1,4 +1,4 @@
-import BlockchainService from "../blockchain";
+import BlockchainService from "../index";
 import IRegistry from "../abis/IRegistry.json";
 import { config } from "../../../constants/config";
 
@@ -21,7 +21,7 @@ export default class RegistryContract extends BlockchainService {
   async addUser() {}
   async address() {}
   async balanceOf() {}
-  async getUserRole() {
+  async getUserRole(address) {
     return await this.contract.then(async contract => {
       return await contract.getUserRole(address);
     });
