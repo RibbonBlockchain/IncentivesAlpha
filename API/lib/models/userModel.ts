@@ -31,10 +31,6 @@ export const UserSchema = new Schema({
     type: String,
     required: "Enter a valid id number"
   },
-  isActive: {
-    type: Boolean,
-    default: false
-  },
   createdDate: {
     type: Date,
     default: Date.now
