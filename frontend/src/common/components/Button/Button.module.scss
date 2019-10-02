@@ -7,4 +7,8 @@
   margin: calculateRem(16) 0 calculateRem(16) 0;
   padding: calculateRem(12) calculateRem(32);
   cursor: pointer;
+  &:disabled {
+    background: $background;
+    cursor: default;
+  }
 }

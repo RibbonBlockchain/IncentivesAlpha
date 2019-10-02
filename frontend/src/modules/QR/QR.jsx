@@ -9,7 +9,10 @@ import styles from "./QR.module.scss";
 function QRCodeWallet({ wallet }) {
   return (
     <>
-      <QRCode renderAs="svg" value={wallet} />
+      <div className={styles.header}>
+        <h3>Share this QR Code with the Community Health Worker</h3>
+        <QRCode renderAs="svg" value={wallet} />
+      </div>
     </>
   );
 }
@@ -27,6 +30,7 @@ export default function RegisterWithQR({ history }) {
     dispatch({
       type: HIDE_QR_REGISTRATION_MODAL
     });
+    setQRCode(false);
   }
 
   return (
@@ -36,14 +40,14 @@ export default function RegisterWithQR({ history }) {
       onClickClose={qrCode && closeModal}
     >
       <div className={styles.cnt}>
-        <div className={styles.header}>{message}</div>
+        {qrCode && (
+          <div className={styles.qrWallet}>
+            <QRCodeWallet wallet={message} />
+          </div>
+        )}
         <div className={styles.container}>
-          {qrCode && (
-            <div className={styles.qrWallet}>
-              <QRCodeWallet wallet={JSON.stringify({})} />
-            </div>
-          )}
           <Button
+            disabled={qrCode ? true : false}
             classNames={[styles.button, styles.button_primary].join(" ")}
             text="Register with Health Worker"
             onClick={showQRCode}

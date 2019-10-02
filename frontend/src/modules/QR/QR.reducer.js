@@ -8,14 +8,13 @@ import { qrInitialState } from "../../common/models/qr";
 const show = (state, payload) => {
   return Object.assign({}, state.qrRegistration, {
     visible: true,
-    message: payload.message
+    message: payload
   });
 };
 
 const hide = state => {
   return Object.assign({}, state.qrRegistration, {
-    visible: false,
-    message: ""
+    visible: false
   });
 };
 

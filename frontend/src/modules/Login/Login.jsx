@@ -11,27 +11,44 @@ import { authenticateUser } from "../../common/utils/web3/auth";
 import Logo from "../../common/components/Logo";
 import styles from "./Login.module.scss";
 import { SHOW_ALERT } from "../../common/constants/alert";
+import { SHOW_QR_REGISTRATION_MODAL } from "../../common/constants/qr";
+
+import { setItem } from "../../common/utils/storage";
+
+import { USER_NOT_FOUND } from "../../common/constants/error_codes";
 
 function Login({ history }) {
   let { WALLET_CONNECT, PORTIS, FORTMATIC, NETWORK } = config;
 
-  function processLogin(provider) {
-    authenticateUser(provider)
-      .then(response => {
-        if (response.type === "success") {
-          history.push("/app");
+  async function processLogin(provider) {
+    await authenticateUser(provider)
+      .then(async result => {
+        if (result.response.error) {
+          if (result.response.error === USER_NOT_FOUND) {
+            await dispatch({
+              type: SHOW_QR_REGISTRATION_MODAL,
+              payload: result.ethAddress
+            });
+          } else {
+            await dispatch({
+              type: SHOW_ALERT,
+              payload: result.response.error.toString()
+            });
+          }
         } else {
-          dispatch({
-            type: SHOW_ALERT,
-            payload: response.msg.toString()
-          });
+          //   await history.replace(history.location.pathname);
+          await setItem("token", result.response.token);
+          await setItem("address", result.ethAddress);
+          //   todo replace this
+          window.location.reload();
         }
       })
-      .catch(err =>
-        dispatch({
-          type: SHOW_ALERT,
-          payload: err.toString()
-        })
+      .catch(
+        async error =>
+          await dispatch({
+            type: SHOW_ALERT,
+            payload: error.toString()
+          })
       );
   }
   const dispatch = useDispatch();

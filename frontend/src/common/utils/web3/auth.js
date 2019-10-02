@@ -9,9 +9,7 @@ export async function authenticateUser(provider) {
     .getInstance(provider)
     .then(async result => {
       let { ethers, signer } = result;
-      let nonce = `I am signing my one-time nonce ${Math.floor(
-        Math.random() * 10000
-      )}`;
+      let nonce = `Signing into RibbonBlockchain Dapp`;
       let sig = await signer.signMessage(nonce);
       let ethAddress = await signer.getAddress();
 
@@ -22,10 +20,19 @@ export async function authenticateUser(provider) {
           type: "error"
         };
       }
-      return authAPI.authenticate({
-        publicAddress: ethAddress,
-        signature: sig
-      });
+      return authAPI
+        .authenticate({
+          publicAddress: ethAddress,
+          signature: sig
+        })
+        .then(response => {
+          {
+            return {
+              ethAddress,
+              response
+            };
+          }
+        });
     })
     .catch(err => {
       return {

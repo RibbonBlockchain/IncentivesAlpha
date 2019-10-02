@@ -17,7 +17,7 @@ export const config = {
   // Auth
   API_ENDPOINT:
     process.env.REACT_APP_API_ENDPOINT ||
-    "https://staging.ribbonblockchain.com:2053/api/v1",
+    "http://localhost:2053/api/v1",
   WALLET_CONNECT:
     process.env.REACT_APP_INFURA_ID || "ad774db213544e6a805541dbd3719d36",
   PORTIS:
