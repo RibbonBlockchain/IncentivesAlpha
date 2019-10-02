@@ -5,9 +5,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - name: "3000"
-    port: 3000
-    targetPort: 3000
+    - name: "2053"
+      port: 2053
+      targetPort: 2053
   selector:
     io.kompose.service: incentives-api
 status:

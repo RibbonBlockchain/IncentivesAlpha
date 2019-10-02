@@ -7,6 +7,7 @@ WORKDIR /home/API
 COPY . .
 
 #Install required packages and build API
+RUN apk --no-cache --virtual build-dependencies add python make g++
 RUN npm install
 RUN npm run build
 
