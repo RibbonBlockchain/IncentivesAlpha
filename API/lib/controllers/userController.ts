@@ -1,6 +1,5 @@
 import * as mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
-import { mapUserDataToResponse } from "../serializers/userDataSerializer";
 import { Request, Response } from "express";
 
 const User = mongoose.model("User", UserSchema);
@@ -17,7 +16,7 @@ export class UserController {
       if (err) {
         res.send({ message: err });
       }
-      res.json({ status: 200, data: mapUserDataToResponse(user) });
+      res.json({ status: 200, data: user });
     });
   }
 
