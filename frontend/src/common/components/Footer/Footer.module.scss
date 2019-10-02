@@ -1,0 +1,17 @@
+@import "../../styles/variables";
+
+footer {
+  display: flex;
+  grid-area: footer;
+  flex-basis: 100%;
+  justify-content: space-between;
+  align-items: center;
+  height: $dashboard-footer-height;
+  padding: 0 var(--spacing);
+  color: #4e5561;
+  background-color: #313541;
+}
+
+@media screen and (min-width: 48rem) {
+  --spacing: 2rem;
+}

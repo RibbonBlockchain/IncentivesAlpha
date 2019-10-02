@@ -1,0 +1,69 @@
+@import "../../common/styles/variables";
+
+.alertWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  font-family: $font;
+  font-size: calculateRem(14);
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  z-index: 4098;
+  pointer-events: none;
+
+  transition-property: opacity;
+  transition-duration: 0.25s;
+
+  .alert {
+    width: calculateRem(400);
+    max-width: 90%;
+    box-sizing: border-box;
+    font-weight: 400;
+    padding: calculateRem(16);
+    border-radius: calculateRem(4);
+    opacity: 1;
+    background: #fff;
+    border-bottom-left-radius: calculateRem(10);
+    border-bottom-right-radius: calculateRem(10);
+    box-shadow: 0px 2px 16px rgba(0, 9, 26, 0.12);
+    position: absolute;
+    top: 0;
+
+    .msg {
+      max-height: 384px;
+      text-align: left;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .textButton {
+      color: $link-color;
+      text-transform: uppercase;
+      text-decoration: none !important;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 4px;
+      padding: 4px 12px;
+      cursor: pointer;
+    }
+  }
+}
+
+.alertWrapper.active {
+  opacity: 1;
+  pointer-events: auto;
+
+  .alert {
+    opacity: 1;
+  }
+}

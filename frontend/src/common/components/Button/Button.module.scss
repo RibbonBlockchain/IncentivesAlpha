@@ -1,0 +1,10 @@
+@import "../../styles/variables";
+
+.button {
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  margin: calculateRem(16) 0 calculateRem(16) 0;
+  padding: calculateRem(12) calculateRem(32);
+  cursor: pointer;
+}
