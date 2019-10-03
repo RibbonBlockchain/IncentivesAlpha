@@ -17,7 +17,8 @@ export const UserSchema = new Schema({
   },
   publicAddress: {
     type: String,
-    required: true
+    required: true,
+    index: { unique:true }
   },
   role: {
     type: Number,

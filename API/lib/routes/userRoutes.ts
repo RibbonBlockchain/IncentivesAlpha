@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserController } from "../controllers/userController";
+import { validJWTNeeded } from "../validators/authValidation";
 
 export class UserRoutes {
   public userController: UserController = new UserController();
@@ -8,7 +9,7 @@ export class UserRoutes {
     // Users
     app
       .route("/api/v1/users")
-      .get(this.userController.getUsers)
+      .get([validJWTNeeded], this.userController.getUsers)
 
       // POST endpoint
       .post(this.userController.addNewUser);
