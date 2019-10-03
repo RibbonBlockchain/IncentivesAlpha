@@ -3,7 +3,8 @@ import * as ethUtil from "ethereumjs-util";
 import * as sigUtil from "eth-sig-util";
 import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-import { ethers } from 'ethers';
+import { ethers } from "ethers";
+
 
 import { config } from "../../config";
 import { UserSchema } from "../models/userModel";
@@ -114,7 +115,6 @@ export class AuthController {
 		// 		.then(user => {
 		// 			if (!(user instanceof User)) {
 		// 				// Should not happen, we should have already sent the response
-
 		// 				throw new Error(
 		// 					'User is not defined in "Generate a new nonce for the user".'
 		// 				);
@@ -151,4 +151,5 @@ export class AuthController {
 		// 		.catch(next)
 		// );
 	}
+
 }

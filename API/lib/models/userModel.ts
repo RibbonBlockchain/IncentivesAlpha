@@ -17,7 +17,8 @@ export const UserSchema = new Schema({
   },
   publicAddress: {
     type: String,
-    required: true
+    required: true,
+    index: { unique:true }
   },
   role: {
     type: Number,
@@ -30,10 +31,6 @@ export const UserSchema = new Schema({
   idNumber: {
     type: String,
     required: "Enter a valid id number"
-  },
-  isActive: {
-    type: Boolean,
-    default: false
   },
   createdDate: {
     type: Date,
