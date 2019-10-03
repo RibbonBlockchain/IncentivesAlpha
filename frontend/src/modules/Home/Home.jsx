@@ -27,8 +27,6 @@ import { SHOW_WALLET } from "../../common/constants/wallet";
 import { getItem } from "../../common/utils/storage";
 import { formatLink } from "../../common/utils";
 
-import { isSuperUser, isCHW, isPractitioner, isPatient } from "./home.utils";
-
 import { allowedRoutes } from "../../common/constants/roles";
 
 function IsAllowedRoute({ component: C, appProps, ...rest }) {
@@ -43,92 +41,6 @@ function IsAllowedRoute({ component: C, appProps, ...rest }) {
       }}
     />
   );
-}
-
-function RenderSuperAdminViews() {
-  return (
-    <>
-      {" "}
-      <li className={styles.menu__item}>
-        <NavLink
-          activeClassName={styles.active}
-          className={styles.menu__link}
-          to="/app/practitioners"
-        >
-          Practitioners
-        </NavLink>
-      </li>
-      <li className={styles.menu__item}>
-        <NavLink
-          activeClassName={styles.active}
-          className={styles.menu__link}
-          to="/app/patients"
-        >
-          Patients
-        </NavLink>
-      </li>
-      <li className={styles.menu__item}>
-        <NavLink
-          activeClassName={styles.active}
-          className={styles.menu__link}
-          to="/app/interactions"
-        >
-          Interactions
-        </NavLink>
-      </li>
-      <li className={styles.menu__item}>
-        <NavLink
-          activeClassName={styles.active}
-          className={styles.menu__link}
-          to="/app/health-workers"
-        >
-          Health Workers
-        </NavLink>
-      </li>
-    </>
-  );
-}
-
-function RenderCHWViews() {
-  return (
-    <>
-      <li className={styles.menu__item}>
-        <NavLink
-          activeClassName={styles.active}
-          className={styles.menu__link}
-          to="/app/practitioners"
-        >
-          Practitioners
-        </NavLink>
-      </li>
-      <li className={styles.menu__item}>
-        <NavLink
-          activeClassName={styles.active}
-          className={styles.menu__link}
-          to="/app/patients"
-        >
-          Patients
-        </NavLink>
-      </li>
-      <li className={styles.menu__item}>
-        <NavLink
-          activeClassName={styles.active}
-          className={styles.menu__link}
-          to="/app/interactions"
-        >
-          Interactions
-        </NavLink>
-      </li>
-    </>
-  );
-}
-
-function RenderPractitionersView() {
-  return <></>;
-}
-
-function RenderPatientsView() {
-  return <></>;
 }
 
 function Home(props) {
