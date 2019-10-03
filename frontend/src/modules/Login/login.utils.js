@@ -1,6 +1,6 @@
-import IRegistry from "../../services/blockchain/apps/registry";
-import AuthAPI from "../../services/api/auth.api";
-import { setItem } from "../../utils/storage";
+import IRegistry from "../../common/services/blockchain/apps/registry";
+import AuthAPI from "../../common/services/api/auth.api";
+import { setItem } from "../../common/utils/storage";
 
 export async function authenticateUser() {
   let contract = new IRegistry();
@@ -29,7 +29,8 @@ export async function authenticateUser() {
       });
       return {
         authWithAPI,
-        userRole
+        publicAddress,
+        loginType: userRole.value.toString()
       };
     } catch (error) {
       return {
@@ -47,10 +48,10 @@ export async function authenticateUser() {
   }
 }
 
-export async function approveUser(user) {
+export async function approveUser(user, history) {
   setItem("token", user.authWithAPI.token);
   setItem("address", user.publicAddress);
-  setItem("loginType", user.userRole.value.toString());
+  setItem("loginType", user.loginType);
   //   todo replace this
-  //   window.location.reload();
+  window.location.reload();
 }
