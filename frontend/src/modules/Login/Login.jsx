@@ -18,7 +18,7 @@ import { authenticateUser, approveUser } from "./login.utils";
 
 import { USER_NOT_FOUND } from "../../common/constants/error_codes";
 
-function Login({ history }) {
+function Login() {
   const dispatch = useDispatch();
 
   let { WALLET_CONNECT, PORTIS, FORTMATIC, NETWORK } = config;
@@ -26,8 +26,8 @@ function Login({ history }) {
   async function processLogin(provider) {
     try {
       let authenticatedUser = await authenticateUser(provider);
-      if (authenticatedUser.authWithAPI.error) {
-        if (authenticatedUser.authWithAPI.error === USER_NOT_FOUND) {
+      if (authenticatedUser.error) {
+        if (authenticatedUser.error === USER_NOT_FOUND) {
           dispatch({
             type: SHOW_QR_REGISTRATION_MODAL,
             payload: authenticatedUser.ethAddress
@@ -35,16 +35,16 @@ function Login({ history }) {
         } else {
           dispatch({
             type: SHOW_ALERT,
-            payload: authenticatedUser.authWithAPI.error.toString()
+            payload: authenticatedUser.error
           });
         }
       } else {
-        approveUser(authenticatedUser, history);
+        approveUser(authenticatedUser);
       }
     } catch (error) {
       dispatch({
         type: SHOW_ALERT,
-        payload: error.toString()
+        payload: error
       });
     }
   }

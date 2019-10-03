@@ -15,9 +15,7 @@ export async function authenticateUser() {
     let recoveredAddress = await ethers.utils.verifyMessage(nonce, signature);
     if (recoveredAddress != publicAddress) {
       return {
-        authWithAPI: {
-          error: `Address recovered do not match, original ${publicAddress} versus computed ${recoveredAddress}`
-        }
+        error: `Address recovered do not match, original ${publicAddress} versus computed ${recoveredAddress}`
       };
     }
 
@@ -27,28 +25,30 @@ export async function authenticateUser() {
         publicAddress,
         signature
       });
-      return {
-        authWithAPI,
-        publicAddress,
-        loginType: userRole.value.toString()
-      };
+      if (authWithAPI.error) {
+        return {
+          error: authWithAPI.error
+        };
+      } else {
+        return {
+          authWithAPI,
+          publicAddress,
+          loginType: userRole.value.toString()
+        };
+      }
     } catch (error) {
       return {
-        authWithAPI: {
-          error
-        }
+        error
       };
     }
   } catch (error) {
     return {
-      authWithAPI: {
-        error
-      }
+      error
     };
   }
 }
 
-export async function approveUser(user, history) {
+export async function approveUser(user) {
   setItem("token", user.authWithAPI.token);
   setItem("address", user.publicAddress);
   setItem("loginType", user.loginType);
