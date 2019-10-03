@@ -20,3 +20,12 @@ export const fromHex = hex => {
   }
   return string;
 };
+
+export const formatLink = link => {
+  return (
+    link
+      .substr(5)
+      .charAt(0)
+      .toUpperCase() + link.substr(6).replace("-", " ")
+  );
+};
