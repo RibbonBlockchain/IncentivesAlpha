@@ -1,0 +1,6 @@
+export const roles = {
+  SUPER_ADMIN: 0,
+  COMMUNITY_HEALTH_WORKER: 1,
+  PRACTITIONER: 2,
+  PATIENT: 3
+};

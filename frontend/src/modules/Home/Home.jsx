@@ -24,9 +24,23 @@ import styles from "./Home.module.scss";
 
 import { SHOW_WALLET } from "../../common/constants/wallet";
 
+import { getItem } from "../../common/utils/storage";
+
+function RenderViews({ component: C, appProps, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        appProps ? <C {...props} {...appProps} /> : <Redirect to="/" />
+      }
+    />
+  );
+}
+
 function Home(props) {
   // to be removed when I start fetching data from backend and metamask
-  let address = "0x9A8A9958ac1B70c49ccE9693CCb0230f13F63505";
+  let address = getItem("address");
+  let roleType = getItem("loginType");
   const dispatch = useDispatch();
 
   function showWallet() {
