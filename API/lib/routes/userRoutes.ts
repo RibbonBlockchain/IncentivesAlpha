@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserController } from "../controllers/userController";
-import { validJWTNeeded, superAdminOnly } from "../validators/authValidation";
+import { validJWTNeeded, superAdminOnly, communityHealthWorkerOnly } from "../validators/authValidation";
 
 export class UserRoutes {
   public userController: UserController = new UserController();
@@ -9,10 +9,22 @@ export class UserRoutes {
     // Users
     app
       .route("/api/v1/users")
-      .get([validJWTNeeded, superAdminOnly], this.userController.getUsers)
+      .get([validJWTNeeded], this.userController.getUsers)
 
-      // POST endpoint
-      .post([validJWTNeeded, superAdminOnly], this.userController.addNewUser);
+    app
+      .route("/api/v1/users/chw")
+      // POST endpoint add community health worker
+      .post([validJWTNeeded, superAdminOnly], this.userController.addNewCommunityHealthWorker);
+
+    app
+      .route("/api/v1/users/practitioners")
+      // POST endpoint add community health worker
+      .post([validJWTNeeded, communityHealthWorkerOnly], this.userController.addNewPractitioner);
+
+    app
+      .route("/api/v1/users/patients")
+      // POST endpoint add community health worker
+      .post([validJWTNeeded, communityHealthWorkerOnly], this.userController.addNewPatient);
 
     app
       .route("/api/v1/users/:userAddress")
