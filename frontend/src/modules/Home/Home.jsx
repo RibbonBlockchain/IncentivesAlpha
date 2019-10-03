@@ -25,22 +25,116 @@ import styles from "./Home.module.scss";
 import { SHOW_WALLET } from "../../common/constants/wallet";
 
 import { getItem } from "../../common/utils/storage";
+import { formatLink } from "../../common/utils";
 
-function RenderViews({ component: C, appProps, ...rest }) {
+import { isSuperUser, isCHW, isPractitioner, isPatient } from "./home.utils";
+
+import { allowedRoutes } from "../../common/constants/roles";
+
+function IsAllowedRoute({ component: C, appProps, ...rest }) {
   return (
     <Route
       {...rest}
-      render={props =>
-        appProps ? <C {...props} {...appProps} /> : <Redirect to="/" />
-      }
+      render={props => {
+        let isAllowed = allowedRoutes[appProps].find(route =>
+          route === props.location.pathname ? true : false
+        );
+        return isAllowed ? <C {...props} {...appProps} /> : <Redirect to="/" />;
+      }}
     />
   );
+}
+
+function RenderSuperAdminViews() {
+  return (
+    <>
+      {" "}
+      <li className={styles.menu__item}>
+        <NavLink
+          activeClassName={styles.active}
+          className={styles.menu__link}
+          to="/app/practitioners"
+        >
+          Practitioners
+        </NavLink>
+      </li>
+      <li className={styles.menu__item}>
+        <NavLink
+          activeClassName={styles.active}
+          className={styles.menu__link}
+          to="/app/patients"
+        >
+          Patients
+        </NavLink>
+      </li>
+      <li className={styles.menu__item}>
+        <NavLink
+          activeClassName={styles.active}
+          className={styles.menu__link}
+          to="/app/interactions"
+        >
+          Interactions
+        </NavLink>
+      </li>
+      <li className={styles.menu__item}>
+        <NavLink
+          activeClassName={styles.active}
+          className={styles.menu__link}
+          to="/app/health-workers"
+        >
+          Health Workers
+        </NavLink>
+      </li>
+    </>
+  );
+}
+
+function RenderCHWViews() {
+  return (
+    <>
+      <li className={styles.menu__item}>
+        <NavLink
+          activeClassName={styles.active}
+          className={styles.menu__link}
+          to="/app/practitioners"
+        >
+          Practitioners
+        </NavLink>
+      </li>
+      <li className={styles.menu__item}>
+        <NavLink
+          activeClassName={styles.active}
+          className={styles.menu__link}
+          to="/app/patients"
+        >
+          Patients
+        </NavLink>
+      </li>
+      <li className={styles.menu__item}>
+        <NavLink
+          activeClassName={styles.active}
+          className={styles.menu__link}
+          to="/app/interactions"
+        >
+          Interactions
+        </NavLink>
+      </li>
+    </>
+  );
+}
+
+function RenderPractitionersView() {
+  return <></>;
+}
+
+function RenderPatientsView() {
+  return <></>;
 }
 
 function Home(props) {
   // to be removed when I start fetching data from backend and metamask
   let address = getItem("address");
-  let roleType = getItem("loginType");
+  let roleType = Number(getItem("loginType"));
   const dispatch = useDispatch();
 
   function showWallet() {
@@ -73,42 +167,17 @@ function Home(props) {
                 Home
               </NavLink>
             </li>
-            <li className={styles.menu__item}>
-              <NavLink
-                activeClassName={styles.active}
-                className={styles.menu__link}
-                to="/app/practitioners"
-              >
-                Practitioners
-              </NavLink>
-            </li>
-            <li className={styles.menu__item}>
-              <NavLink
-                activeClassName={styles.active}
-                className={styles.menu__link}
-                to="/app/patients"
-              >
-                Patients
-              </NavLink>
-            </li>
-            <li className={styles.menu__item}>
-              <NavLink
-                activeClassName={styles.active}
-                className={styles.menu__link}
-                to="/app/interactions"
-              >
-                Interactions
-              </NavLink>
-            </li>
-            <li className={styles.menu__item}>
-              <NavLink
-                activeClassName={styles.active}
-                className={styles.menu__link}
-                to="/app/health-workers"
-              >
-                Health Workers
-              </NavLink>
-            </li>
+            {allowedRoutes[roleType].map((route, index) => (
+              <li key={index} className={styles.menu__item}>
+                <NavLink
+                  activeClassName={styles.active}
+                  className={styles.menu__link}
+                  to={route}
+                >
+                  {formatLink(route)}
+                </NavLink>
+              </li>
+            ))}
             <li className={styles.menu__item}>
               <div className={styles.menu__link} onClick={showWallet}>
                 My Profile
@@ -119,18 +188,44 @@ function Home(props) {
         <main className={styles.admin__main}>
           <Switch>
             <Route path="/app/home" component={Dashboard} />
-            <Route path="/app/interactions" component={ListInteractions} />
-            <Route path="/app/interactions/new" component={CreateInteraction} />
-            <Route path="/app/practitioners" component={ListPractitioners} />
-            <Route
+            <IsAllowedRoute
+              appProps={roleType}
+              path="/app/interactions"
+              component={ListInteractions}
+            />
+            <IsAllowedRoute
+              appProps={roleType}
+              path="/app/interactions/new"
+              component={CreateInteraction}
+            />
+            <IsAllowedRoute
+              appProps={roleType}
+              path="/app/practitioners"
+              component={ListPractitioners}
+            />
+            <IsAllowedRoute
+              appProps={roleType}
               path="/app/practitioners/new"
               component={CreatePractitioner}
             />
-            <Route path="/app/patients" component={ListPatients} />
-            <Route path="/app/patients/new" component={CreatePatient} />
+            <IsAllowedRoute
+              appProps={roleType}
+              path="/app/patients"
+              component={ListPatients}
+            />
+            <IsAllowedRoute
+              appProps={roleType}
+              path="/app/patients/new"
+              component={CreatePatient}
+            />
 
-            <Route path="/app/health-workers" component={ListHealthWorker} />
-            <Route
+            <IsAllowedRoute
+              appProps={roleType}
+              path="/app/health-workers"
+              component={ListHealthWorker}
+            />
+            <IsAllowedRoute
+              appProps={roleType}
               path="/app/health-workers/new"
               component={CreateHealthWorker}
             />
