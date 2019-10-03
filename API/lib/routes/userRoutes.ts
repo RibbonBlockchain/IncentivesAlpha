@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserController } from "../controllers/userController";
-import { validJWTNeeded } from "../validators/authValidation";
+import { validJWTNeeded, superAdminOnly } from "../validators/authValidation";
 
 export class UserRoutes {
   public userController: UserController = new UserController();
@@ -9,16 +9,16 @@ export class UserRoutes {
     // Users
     app
       .route("/api/v1/users")
-      .get([validJWTNeeded], this.userController.getUsers)
+      .get([validJWTNeeded, superAdminOnly], this.userController.getUsers)
 
       // POST endpoint
-      .post(this.userController.addNewUser);
+      .post([validJWTNeeded, superAdminOnly], this.userController.addNewUser);
 
     app
       .route("/api/v1/users/:userAddress")
-      .get(this.userController.getUserByWalletAddress)
+      .get([validJWTNeeded], this.userController.getUserByWalletAddress)
 
       // UPDATE endpoint
-      .patch(this.userController.updateUserDetails);
+      .patch([validJWTNeeded, superAdminOnly], this.userController.updateUserDetails);
   }
 }
