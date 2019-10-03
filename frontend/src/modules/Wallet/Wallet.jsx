@@ -5,6 +5,7 @@ import Blockies from "../../common/components/Blockies";
 import Button from "../../common/components/Button";
 import Balance from "../../common/components/Balance";
 import { HIDE_WALLET } from "../../common/constants/wallet";
+import { removeItem } from "../../common/utils/storage";
 import styles from "./Wallet.module.scss";
 
 function Profile({ history }) {
@@ -25,7 +26,10 @@ function Profile({ history }) {
     history.push("/app/profile");
   }
 
-  async function handleSignOut() {}
+  async function handleSignOut() {
+    await removeItem("address");
+    window.location.reload();
+  }
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
