@@ -1,13 +1,14 @@
 @import "../../styles/variables";
 
 .address {
-  background-color: #76808f;
-  color: #ffffff;
-  margin-left: calculateRem(20);
+  background-color: $background;
+  color: $text-color;
   border-radius: calculateRem(40);
   cursor: pointer;
   display: flex;
   align-items: center;
+  height: calculateRem(24);
+  align-self: center;
   width: calculateRem(220);
   padding: calculateRem(10) 0;
   &:hover {

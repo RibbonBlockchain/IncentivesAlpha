@@ -7,7 +7,6 @@ let registryAddress = config.REGISTRY_CONTRACT_ADDRESS;
 export default class RegistryContract extends BlockchainService {
   constructor() {
     super();
-    this.blockchainService = new BlockchainService();
     this.contract = this.initializeContract(registryAddress, IRegistry);
     this.addUser = this.addUser.bind(this);
     this.address = this.address.bind(this);
@@ -16,22 +15,36 @@ export default class RegistryContract extends BlockchainService {
     this.recordPayout = this.recordPayout.bind(this);
     this.removeUser = this.removeUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.addWhitelistAdmin = this.addWhitelistAdmin.bind(this);
   }
 
-  async addUser() {}
-  async address() {}
-  async balanceOf() {}
-  async getUserRole(address) {
+  async addWhitelistAdmin(address) {
+    let { ethers } = await this.getInstance();
+    let contract = await this.contract;
+    console.log(contract);
+    try {
+      //   return await contract.addWhitelistAdmin(address);
+    } catch (error) {
+      return error;
+    }
+  }
+  async addUser(address, role) {
     let { ethers } = await this.getInstance();
     let contract = await this.contract;
     try {
-      return await contract.getUserRole(address, {
-        gasPrice: 0x0,
+      return await contract.addUser(address, role, {
+        value: 0x0,
         gasLimit: ethers.utils.hexlify(8000000)
       });
     } catch (error) {
       return error;
     }
+  }
+  async address() {}
+  async balanceOf() {}
+  async getUserRole(address) {
+    let contract = await this.contract;
+    return await contract.getUserRole(address);
   }
   async recordPayout() {}
   async removeUser() {}

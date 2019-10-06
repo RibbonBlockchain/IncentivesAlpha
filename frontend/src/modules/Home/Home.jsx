@@ -18,6 +18,8 @@ import ListPatients from "../Patients/List";
 import CreateHealthWorker from "../HealthWorker/Create";
 import ListHealthWorker from "../HealthWorker/List";
 
+import Onboard from "../Onboard";
+
 import Profile from "../Profile";
 
 import styles from "./Home.module.scss";
@@ -27,7 +29,7 @@ import { SHOW_WALLET } from "../../common/constants/wallet";
 import { getItem } from "../../common/utils/storage";
 import { formatLink } from "../../common/utils";
 
-import { allowedRoutes } from "../../common/constants/roles";
+import { allowedRoutes, routes } from "../../common/constants/roles";
 
 function IsAllowedRoute({ component: C, appProps, ...rest }) {
   return (
@@ -64,6 +66,7 @@ function Home(props) {
           <div className={styles.toolbar}>
             <div></div>
             <div className={styles.actions}>
+              <Onboard />
               <User onClick={showWallet} address={address} />
             </div>
           </div>
@@ -79,17 +82,20 @@ function Home(props) {
                 Home
               </NavLink>
             </li>
-            {allowedRoutes[roleType].map((route, index) => (
-              <li key={index} className={styles.menu__item}>
-                <NavLink
-                  activeClassName={styles.active}
-                  className={styles.menu__link}
-                  to={route}
-                >
-                  {formatLink(route)}
-                </NavLink>
-              </li>
-            ))}
+            {allowedRoutes[roleType].map(
+              (route, index) =>
+                !route.includes("/new") && (
+                  <li key={index} className={styles.menu__item}>
+                    <NavLink
+                      activeClassName={styles.active}
+                      className={styles.menu__link}
+                      to={route}
+                    >
+                      {formatLink(route)}
+                    </NavLink>
+                  </li>
+                )
+            )}
             <li className={styles.menu__item}>
               <div className={styles.menu__link} onClick={showWallet}>
                 My Profile
@@ -101,31 +107,37 @@ function Home(props) {
           <Switch>
             <Route path="/app/home" component={Dashboard} />
             <IsAllowedRoute
+              exact
               appProps={roleType}
               path="/app/interactions"
               component={ListInteractions}
             />
             <IsAllowedRoute
+              exact
               appProps={roleType}
               path="/app/interactions/new"
               component={CreateInteraction}
             />
             <IsAllowedRoute
               appProps={roleType}
+              exact
               path="/app/practitioners"
               component={ListPractitioners}
             />
             <IsAllowedRoute
+              exact
               appProps={roleType}
               path="/app/practitioners/new"
               component={CreatePractitioner}
             />
             <IsAllowedRoute
+              exact
               appProps={roleType}
               path="/app/patients"
               component={ListPatients}
             />
             <IsAllowedRoute
+              exact
               appProps={roleType}
               path="/app/patients/new"
               component={CreatePatient}
@@ -133,12 +145,14 @@ function Home(props) {
 
             <IsAllowedRoute
               appProps={roleType}
+              exact
               path="/app/health-workers"
               component={ListHealthWorker}
             />
             <IsAllowedRoute
               appProps={roleType}
               path="/app/health-workers/new"
+              exact
               component={CreateHealthWorker}
             />
             <Route path="/app/profile" component={Profile} />

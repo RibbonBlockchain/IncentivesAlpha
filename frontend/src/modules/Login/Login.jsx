@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import Web3Connect from "web3connect";
 import WalletConnectProvider from "@walletconnect/web3-provider";
@@ -9,10 +9,8 @@ import { config } from "../../common/constants/config";
 
 import Logo from "../../common/components/Logo";
 import styles from "./Login.module.scss";
-import { LOGIN_SUCCESS } from "../../common/constants/login";
 import { SHOW_ALERT } from "../../common/constants/alert";
 import { SHOW_QR_REGISTRATION_MODAL } from "../../common/constants/qr";
-import { getItem } from "../../common/utils/storage";
 
 import { authenticateUser, approveUser } from "./login.utils";
 
@@ -28,24 +26,24 @@ function Login() {
       let authenticatedUser = await authenticateUser(provider);
       if (authenticatedUser.error) {
         if (authenticatedUser.error === USER_NOT_FOUND) {
-          dispatch({
-            type: SHOW_QR_REGISTRATION_MODAL,
-            payload: authenticatedUser.ethAddress
-          });
+            dispatch({
+              type: SHOW_QR_REGISTRATION_MODAL,
+              payload: authenticatedUser.ethAddress
+            });
         } else {
           dispatch({
             type: SHOW_ALERT,
-            payload: authenticatedUser.error
+            payload: authenticatedUser.error.toString()
           });
         }
       } else {
         approveUser(authenticatedUser);
       }
     } catch (error) {
-      dispatch({
-        type: SHOW_ALERT,
-        payload: error
-      });
+        dispatch({
+          type: SHOW_ALERT,
+          payload: JSON.stringify(error)
+        });
     }
   }
 

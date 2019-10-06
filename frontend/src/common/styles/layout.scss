@@ -18,13 +18,13 @@
     padding: calc(var(--spacing) / 2);
 
     // these span the full width
-    &--full {
+    &__full {
       flex-basis: 100%;
       grid-column: 1 / -1;
     }
 
     // these span only one column
-    &--col {
+    &__col {
       flex-basis: calc(100% / var(--column-count));
       grid-column-end: span 1;
     }

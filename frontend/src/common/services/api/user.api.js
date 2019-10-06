@@ -4,7 +4,7 @@
  */
 import HTTP from "./http";
 
-export default class SuperAdmin extends HTTP {
+export default class UserAPI extends HTTP {
   constructor() {
     super();
   }
