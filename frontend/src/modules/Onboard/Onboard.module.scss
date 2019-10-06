@@ -1,0 +1,84 @@
+@import "../../common/styles/variables";
+
+.modalWindow {
+  background: #313541;
+  color: #ffffff;
+}
+
+.modalFormWindow {
+  width: 80%;
+  background: #313541;
+  color: #ffffff;
+}
+
+.cnt {
+  font-family: $font;
+  padding: calculateRem(30);
+  display: flex;
+  flex-direction: column;
+  h4 {
+    align-self: center;
+  }
+}
+
+.form_heading {
+  text-align: center;
+}
+
+a {
+  color: #dc5a60;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: calculateRem(10);
+}
+
+.button {
+  margin-right: calculateRem(5);
+}
+
+.close {
+  position: absolute !important;
+}
+
+.container {
+  padding: calculateRem(20);
+}
+
+.input_area {
+  color: #ffffff;
+}
+
+.count {
+  margin-bottom: calculateRem(20);
+  font-size: calculateRem(20);
+  font-weight: 500;
+}
+
+.heading {
+  color: $background;
+}
+
+.card__light {
+  background: #ffffff;
+}
+
+.card__light_blue {
+  background: $blue-bg;
+}
+
+.card__light_pink {
+  background: $pink-bg;
+}
+
+.card__light_purple {
+  background: $purple-bg;
+}

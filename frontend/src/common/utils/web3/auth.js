@@ -21,23 +21,15 @@ export async function authenticateUser() {
       };
     }
 
-    try {
-      let userRole = await contract.getUserRole(publicAddress);
-      let authWithAPI = await authAPI.authenticate({
-        publicAddress,
-        signature
-      });
-      return {
-        authWithAPI,
-        userRole
-      };
-    } catch (error) {
-      return {
-        authWithAPI: {
-          error
-        }
-      };
-    }
+    let userRole = await contract.getUserRole(publicAddress);
+    let authWithAPI = await authAPI.authenticate({
+      publicAddress,
+      signature
+    });
+    return {
+      authWithAPI,
+      userRole
+    };
   } catch (error) {
     return {
       authWithAPI: {

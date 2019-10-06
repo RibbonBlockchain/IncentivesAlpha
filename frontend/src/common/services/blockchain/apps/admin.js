@@ -16,11 +16,17 @@ export default class AdminContract extends BlockchainService {
     this.removeUser = this.removeUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
   }
-
+  
   async addUser(address, role) {
-    return await this.contract.then(contract =>
-      contract.addUser(address, role)
-    );
+    let { ethers } = await this.getInstance();
+    let contract = await this.contract;
+    try {
+      return await contract.addUser(address, role, {
+        gasLimit: ethers.utils.hexlify(8000000)
+      });
+    } catch (error) {
+      return error;
+    }
   }
 
   async address() {

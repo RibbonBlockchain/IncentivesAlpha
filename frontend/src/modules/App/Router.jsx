@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 import { getItem } from "../../common/utils/storage";
@@ -8,8 +8,6 @@ import QR from "../QR";
 import Login from "../Login";
 
 import Home from "../Home";
-
-const initialState = () => "";
 
 function AuthenticatedRoute({ component: C, appProps, ...rest }) {
   return (

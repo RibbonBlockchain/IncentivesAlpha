@@ -13,14 +13,13 @@ export async function authenticateUser() {
     let signature = await signer.signMessage(nonce);
     let publicAddress = await signer.getAddress();
     let recoveredAddress = await ethers.utils.verifyMessage(nonce, signature);
-    if (recoveredAddress != publicAddress) {
+    if (recoveredAddress !== publicAddress) {
       return {
         error: `Address recovered do not match, original ${publicAddress} versus computed ${recoveredAddress}`
       };
     }
 
     try {
-      let userRole = await contract.getUserRole(publicAddress);
       let authWithAPI = await authAPI.authenticate({
         publicAddress,
         signature
@@ -30,11 +29,18 @@ export async function authenticateUser() {
           error: authWithAPI.error
         };
       } else {
-        return {
-          authWithAPI,
-          publicAddress,
-          loginType: userRole.value.toString()
-        };
+        let userRole = await contract.getUserRole(publicAddress);
+        if (userRole) {
+          return {
+            authWithAPI,
+            publicAddress,
+            loginType: userRole.value.toString()
+          };
+        } else {
+          return {
+            error: "Failed to retrieve user login role"
+          };
+        }
       }
     } catch (error) {
       return {
