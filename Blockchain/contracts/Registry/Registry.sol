@@ -29,6 +29,7 @@ contract Registry is IRegistry, WhitelistAdminRole {
     constructor(address _vault, address _admin) public WhitelistAdminRole() {
         _vaultInstance = IVault(_vault);
         _adminInstance = IAdmin(_admin);
+        _userDetails[msg.sender]._userRole = UserRole.ADMIN;
     }
 
     modifier onlyAdminContract() {
