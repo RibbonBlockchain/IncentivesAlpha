@@ -28,7 +28,7 @@ function Login() {
         if (authenticatedUser.error === USER_NOT_FOUND) {
             dispatch({
               type: SHOW_QR_REGISTRATION_MODAL,
-              payload: authenticatedUser.ethAddress
+              payload: authenticatedUser.publicAddress
             });
         } else {
           dispatch({
