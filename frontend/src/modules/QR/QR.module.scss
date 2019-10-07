@@ -3,6 +3,7 @@
 .modalWindow {
   background: #313541;
   color: #ffffff;
+  width: 30rem;
 }
 
 .cnt {
@@ -21,6 +22,12 @@
   font-size: calculateRem(14);
   line-height: calculateRem(22);
   margin: calculateRem(12) 0;
+  text-align: center;
+  h3 {
+	margin-bottom: calculateRem(30);
+	font-weight: 500;
+	font-size: calculateRem(20);
+  }
 }
 
 .heading {

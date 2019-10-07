@@ -5,25 +5,17 @@ const PORT = 2053;
 const isDocker = require("is-docker");
 
 if (isDocker()) {
-  const httpsOptions = {
-    key: fs.readFileSync("./config/key.pem"),
-    cert: fs.readFileSync("./config/cert.pem")
-  };
+	const httpsOptions = {
+		key: fs.readFileSync("./config/key.pem"),
+		cert: fs.readFileSync("./config/cert.pem")
+	};
 
-  https.createServer(httpsOptions, app).listen(PORT, () => {
-    console.log("Express server listening on port " + PORT);
-  });
+	https.createServer(httpsOptions, app).listen(PORT, () => {
+		console.log("Express server listening on port " + PORT);
+	});
 } else {
-  const httpsOptions = {
-    key: fs.readFileSync("./local_config/key.pem"),
-    cert: fs.readFileSync("./local_config/cert.pem")
-  };
-
-  https.createServer(httpsOptions, app).listen(PORT, () => {
-    console.log("Express server listening on port " + PORT);
-  });
+	app.listen(PORT, () => {
+		console.log("Express server running on port " + PORT);
+	});
 }
 
-// app.listen(PORT, () => {
-//   console.log("Express server running on port " + PORT);
-// });

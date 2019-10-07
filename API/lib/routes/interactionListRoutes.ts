@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { InteractionListController } from "../controllers/interactionController";
+import { validJWTNeeded, superAdminOnly } from "../validators/authValidation";
 
 export class InteractionListRoutes {
   public interactionListController: InteractionListController = new InteractionListController();
@@ -8,15 +9,15 @@ export class InteractionListRoutes {
     // Users
     app
       .route("/api/v1/interactions")
-      .get(this.interactionListController.getAllInteractionLists)
+      .get([validJWTNeeded, superAdminOnly], this.interactionListController.getAllInteractionLists)
 
       // POST endpoint
-      .post(this.interactionListController.addInteraction);
+      .post([validJWTNeeded, superAdminOnly], this.interactionListController.addInteraction);
 
     app
       .route("/api/v1/interactions/:interactionId")
 
       // UPDATE endpoint
-      .patch(this.interactionListController.updateInteractionDetails);
+      .patch([validJWTNeeded, superAdminOnly], this.interactionListController.updateInteractionDetails);
   }
 }
