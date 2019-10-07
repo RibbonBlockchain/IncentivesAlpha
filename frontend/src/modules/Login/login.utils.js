@@ -26,7 +26,8 @@ export async function authenticateUser() {
       });
       if (authWithAPI.error) {
         return {
-          error: authWithAPI.error
+          error: authWithAPI.error,
+          publicAddress
         };
       } else {
         let userRole = await contract.getUserRole(publicAddress);
