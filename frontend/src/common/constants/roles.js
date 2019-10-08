@@ -1,15 +1,15 @@
 export const roleNames = {
-  SUPER_ADMIN: 0,
-  HEALTH_WORKER: 1,
-  PRACTITIONER: 2,
-  PATIENT: 3
+  SUPER_ADMIN: 1,
+  HEALTH_WORKER: 2,
+  PRACTITIONER: 3,
+  PATIENT: 4
 };
 
 export const roles = {
-  0: "SUPER_ADMIN",
-  1: "HEALTH_WORKER",
-  2: "PRACTITIONER",
-  3: "PATIENT"
+  1: "SUPER_ADMIN",
+  2: "HEALTH_WORKER",
+  3: "PRACTITIONER",
+  4: "PATIENT"
 };
 
 export const allowedRoutes = [

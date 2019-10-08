@@ -1,5 +1,5 @@
 import BlockchainService from "../index";
-import IVault from "../abis/IVault.json";
+import Vault from "../abis/Vault.json";
 
 import { config } from "../../../constants/config";
 import { toHex } from "../../../utils";
@@ -10,7 +10,7 @@ export default class VaultContract extends BlockchainService {
   constructor() {
     super();
     this.blockchainService = new BlockchainService();
-    this.contract = this.initializeContract(vaultAddress, IVault);
+    this.contract = this.initializeContract(vaultAddress, Vault);
   }
 
   static async address() {}
