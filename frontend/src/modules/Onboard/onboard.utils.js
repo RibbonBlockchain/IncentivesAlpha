@@ -8,18 +8,20 @@ export async function createNewUser(data) {
   let { publicAddress, role } = data;
 
   try {
-    // let tx = await contract.addUser(publicAddress, role);
+    let tx = await contract.addUser(publicAddress, role);
+    console.log(tx);
+    return {};
     // if (tx.hash) {
-    let user = await userAPI.createUser(data);
-    if (user) {
-      return {
-        user
-      };
-    } else {
-      return {
-        error: `An error occured. Please try again`
-      };
-    }
+    //   let user = await userAPI.createUser(data);
+    //   if (user) {
+    //     return {
+    //       user
+    //     };
+    //   } else {
+    //     return {
+    //       error: `An error occured. Please try again`
+    //     };
+    //   }
     // } else {
     //   return {
     //     error: `An error occured. Please try again`

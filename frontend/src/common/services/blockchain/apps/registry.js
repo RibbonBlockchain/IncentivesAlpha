@@ -1,5 +1,5 @@
 import BlockchainService from "../index";
-import IRegistry from "../abis/IRegistry.json";
+import Registry from "../abis/Registry.json";
 import { config } from "../../../constants/config";
 
 let registryAddress = config.REGISTRY_CONTRACT_ADDRESS;
@@ -7,7 +7,7 @@ let registryAddress = config.REGISTRY_CONTRACT_ADDRESS;
 export default class RegistryContract extends BlockchainService {
   constructor() {
     super();
-    this.contract = this.initializeContract(registryAddress, IRegistry);
+    this.contract = this.initializeContract(registryAddress, Registry);
     this.addUser = this.addUser.bind(this);
     this.address = this.address.bind(this);
     this.balanceOf = this.balanceOf.bind(this);
@@ -29,13 +29,9 @@ export default class RegistryContract extends BlockchainService {
     }
   }
   async addUser(address, role) {
-    let { ethers } = await this.getInstance();
     let contract = await this.contract;
     try {
-      return await contract.addUser(address, role, {
-        value: 0x0,
-        gasLimit: ethers.utils.hexlify(8000000)
-      });
+      return await contract.addUser(address, role);
     } catch (error) {
       return error;
     }
