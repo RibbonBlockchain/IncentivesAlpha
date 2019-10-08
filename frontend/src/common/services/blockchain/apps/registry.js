@@ -29,9 +29,12 @@ export default class RegistryContract extends BlockchainService {
     }
   }
   async addUser(address, role) {
+    let { ethers } = await this.getInstance();
     let contract = await this.contract;
     try {
-      return await contract.addUser(address, role);
+      return await contract.addUser(address, role, {
+        gasLimit: ethers.utils.hexlify(80000)
+      });
     } catch (error) {
       return error;
     }
