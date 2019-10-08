@@ -31,11 +31,6 @@ interface IRegistry {
       * @notice Returns the role of the user.
       */
     function getUserRole(address _user) external returns(UserRole);
-
-    /**
-      * @notice Returns the balance of the user.
-      */
-    function balanceOf(address _user) external returns(uint256);
     
     /**
       * @notice Allows the admin contract to kill the registry, which will

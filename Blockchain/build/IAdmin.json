@@ -75,18 +75,24 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.5.10;\n\ninterface IAdmin {\n\n    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }\n\n    /**\n      * @notice Sends funds to the vault.\n      */\n    function donateFunds() external payable;\n\n    /**\n      * @notice Allows the admin contract to add a user as any user role.\n      */\n    function addUser(address _user, uint8 _userRole) external;\n\n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUser(address _user) external;\n\n    /**\n      * @notice Allows the admin contract to update the role of the user.\n      */\n    function updateUser(address _user, uint8 _newUserRole) external;\n\n    /**\n      * @notice Allows the admin of the admin contract to kill the eco-system.\n      *         This will send all remaining collateral in the vault to the\n      *         admin as well as burning all the tokens. This function will kill\n      *         the vault and the registry.\n      */\n    function kill() external;\n}",
-  "sourcePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
+  "sourcePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
   "ast": {
-    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
+    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
     "exportedSymbols": {
-      "IAdmin": [152]
+      "IAdmin": [
+        152
+      ]
     },
     "id": 153,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 120,
-        "literals": ["solidity", "0.5", ".10"],
+        "literals": [
+          "solidity",
+          "0.5",
+          ".10"
+        ],
         "nodeType": "PragmaDirective",
         "src": "0:23:1"
       },
@@ -97,7 +103,9 @@
         "documentation": null,
         "fullyImplemented": false,
         "id": 152,
-        "linearizedBaseContracts": [152],
+        "linearizedBaseContracts": [
+          152
+        ],
         "name": "IAdmin",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -419,16 +427,22 @@
     "src": "0:976:1"
   },
   "legacyAST": {
-    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
+    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
     "exportedSymbols": {
-      "IAdmin": [152]
+      "IAdmin": [
+        152
+      ]
     },
     "id": 153,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 120,
-        "literals": ["solidity", "0.5", ".10"],
+        "literals": [
+          "solidity",
+          "0.5",
+          ".10"
+        ],
         "nodeType": "PragmaDirective",
         "src": "0:23:1"
       },
@@ -439,7 +453,9 @@
         "documentation": null,
         "fullyImplemented": false,
         "id": 152,
-        "linearizedBaseContracts": [152],
+        "linearizedBaseContracts": [
+          152
+        ],
         "name": "IAdmin",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -768,5 +784,5 @@
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-10-07T23:51:59.950Z"
+  "updatedAt": "2019-10-08T12:36:20.011Z"
 }

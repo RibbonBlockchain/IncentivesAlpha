@@ -90,25 +90,6 @@
     },
     {
       "constant": false,
-      "inputs": [
-        {
-          "name": "_user",
-          "type": "address"
-        }
-      ],
-      "name": "balanceOf",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
       "inputs": [],
       "name": "kill",
       "outputs": [],
@@ -121,19 +102,25 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.5.10;\n\ninterface IRegistry {\n\n    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }\n\n    /**\n      * @notice Allows the adding of a user as any user role. If the\n      *         `msg.sender` is the admin contract, any user role may be added.\n      *         If the `msg.sender` is a CHW, only patients and practitioners\n      *         may be added.\n      */\n    function addUser(address _user, uint8 _userRole) external;\n    \n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUser(address _user) external;\n    \n    /**\n      * @notice Allows the admin contract to update the role of the user.\n      */\n    function updateUser(address _user, uint8 _newUserRole) external;\n\n    /**\n      * @notice Allows the vault contract to record a payout.\n      */\n    function recordPayout(address _user, uint256 _amount) external;\n    \n    /**\n      * @notice Returns the role of the user.\n      */\n    function getUserRole(address _user) external returns(UserRole);\n\n    /**\n      * @notice Returns the balance of the user.\n      */\n    function balanceOf(address _user) external returns(uint256);\n    \n    /**\n      * @notice Allows the admin contract to kill the registry, which will\n      *         prevent any users from being added or removed.\n      */\n    function kill() external;\n}",
-  "sourcePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+  "source": "pragma solidity 0.5.10;\n\ninterface IRegistry {\n\n    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }\n\n    /**\n      * @notice Allows the adding of a user as any user role. If the\n      *         `msg.sender` is the admin contract, any user role may be added.\n      *         If the `msg.sender` is a CHW, only patients and practitioners\n      *         may be added.\n      */\n    function addUser(address _user, uint8 _userRole) external;\n    \n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUser(address _user) external;\n    \n    /**\n      * @notice Allows the admin contract to update the role of the user.\n      */\n    function updateUser(address _user, uint8 _newUserRole) external;\n\n    /**\n      * @notice Allows the vault contract to record a payout.\n      */\n    function recordPayout(address _user, uint256 _amount) external;\n    \n    /**\n      * @notice Returns the role of the user.\n      */\n    function getUserRole(address _user) external returns(UserRole);\n    \n    /**\n      * @notice Allows the admin contract to kill the registry, which will\n      *         prevent any users from being added or removed.\n      */\n    function kill() external;\n}",
+  "sourcePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
   "ast": {
-    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
     "exportedSymbols": {
-      "IRegistry": [204]
+      "IRegistry": [
+        197
+      ]
     },
-    "id": 205,
+    "id": 198,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 154,
-        "literals": ["solidity", "0.5", ".10"],
+        "literals": [
+          "solidity",
+          "0.5",
+          ".10"
+        ],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
       },
@@ -143,8 +130,10 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 204,
-        "linearizedBaseContracts": [204],
+        "id": 197,
+        "linearizedBaseContracts": [
+          197
+        ],
         "name": "IRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -262,7 +251,7 @@
               "parameters": [],
               "src": "438:0:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "381:58:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -317,7 +306,7 @@
               "parameters": [],
               "src": "569:0:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "526:44:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -398,7 +387,7 @@
               "parameters": [],
               "src": "734:0:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "671:64:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -479,7 +468,7 @@
               "parameters": [],
               "src": "882:0:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "820:63:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -563,7 +552,7 @@
               ],
               "src": "1008:10:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "956:63:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -571,131 +560,55 @@
           },
           {
             "body": null,
-            "documentation": "@notice Returns the balance of the user.",
-            "id": 200,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "balanceOf",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 196,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 195,
-                  "name": "_user",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 200,
-                  "src": "1110:13:2",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 194,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1110:7:2",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "1109:15:2"
-            },
-            "returnParameters": {
-              "id": 199,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 198,
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 200,
-                  "src": "1142:7:2",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 197,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1142:7:2",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "1141:9:2"
-            },
-            "scope": 204,
-            "src": "1091:60:2",
-            "stateMutability": "nonpayable",
-            "superFunction": null,
-            "visibility": "external"
-          },
-          {
-            "body": null,
             "documentation": "@notice Allows the admin contract to kill the registry, which will\n        prevent any users from being added or removed.",
-            "id": 203,
+            "id": 196,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 201,
+              "id": 194,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1329:2:2"
+              "src": "1197:2:2"
             },
             "returnParameters": {
-              "id": 202,
+              "id": 195,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1340:0:2"
+              "src": "1208:0:2"
             },
-            "scope": 204,
-            "src": "1316:25:2",
+            "scope": 197,
+            "src": "1184:25:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 205,
-        "src": "25:1318:2"
+        "scope": 198,
+        "src": "25:1186:2"
       }
     ],
-    "src": "0:1343:2"
+    "src": "0:1211:2"
   },
   "legacyAST": {
-    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
     "exportedSymbols": {
-      "IRegistry": [204]
+      "IRegistry": [
+        197
+      ]
     },
-    "id": 205,
+    "id": 198,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 154,
-        "literals": ["solidity", "0.5", ".10"],
+        "literals": [
+          "solidity",
+          "0.5",
+          ".10"
+        ],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
       },
@@ -705,8 +618,10 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 204,
-        "linearizedBaseContracts": [204],
+        "id": 197,
+        "linearizedBaseContracts": [
+          197
+        ],
         "name": "IRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -824,7 +739,7 @@
               "parameters": [],
               "src": "438:0:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "381:58:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -879,7 +794,7 @@
               "parameters": [],
               "src": "569:0:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "526:44:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -960,7 +875,7 @@
               "parameters": [],
               "src": "734:0:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "671:64:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1041,7 +956,7 @@
               "parameters": [],
               "src": "882:0:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "820:63:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1125,7 +1040,7 @@
               ],
               "src": "1008:10:2"
             },
-            "scope": 204,
+            "scope": 197,
             "src": "956:63:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1133,119 +1048,37 @@
           },
           {
             "body": null,
-            "documentation": "@notice Returns the balance of the user.",
-            "id": 200,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "balanceOf",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 196,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 195,
-                  "name": "_user",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 200,
-                  "src": "1110:13:2",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 194,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1110:7:2",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "1109:15:2"
-            },
-            "returnParameters": {
-              "id": 199,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 198,
-                  "name": "",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 200,
-                  "src": "1142:7:2",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 197,
-                    "name": "uint256",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1142:7:2",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "1141:9:2"
-            },
-            "scope": 204,
-            "src": "1091:60:2",
-            "stateMutability": "nonpayable",
-            "superFunction": null,
-            "visibility": "external"
-          },
-          {
-            "body": null,
             "documentation": "@notice Allows the admin contract to kill the registry, which will\n        prevent any users from being added or removed.",
-            "id": 203,
+            "id": 196,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 201,
+              "id": 194,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1329:2:2"
+              "src": "1197:2:2"
             },
             "returnParameters": {
-              "id": 202,
+              "id": 195,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1340:0:2"
+              "src": "1208:0:2"
             },
-            "scope": 204,
-            "src": "1316:25:2",
+            "scope": 197,
+            "src": "1184:25:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 205,
-        "src": "25:1318:2"
+        "scope": 198,
+        "src": "25:1186:2"
       }
     ],
-    "src": "0:1343:2"
+    "src": "0:1211:2"
   },
   "compiler": {
     "name": "solc",
@@ -1255,5 +1088,5 @@
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-10-07T23:51:59.951Z"
+  "updatedAt": "2019-10-08T12:36:20.013Z"
 }

@@ -65,18 +65,24 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.5.10;\n\ninterface IVault {\n\n    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }\n    \n    /**\n      * @notice Allows the vault to receive funds from the admin contract. This\n      *         will mint tokens that will be owned by the vault until they are\n      *         spent as payouts.\n      */\n    function donateFunds() external payable;\n\n    /**\n      * @notice Allows a CHW to create payouts. The `msg.sender` is verified\n      *         against the registry.\n      */\n    function payout(\n        address payable _patient,\n        address payable _practitioner,\n        address payable _CHW,\n        uint256 _amountEach\n    )\n        external;\n\n    /**\n      * @notice Allows the admin contract to add the address of the registry.\n      * @dev    The vault will not function untill this function has been\n      *         called. This function is called from the admin contract.\n      */\n    function init(address _registry) external;\n\n    /**\n      * @notice Allows the admin contract to kill the vault. This will make the\n      *         vault send all collateral to the admin contract owner, as well\n      *         as burn all remaining tokens.\n      */\n    function kill() external;\n}",
-  "sourcePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Vault/IVault.sol",
+  "sourcePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Vault/IVault.sol",
   "ast": {
-    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Vault/IVault.sol",
+    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Vault/IVault.sol",
     "exportedSymbols": {
-      "IVault": [918]
+      "IVault": [
+        869
+      ]
     },
-    "id": 919,
+    "id": 870,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 889,
-        "literals": ["solidity", "0.5", ".10"],
+        "id": 840,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".10"
+        ],
         "nodeType": "PragmaDirective",
         "src": "0:23:8"
       },
@@ -86,41 +92,43 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 918,
-        "linearizedBaseContracts": [918],
+        "id": 869,
+        "linearizedBaseContracts": [
+          869
+        ],
         "name": "IVault",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "IVault.UserRole",
-            "id": 895,
+            "id": 846,
             "members": [
               {
-                "id": 890,
+                "id": 841,
                 "name": "INACTIVE",
                 "nodeType": "EnumValue",
                 "src": "65:8:8"
               },
               {
-                "id": 891,
+                "id": 842,
                 "name": "ADMIN",
                 "nodeType": "EnumValue",
                 "src": "75:5:8"
               },
               {
-                "id": 892,
+                "id": 843,
                 "name": "CHW",
                 "nodeType": "EnumValue",
                 "src": "82:3:8"
               },
               {
-                "id": 893,
+                "id": 844,
                 "name": "PAT",
                 "nodeType": "EnumValue",
                 "src": "87:3:8"
               },
               {
-                "id": 894,
+                "id": 845,
                 "name": "PRAC",
                 "nodeType": "EnumValue",
                 "src": "92:4:8"
@@ -133,25 +141,25 @@
           {
             "body": null,
             "documentation": "@notice Allows the vault to receive funds from the admin contract. This\n        will mint tokens that will be owned by the vault until they are\n        spent as payouts.",
-            "id": 898,
+            "id": 849,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "donateFunds",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 896,
+              "id": 847,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "339:2:8"
             },
             "returnParameters": {
-              "id": 897,
+              "id": 848,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "358:0:8"
             },
-            "scope": 918,
+            "scope": 869,
             "src": "319:40:8",
             "stateMutability": "payable",
             "superFunction": null,
@@ -160,22 +168,22 @@
           {
             "body": null,
             "documentation": "@notice Allows a CHW to create payouts. The `msg.sender` is verified\n        against the registry.",
-            "id": 909,
+            "id": 860,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "payout",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 907,
+              "id": 858,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 900,
+                  "id": 851,
                   "name": "_patient",
                   "nodeType": "VariableDeclaration",
-                  "scope": 909,
+                  "scope": 860,
                   "src": "522:24:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -184,7 +192,7 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 899,
+                    "id": 850,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "522:15:8",
@@ -199,10 +207,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 902,
+                  "id": 853,
                   "name": "_practitioner",
                   "nodeType": "VariableDeclaration",
-                  "scope": 909,
+                  "scope": 860,
                   "src": "556:29:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -211,7 +219,7 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 901,
+                    "id": 852,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "556:15:8",
@@ -226,10 +234,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 904,
+                  "id": 855,
                   "name": "_CHW",
                   "nodeType": "VariableDeclaration",
-                  "scope": 909,
+                  "scope": 860,
                   "src": "595:20:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -238,7 +246,7 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 903,
+                    "id": 854,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "595:15:8",
@@ -253,10 +261,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 906,
+                  "id": 857,
                   "name": "_amountEach",
                   "nodeType": "VariableDeclaration",
-                  "scope": 909,
+                  "scope": 860,
                   "src": "625:19:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -265,7 +273,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 905,
+                    "id": 856,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "625:7:8",
@@ -281,12 +289,12 @@
               "src": "512:138:8"
             },
             "returnParameters": {
-              "id": 908,
+              "id": 859,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "667:0:8"
             },
-            "scope": 918,
+            "scope": 869,
             "src": "497:171:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -295,22 +303,22 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to add the address of the registry.\n@dev    The vault will not function untill this function has been\n        called. This function is called from the admin contract.",
-            "id": 914,
+            "id": 865,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "init",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 912,
+              "id": 863,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 911,
+                  "id": 862,
                   "name": "_registry",
                   "nodeType": "VariableDeclaration",
-                  "scope": 914,
+                  "scope": 865,
                   "src": "930:17:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -319,7 +327,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 910,
+                    "id": 861,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "930:7:8",
@@ -336,12 +344,12 @@
               "src": "929:19:8"
             },
             "returnParameters": {
-              "id": 913,
+              "id": 864,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "957:0:8"
             },
-            "scope": 918,
+            "scope": 869,
             "src": "916:42:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -350,48 +358,54 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to kill the vault. This will make the\n        vault send all collateral to the admin contract owner, as well\n        as burn all remaining tokens.",
-            "id": 917,
+            "id": 868,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 915,
+              "id": 866,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1199:2:8"
             },
             "returnParameters": {
-              "id": 916,
+              "id": 867,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1210:0:8"
             },
-            "scope": 918,
+            "scope": 869,
             "src": "1186:25:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 919,
+        "scope": 870,
         "src": "25:1188:8"
       }
     ],
     "src": "0:1213:8"
   },
   "legacyAST": {
-    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Vault/IVault.sol",
+    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Vault/IVault.sol",
     "exportedSymbols": {
-      "IVault": [918]
+      "IVault": [
+        869
+      ]
     },
-    "id": 919,
+    "id": 870,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 889,
-        "literals": ["solidity", "0.5", ".10"],
+        "id": 840,
+        "literals": [
+          "solidity",
+          "0.5",
+          ".10"
+        ],
         "nodeType": "PragmaDirective",
         "src": "0:23:8"
       },
@@ -401,41 +415,43 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 918,
-        "linearizedBaseContracts": [918],
+        "id": 869,
+        "linearizedBaseContracts": [
+          869
+        ],
         "name": "IVault",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "IVault.UserRole",
-            "id": 895,
+            "id": 846,
             "members": [
               {
-                "id": 890,
+                "id": 841,
                 "name": "INACTIVE",
                 "nodeType": "EnumValue",
                 "src": "65:8:8"
               },
               {
-                "id": 891,
+                "id": 842,
                 "name": "ADMIN",
                 "nodeType": "EnumValue",
                 "src": "75:5:8"
               },
               {
-                "id": 892,
+                "id": 843,
                 "name": "CHW",
                 "nodeType": "EnumValue",
                 "src": "82:3:8"
               },
               {
-                "id": 893,
+                "id": 844,
                 "name": "PAT",
                 "nodeType": "EnumValue",
                 "src": "87:3:8"
               },
               {
-                "id": 894,
+                "id": 845,
                 "name": "PRAC",
                 "nodeType": "EnumValue",
                 "src": "92:4:8"
@@ -448,25 +464,25 @@
           {
             "body": null,
             "documentation": "@notice Allows the vault to receive funds from the admin contract. This\n        will mint tokens that will be owned by the vault until they are\n        spent as payouts.",
-            "id": 898,
+            "id": 849,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "donateFunds",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 896,
+              "id": 847,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "339:2:8"
             },
             "returnParameters": {
-              "id": 897,
+              "id": 848,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "358:0:8"
             },
-            "scope": 918,
+            "scope": 869,
             "src": "319:40:8",
             "stateMutability": "payable",
             "superFunction": null,
@@ -475,22 +491,22 @@
           {
             "body": null,
             "documentation": "@notice Allows a CHW to create payouts. The `msg.sender` is verified\n        against the registry.",
-            "id": 909,
+            "id": 860,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "payout",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 907,
+              "id": 858,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 900,
+                  "id": 851,
                   "name": "_patient",
                   "nodeType": "VariableDeclaration",
-                  "scope": 909,
+                  "scope": 860,
                   "src": "522:24:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -499,7 +515,7 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 899,
+                    "id": 850,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "522:15:8",
@@ -514,10 +530,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 902,
+                  "id": 853,
                   "name": "_practitioner",
                   "nodeType": "VariableDeclaration",
-                  "scope": 909,
+                  "scope": 860,
                   "src": "556:29:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -526,7 +542,7 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 901,
+                    "id": 852,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "556:15:8",
@@ -541,10 +557,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 904,
+                  "id": 855,
                   "name": "_CHW",
                   "nodeType": "VariableDeclaration",
-                  "scope": 909,
+                  "scope": 860,
                   "src": "595:20:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -553,7 +569,7 @@
                     "typeString": "address payable"
                   },
                   "typeName": {
-                    "id": 903,
+                    "id": 854,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "595:15:8",
@@ -568,10 +584,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 906,
+                  "id": 857,
                   "name": "_amountEach",
                   "nodeType": "VariableDeclaration",
-                  "scope": 909,
+                  "scope": 860,
                   "src": "625:19:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -580,7 +596,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 905,
+                    "id": 856,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "625:7:8",
@@ -596,12 +612,12 @@
               "src": "512:138:8"
             },
             "returnParameters": {
-              "id": 908,
+              "id": 859,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "667:0:8"
             },
-            "scope": 918,
+            "scope": 869,
             "src": "497:171:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -610,22 +626,22 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to add the address of the registry.\n@dev    The vault will not function untill this function has been\n        called. This function is called from the admin contract.",
-            "id": 914,
+            "id": 865,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "init",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 912,
+              "id": 863,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 911,
+                  "id": 862,
                   "name": "_registry",
                   "nodeType": "VariableDeclaration",
-                  "scope": 914,
+                  "scope": 865,
                   "src": "930:17:8",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -634,7 +650,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 910,
+                    "id": 861,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "930:7:8",
@@ -651,12 +667,12 @@
               "src": "929:19:8"
             },
             "returnParameters": {
-              "id": 913,
+              "id": 864,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "957:0:8"
             },
-            "scope": 918,
+            "scope": 869,
             "src": "916:42:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -665,32 +681,32 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to kill the vault. This will make the\n        vault send all collateral to the admin contract owner, as well\n        as burn all remaining tokens.",
-            "id": 917,
+            "id": 868,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 915,
+              "id": 866,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1199:2:8"
             },
             "returnParameters": {
-              "id": 916,
+              "id": 867,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1210:0:8"
             },
-            "scope": 918,
+            "scope": 869,
             "src": "1186:25:8",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 919,
+        "scope": 870,
         "src": "25:1188:8"
       }
     ],
@@ -704,5 +720,5 @@
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-10-07T23:51:59.951Z"
+  "updatedAt": "2019-10-08T12:36:20.012Z"
 }

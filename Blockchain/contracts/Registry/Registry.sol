@@ -20,7 +20,6 @@ contract Registry is IRegistry, WhitelistAdminRole {
 
     struct UserInfo {
         UserRole _userRole;
-        uint256 _balance;
     }
 
     /**
@@ -68,12 +67,10 @@ contract Registry is IRegistry, WhitelistAdminRole {
             );
             // Adding the user
             _userDetails[_user]._userRole = UserRole(_newUserRole);
-            _userDetails[_user]._balance = 0;
 
         } else if(msg.sender == address(_adminInstance)) {
             // Adding the user
             _userDetails[_user]._userRole = UserRole(_newUserRole);
-            _userDetails[_user]._balance = 0;
 
         } else {
             require(
@@ -118,9 +115,6 @@ contract Registry is IRegistry, WhitelistAdminRole {
             _userDetails[_user]._userRole != UserRole.INACTIVE,
             "Revert, user role inactive"
         );
-        
-        _userDetails[_user]._balance = _userDetails[_user]
-            ._balance.add(_amount);
     }
 
     /**
@@ -128,13 +122,6 @@ contract Registry is IRegistry, WhitelistAdminRole {
       */
     function getUserRole(address _user) external returns(UserRole) {
         return _userDetails[_user]._userRole;
-    }
-
-    /**
-      * @notice Returns the balance of the user.
-      */
-    function balanceOf(address _user) external returns(uint256) {
-        return _userDetails[_user]._balance;
     }
     
     /**
