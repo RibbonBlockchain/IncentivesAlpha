@@ -2,8 +2,6 @@ pragma solidity 0.5.10;
 
 interface IRegistry {
 
-    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }
-
     /**
       * @notice Allows the adding of a user as any user role. If the
       *         `msg.sender` is the admin contract, any user role may be added.
@@ -23,14 +21,19 @@ interface IRegistry {
     function updateUser(address _user, uint8 _newUserRole) external;
 
     /**
-      * @notice Allows the vault contract to record a payout.
+      * @notice Allows the vault contract to verify an account for a payout.
       */
-    function recordPayout(address _user, uint256 _amount) external;
+    function verifyPayout(address _user) external view returns(bool);
     
     /**
       * @notice Returns the role of the user.
       */
-    function getUserRole(address _user) external returns(UserRole);
+    function getUserRole(address _user) external view returns(uint8);
+
+    /**
+      * @return bool : If the contract is currently active.
+      */
+    function isAlive() external view returns(bool);
     
     /**
       * @notice Allows the admin contract to kill the registry, which will

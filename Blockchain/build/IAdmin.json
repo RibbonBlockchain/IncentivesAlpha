@@ -16,45 +16,9 @@
         {
           "name": "_user",
           "type": "address"
-        },
-        {
-          "name": "_userRole",
-          "type": "uint8"
         }
       ],
-      "name": "addUser",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_user",
-          "type": "address"
-        }
-      ],
-      "name": "removeUser",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "name": "_newUserRole",
-          "type": "uint8"
-        }
-      ],
-      "name": "updateUser",
+      "name": "removeUserFromRegistry",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -74,16 +38,16 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.5.10;\n\ninterface IAdmin {\n\n    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }\n\n    /**\n      * @notice Sends funds to the vault.\n      */\n    function donateFunds() external payable;\n\n    /**\n      * @notice Allows the admin contract to add a user as any user role.\n      */\n    function addUser(address _user, uint8 _userRole) external;\n\n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUser(address _user) external;\n\n    /**\n      * @notice Allows the admin contract to update the role of the user.\n      */\n    function updateUser(address _user, uint8 _newUserRole) external;\n\n    /**\n      * @notice Allows the admin of the admin contract to kill the eco-system.\n      *         This will send all remaining collateral in the vault to the\n      *         admin as well as burning all the tokens. This function will kill\n      *         the vault and the registry.\n      */\n    function kill() external;\n}",
+  "source": "pragma solidity 0.5.10;\n\ninterface IAdmin {\n\n    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }\n\n    /**\n      * @notice Sends funds to the vault.\n      */\n    function donateFunds() external payable;\n\n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUserFromRegistry(address _user) external;\n\n    /**\n      * @notice Allows the admin of the admin contract to kill the eco-system.\n      *         This will send all remaining collateral in the vault to the\n      *         admin as well as burning all the tokens. This function will kill\n      *         the vault and the registry.\n      */\n    function kill() external;\n}",
   "sourcePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
   "ast": {
     "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
     "exportedSymbols": {
       "IAdmin": [
-        152
+        138
       ]
     },
-    "id": 153,
+    "id": 139,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -102,9 +66,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 152,
+        "id": 138,
         "linearizedBaseContracts": [
-          152
+          138
         ],
         "name": "IAdmin",
         "nodeType": "ContractDefinition",
@@ -169,7 +133,7 @@
               "parameters": [],
               "src": "202:0:1"
             },
-            "scope": 152,
+            "scope": 138,
             "src": "163:40:1",
             "stateMutability": "payable",
             "superFunction": null,
@@ -177,15 +141,15 @@
           },
           {
             "body": null,
-            "documentation": "@notice Allows the admin contract to add a user as any user role.",
-            "id": 136,
+            "documentation": "@notice Allows the admin contract to remove a user.",
+            "id": 134,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "addUser",
+            "name": "removeUserFromRegistry",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 134,
+              "id": 132,
               "nodeType": "ParameterList",
               "parameters": [
                 {
@@ -193,8 +157,8 @@
                   "id": 131,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 136,
-                  "src": "317:13:1",
+                  "scope": 134,
+                  "src": "318:13:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -205,88 +169,7 @@
                     "id": 130,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "317:7:1",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 133,
-                  "name": "_userRole",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 136,
-                  "src": "332:15:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint8",
-                    "typeString": "uint8"
-                  },
-                  "typeName": {
-                    "id": 132,
-                    "name": "uint8",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "332:5:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint8",
-                      "typeString": "uint8"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "316:32:1"
-            },
-            "returnParameters": {
-              "id": 135,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "357:0:1"
-            },
-            "scope": 152,
-            "src": "300:58:1",
-            "stateMutability": "nonpayable",
-            "superFunction": null,
-            "visibility": "external"
-          },
-          {
-            "body": null,
-            "documentation": "@notice Allows the admin contract to remove a user.",
-            "id": 141,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "removeUser",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 139,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 138,
-                  "name": "_user",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 141,
-                  "src": "461:13:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 137,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "461:7:1",
+                    "src": "318:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -297,97 +180,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "460:15:1"
+              "src": "317:15:1"
             },
             "returnParameters": {
-              "id": 140,
+              "id": 133,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "484:0:1"
+              "src": "341:0:1"
             },
-            "scope": 152,
-            "src": "441:44:1",
-            "stateMutability": "nonpayable",
-            "superFunction": null,
-            "visibility": "external"
-          },
-          {
-            "body": null,
-            "documentation": "@notice Allows the admin contract to update the role of the user.",
-            "id": 148,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "updateUser",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 146,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 143,
-                  "name": "_user",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 148,
-                  "src": "602:13:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 142,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "602:7:1",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 145,
-                  "name": "_newUserRole",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 148,
-                  "src": "617:18:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint8",
-                    "typeString": "uint8"
-                  },
-                  "typeName": {
-                    "id": 144,
-                    "name": "uint8",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "617:5:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint8",
-                      "typeString": "uint8"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "601:35:1"
-            },
-            "returnParameters": {
-              "id": 147,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "645:0:1"
-            },
-            "scope": 152,
-            "src": "582:64:1",
+            "scope": 138,
+            "src": "286:56:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -395,45 +197,45 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin of the admin contract to kill the eco-system.\n        This will send all remaining collateral in the vault to the\n        admin as well as burning all the tokens. This function will kill\n        the vault and the registry.",
-            "id": 151,
+            "id": 137,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 149,
+              "id": 135,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "962:2:1"
+              "src": "658:2:1"
             },
             "returnParameters": {
-              "id": 150,
+              "id": 136,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "973:0:1"
+              "src": "669:0:1"
             },
-            "scope": 152,
-            "src": "949:25:1",
+            "scope": 138,
+            "src": "645:25:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 153,
-        "src": "25:951:1"
+        "scope": 139,
+        "src": "25:647:1"
       }
     ],
-    "src": "0:976:1"
+    "src": "0:672:1"
   },
   "legacyAST": {
     "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
     "exportedSymbols": {
       "IAdmin": [
-        152
+        138
       ]
     },
-    "id": 153,
+    "id": 139,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -452,9 +254,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 152,
+        "id": 138,
         "linearizedBaseContracts": [
-          152
+          138
         ],
         "name": "IAdmin",
         "nodeType": "ContractDefinition",
@@ -519,7 +321,7 @@
               "parameters": [],
               "src": "202:0:1"
             },
-            "scope": 152,
+            "scope": 138,
             "src": "163:40:1",
             "stateMutability": "payable",
             "superFunction": null,
@@ -527,15 +329,15 @@
           },
           {
             "body": null,
-            "documentation": "@notice Allows the admin contract to add a user as any user role.",
-            "id": 136,
+            "documentation": "@notice Allows the admin contract to remove a user.",
+            "id": 134,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "addUser",
+            "name": "removeUserFromRegistry",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 134,
+              "id": 132,
               "nodeType": "ParameterList",
               "parameters": [
                 {
@@ -543,8 +345,8 @@
                   "id": 131,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 136,
-                  "src": "317:13:1",
+                  "scope": 134,
+                  "src": "318:13:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -555,88 +357,7 @@
                     "id": 130,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "317:7:1",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 133,
-                  "name": "_userRole",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 136,
-                  "src": "332:15:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint8",
-                    "typeString": "uint8"
-                  },
-                  "typeName": {
-                    "id": 132,
-                    "name": "uint8",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "332:5:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint8",
-                      "typeString": "uint8"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "316:32:1"
-            },
-            "returnParameters": {
-              "id": 135,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "357:0:1"
-            },
-            "scope": 152,
-            "src": "300:58:1",
-            "stateMutability": "nonpayable",
-            "superFunction": null,
-            "visibility": "external"
-          },
-          {
-            "body": null,
-            "documentation": "@notice Allows the admin contract to remove a user.",
-            "id": 141,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "removeUser",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 139,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 138,
-                  "name": "_user",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 141,
-                  "src": "461:13:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 137,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "461:7:1",
+                    "src": "318:7:1",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -647,97 +368,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "460:15:1"
+              "src": "317:15:1"
             },
             "returnParameters": {
-              "id": 140,
+              "id": 133,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "484:0:1"
+              "src": "341:0:1"
             },
-            "scope": 152,
-            "src": "441:44:1",
-            "stateMutability": "nonpayable",
-            "superFunction": null,
-            "visibility": "external"
-          },
-          {
-            "body": null,
-            "documentation": "@notice Allows the admin contract to update the role of the user.",
-            "id": 148,
-            "implemented": false,
-            "kind": "function",
-            "modifiers": [],
-            "name": "updateUser",
-            "nodeType": "FunctionDefinition",
-            "parameters": {
-              "id": 146,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 143,
-                  "name": "_user",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 148,
-                  "src": "602:13:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 142,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "602:7:1",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                },
-                {
-                  "constant": false,
-                  "id": 145,
-                  "name": "_newUserRole",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 148,
-                  "src": "617:18:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint8",
-                    "typeString": "uint8"
-                  },
-                  "typeName": {
-                    "id": 144,
-                    "name": "uint8",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "617:5:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint8",
-                      "typeString": "uint8"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "601:35:1"
-            },
-            "returnParameters": {
-              "id": 147,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "645:0:1"
-            },
-            "scope": 152,
-            "src": "582:64:1",
+            "scope": 138,
+            "src": "286:56:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -745,44 +385,44 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin of the admin contract to kill the eco-system.\n        This will send all remaining collateral in the vault to the\n        admin as well as burning all the tokens. This function will kill\n        the vault and the registry.",
-            "id": 151,
+            "id": 137,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 149,
+              "id": 135,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "962:2:1"
+              "src": "658:2:1"
             },
             "returnParameters": {
-              "id": 150,
+              "id": 136,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "973:0:1"
+              "src": "669:0:1"
             },
-            "scope": 152,
-            "src": "949:25:1",
+            "scope": 138,
+            "src": "645:25:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 153,
-        "src": "25:951:1"
+        "scope": 139,
+        "src": "25:647:1"
       }
     ],
-    "src": "0:976:1"
+    "src": "0:672:1"
   },
   "compiler": {
     "name": "solc",
     "version": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
     "optimizer": true,
-    "runs": 500
+    "runs": 999
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-10-08T12:36:20.011Z"
+  "updatedAt": "2019-10-14T13:30:39.385Z"
 }

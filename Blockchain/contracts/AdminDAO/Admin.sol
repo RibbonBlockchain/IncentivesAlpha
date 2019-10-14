@@ -37,7 +37,7 @@ contract Admin is IAdmin, WhitelistAdminRole {
     /**
       * @notice Allows the admin contract to add a user as any user role.
       */
-    function addUser(
+    function addUserInRegistry(
         address _user,
         uint8 _userRole
     )
@@ -50,14 +50,14 @@ contract Admin is IAdmin, WhitelistAdminRole {
     /**
       * @notice Allows the admin contract to remove a user.
       */
-    function removeUser(address _user) external onlyWhitelistAdmin() {
+    function removeUserFromRegistry(address _user) external onlyWhitelistAdmin() {
         _registryInstance.removeUser(_user);
     }
 
     /**
       * @notice Allows the admin contract to update the role of the user.
       */
-    function updateUser(
+    function updateUserInRegistry(
         address _user,
         uint8 _newUserRole
     )

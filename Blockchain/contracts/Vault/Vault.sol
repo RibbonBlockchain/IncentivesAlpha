@@ -79,19 +79,15 @@ contract Vault is IVault, WhitelistAdminRole {
             "Insuficient balance in vault to compleate payout"
         );
         require(
-            uint8(_registryInstance.getUserRole(_patient)) != uint8(UserRole.INACTIVE) &&
-            uint8(_registryInstance.getUserRole(_practitioner)) != uint8(UserRole.INACTIVE) &&
-            uint8(_registryInstance.getUserRole(_CHW)) != uint8(UserRole.INACTIVE)
+            _registryInstance.verifyPayout(_patient) &&
+            _registryInstance.verifyPayout(_practitioner) &&
+            _registryInstance.verifyPayout(_CHW)
             ,"Revert, a user in the payout was inactive"
         );
 
         _patient.transfer(_amountEach);
         _practitioner.transfer(_amountEach);
         _CHW.transfer(_amountEach);
-
-        _registryInstance.recordPayout(_patient, _amountEach);
-        _registryInstance.recordPayout(_practitioner, _amountEach);
-        _registryInstance.recordPayout(_CHW, _amountEach);
     }
 
     /**

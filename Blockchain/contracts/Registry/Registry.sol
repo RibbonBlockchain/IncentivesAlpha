@@ -19,7 +19,12 @@ contract Registry is IRegistry, WhitelistAdminRole {
     bool internal _active = true;
 
     struct UserInfo {
-        UserRole _userRole;
+        uint8 _userRole;
+        // 0 = inactive
+        // 1 = super admin
+        // 2 = admin (CHW)
+        // 3 = patient
+        // 4 = practitoner
     }
 
     /**
@@ -28,7 +33,8 @@ contract Registry is IRegistry, WhitelistAdminRole {
     constructor(address _vault, address _admin) public WhitelistAdminRole() {
         _vaultInstance = IVault(_vault);
         _adminInstance = IAdmin(_admin);
-        _userDetails[msg.sender]._userRole = UserRole.ADMIN;
+        _userDetails[msg.sender]._userRole = 1;
+        _userDetails[address(_adminInstance)]._userRole == 1;
     }
 
     modifier onlyAdminContract() {
@@ -59,18 +65,18 @@ contract Registry is IRegistry, WhitelistAdminRole {
       *         may be added.
       */
     function addUser(address _user, uint8 _newUserRole) external isActive() {
-        if(_userDetails[msg.sender]._userRole == UserRole.CHW) {
+        if(_userDetails[msg.sender]._userRole == 2) {
             // Ensuring the CHW only adds roles it has permission to add
             require(
-                _newUserRole != uint8(UserRole.ADMIN) && _newUserRole != uint8(UserRole.CHW),
+                _newUserRole != 1 && _newUserRole != 2,
                 "Permission denied, CHW cannot add admin or CHW"
             );
             // Adding the user
-            _userDetails[_user]._userRole = UserRole(_newUserRole);
+            _addUser(_user, _newUserRole);
 
-        } else if(msg.sender == address(_adminInstance)) {
+        } else if(_userDetails[msg.sender]._userRole == 1) {
             // Adding the user
-            _userDetails[_user]._userRole = UserRole(_newUserRole);
+            _addUser(_user, _newUserRole);
 
         } else {
             require(
@@ -81,10 +87,20 @@ contract Registry is IRegistry, WhitelistAdminRole {
     }
     
     /**
-      * @notice Allows the admin contract to remove a user.
+      * @notice Allows an admin to remove a user.
       */
-    function removeUser(address _user) external onlyAdminContract() isActive() {
-        _userDetails[_user]._userRole = UserRole.INACTIVE;
+    function removeUser(
+        address _user
+    )
+        external
+        isActive()
+    {
+        require(
+            _userDetails[msg.sender]._userRole == 1,
+            "Incorrect permissions"
+        );
+
+        _userDetails[_user]._userRole = 0;
     }
     
     /**
@@ -95,33 +111,14 @@ contract Registry is IRegistry, WhitelistAdminRole {
         uint8 _newUserRole
     )
         external
-        onlyAdminContract()
-    {
-        _userDetails[_user]._userRole = UserRole(_newUserRole);
-    }
-
-    /**
-      * @notice Allows the vault contract to record a payout.
-      */
-    function recordPayout(
-        address _user,
-        uint256 _amount
-    )
-        external
-        onlyVaultContract()
         isActive()
     {
         require(
-            _userDetails[_user]._userRole != UserRole.INACTIVE,
-            "Revert, user role inactive"
+            _userDetails[msg.sender]._userRole == 1,
+            "Incorrect permissions"
         );
-    }
 
-    /**
-      * @notice Returns the role of the user.
-      */
-    function getUserRole(address _user) external returns(UserRole) {
-        return _userDetails[_user]._userRole;
+        _userDetails[_user]._userRole = _newUserRole;
     }
     
     /**
@@ -130,5 +127,50 @@ contract Registry is IRegistry, WhitelistAdminRole {
       */
     function kill() external onlyAdminContract() {
         _active = false;
+    }
+
+    /**
+      * @notice Allows the vault contract to record a payout.
+      */
+    function verifyPayout(
+        address _user
+    )
+        external
+        view
+        onlyVaultContract()
+        isActive()
+        returns(bool)
+    {
+        require(
+            _userDetails[_user]._userRole != 0,
+            "Revert, user role inactive"
+        );
+        return true;
+    }
+
+    /**
+      * @notice Returns the role of the user.
+      */
+    function getUserRole(address _user) external view returns(uint8) {
+        return _userDetails[_user]._userRole;
+    }
+
+    /**
+      * @return bool : If the contract is currently active.
+      */
+    function isAlive() external view returns(bool) {
+        return _active;
+    }
+
+    function _addUser(
+        address _user,
+        uint8 _newUserRole
+    )
+        internal
+        isActive()
+        returns(uint8)
+    {
+        _userDetails[_user]._userRole = _newUserRole;
+        return uint8(_userDetails[_user]._userRole);
     }
 }
