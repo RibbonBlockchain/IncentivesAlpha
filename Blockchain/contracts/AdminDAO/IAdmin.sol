@@ -2,13 +2,6 @@ pragma solidity 0.5.10;
 
 interface IAdmin {
 
-    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }
-
-    /**
-      * @notice Sends funds to the vault.
-      */
-    function donateFunds() external payable;
-
     /**
       * @notice Allows the admin contract to remove a user.
       */

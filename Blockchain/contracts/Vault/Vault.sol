@@ -18,6 +18,9 @@ contract Vault is IVault, WhitelistAdminRole {
     // Creator address
     address payable internal _creator;
 
+    event recivedDonation(uint256 _amount, address _from, string _message);
+    event payoutRecord(address _pat, address prac, address _chw, uint256 _amount);
+
     constructor(
         address _admin
     )
@@ -46,12 +49,22 @@ contract Vault is IVault, WhitelistAdminRole {
         _;
     }
 
+    modifier onlyAdminsAndCHW() {
+        require(
+            _registryInstance.getUserRole(msg.sender) == 1 ||
+            _registryInstance.getUserRole(msg.sender) == 2,
+            "User does not have correct permissions to make payout"
+        );
+        _;
+    }
+
     /**
       * @dev This allows admin addresses/contract to update/set the address
       *      of the vault contract
       */
     function init(address _registry) external onlyWhitelistAdmin() {
         _registryInstance = IRegistry(_registry);
+        _active = true;
     }
 
     /**
@@ -59,8 +72,8 @@ contract Vault is IVault, WhitelistAdminRole {
       *         will mint tokens that will be owned by the vault until they are
       *         spent as payouts.
       */
-    function donateFunds() external payable onlyAdminContract() isActive() {
-        
+    function donateFunds(string calldata _message) external payable isActive() {
+        emit recivedDonation(msg.value, msg.sender, _message);
     }
 
     function payout(
@@ -70,10 +83,11 @@ contract Vault is IVault, WhitelistAdminRole {
         uint256 _amountEach
     )
         external
+        onlyAdminsAndCHW()
         isActive()
     {
         uint256 balance = address(this).balance;
-        // check with registry that msg.sender is chw
+        
         require(
             _amountEach.mul(3) >= balance,
             "Insuficient balance in vault to compleate payout"
@@ -88,6 +102,8 @@ contract Vault is IVault, WhitelistAdminRole {
         _patient.transfer(_amountEach);
         _practitioner.transfer(_amountEach);
         _CHW.transfer(_amountEach);
+
+        emit payoutRecord(_patient, _practitioner, _CHW, _amountEach);
     }
 
     /**
@@ -95,10 +111,25 @@ contract Vault is IVault, WhitelistAdminRole {
       *         vault send all collateral to the admin contract owner, as well
       *         as burn all remaining tokens.
       */
-    function kill() external onlyWhitelistAdmin() isActive() {
+    function kill() external onlyAdminContract() {
         _active = false;
 
         uint256 balance = address(this).balance;
         _creator.transfer(balance);
+    }
+
+    /**
+      * @return bool : If the contract is currently active.
+      */
+    function isAlive() external view returns(bool) {
+        return _active;
+    }
+
+    function balance() external view returns(uint256) {
+        return address(this).balance;
+    }
+
+    function() external payable {
+        emit recivedDonation(msg.value, msg.sender, "fallback function donation");
     }
 }

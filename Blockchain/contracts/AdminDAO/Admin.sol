@@ -27,13 +27,6 @@ contract Admin is IAdmin, WhitelistAdminRole {
         _registryInstance = IRegistry(_registry);
     }
 
-     /**
-      * @notice Sends funds to the vault.
-      */
-    function donateFunds() external payable onlyWhitelistAdmin() {
-        _vaultInstance.donateFunds();
-    }
-
     /**
       * @notice Allows the admin contract to add a user as any user role.
       */
@@ -75,5 +68,6 @@ contract Admin is IAdmin, WhitelistAdminRole {
       */
     function kill() external onlyWhitelistAdmin() {
         _registryInstance.kill();
+        _vaultInstance.kill();
     }
 }
