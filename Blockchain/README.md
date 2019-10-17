@@ -1,5 +1,10 @@
 # Blockchain 
 
+Contract addresses on sokol
+Admin: 0xB1353e322b15884Eb36500BB5b5FDE989a42c693
+Vault: 0xEB8C8B9F19F824A95d5D2fA05f03fBE1fdCC4826
+Registry: 0x3d16A53647C09daD6f8F7Bc2D9918CD202cBbE58
+
 ## Index
 [1. Getting started](#1-getting-started)
 [2. Trouble shooting](#2-trouble-shooting)

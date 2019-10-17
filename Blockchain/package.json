@@ -12,7 +12,8 @@
     "start": "etherlime ganache --networkId=1337",
     "build": "etherlime compile --runs=999",
     "build-err": "rmdir build /s && etherlime compile --runs=999",
-    "test": "etherlime test -timeout 100000 --gas-report=true --runs=999"
+    "test": "etherlime test --timeout 100000 --gas-report=true --runs=999",
+    "cover": "etherlime coverage --timeout 100000 --runs=999"
   },
   "author": "@vonnie610",
   "license": "MIT",

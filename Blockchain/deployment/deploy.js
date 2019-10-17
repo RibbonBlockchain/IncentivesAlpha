@@ -52,12 +52,43 @@ const deploy = async (network, secret) => {
     vaultDeployed.contract.address,
     registryDeployed.contract.address
   );
+  await adminDeployed.verboseWaitForTransaction(initAdminTx, "Init Admin");
 
   //init the vault
   const initVaultTx = await vaultDeployed.init(
     registryDeployed.contract.address
   );
+  await vaultDeployed.verboseWaitForTransaction(initVaultTx, "Init vault");
+
+  //add users as admins
+  let addUser1Tx = await adminDeployed.addUser(
+    "0x9A8A9958ac1B70c49ccE9693CCb0230f13F63505",
+    1
+  ); //issac 1
+  await registryDeployed.verboseWaitForTransaction(
+    addUser1Tx,
+    "Adding admin User 1"
+  );
+
+  let addUser2Tx = await adminDeployed.addUser(
+    "0xdb0B020Ab16129983045C80692fa1D1916133471",
+    1
+  ); //issac 2
+  await registryDeployed.verboseWaitForTransaction(
+    addUser2Tx,
+    "Adding admin User 2"
+  );
+
+  let addUser3Tx = await adminDeployed.addUser(
+    "0x1D4f94F90a919EB646D9158Ca3B3ECEF3EBc7941",
+    1
+  ); //allan
+  await registryDeployed.verboseWaitForTransaction(
+    addUser3Tx,
+    "Adding admin User 3"
+  );
 };
+//
 module.exports = {
   deploy
 };
