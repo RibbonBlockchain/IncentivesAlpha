@@ -118,24 +118,18 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.5.10;\n\ninterface IRegistry {\n\n    /**\n      * @notice Allows the adding of a user as any user role. If the\n      *         `msg.sender` is the admin contract, any user role may be added.\n      *         If the `msg.sender` is a CHW, only patients and practitioners\n      *         may be added.\n      */\n    function addUser(address _user, uint8 _userRole) external;\n    \n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUser(address _user) external;\n    \n    /**\n      * @notice Allows the admin contract to update the role of the user.\n      */\n    function updateUser(address _user, uint8 _newUserRole) external;\n\n    /**\n      * @notice Allows the vault contract to verify an account for a payout.\n      */\n    function verifyPayout(address _user) external view returns(bool);\n    \n    /**\n      * @notice Returns the role of the user.\n      */\n    function getUserRole(address _user) external view returns(uint8);\n\n    /**\n      * @return bool : If the contract is currently active.\n      */\n    function isAlive() external view returns(bool);\n    \n    /**\n      * @notice Allows the admin contract to kill the registry, which will\n      *         prevent any users from being added or removed.\n      */\n    function kill() external;\n}",
-  "sourcePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+  "sourcePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
   "ast": {
-    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
     "exportedSymbols": {
-      "IRegistry": [
-        167
-      ]
+      "IRegistry": [167]
     },
     "id": 168,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 125,
-        "literals": [
-          "solidity",
-          "0.5",
-          ".10"
-        ],
+        "literals": ["solidity", "0.5", ".10"],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
       },
@@ -146,9 +140,7 @@
         "documentation": null,
         "fullyImplemented": false,
         "id": 167,
-        "linearizedBaseContracts": [
-          167
-        ],
+        "linearizedBaseContracts": [167],
         "name": "IRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -622,22 +614,16 @@
     "src": "0:1305:2"
   },
   "legacyAST": {
-    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
     "exportedSymbols": {
-      "IRegistry": [
-        167
-      ]
+      "IRegistry": [167]
     },
     "id": 168,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 125,
-        "literals": [
-          "solidity",
-          "0.5",
-          ".10"
-        ],
+        "literals": ["solidity", "0.5", ".10"],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
       },
@@ -648,9 +634,7 @@
         "documentation": null,
         "fullyImplemented": false,
         "id": 167,
-        "linearizedBaseContracts": [
-          167
-        ],
+        "linearizedBaseContracts": [167],
         "name": "IRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -1127,9 +1111,9 @@
     "name": "solc",
     "version": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
     "optimizer": true,
-    "runs": 999
+    "runs": 500
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-10-15T16:00:46.473Z"
+  "updatedAt": "2019-10-17T09:32:15.328Z"
 }

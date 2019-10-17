@@ -1,30 +1,23 @@
 {
   "contractName": "Roles",
   "abi": [],
-  "bytecode": "0x60556023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea265627a7a723058207544c78a0ce13b7e8086ea7aaffccbb9c8dcd39a8ebe775c1a7211438251e89d64736f6c634300050a0032",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea265627a7a723058207544c78a0ce13b7e8086ea7aaffccbb9c8dcd39a8ebe775c1a7211438251e89d64736f6c634300050a0032",
+  "bytecode": "0x60556023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea265627a7a72305820d15c58f74ad26d1437748a2e8f88f2442ccb472c9178a4326c15e9ee61c3724864736f6c634300050a0032",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea265627a7a72305820d15c58f74ad26d1437748a2e8f88f2442ccb472c9178a4326c15e9ee61c3724864736f6c634300050a0032",
   "sourceMap": "108:873:4:-;;132:2:-1;166:7;155:9;146:7;137:37;255:7;249:14;246:1;241:23;235:4;232:33;222:2;;269:9;222:2;293:9;290:1;283:20;323:4;314:7;306:22;347:7;338;331:24",
   "deployedSourceMap": "108:873:4:-;;;;;;;;",
   "source": "pragma solidity ^0.5.0;\n\n/**\n * @title Roles\n * @dev Library for managing addresses assigned to a Role.\n */\nlibrary Roles {\n    struct Role {\n        mapping (address => bool) bearer;\n    }\n\n    /**\n     * @dev Give an account access to this role.\n     */\n    function add(Role storage role, address account) internal {\n        require(!has(role, account), \"Roles: account already has role\");\n        role.bearer[account] = true;\n    }\n\n    /**\n     * @dev Remove an account's access to this role.\n     */\n    function remove(Role storage role, address account) internal {\n        require(has(role, account), \"Roles: account does not have role\");\n        role.bearer[account] = false;\n    }\n\n    /**\n     * @dev Check if an account has this role.\n     * @return bool\n     */\n    function has(Role storage role, address account) internal view returns (bool) {\n        require(account != address(0), \"Roles: account is the zero address\");\n        return role.bearer[account];\n    }\n}\n",
-  "sourcePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
+  "sourcePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
   "ast": {
-    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
     "exportedSymbols": {
-      "Roles": [
-        548
-      ]
+      "Roles": [548]
     },
     "id": 549,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 469,
-        "literals": [
-          "solidity",
-          "^",
-          "0.5",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.5", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:4"
       },
@@ -35,9 +28,7 @@
         "documentation": "@title Roles\n@dev Library for managing addresses assigned to a Role.",
         "fullyImplemented": true,
         "id": 548,
-        "linearizedBaseContracts": [
-          548
-        ],
+        "linearizedBaseContracts": [548],
         "name": "Roles",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -222,10 +213,7 @@
                       "id": 481,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1169,
-                        1170
-                      ],
+                      "overloadedDeclarations": [1169, 1170],
                       "referencedDeclaration": 1170,
                       "src": "328:7:4",
                       "typeDescriptions": {
@@ -537,10 +525,7 @@
                       "id": 506,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1169,
-                        1170
-                      ],
+                      "overloadedDeclarations": [1169, 1170],
                       "referencedDeclaration": 1170,
                       "src": "581:7:4",
                       "typeDescriptions": {
@@ -874,10 +859,7 @@
                       "id": 532,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1169,
-                        1170
-                      ],
+                      "overloadedDeclarations": [1169, 1170],
                       "referencedDeclaration": 1170,
                       "src": "867:7:4",
                       "typeDescriptions": {
@@ -1083,23 +1065,16 @@
     "src": "0:982:4"
   },
   "legacyAST": {
-    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
     "exportedSymbols": {
-      "Roles": [
-        548
-      ]
+      "Roles": [548]
     },
     "id": 549,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 469,
-        "literals": [
-          "solidity",
-          "^",
-          "0.5",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.5", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:4"
       },
@@ -1110,9 +1085,7 @@
         "documentation": "@title Roles\n@dev Library for managing addresses assigned to a Role.",
         "fullyImplemented": true,
         "id": 548,
-        "linearizedBaseContracts": [
-          548
-        ],
+        "linearizedBaseContracts": [548],
         "name": "Roles",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -1297,10 +1270,7 @@
                       "id": 481,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1169,
-                        1170
-                      ],
+                      "overloadedDeclarations": [1169, 1170],
                       "referencedDeclaration": 1170,
                       "src": "328:7:4",
                       "typeDescriptions": {
@@ -1612,10 +1582,7 @@
                       "id": 506,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1169,
-                        1170
-                      ],
+                      "overloadedDeclarations": [1169, 1170],
                       "referencedDeclaration": 1170,
                       "src": "581:7:4",
                       "typeDescriptions": {
@@ -1949,10 +1916,7 @@
                       "id": 532,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1169,
-                        1170
-                      ],
+                      "overloadedDeclarations": [1169, 1170],
                       "referencedDeclaration": 1170,
                       "src": "867:7:4",
                       "typeDescriptions": {
@@ -2161,9 +2125,9 @@
     "name": "solc",
     "version": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
     "optimizer": true,
-    "runs": 999
+    "runs": 500
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-10-15T16:00:46.481Z"
+  "updatedAt": "2019-10-17T09:32:15.331Z"
 }

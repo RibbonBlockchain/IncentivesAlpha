@@ -30,24 +30,18 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.5.10;\n\ninterface IAdmin {\n\n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUserFromRegistry(address _user) external;\n\n    /**\n      * @notice Allows the admin of the admin contract to kill the eco-system.\n      *         This will send all remaining collateral in the vault to the\n      *         admin as well as burning all the tokens. This function will kill\n      *         the vault and the registry.\n      */\n    function kill() external;\n}",
-  "sourcePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
+  "sourcePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
   "ast": {
-    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
     "exportedSymbols": {
-      "IAdmin": [
-        123
-      ]
+      "IAdmin": [123]
     },
     "id": 124,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 114,
-        "literals": [
-          "solidity",
-          "0.5",
-          ".10"
-        ],
+        "literals": ["solidity", "0.5", ".10"],
         "nodeType": "PragmaDirective",
         "src": "0:23:1"
       },
@@ -58,9 +52,7 @@
         "documentation": null,
         "fullyImplemented": false,
         "id": 123,
-        "linearizedBaseContracts": [
-          123
-        ],
+        "linearizedBaseContracts": [123],
         "name": "IAdmin",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -154,22 +146,16 @@
     "src": "0:512:1"
   },
   "legacyAST": {
-    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/AdminDAO/IAdmin.sol",
     "exportedSymbols": {
-      "IAdmin": [
-        123
-      ]
+      "IAdmin": [123]
     },
     "id": 124,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 114,
-        "literals": [
-          "solidity",
-          "0.5",
-          ".10"
-        ],
+        "literals": ["solidity", "0.5", ".10"],
         "nodeType": "PragmaDirective",
         "src": "0:23:1"
       },
@@ -180,9 +166,7 @@
         "documentation": null,
         "fullyImplemented": false,
         "id": 123,
-        "linearizedBaseContracts": [
-          123
-        ],
+        "linearizedBaseContracts": [123],
         "name": "IAdmin",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -279,9 +263,9 @@
     "name": "solc",
     "version": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
     "optimizer": true,
-    "runs": 999
+    "runs": 500
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-10-15T16:00:46.472Z"
+  "updatedAt": "2019-10-17T09:32:15.327Z"
 }

@@ -79,30 +79,23 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.0;\n\nimport \"./Roles.sol\";\n\n/**\n * @title WhitelistAdminRole\n * @dev WhitelistAdmins are responsible for assigning and removing Whitelisted accounts.\n */\ncontract WhitelistAdminRole {\n    using Roles for Roles.Role;\n\n    event WhitelistAdminAdded(address indexed account);\n    event WhitelistAdminRemoved(address indexed account);\n\n    Roles.Role private _whitelistAdmins;\n\n    constructor () internal {\n        _addWhitelistAdmin(msg.sender);\n    }\n\n    modifier onlyWhitelistAdmin() {\n        require(isWhitelistAdmin(msg.sender), \"WhitelistAdminRole: caller does not have the WhitelistAdmin role\");\n        _;\n    }\n\n    function isWhitelistAdmin(address account) public view returns (bool) {\n        return _whitelistAdmins.has(account);\n    }\n\n    function addWhitelistAdmin(address account) public onlyWhitelistAdmin {\n        _addWhitelistAdmin(account);\n    }\n\n    function renounceWhitelistAdmin() public {\n        _removeWhitelistAdmin(msg.sender);\n    }\n\n    function _addWhitelistAdmin(address account) internal {\n        _whitelistAdmins.add(account);\n        emit WhitelistAdminAdded(account);\n    }\n\n    function _removeWhitelistAdmin(address account) internal {\n        _whitelistAdmins.remove(account);\n        emit WhitelistAdminRemoved(account);\n    }\n}\n",
-  "sourcePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Support/WhitelistAdminRole.sol",
+  "sourcePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Support/WhitelistAdminRole.sol",
   "ast": {
-    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Support/WhitelistAdminRole.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Support/WhitelistAdminRole.sol",
     "exportedSymbols": {
-      "WhitelistAdminRole": [
-        652
-      ]
+      "WhitelistAdminRole": [652]
     },
     "id": 653,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 550,
-        "literals": [
-          "solidity",
-          "^",
-          "0.5",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.5", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:5"
       },
       {
-        "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
+        "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
         "file": "./Roles.sol",
         "id": 551,
         "nodeType": "ImportDirective",
@@ -119,9 +112,7 @@
         "documentation": "@title WhitelistAdminRole\n@dev WhitelistAdmins are responsible for assigning and removing Whitelisted accounts.",
         "fullyImplemented": true,
         "id": 652,
-        "linearizedBaseContracts": [
-          652
-        ],
+        "linearizedBaseContracts": [652],
         "name": "WhitelistAdminRole",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -479,10 +470,7 @@
                       "id": 575,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1169,
-                        1170
-                      ],
+                      "overloadedDeclarations": [1169, 1170],
                       "referencedDeclaration": 1170,
                       "src": "515:7:5",
                       "typeDescriptions": {
@@ -1303,28 +1291,21 @@
     "src": "0:1293:5"
   },
   "legacyAST": {
-    "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Support/WhitelistAdminRole.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Support/WhitelistAdminRole.sol",
     "exportedSymbols": {
-      "WhitelistAdminRole": [
-        652
-      ]
+      "WhitelistAdminRole": [652]
     },
     "id": 653,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 550,
-        "literals": [
-          "solidity",
-          "^",
-          "0.5",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.5", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:5"
       },
       {
-        "absolutePath": "/home/chris/Desktop/DailyGreens/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
+        "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Support/Roles.sol",
         "file": "./Roles.sol",
         "id": 551,
         "nodeType": "ImportDirective",
@@ -1341,9 +1322,7 @@
         "documentation": "@title WhitelistAdminRole\n@dev WhitelistAdmins are responsible for assigning and removing Whitelisted accounts.",
         "fullyImplemented": true,
         "id": 652,
-        "linearizedBaseContracts": [
-          652
-        ],
+        "linearizedBaseContracts": [652],
         "name": "WhitelistAdminRole",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -1701,10 +1680,7 @@
                       "id": 575,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1169,
-                        1170
-                      ],
+                      "overloadedDeclarations": [1169, 1170],
                       "referencedDeclaration": 1170,
                       "src": "515:7:5",
                       "typeDescriptions": {
@@ -2528,9 +2504,9 @@
     "name": "solc",
     "version": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
     "optimizer": true,
-    "runs": 999
+    "runs": 500
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-10-15T16:00:46.482Z"
+  "updatedAt": "2019-10-17T09:32:15.331Z"
 }
