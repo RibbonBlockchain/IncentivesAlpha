@@ -1,19 +1,1 @@
 @import "../../styles/variables";
-.input {
-  display: flex;
-  flex-direction: column;
-  margin: calculateRem(10) 0;
-}
-
-label {
-  margin-bottom: calculateRem(5);
-  color: #76808f;
-}
-
-.form_input {
-  background-color: transparent;
-  font-family: $font;
-  border: 1px solid $background;
-  outline: none;
-  padding: calculateRem(10);
-}

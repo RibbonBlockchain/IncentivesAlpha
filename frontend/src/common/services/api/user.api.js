@@ -18,7 +18,9 @@ export default class UserAPI extends HTTP {
    * @returns {Promise.<Object>}
    */
   async listUsers() {
-    return await this.getRequest("users");
+    return await this.getRequest("users", {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 
   /**

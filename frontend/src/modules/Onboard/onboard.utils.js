@@ -12,9 +12,9 @@ export async function createNewUser(data) {
     let tx = await contract.addUser(publicAddress, role);
     if (tx.hash) {
       let user = await userAPI.createUser(data, getRoleURL(role));
-      if (user.data.message) {
+      if (user.message) {
         return {
-          error: user.data.message.errors
+          error: user.message.code
         };
       } else {
         return {
