@@ -23,7 +23,7 @@ export async function authenticateUser() {
       let authWithAPI = await authAPI.authenticate({
         publicAddress,
         signature
-	  });
+      });
       if (authWithAPI.error) {
         return {
           error: authWithAPI.error,
@@ -56,7 +56,7 @@ export async function authenticateUser() {
 }
 
 export async function approveUser(user) {
-  setItem("token", user.authWithAPI.data.token);
+  setItem("token", user.authWithAPI.token);
   setItem("address", user.publicAddress);
   setItem("loginType", user.loginType);
   //   todo replace this

@@ -3,14 +3,14 @@
 .address {
   background-color: $background;
   color: $text-color;
-  border-radius: calculateRem(40);
+  border-radius: calculateRem(100);
   cursor: pointer;
   display: flex;
   align-items: center;
-  height: calculateRem(24);
+  height: calculateRem(18);
   align-self: center;
   width: calculateRem(220);
-  padding: calculateRem(10) 0;
+  padding: calculateRem(12) calculateRem(5);
   &:hover {
     background-color: #1f222d;
   }
@@ -32,8 +32,6 @@
 
 @media (max-width: $desktop) {
   .address {
-    padding: calculateRem(5) 0;
-
     .avatar {
       width: 10px !important;
       height: 30px !important;

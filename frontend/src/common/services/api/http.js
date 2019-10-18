@@ -30,7 +30,15 @@ export default class HTTP {
    */
   async postRequest(url, body, headers = {}) {
     let endpoint = `${config.API_ENDPOINT}/${url}`;
-    return await handleRequest("POST", endpoint, { body, headers });
+    return fetch(endpoint, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        ...DEFAULT_HEADERS,
+        ...headers
+      }
+    }).then(response => response.json());
+    // return await handleRequest("POST", endpoint, { body, headers });
   }
 
   /**

@@ -7,6 +7,7 @@
 
 .modalFormWindow {
   width: 80%;
+  height: 80vh;
   background: #313541;
   color: #ffffff;
 }
@@ -63,6 +64,36 @@ img {
   font-weight: 500;
 }
 
+.form {
+  display: grid;
+  grid-template-rows: 1fr 4fr 0fr;
+}
+
+.form_body {
+  small {
+    color: $red;
+  }
+}
+
+.form_input {
+  color: $text-color;
+  input {
+    background: transparent;
+    border: none;
+    color: $text-color;
+    background-color: none !important;
+  }
+}
+
+.datepicker {
+  background-color: transparent;
+  font-family: $font;
+  border: 1px solid $background;
+  color: $text-color;
+  outline: none;
+  padding: calculateRem(10);
+}
+
 .heading {
   color: $background;
 }
@@ -81,4 +112,8 @@ img {
 
 .card__light_purple {
   background: $purple-bg;
+}
+
+.react-phone-number-input__input:-webkit-autofill {
+  box-shadow: none !important;
 }
