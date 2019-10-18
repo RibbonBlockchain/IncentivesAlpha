@@ -34,3 +34,18 @@ export const routes = [
   "/app/health-workers",
   "/app/health-workers/new"
 ];
+
+export const getRoleURL = role => {
+  switch (role) {
+    case roleNames.HEALTH_WORKER:
+      return "chw";
+    case roleNames.PATIENT:
+      return "patients";
+    case roleNames.PRACTITIONER:
+      return "practitioners";
+    default:
+      return {
+        error: `Unknown role type ${role}`
+      };
+  }
+};
