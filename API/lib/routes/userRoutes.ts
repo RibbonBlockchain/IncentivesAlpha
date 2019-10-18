@@ -14,17 +14,17 @@ export class UserRoutes {
     app
       .route("/api/v1/users/chw")
       // POST endpoint add community health worker
-      .post([validJWTNeeded, superAdminOnly], this.userController.addNewCommunityHealthWorker);
+      .post([validJWTNeeded], this.userController.addNewCommunityHealthWorker);
 
     app
       .route("/api/v1/users/practitioners")
       // POST endpoint add community health worker
-      .post([validJWTNeeded, communityHealthWorkerOnly], this.userController.addNewPractitioner);
+      .post([validJWTNeeded], this.userController.addNewPractitioner);
 
     app
       .route("/api/v1/users/patients")
       // POST endpoint add community health worker
-      .post([validJWTNeeded, communityHealthWorkerOnly], this.userController.addNewPatient);
+      .post([validJWTNeeded], this.userController.addNewPatient);
 
     app
       .route("/api/v1/users/:userAddress")
