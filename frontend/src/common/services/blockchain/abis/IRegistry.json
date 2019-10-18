@@ -52,25 +52,26 @@
       "type": "function"
     },
     {
-      "constant": false,
+      "constant": true,
       "inputs": [
         {
           "name": "_user",
           "type": "address"
-        },
-        {
-          "name": "_amount",
-          "type": "uint256"
         }
       ],
-      "name": "recordPayout",
-      "outputs": [],
+      "name": "verifyPayout",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
-      "constant": false,
+      "constant": true,
       "inputs": [
         {
           "name": "_user",
@@ -85,26 +86,21 @@
         }
       ],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_user",
-          "type": "address"
-        }
-      ],
-      "name": "balanceOf",
+      "constant": true,
+      "inputs": [],
+      "name": "isAlive",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
+          "type": "bool"
         }
       ],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -121,25 +117,19 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.5.10;\n\ninterface IRegistry {\n\n    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }\n\n    /**\n      * @notice Allows the adding of a user as any user role. If the\n      *         `msg.sender` is the admin contract, any user role may be added.\n      *         If the `msg.sender` is a CHW, only patients and practitioners\n      *         may be added.\n      */\n    function addUser(address _user, uint8 _userRole) external;\n    \n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUser(address _user) external;\n    \n    /**\n      * @notice Allows the admin contract to update the role of the user.\n      */\n    function updateUser(address _user, uint8 _newUserRole) external;\n\n    /**\n      * @notice Allows the vault contract to record a payout.\n      */\n    function recordPayout(address _user, uint256 _amount) external;\n    \n    /**\n      * @notice Returns the role of the user.\n      */\n    function getUserRole(address _user) external returns(UserRole);\n\n    /**\n      * @notice Returns the balance of the user.\n      */\n    function balanceOf(address _user) external returns(uint256);\n    \n    /**\n      * @notice Allows the admin contract to kill the registry, which will\n      *         prevent any users from being added or removed.\n      */\n    function kill() external;\n}",
-  "sourcePath": "/home/iamonuwa/Projects/RibbonBlockchain/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+  "source": "pragma solidity 0.5.10;\n\ninterface IRegistry {\n\n    /**\n      * @notice Allows the adding of a user as any user role. If the\n      *         `msg.sender` is the admin contract, any user role may be added.\n      *         If the `msg.sender` is a CHW, only patients and practitioners\n      *         may be added.\n      */\n    function addUser(address _user, uint8 _userRole) external;\n    \n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUser(address _user) external;\n    \n    /**\n      * @notice Allows the admin contract to update the role of the user.\n      */\n    function updateUser(address _user, uint8 _newUserRole) external;\n\n    /**\n      * @notice Allows the vault contract to verify an account for a payout.\n      */\n    function verifyPayout(address _user) external view returns(bool);\n    \n    /**\n      * @notice Returns the role of the user.\n      */\n    function getUserRole(address _user) external view returns(uint8);\n\n    /**\n      * @return bool : If the contract is currently active.\n      */\n    function isAlive() external view returns(bool);\n    \n    /**\n      * @notice Allows the admin contract to kill the registry, which will\n      *         prevent any users from being added or removed.\n      */\n    function kill() external;\n}",
+  "sourcePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
   "ast": {
-    "absolutePath": "/home/iamonuwa/Projects/RibbonBlockchain/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
     "exportedSymbols": {
-      "IRegistry": [
-        204
-      ]
+      "IRegistry": [167]
     },
-    "id": 205,
+    "id": 168,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 154,
-        "literals": [
-          "solidity",
-          "0.5",
-          ".10"
-        ],
+        "id": 125,
+        "literals": ["solidity", "0.5", ".10"],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
       },
@@ -149,72 +139,31 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 204,
-        "linearizedBaseContracts": [
-          204
-        ],
+        "id": 167,
+        "linearizedBaseContracts": [167],
         "name": "IRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "canonicalName": "IRegistry.UserRole",
-            "id": 160,
-            "members": [
-              {
-                "id": 155,
-                "name": "INACTIVE",
-                "nodeType": "EnumValue",
-                "src": "68:8:2"
-              },
-              {
-                "id": 156,
-                "name": "ADMIN",
-                "nodeType": "EnumValue",
-                "src": "78:5:2"
-              },
-              {
-                "id": 157,
-                "name": "CHW",
-                "nodeType": "EnumValue",
-                "src": "85:3:2"
-              },
-              {
-                "id": 158,
-                "name": "PAT",
-                "nodeType": "EnumValue",
-                "src": "90:3:2"
-              },
-              {
-                "id": 159,
-                "name": "PRAC",
-                "nodeType": "EnumValue",
-                "src": "95:4:2"
-              }
-            ],
-            "name": "UserRole",
-            "nodeType": "EnumDefinition",
-            "src": "52:49:2"
-          },
-          {
             "body": null,
             "documentation": "@notice Allows the adding of a user as any user role. If the\n        `msg.sender` is the admin contract, any user role may be added.\n        If the `msg.sender` is a CHW, only patients and practitioners\n        may be added.",
-            "id": 167,
+            "id": 132,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "addUser",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 165,
+              "id": 130,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 162,
+                  "id": 127,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 167,
-                  "src": "398:13:2",
+                  "scope": 132,
+                  "src": "343:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -222,10 +171,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 161,
+                    "id": 126,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "398:7:2",
+                    "src": "343:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -237,11 +186,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 164,
+                  "id": 129,
                   "name": "_userRole",
                   "nodeType": "VariableDeclaration",
-                  "scope": 167,
-                  "src": "413:15:2",
+                  "scope": 132,
+                  "src": "358:15:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -249,10 +198,10 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 163,
+                    "id": 128,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
-                    "src": "413:5:2",
+                    "src": "358:5:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
@@ -262,16 +211,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "397:32:2"
+              "src": "342:32:2"
             },
             "returnParameters": {
-              "id": 166,
+              "id": 131,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "438:0:2"
+              "src": "383:0:2"
             },
-            "scope": 204,
-            "src": "381:58:2",
+            "scope": 167,
+            "src": "326:58:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -279,23 +228,23 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to remove a user.",
-            "id": 172,
+            "id": 137,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "removeUser",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 170,
+              "id": 135,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 169,
+                  "id": 134,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 172,
-                  "src": "546:13:2",
+                  "scope": 137,
+                  "src": "491:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -303,10 +252,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 168,
+                    "id": 133,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "546:7:2",
+                    "src": "491:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -317,16 +266,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "545:15:2"
+              "src": "490:15:2"
             },
             "returnParameters": {
-              "id": 171,
+              "id": 136,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "569:0:2"
+              "src": "514:0:2"
             },
-            "scope": 204,
-            "src": "526:44:2",
+            "scope": 167,
+            "src": "471:44:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -334,23 +283,23 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to update the role of the user.",
-            "id": 179,
+            "id": 144,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "updateUser",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 177,
+              "id": 142,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 174,
+                  "id": 139,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 179,
-                  "src": "691:13:2",
+                  "scope": 144,
+                  "src": "636:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -358,10 +307,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 173,
+                    "id": 138,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "691:7:2",
+                    "src": "636:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -373,11 +322,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 176,
+                  "id": 141,
                   "name": "_newUserRole",
                   "nodeType": "VariableDeclaration",
-                  "scope": 179,
-                  "src": "706:18:2",
+                  "scope": 144,
+                  "src": "651:18:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -385,10 +334,10 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 175,
+                    "id": 140,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
-                    "src": "706:5:2",
+                    "src": "651:5:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
@@ -398,40 +347,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "690:35:2"
+              "src": "635:35:2"
             },
             "returnParameters": {
-              "id": 178,
+              "id": 143,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "734:0:2"
+              "src": "679:0:2"
             },
-            "scope": 204,
-            "src": "671:64:2",
+            "scope": 167,
+            "src": "616:64:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           },
           {
             "body": null,
-            "documentation": "@notice Allows the vault contract to record a payout.",
-            "id": 186,
+            "documentation": "@notice Allows the vault contract to verify an account for a payout.",
+            "id": 151,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "recordPayout",
+            "name": "verifyPayout",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 184,
+              "id": 147,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 181,
+                  "id": 146,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 186,
-                  "src": "842:13:2",
+                  "scope": 151,
+                  "src": "802:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -439,10 +388,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 180,
+                    "id": 145,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "842:7:2",
+                    "src": "802:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -451,68 +400,69 @@
                   },
                   "value": null,
                   "visibility": "internal"
-                },
+                }
+              ],
+              "src": "801:15:2"
+            },
+            "returnParameters": {
+              "id": 150,
+              "nodeType": "ParameterList",
+              "parameters": [
                 {
                   "constant": false,
-                  "id": 183,
-                  "name": "_amount",
+                  "id": 149,
+                  "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 186,
-                  "src": "857:15:2",
+                  "scope": 151,
+                  "src": "839:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 182,
-                    "name": "uint256",
+                    "id": 148,
+                    "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "857:7:2",
+                    "src": "839:4:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "841:32:2"
+              "src": "838:6:2"
             },
-            "returnParameters": {
-              "id": 185,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "882:0:2"
-            },
-            "scope": 204,
-            "src": "820:63:2",
-            "stateMutability": "nonpayable",
+            "scope": 167,
+            "src": "780:65:2",
+            "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           },
           {
             "body": null,
             "documentation": "@notice Returns the role of the user.",
-            "id": 193,
+            "id": 158,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getUserRole",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 189,
+              "id": 154,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 188,
+                  "id": 153,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 193,
-                  "src": "977:13:2",
+                  "scope": 158,
+                  "src": "939:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -520,10 +470,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 187,
+                    "id": 152,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "977:7:2",
+                    "src": "939:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -534,182 +484,146 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "976:15:2"
+              "src": "938:15:2"
             },
             "returnParameters": {
-              "id": 192,
+              "id": 157,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 191,
+                  "id": 156,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 193,
-                  "src": "1009:8:2",
+                  "scope": 158,
+                  "src": "976:5:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_UserRole_$160",
-                    "typeString": "enum IRegistry.UserRole"
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
                   },
                   "typeName": {
-                    "contractScope": null,
-                    "id": 190,
-                    "name": "UserRole",
-                    "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 160,
-                    "src": "1009:8:2",
+                    "id": 155,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "976:5:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_UserRole_$160",
-                      "typeString": "enum IRegistry.UserRole"
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "1008:10:2"
+              "src": "975:7:2"
             },
-            "scope": 204,
-            "src": "956:63:2",
-            "stateMutability": "nonpayable",
+            "scope": 167,
+            "src": "918:65:2",
+            "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           },
           {
             "body": null,
-            "documentation": "@notice Returns the balance of the user.",
-            "id": 200,
+            "documentation": "@return bool : If the contract is currently active.",
+            "id": 163,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "balanceOf",
+            "name": "isAlive",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 196,
+              "id": 159,
               "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 195,
-                  "name": "_user",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 200,
-                  "src": "1110:13:2",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 194,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1110:7:2",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "1109:15:2"
+              "parameters": [],
+              "src": "1082:2:2"
             },
             "returnParameters": {
-              "id": 199,
+              "id": 162,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 198,
+                  "id": 161,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 200,
-                  "src": "1142:7:2",
+                  "scope": 163,
+                  "src": "1107:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 197,
-                    "name": "uint256",
+                    "id": 160,
+                    "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1142:7:2",
+                    "src": "1107:4:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "1141:9:2"
+              "src": "1106:6:2"
             },
-            "scope": 204,
-            "src": "1091:60:2",
-            "stateMutability": "nonpayable",
+            "scope": 167,
+            "src": "1066:47:2",
+            "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           },
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to kill the registry, which will\n        prevent any users from being added or removed.",
-            "id": 203,
+            "id": 166,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 201,
+              "id": 164,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1329:2:2"
+              "src": "1291:2:2"
             },
             "returnParameters": {
-              "id": 202,
+              "id": 165,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1340:0:2"
+              "src": "1302:0:2"
             },
-            "scope": 204,
-            "src": "1316:25:2",
+            "scope": 167,
+            "src": "1278:25:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 205,
-        "src": "25:1318:2"
+        "scope": 168,
+        "src": "25:1280:2"
       }
     ],
-    "src": "0:1343:2"
+    "src": "0:1305:2"
   },
   "legacyAST": {
-    "absolutePath": "/home/iamonuwa/Projects/RibbonBlockchain/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
+    "absolutePath": "/Users/chris/Projects/IncentivesAlpha/Blockchain/contracts/Registry/IRegistry.sol",
     "exportedSymbols": {
-      "IRegistry": [
-        204
-      ]
+      "IRegistry": [167]
     },
-    "id": 205,
+    "id": 168,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 154,
-        "literals": [
-          "solidity",
-          "0.5",
-          ".10"
-        ],
+        "id": 125,
+        "literals": ["solidity", "0.5", ".10"],
         "nodeType": "PragmaDirective",
         "src": "0:23:2"
       },
@@ -719,72 +633,31 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 204,
-        "linearizedBaseContracts": [
-          204
-        ],
+        "id": 167,
+        "linearizedBaseContracts": [167],
         "name": "IRegistry",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "canonicalName": "IRegistry.UserRole",
-            "id": 160,
-            "members": [
-              {
-                "id": 155,
-                "name": "INACTIVE",
-                "nodeType": "EnumValue",
-                "src": "68:8:2"
-              },
-              {
-                "id": 156,
-                "name": "ADMIN",
-                "nodeType": "EnumValue",
-                "src": "78:5:2"
-              },
-              {
-                "id": 157,
-                "name": "CHW",
-                "nodeType": "EnumValue",
-                "src": "85:3:2"
-              },
-              {
-                "id": 158,
-                "name": "PAT",
-                "nodeType": "EnumValue",
-                "src": "90:3:2"
-              },
-              {
-                "id": 159,
-                "name": "PRAC",
-                "nodeType": "EnumValue",
-                "src": "95:4:2"
-              }
-            ],
-            "name": "UserRole",
-            "nodeType": "EnumDefinition",
-            "src": "52:49:2"
-          },
-          {
             "body": null,
             "documentation": "@notice Allows the adding of a user as any user role. If the\n        `msg.sender` is the admin contract, any user role may be added.\n        If the `msg.sender` is a CHW, only patients and practitioners\n        may be added.",
-            "id": 167,
+            "id": 132,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "addUser",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 165,
+              "id": 130,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 162,
+                  "id": 127,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 167,
-                  "src": "398:13:2",
+                  "scope": 132,
+                  "src": "343:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -792,10 +665,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 161,
+                    "id": 126,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "398:7:2",
+                    "src": "343:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -807,11 +680,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 164,
+                  "id": 129,
                   "name": "_userRole",
                   "nodeType": "VariableDeclaration",
-                  "scope": 167,
-                  "src": "413:15:2",
+                  "scope": 132,
+                  "src": "358:15:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -819,10 +692,10 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 163,
+                    "id": 128,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
-                    "src": "413:5:2",
+                    "src": "358:5:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
@@ -832,16 +705,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "397:32:2"
+              "src": "342:32:2"
             },
             "returnParameters": {
-              "id": 166,
+              "id": 131,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "438:0:2"
+              "src": "383:0:2"
             },
-            "scope": 204,
-            "src": "381:58:2",
+            "scope": 167,
+            "src": "326:58:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -849,23 +722,23 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to remove a user.",
-            "id": 172,
+            "id": 137,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "removeUser",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 170,
+              "id": 135,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 169,
+                  "id": 134,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 172,
-                  "src": "546:13:2",
+                  "scope": 137,
+                  "src": "491:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -873,10 +746,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 168,
+                    "id": 133,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "546:7:2",
+                    "src": "491:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -887,16 +760,16 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "545:15:2"
+              "src": "490:15:2"
             },
             "returnParameters": {
-              "id": 171,
+              "id": 136,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "569:0:2"
+              "src": "514:0:2"
             },
-            "scope": 204,
-            "src": "526:44:2",
+            "scope": 167,
+            "src": "471:44:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
@@ -904,23 +777,23 @@
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to update the role of the user.",
-            "id": 179,
+            "id": 144,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "updateUser",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 177,
+              "id": 142,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 174,
+                  "id": 139,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 179,
-                  "src": "691:13:2",
+                  "scope": 144,
+                  "src": "636:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -928,10 +801,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 173,
+                    "id": 138,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "691:7:2",
+                    "src": "636:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -943,11 +816,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 176,
+                  "id": 141,
                   "name": "_newUserRole",
                   "nodeType": "VariableDeclaration",
-                  "scope": 179,
-                  "src": "706:18:2",
+                  "scope": 144,
+                  "src": "651:18:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -955,10 +828,10 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 175,
+                    "id": 140,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
-                    "src": "706:5:2",
+                    "src": "651:5:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
@@ -968,40 +841,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "690:35:2"
+              "src": "635:35:2"
             },
             "returnParameters": {
-              "id": 178,
+              "id": 143,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "734:0:2"
+              "src": "679:0:2"
             },
-            "scope": 204,
-            "src": "671:64:2",
+            "scope": 167,
+            "src": "616:64:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           },
           {
             "body": null,
-            "documentation": "@notice Allows the vault contract to record a payout.",
-            "id": 186,
+            "documentation": "@notice Allows the vault contract to verify an account for a payout.",
+            "id": 151,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "recordPayout",
+            "name": "verifyPayout",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 184,
+              "id": 147,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 181,
+                  "id": 146,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 186,
-                  "src": "842:13:2",
+                  "scope": 151,
+                  "src": "802:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1009,10 +882,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 180,
+                    "id": 145,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "842:7:2",
+                    "src": "802:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1021,68 +894,69 @@
                   },
                   "value": null,
                   "visibility": "internal"
-                },
+                }
+              ],
+              "src": "801:15:2"
+            },
+            "returnParameters": {
+              "id": 150,
+              "nodeType": "ParameterList",
+              "parameters": [
                 {
                   "constant": false,
-                  "id": 183,
-                  "name": "_amount",
+                  "id": 149,
+                  "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 186,
-                  "src": "857:15:2",
+                  "scope": 151,
+                  "src": "839:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 182,
-                    "name": "uint256",
+                    "id": 148,
+                    "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "857:7:2",
+                    "src": "839:4:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "841:32:2"
+              "src": "838:6:2"
             },
-            "returnParameters": {
-              "id": 185,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "882:0:2"
-            },
-            "scope": 204,
-            "src": "820:63:2",
-            "stateMutability": "nonpayable",
+            "scope": 167,
+            "src": "780:65:2",
+            "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           },
           {
             "body": null,
             "documentation": "@notice Returns the role of the user.",
-            "id": 193,
+            "id": 158,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getUserRole",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 189,
+              "id": 154,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 188,
+                  "id": 153,
                   "name": "_user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 193,
-                  "src": "977:13:2",
+                  "scope": 158,
+                  "src": "939:13:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1090,10 +964,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 187,
+                    "id": 152,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "977:7:2",
+                    "src": "939:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1104,164 +978,134 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "976:15:2"
+              "src": "938:15:2"
             },
             "returnParameters": {
-              "id": 192,
+              "id": 157,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 191,
+                  "id": 156,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 193,
-                  "src": "1009:8:2",
+                  "scope": 158,
+                  "src": "976:5:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_UserRole_$160",
-                    "typeString": "enum IRegistry.UserRole"
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
                   },
                   "typeName": {
-                    "contractScope": null,
-                    "id": 190,
-                    "name": "UserRole",
-                    "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 160,
-                    "src": "1009:8:2",
+                    "id": 155,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "976:5:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_UserRole_$160",
-                      "typeString": "enum IRegistry.UserRole"
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "1008:10:2"
+              "src": "975:7:2"
             },
-            "scope": 204,
-            "src": "956:63:2",
-            "stateMutability": "nonpayable",
+            "scope": 167,
+            "src": "918:65:2",
+            "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           },
           {
             "body": null,
-            "documentation": "@notice Returns the balance of the user.",
-            "id": 200,
+            "documentation": "@return bool : If the contract is currently active.",
+            "id": 163,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
-            "name": "balanceOf",
+            "name": "isAlive",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 196,
+              "id": 159,
               "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 195,
-                  "name": "_user",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 200,
-                  "src": "1110:13:2",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  },
-                  "typeName": {
-                    "id": 194,
-                    "name": "address",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "1110:7:2",
-                    "stateMutability": "nonpayable",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_address",
-                      "typeString": "address"
-                    }
-                  },
-                  "value": null,
-                  "visibility": "internal"
-                }
-              ],
-              "src": "1109:15:2"
+              "parameters": [],
+              "src": "1082:2:2"
             },
             "returnParameters": {
-              "id": 199,
+              "id": 162,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 198,
+                  "id": 161,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 200,
-                  "src": "1142:7:2",
+                  "scope": 163,
+                  "src": "1107:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 197,
-                    "name": "uint256",
+                    "id": 160,
+                    "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1142:7:2",
+                    "src": "1107:4:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "1141:9:2"
+              "src": "1106:6:2"
             },
-            "scope": 204,
-            "src": "1091:60:2",
-            "stateMutability": "nonpayable",
+            "scope": 167,
+            "src": "1066:47:2",
+            "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
           },
           {
             "body": null,
             "documentation": "@notice Allows the admin contract to kill the registry, which will\n        prevent any users from being added or removed.",
-            "id": 203,
+            "id": 166,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 201,
+              "id": 164,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1329:2:2"
+              "src": "1291:2:2"
             },
             "returnParameters": {
-              "id": 202,
+              "id": 165,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1340:0:2"
+              "src": "1302:0:2"
             },
-            "scope": 204,
-            "src": "1316:25:2",
+            "scope": 167,
+            "src": "1278:25:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 205,
-        "src": "25:1318:2"
+        "scope": 168,
+        "src": "25:1280:2"
       }
     ],
-    "src": "0:1343:2"
+    "src": "0:1305:2"
   },
   "compiler": {
     "name": "solc",
@@ -1271,5 +1115,5 @@
   },
   "networks": {},
   "schemaVersion": "2.2.0",
-  "updatedAt": "2019-09-27T18:51:32.941Z"
+  "updatedAt": "2019-10-17T09:32:15.328Z"
 }
