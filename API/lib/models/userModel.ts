@@ -32,6 +32,10 @@ export const UserSchema = new Schema({
     type: String,
     required: "Enter a valid id number"
   },
+  phoneNumber: {
+    type: String,
+    required: "Please Enter a Mobile Number"
+  },
   createdDate: {
     type: Date,
     default: Date.now
