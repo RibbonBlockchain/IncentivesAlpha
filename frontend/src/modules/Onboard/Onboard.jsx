@@ -147,6 +147,15 @@ export default function Onboard() {
                 label="Last name"
               />
             </div>
+			<div className={styles.layout__item}>
+			<TextInput
+                placeholder="id number"
+                classNames={styles.input_area}
+                inputType="text"
+                refs={idNumberRef}
+                label="ID Number"
+              />
+			</div>
           </div>
           <div className={[styles.layout].join(" ")}>
             <div className={styles.layout__full}>
@@ -160,11 +169,11 @@ export default function Onboard() {
             </div>
             <div className={styles.layout__full}>
               <TextInput
-                placeholder="id number"
+                placeholder="phone number"
                 classNames={styles.input_area}
                 inputType="text"
                 refs={idNumberRef}
-                label="ID Number"
+                label="Phone Number"
               />
             </div>
             <div className={styles.layout__item}>
