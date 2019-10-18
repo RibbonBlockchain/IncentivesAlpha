@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { getItem } from "../../common/utils/storage";
 
 import Alert from "../Alert";
-import QR from "../QR";
+import QRCodeDisplay from "../QRCodeDisplay";
 import Login from "../Login";
 
 import Home from "../Home";
@@ -52,7 +52,7 @@ function Router() {
         <AuthenticatedRoute appProps={user} path="/app" component={Home} />
       </Switch>
       <Alert />
-      <QR />
+      <QRCodeDisplay />
     </>
   );
 }

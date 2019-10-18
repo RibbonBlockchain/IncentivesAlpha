@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { ethers } from "ethers";
 import { useDispatch } from "react-redux";
 import useForm from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import QRScanner from "qr-code-scanner";
 import * as moment from "moment";
 import "react-phone-number-input/style.css";
 import { createNewUser } from "./onboard.utils";
@@ -12,13 +14,20 @@ import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
 import styles from "./Onboard.module.scss";
 import { SHOW_ALERT } from "../../common/constants/alert";
-import { getItem, clear } from "../../common/utils/storage";
+import { getItem } from "../../common/utils/storage";
 
 export default function Onboard() {
   const [onboardOptions, setOnboardOptions] = useState(false);
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
-  const { handleSubmit, register, errors, formState } = useForm({
+  const {
+    handleSubmit,
+    register,
+    errors,
+    formState,
+    setValue,
+    triggerValidation
+  } = useForm({
     mode: "onChange"
   });
 
@@ -103,6 +112,23 @@ export default function Onboard() {
     return formState.isValid && phoneNumber.isValid ? false : true;
   }
 
+  function captureAddressFromQRCodeDisplay() {
+    QRScanner.initiate({
+      onResult: address => {
+        if (ethers.utils.getAddress(address)) {
+          setValue("publicAddress", address);
+          triggerValidation({ name: "publicAddress", value: address });
+        } else {
+          dispatch({
+            type: SHOW_ALERT,
+            payload: `Address ${address} does not match checksum`
+          });
+        }
+      },
+      timeout: 20000
+    });
+  }
+
   const OnboardOptions = ({ visible }) => {
     return (
       <Modal visible={visible} windowClassName={styles.modalWindow}>
@@ -153,6 +179,14 @@ export default function Onboard() {
                 .toString()
                 .toLowerCase()}
             </h2>
+            <div className={styles.actions}>
+              <Button
+                text="Capture Wallet Address"
+                classNames={[styles.button, styles.button_primary].join(" ")}
+                onClick={captureAddressFromQRCodeDisplay}
+                button="button"
+              ></Button>
+            </div>
             <div className={styles.form_body}>
               <div className={[styles.layout].join(" ")}>
                 <div className={styles.layout__item}>
@@ -245,6 +279,10 @@ export default function Onboard() {
                     <input
                       className={[styles.form_input].join(" ")}
                       placeholder="0x0..."
+                      disabled={
+                        type === roleNames.PATIENT ||
+                        type === roleNames.PRACTITIONER
+                      }
                       ref={register({
                         required: "Wallet Address is required",
                         pattern: {

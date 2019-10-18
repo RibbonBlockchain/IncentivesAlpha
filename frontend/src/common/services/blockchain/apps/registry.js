@@ -19,9 +19,7 @@ export default class RegistryContract extends BlockchainService {
   }
 
   async addWhitelistAdmin(address) {
-    let { ethers } = await this.getInstance();
-    let contract = await this.contract;
-    console.log(contract);
+    // let contract = await this.contract;
     try {
       //   return await contract.addWhitelistAdmin(address);
     } catch (error) {

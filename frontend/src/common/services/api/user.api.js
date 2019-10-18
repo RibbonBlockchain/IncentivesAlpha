@@ -6,10 +6,6 @@ import HTTP from "./http";
 import { getItem } from "../../utils/storage";
 
 export default class UserAPI extends HTTP {
-  constructor() {
-    super();
-  }
-
   /**
    * List Users Request
    *
