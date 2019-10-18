@@ -60,7 +60,7 @@ export default function Onboard() {
       role: type
     };
 
-    let newUser = await createNewUser(data);
+	let newUser = await createNewUser(data);
     if (newUser.error) {
         dispatch({
           type: SHOW_ALERT,

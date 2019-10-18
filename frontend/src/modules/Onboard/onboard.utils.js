@@ -1,5 +1,6 @@
 import RegistryContract from "../../common/services/blockchain/apps/registry";
 import UserAPI from "../../common/services/api/user.api";
+import { getRoleURL } from "../../common/constants/roles";
 
 export async function createNewUser(data) {
   let contract = new RegistryContract();
@@ -10,14 +11,14 @@ export async function createNewUser(data) {
   try {
     let tx = await contract.addUser(publicAddress, role);
     if (tx.hash) {
-      let user = await userAPI.createUser(data);
-      if (user) {
+      let user = await userAPI.createUser(data, getRoleURL(role));
+      if (user.data.message) {
         return {
-          user
+          error: user.data.message.errors
         };
       } else {
         return {
-          error: `An error occured. Please try again`
+          user: user.data
         };
       }
     } else {
