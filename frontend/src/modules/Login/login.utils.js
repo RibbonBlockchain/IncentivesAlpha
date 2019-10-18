@@ -23,19 +23,19 @@ export async function authenticateUser() {
       let authWithAPI = await authAPI.authenticate({
         publicAddress,
         signature
-      });
+	  });
       if (authWithAPI.error) {
         return {
           error: authWithAPI.error,
           publicAddress
         };
       } else {
-        let userRole = await contract.getUserRole(publicAddress);
-        if (userRole) {
+        let loginType = await contract.getUserRole(publicAddress);
+        if (loginType) {
           return {
             authWithAPI,
             publicAddress,
-            loginType: userRole.value.toString()
+            loginType
           };
         } else {
           return {
@@ -56,7 +56,7 @@ export async function authenticateUser() {
 }
 
 export async function approveUser(user) {
-  setItem("token", user.authWithAPI.token);
+  setItem("token", user.authWithAPI.data.token);
   setItem("address", user.publicAddress);
   setItem("loginType", user.loginType);
   //   todo replace this
