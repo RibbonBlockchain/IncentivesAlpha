@@ -9,17 +9,9 @@ import { HIDE_WALLET } from "../../common/constants/wallet";
 import { clear, getItem } from "../../common/utils/storage";
 import styles from "./Wallet.module.scss";
 
-function Profile({ history }) {
+function Profile({ history, user }) {
   const dispatch = useDispatch();
   let ticker = "USD";
-  let data = {
-    address: getItem("address"),
-    firstName: "Nnachi",
-    lastName: "Onuwa",
-    dob: "November 23rd",
-    balance: "0.0",
-    role: getItem("loginType")
-  };
 
   async function handleProfileNavigation() {
     await dispatch({
@@ -35,10 +27,10 @@ function Profile({ history }) {
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
-        {data.address && (
+        {user.address && (
           <Blockies
             className={styles.blockies}
-            address={data.address}
+            address={user.address}
             imageSize={40}
           />
         )}
@@ -46,23 +38,23 @@ function Profile({ history }) {
       <div className={styles.information}>
         <h4
           className={styles.header}
-        >{`${data.lastName} ${data.firstName}`}</h4>
+        >{`${user.lastName} ${user.firstName}`}</h4>
         <span className={styles.heading}>
-          Logged In as: <strong>{roles[data.role].replace("_", " ")}</strong>
+          Logged In as: <strong>{roles[user.role].replace("_", " ")}</strong>
         </span>
         <div className={styles.wallet}>
-          <small>{data.address}</small>
+          <small>{user.address}</small>
           <span>
-            <Balance balance={data.balance} ticker={ticker} />
+            <Balance balance={user.balance} ticker={ticker} />
           </span>
         </div>
         <div className={styles.description}>
           <span className={styles.heading}>Bio</span>
-          <span className={styles.wrapper}>{data.bio || "Not available"}</span>
+          <span className={styles.wrapper}>{user.bio || "Not available"}</span>
         </div>
         <div className={styles.dob}>
           <span className={styles.heading}>Date of Birth</span>
-          <span className={styles.wrapper}>{data.dob}</span>
+          <span className={styles.wrapper}>{user.dob}</span>
         </div>
       </div>
       <div className={styles.actions}>
@@ -82,6 +74,7 @@ function Profile({ history }) {
 }
 export default function Wallet({ history }) {
   const { visible } = useSelector(state => state.wallet);
+  const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   function onClickClose() {
@@ -90,14 +83,21 @@ export default function Wallet({ history }) {
     });
   }
 
+  let isOpen = visible && user;
+  let data = {
+    ...user,
+    balance: "0.0",
+    role: getItem("loginType")
+  };
+
   return (
     <Modal
-      visible={visible}
+      visible={isOpen}
       onClickClose={onClickClose}
       windowClassName={styles.modalWindow}
     >
       <div className={styles.cnt}>
-        <Profile history={history} />
+        <Profile history={history} user={data} />
       </div>
     </Modal>
   );

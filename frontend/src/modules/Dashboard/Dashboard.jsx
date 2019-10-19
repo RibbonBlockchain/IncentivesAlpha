@@ -1,55 +1,274 @@
 import React, { useEffect, useState } from "react";
-import UserAPI from "../../common/services/api/user.api";
+import { useDispatch, useSelector } from "react-redux";
+import useForm from "react-hook-form";
+import { Table, AutoSizer, Column } from "react-virtualized";
+import { loadUsers, getRoleCount, makeDonation } from "./dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
+import { LOAD_DATA } from "../../common/constants/dashboard";
+import { getItem } from "../../common/utils/storage";
 import Card from "../../common/components/Card";
+import Button from "../../common/components/Button";
+import Modal from "../../common/components/Modal";
+import { SHOW_ALERT } from "../../common/constants/alert";
 import styles from "./Dashboard.module.scss";
 
-export default function Dashboard() {
-  const [users, setUsers] = useState([]);
-  let userAPI = new UserAPI();
-  useEffect(() => {
-    loadUsers();
-  }, []);
+function DashboardTable({ data }) {
+  const [donateModal, setDonateModal] = useState(false);
+  let type = Number(getItem("loginType"));
 
-  async function loadUsers() {
-    let data = await userAPI.listUsers();
-    let users = data.data.data;
-    setUsers(users);
+  function _noRowsRenderer() {
+    return <div className={styles.noRows}>No data found</div>;
   }
 
-  function getRoleCount(role) {
-    return users
-      .map(object => object.role === role)
-      .reduce((accumulator, object) => accumulator + object, 0);
+  function _rowClassName({ index }) {
+    if (index < 0) {
+      return styles.headerRow;
+    } else {
+      return index % 2 === 0 ? styles.evenRow : styles.oddRow;
+    }
   }
+
+  function renderTxLink({ rowData }) {
+    return <a href={rowData.link}>{rowData.link}</a>;
+  }
+
+  const DonationModal = ({ visible }) => {
+    let dispatch = useDispatch();
+    const { handleSubmit, register, errors, formState } = useForm({
+      mode: "onChange"
+    });
+
+    async function onSubmit(values, e) {
+      let data = {
+        value: Number(values.amount),
+        message: values.message
+      };
+      let result = await makeDonation(data);
+      dispatch({
+        type: SHOW_ALERT,
+        payload: result.message
+      });
+      e.target.reset();
+    }
+    return (
+      <Modal visible={visible} windowClassName={styles.modalWindow}>
+        <div className={styles.cnt}>
+          <h4>Make Donation</h4>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className={styles.modalFormWindow}
+          >
+            <div className={styles.layout__item}>
+              <div className={[styles.input].join(" ")}>
+                <label htmlFor="amount">Amount in (eth)</label>
+                <input
+                  className={[styles.form_input].join(" ")}
+                  placeholder="amount"
+                  name="amount"
+                  type="number"
+                  step={0.0001}
+                  ref={register({
+                    required: "Amount is required",
+                    pattern: {}
+                  })}
+                />
+                <small> {errors.amount && errors.amount.message}</small>
+              </div>
+            </div>
+            <div className={styles.layout__item}>
+              <div className={[styles.input].join(" ")}>
+                <label htmlFor="message">Message</label>
+                <textarea
+                  className={[styles.form_input].join(" ")}
+                  placeholder="message (optional)"
+                  name="message"
+                  ref={register}
+                />
+                <small> {errors.message && errors.message.message}</small>
+              </div>
+            </div>
+            <div className={styles.actions}>
+              <Button
+                type="button"
+                text={"Cancel"}
+                classNames={[styles.button].join(" ")}
+                onClick={() => setDonateModal(false)}
+              ></Button>
+              <Button
+                text="Donate"
+                classNames={[styles.button, styles.button_primary].join(" ")}
+                disabled={!formState.isValid}
+                button="submit"
+              ></Button>
+            </div>
+          </form>
+        </div>
+      </Modal>
+    );
+  };
+  return (
+    <>
+      {roleNames.SUPER_ADMIN === type && (
+        <div className={styles.actions}>
+          <Button
+            onClick={() => setDonateModal(true)}
+            classNames={styles.button_primary}
+            text="Donate"
+          />
+          <DonationModal visible={donateModal} />
+        </div>
+      )}
+      <Card classNames={[styles.table, styles.card__white].join(" ")}>
+        <AutoSizer disableHeight>
+          {({ width }) => (
+            <Table
+              width={width}
+              height={400}
+              headerHeight={40}
+              noRowsRenderer={_noRowsRenderer}
+              rowHeight={40}
+              rowCount={data.length}
+              rowClassName={_rowClassName}
+              rowGetter={({ index }) => data[index]}
+              headerClassName={[
+                styles.ReactVirtualized__Table__headerColumn
+              ].join(" ")}
+            >
+              <Column
+                label="Tx Hash"
+                cellRenderer={renderTxLink}
+                dataKey="hash"
+                className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                width={500}
+              />
+              <Column
+                label="Transaction Date and Time"
+                cellRenderer={renderTxLink}
+                dataKey="datetime"
+                className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                width={500}
+              />
+              <Column
+                label="Status"
+                cellRenderer={renderTxLink}
+                dataKey="status"
+                className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                width={100}
+              />
+            </Table>
+          )}
+        </AutoSizer>
+      </Card>
+    </>
+  );
+}
+
+function Stats({ users, type }) {
   return (
     <div className={styles.dashboard}>
-      <div className={styles.layout}>
-        <Card classNames={styles.card__light_orange}>
-          <div className={styles.count}>{getRoleCount(roleNames.PATIENT)}</div>
-          <div className={styles.heading}>Patients Registered</div>
-        </Card>
-        <Card classNames={styles.card__light_blue}>
-          <div className={styles.count}>
-            {getRoleCount(roleNames.PRACTITIONER)}
-          </div>
-          <div className={styles.heading}>Practitioners Registered</div>
-        </Card>
-        <Card classNames={styles.card__light_pink}>
-          <div className={styles.count}>
-            {getRoleCount(roleNames.HEALTH_WORKER)}
-          </div>
-          <div className={styles.heading}>
-            Community Health Workers Registered
-          </div>
-        </Card>
-        <Card classNames={styles.card__light_purple}>
-          <div className={styles.count}>
-            {getRoleCount(roleNames.SUPER_ADMIN)}
-          </div>
-          <div className={styles.heading}>Administrators</div>
-        </Card>
-      </div>
+      {roleNames.SUPER_ADMIN === type && (
+        <div className={styles.layout}>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.count}>
+              {getRoleCount(users, roleNames.PATIENT)}
+            </div>
+            <div className={styles.heading}>Patients Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_blue}>
+            <div className={styles.count}>
+              {getRoleCount(users, roleNames.PRACTITIONER)}
+            </div>
+            <div className={styles.heading}>Practitioners Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_pink}>
+            <div className={styles.count}>
+              {getRoleCount(users, roleNames.HEALTH_WORKER)}
+            </div>
+            <div className={styles.heading}>
+              Community Health Workers Registered
+            </div>
+          </Card>
+          <Card classNames={styles.card__light_purple}>
+            <div className={styles.count}>
+              {getRoleCount(users, roleNames.SUPER_ADMIN)}
+            </div>
+            <div className={styles.heading}>Administrators</div>
+          </Card>
+        </div>
+      )}
+      {roleNames.HEALTH_WORKER === type && (
+        <div className={styles.layout}>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.count}>
+              {getRoleCount(users, roleNames.PATIENT)}
+            </div>
+            <div className={styles.heading}>Patients Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_blue}>
+            <div className={styles.count}>
+              {getRoleCount(users, roleNames.PRACTITIONER)}
+            </div>
+            <div className={styles.heading}>Practitioners Registered</div>
+          </Card>
+        </div>
+      )}
+      {roleNames.PRACTITIONER === type && (
+        <div className={styles.layout}>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.count}>0</div>
+            <div className={styles.heading}>Transactions completed</div>
+          </Card>
+        </div>
+      )}
+      {roleNames.PATIENT === type && (
+        <div className={styles.layout}>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.count}>0</div>
+            <div className={styles.heading}>Transactions completed</div>
+          </Card>
+        </div>
+      )}
     </div>
+  );
+}
+
+function HandleViews({ type }) {
+  switch (type) {
+    case roleNames.SUPER_ADMIN:
+      return <DashboardTable data={[]} />;
+    case roleNames.HEALTH_WORKER:
+      return <DashboardTable data={[]} />;
+    case roleNames.PRACTITIONER:
+      return <DashboardTable data={[]} />;
+    case roleNames.PATIENT:
+      return <DashboardTable data={[]} />;
+    default:
+      // todo replace this with 404 page
+      throw new Error("Unknown login Type");
+  }
+}
+
+export default function Dashboard() {
+  let dispatch = useDispatch();
+  let loginRole = getItem("loginType");
+  const { data } = useSelector(state => state.dapp);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  async function getUsers() {
+    let users = await loadUsers();
+    dispatch({
+      type: LOAD_DATA,
+      payload: users
+    });
+  }
+
+  return (
+    <>
+      <Stats type={Number(loginRole)} users={data} />
+      {loginRole !== null && <HandleViews type={Number(loginRole)} />}
+    </>
   );
 }

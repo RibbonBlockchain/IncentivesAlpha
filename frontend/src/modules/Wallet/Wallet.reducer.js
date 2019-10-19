@@ -1,6 +1,6 @@
 import reducerUtil from "../../common/utils/reducer.util";
 import { SHOW_WALLET, HIDE_WALLET } from "../../common/constants/wallet";
-import { alertInitialState } from "../../common/models/wallet";
+import { initialState } from "../../common/models/wallet";
 
 const show = (state, payload) => {
   return Object.assign({}, state.wallet, {
@@ -19,4 +19,4 @@ const map = {
   [HIDE_WALLET]: hide
 };
 
-export default reducerUtil(map, { ...alertInitialState });
+export default reducerUtil(map, { ...initialState });

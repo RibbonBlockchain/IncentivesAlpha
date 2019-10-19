@@ -5,6 +5,8 @@ import alertReducer from "../../modules/Alert/Alert.reducer";
 import walletReducer from "../../modules/Wallet/Wallet.reducer";
 import QRReducer from "../../modules/QRCodeDisplay/QRCodeDisplay.reducer";
 import LoginReducer from "../../modules/Login/login.reducer";
+import DashboardReducer from "../../modules/Dashboard/dashboard.reducer";
+import HomeReducer from "../../modules/Home/home.reducer";
 export default history =>
   combineReducers({
     router: connectRouter(history),
@@ -12,5 +14,7 @@ export default history =>
     alert: alertReducer,
     wallet: walletReducer,
     qrRegistration: QRReducer,
-    auth: LoginReducer
+    auth: LoginReducer,
+    dapp: DashboardReducer,
+    user: HomeReducer
   });

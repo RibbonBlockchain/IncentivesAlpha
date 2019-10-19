@@ -2,7 +2,6 @@ import BlockchainService from "../index";
 import Vault from "../abis/Vault.json";
 
 import { config } from "../../../constants/config";
-import { toHex } from "../../../utils";
 
 let vaultAddress = config.VAULT_CONTRACT_ADDRESS;
 
@@ -13,13 +12,23 @@ export default class VaultContract extends BlockchainService {
     this.contract = this.initializeContract(vaultAddress, Vault);
   }
 
-  static async address() {}
+  async address() {}
 
-  static async donateFunds() {}
+  async donateFunds(value, message) {
+    let { ethers } = await this.getInstance();
+    let contract = await this.contract;
+    try {
+      return await contract.donateFunds(message, {
+        value: ethers.utils.parseEther(value.toString())
+      });
+    } catch (error) {
+      return error;
+    }
+  }
 
-  static async init() {}
+  async init() {}
 
-  static async kill() {}
+  async kill() {}
 
-  static async payout() {}
+  async payout() {}
 }

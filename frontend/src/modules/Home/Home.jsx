@@ -1,5 +1,5 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import Logo from "../../common/components/Logo";
 import User from "../../common/components/User";
@@ -19,15 +19,19 @@ import CreateHealthWorker from "../HealthWorker/Create";
 import ListHealthWorker from "../HealthWorker/List";
 
 import Onboard from "../Onboard";
+import Recorder from "../Recorder";
 
 import Profile from "../Profile";
 
 import styles from "./Home.module.scss";
 
 import { SHOW_WALLET } from "../../common/constants/wallet";
+import { LOAD_USER } from "../../common/constants/dashboard";
 
 import { getItem } from "../../common/utils/storage";
 import { formatLink } from "../../common/utils";
+
+import { getUser } from "./home.utils";
 
 import { allowedRoutes, routes } from "../../common/constants/roles";
 
@@ -49,7 +53,20 @@ function Home(props) {
   // to be removed when I start fetching data from backend and metamask
   let address = getItem("address");
   let roleType = Number(getItem("loginType"));
+  const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    userDetails();
+  }, [user]);
+
+  async function userDetails() {
+    let user = await getUser(address);
+    dispatch({
+      type: LOAD_USER,
+      payload: user.data
+    });
+  }
 
   function showWallet() {
     dispatch({
@@ -66,7 +83,10 @@ function Home(props) {
           <div className={styles.toolbar}>
             <div></div>
             <div className={styles.actions}>
-              <Onboard />
+              <>
+                <Onboard />
+                <Recorder />
+              </>
               <User onClick={showWallet} address={address} />
             </div>
           </div>
