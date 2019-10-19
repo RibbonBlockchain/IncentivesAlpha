@@ -109,19 +109,24 @@ export default function Onboard() {
         <div className={styles.cnt}>
           <h4>Pick a profile</h4>
           {loginType == Number(roleNames.SUPER_ADMIN) && (
-            <Button
-              onClick={showPractitionerForm}
-              text="Practitioner Profile"
-            />
+            <>
+              <Button onClick={showCHWForm} text="Health Worker Profile" />
+              <Button
+                onClick={showPractitionerForm}
+                text="Practitioner Profile"
+              />
+              <Button onClick={showPatientForm} text="Patient Profile" />
+            </>
           )}
           {loginType == Number(roleNames.HEALTH_WORKER) && (
-            <Button
-              onClick={showPractitionerForm}
-              text="Practitioner Profile"
-            />
+            <>
+              <Button
+                onClick={showPractitionerForm}
+                text="Practitioner Profile"
+              />
+              <Button onClick={showPatientForm} text="Patient Profile" />
+            </>
           )}
-          <Button onClick={showPatientForm} text="Patient Profile" />
-          <Button onClick={showCHWForm} text="Health Worker Profile" />
         </div>
       </Modal>
     );
@@ -129,10 +134,11 @@ export default function Onboard() {
 
   return (
     <>
-      <div className={styles.actions}>
-        <Button onClick={() => showOption()} text="New Account" />
-      </div>
-      <OnboardOptions visible={onboardOptions} />
+      {loginType < roleNames.PRACTITIONER && (
+        <div className={styles.actions}>
+          <Button onClick={() => showOption()} text="New Account" />
+        </div>
+      )}
       <Modal
         visible={visible}
         onClickClose={hideForm}
@@ -293,6 +299,7 @@ export default function Onboard() {
           </div>
         </form>
       </Modal>
+      <OnboardOptions visible={onboardOptions} />
     </>
   );
 }
