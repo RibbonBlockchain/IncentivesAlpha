@@ -1,11 +1,13 @@
 import * as mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
 import { Request, Response } from "express";
+import { body } from "express-validator";
+
 
 const User = mongoose.model("User", UserSchema);
 
 export class UserController {
-  public addNewCommunityHealthWorker(req: Request, res: Response) {
+  public async addNewCommunityHealthWorker(req: Request, res: Response) {
     if(req.body.role!=1){
       res.status(400).send({status:400, error:"Please ensure role is 1 for community health worker"})
     }
@@ -16,7 +18,7 @@ export class UserController {
       form_data.nonce = nonce;
       let newUser = new User(form_data);
 
-      newUser.save((err, user) => {
+      await newUser.save((err, user) => {
         if (err) {
           res.send({ message: err });
         }
@@ -25,7 +27,7 @@ export class UserController {
     }
   }
 
-  public addNewPractitioner(req: Request, res: Response) {
+  public async addNewPractitioner(req: Request, res: Response) {
     if(req.body.role!=2){
       res.status(400).send({status:400, error:"Please ensure role is 2 for practitioner"})
     }
@@ -36,7 +38,7 @@ export class UserController {
       form_data.nonce = nonce;
       let newUser = new User(form_data);
 
-      newUser.save((err, user) => {
+      await newUser.save((err, user) => {
         if (err) {
           res.send({ message: err });
         }
@@ -45,7 +47,7 @@ export class UserController {
     }
   }
 
-  public addNewPatient(req: Request, res: Response) {
+  public async addNewPatient(req: Request, res: Response) {
     if(req.body.role!=3){
       res.status(400).send({status:400, error:"Please ensure role is 3 for patient"})
     }
@@ -56,7 +58,7 @@ export class UserController {
       form_data.nonce = nonce;
       let newUser = new User(form_data);
 
-      newUser.save((err, user) => {
+      await newUser.save((err, user) => {
         if (err) {
           res.send({ message: err });
         }
@@ -65,8 +67,8 @@ export class UserController {
     }
   }
 
-  public getUsers(req: Request, res: Response) {
-    User.find({}, (err, users) => {
+  public async getUsers(req: Request, res: Response) {
+    await User.find({}, (err, users) => {
       if (err) {
         res.send({ message: err });
       }
@@ -74,8 +76,8 @@ export class UserController {
     });
   }
 
-  public getUserByWalletAddress(req: Request, res: Response) {
-    User.find({ publicAddress: req.params.userAddress }, (err, user) => {
+  public async getUserByWalletAddress(req: Request, res: Response) {
+    await User.findOne({ publicAddress: req.params.userAddress }, (err, user) => {
       if (err) {
         res.send(err);
       }
@@ -83,8 +85,8 @@ export class UserController {
     });
   }
 
-  public updateUserDetails(req: Request, res: Response) {
-    User.updateOne(
+  public async updateUserDetails(req: Request, res: Response) {
+    await User.updateOne(
       { publicAddress: req.params.userAddress },
       {
         $set: {
