@@ -9,14 +9,16 @@ const log = mongoose.model(
 
 export class LogController {
   public addNewLog(req: Request, res: Response) {
-    let newLog = new log(req.body);
+    try{
+        let newLog = new log(req.body);
 
-    newLog.save((err, newlog) => {
-      if (err) {
-        res.send({ message: err });
-      }
-      res.json({ status: 200, data: newlog });
-    });
+        newLog.save((err, newlog) => {
+
+        res.status(200).json({ status: 200, data: newlog });
+        });
+    }catch{
+        res.status(400).json({status:400, message:"Duplicate Transaction hash"})
+    }
   }
 
   public getAllLogs(req: Request, res: Response) {
