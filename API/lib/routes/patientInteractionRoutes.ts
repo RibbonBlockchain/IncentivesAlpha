@@ -11,6 +11,8 @@ export class InteractionRoutes {
       .route("/api/v1/interactions")
 
       // GET all logs by address
-      .get([validJWTNeeded], this.interactionController.getAllPatientInteractions);
+      .get([validJWTNeeded], this.interactionController.getAllPatientInteractions)
+
+      .post([validJWTNeeded], this.interactionController.addPatientInteraction);
   }
 }

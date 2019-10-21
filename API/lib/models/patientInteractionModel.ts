@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 
 export const PatientInteractionSchema = new Schema({
     patientId: {
-        type: Number,
+        type: String,
         required: "Enter a patient id"
     },
     practitionerId: {
-        type: Number,
+        type: String,
         required: "Enter a practitioner id"
     },
     activities: [

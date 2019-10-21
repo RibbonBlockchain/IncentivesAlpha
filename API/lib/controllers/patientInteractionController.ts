@@ -8,21 +8,23 @@ const patientInteractionList = mongoose.model(
 );
 
 export class PatientInteractionListController {
-//   public async addActivity(req: Request, res: Response) {
-//     try{
-//       let newActivity = new activityList(req.body);
+  public async addPatientInteraction(req: Request, res: Response) {
+    try{
+      let newPatientInteraction = new patientInteractionList(
+          req.body
+          );
 
-//       await newActivity.save().then(
-//         async activity => {
-//           res.status(201).json({ status: 201, data: activity });
-//         }
-//       ).catch(error => {
-//         res.status(400).json({status:400, message:"Bad request, please check your request body"})
-//       })
-//     }catch{
-//       res.status(500).json({status:500, message:"Server Error"})
-//     }
-//   }
+      await newPatientInteraction.save().then(
+        async interaction => {
+          res.status(201).json({ status: 201, data: interaction });
+        }
+      ).catch(error => {
+        res.status(400).json({status:400, message:error})
+      })
+    }catch{
+      res.status(500).json({status:500, message:"Server Error"})
+    }
+  }
 
   public async getAllPatientInteractions(req: Request, res: Response) {
     try{
