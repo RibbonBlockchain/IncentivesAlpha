@@ -15,3 +15,10 @@ export const broadcastContractFn = (contractMethod, account) => {
       .catch(error => reject);
   });
 };
+
+export const waitForConfirmation = async provider => {
+  return new Promise(async (resolve, reject) => {
+    // let receipt = await provider.getTransactionReceipt(tx.hash);
+    // if (receipt == null || provider)
+  });
+};

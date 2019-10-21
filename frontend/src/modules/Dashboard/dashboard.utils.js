@@ -30,3 +30,16 @@ export const makeDonation = async ({ value, message }) => {
     };
   }
 };
+
+export const getByRole = (users, role) => {
+  let data = [];
+  users.map(user => {
+    if (user.role === role) {
+      data.push({
+        label: user.idNumber,
+        value: user.idNumber
+      });
+    }
+  });
+  return data;
+};

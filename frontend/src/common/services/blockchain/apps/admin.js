@@ -20,7 +20,9 @@ export default class AdminContract extends BlockchainService {
     let { ethers } = await this.getInstance();
     let contract = await this.contract;
     try {
-      return await contract.addUser(address, role);
+      let tx = await contract.addUser(address, role);
+      console.log(tx);
+      return null;
     } catch (error) {
       return error;
     }

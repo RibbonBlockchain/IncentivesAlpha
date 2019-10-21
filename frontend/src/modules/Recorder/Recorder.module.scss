@@ -6,10 +6,24 @@
 }
 
 .modalFormWindow {
-  width: 80%;
-  height: 80vh;
   background: #313541;
+  width: 50%;
   color: #ffffff;
+  small {
+    color: $red;
+  }
+}
+
+input,
+textarea {
+  //   color: $text-color;
+  background: transparent;
+}
+
+textarea {
+  resize: none;
+  padding: calculateRem(5);
+  outline: none;
 }
 
 .cnt {
@@ -116,4 +130,9 @@ img {
 
 .react-phone-number-input__input:-webkit-autofill {
   box-shadow: none !important;
+}
+
+.react-select-container {
+  outline: none;
+  background: transparent;
 }
