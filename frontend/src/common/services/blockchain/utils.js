@@ -1,24 +1,19 @@
-export const broadcastContractFn = (contractMethod, account) => {
-  return new Promise((resolve, reject) => {
-    contractMethod
-      .estimateGas({ from: account })
-      .then(estimatedGas => {
-        contractMethod
-          .send({ from: account, gas: estimatedGas + 1000 })
-          .on("transactionHash", hash => {
-            resolve(hash);
-          })
-          .on("error", error => {
-            reject(error);
-          });
-      })
-      .catch(error => reject);
-  });
-};
+import LogAPI from "../api/log.api";
 
-export const waitForConfirmation = async provider => {
-  return new Promise(async (resolve, reject) => {
-    // let receipt = await provider.getTransactionReceipt(tx.hash);
-    // if (receipt == null || provider)
-  });
+export const waitForConfirmation = async (provider, tx) => {
+  let logAPI = new LogAPI();
+  try {
+    let result = await tx.wait(1);
+    let data = {
+      txn_address: result.from,
+      txn_hash: result.transactionHash,
+      txn_date: new Date(),
+      txn_amount: result,
+      status: result.status
+    };
+    logAPI.createLogs(data);
+    return result;
+  } catch (error) {
+    return error;
+  }
 };

@@ -45,6 +45,12 @@ export default function Onboard() {
     setOnboardOptions(true);
   }
 
+  function showAdminForm() {
+    setOnboardOptions(false);
+    setVisible(true);
+    setType(roleNames.SUPER_ADMIN);
+  }
+
   function showPatientForm() {
     setOnboardOptions(false);
     setVisible(true);
@@ -84,7 +90,7 @@ export default function Onboard() {
       } else {
         dispatch({
           type: SHOW_ALERT,
-          payload: "An error occured. Please try again"
+          payload: newUser.error
         });
       }
     } else {
@@ -136,6 +142,7 @@ export default function Onboard() {
           <h4>Pick a profile</h4>
           {loginType == Number(roleNames.SUPER_ADMIN) && (
             <>
+              <Button onClick={showAdminForm} text="Add Administrator" />
               <Button onClick={showCHWForm} text="Health Worker Profile" />
               <Button
                 onClick={showPractitionerForm}

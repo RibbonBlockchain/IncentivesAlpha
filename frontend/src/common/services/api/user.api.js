@@ -42,9 +42,10 @@ export default class UserAPI extends HTTP {
    * @returns {Promise.<Object>}
    */
   async getUserByAddress(address) {
-    return await this.getRequest(`users/${address.toLowerCase()}`, {
-      authorization: `Bearer ${getItem("token")}`
-    });
+    // return await this.getRequest(`users/${address.toLowerCase()}`, {
+    //   authorization: `Bearer ${getItem("token")}`
+    // });
+    return {};
   }
 
   /**

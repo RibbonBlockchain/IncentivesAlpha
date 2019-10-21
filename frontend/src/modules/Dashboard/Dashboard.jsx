@@ -10,6 +10,8 @@ import Card from "../../common/components/Card";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
 import { SHOW_ALERT } from "../../common/constants/alert";
+import { getLogsByUser } from "../../common/utils/logger";
+import * as moment from "moment";
 import styles from "./Dashboard.module.scss";
 
 function DashboardTable({ data }) {
@@ -29,7 +31,19 @@ function DashboardTable({ data }) {
   }
 
   function renderTxLink({ rowData }) {
-    return <a href={rowData.link}>{rowData.link}</a>;
+    return (
+      <a href={`https://blockscout.com/poa/sokol/tx/${rowData.txn_hash}`}>
+        {rowData.txt_hash}
+      </a>
+    );
+  }
+
+  function renderStatus({ rowData }) {
+    return <>{rowData.status == 1 ? "Confirmed" : "Failed"}</>;
+  }
+
+  function renderDate({ rowData }) {
+    return <>{moment(rowData.txn_date).utc()}</>;
   }
 
   const DonationModal = ({ visible }) => {
@@ -137,20 +151,20 @@ function DashboardTable({ data }) {
               <Column
                 label="Tx Hash"
                 cellRenderer={renderTxLink}
-                dataKey="hash"
+                dataKey="txn_hash"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
                 width={500}
               />
               <Column
                 label="Transaction Date and Time"
-                cellRenderer={renderTxLink}
-                dataKey="datetime"
+                cellRenderer={renderDate}
+                dataKey="txn_date"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
                 width={500}
               />
               <Column
                 label="Status"
-                cellRenderer={renderTxLink}
+                cellRenderer={renderStatus}
                 dataKey="status"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
                 width={100}
@@ -232,16 +246,16 @@ function Stats({ users, type }) {
   );
 }
 
-function HandleViews({ type }) {
+function HandleViews({ type, transactions }) {
   switch (type) {
     case roleNames.SUPER_ADMIN:
-      return <DashboardTable data={[]} />;
+      return <DashboardTable data={transactions} />;
     case roleNames.HEALTH_WORKER:
-      return <DashboardTable data={[]} />;
+      return <DashboardTable data={transactions} />;
     case roleNames.PRACTITIONER:
-      return <DashboardTable data={[]} />;
+      return <DashboardTable data={transactions} />;
     case roleNames.PATIENT:
-      return <DashboardTable data={[]} />;
+      return <DashboardTable data={transactions} />;
     default:
       // todo replace this with 404 page
       throw new Error("Unknown login Type");
@@ -249,26 +263,43 @@ function HandleViews({ type }) {
 }
 
 export default function Dashboard() {
-  let dispatch = useDispatch();
   let loginRole = getItem("loginType");
-  const { data } = useSelector(state => state.dapp);
+  let address = getItem("address");
+  const [data, setData] = useState({
+    users: [],
+    transactions: []
+  });
 
   useEffect(() => {
     getUsers();
+    loadTransactions();
   }, []);
 
   async function getUsers() {
     let users = await loadUsers();
-    dispatch({
-      type: LOAD_DATA,
-      payload: users
+    setData({
+      users,
+      transactions: data.transactions
+    });
+  }
+
+  async function loadTransactions() {
+    let transactions = await getLogsByUser(address);
+    setData({
+      users: data.users,
+      transactions: transactions.data
     });
   }
 
   return (
     <>
-      <Stats type={Number(loginRole)} users={data} />
-      {loginRole !== null && <HandleViews type={Number(loginRole)} />}
+      <Stats type={Number(loginRole)} users={data.users} />
+      {loginRole !== null && (
+        <HandleViews
+          transactions={data.transactions}
+          type={Number(loginRole)}
+        />
+      )}
     </>
   );
 }
