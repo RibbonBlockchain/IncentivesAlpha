@@ -78,12 +78,22 @@ export class UserController {
   }
 
   public async getUserByWalletAddress(req: Request, res: Response) {
-    await User.findOne({ publicAddress: req.params.userAddress }, (err, user) => {
-      if (err) {
-        res.send(err);
-      }
-      res.json({ status: 200, data: mapUserDataToResponse(user) });
-    });
+    try {
+      await User.findOne(
+        { 
+          publicAddress: 
+          req.params.userAddress 
+        }).then(async user => {
+          res.json({ status: 200, data: mapUserDataToResponse(user) });
+        }).catch(error => {
+          res.status(404).json({
+            status:404,
+            message: "User with wallet address doesnot exist"
+          });
+        })
+    }catch(err){
+      res.status(404).json({ message: err.toString() });
+    }
   }
 
   public async updateUserDetails(req: Request, res: Response) {
