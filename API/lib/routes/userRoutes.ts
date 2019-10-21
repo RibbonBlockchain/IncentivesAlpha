@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { UserController } from "../controllers/userController";
 import { validJWTNeeded, superAdminOnly, communityHealthWorkerOnly } from "../validators/authValidation";
+import { check, validationResult } from "express-validator";
 
 export class UserRoutes {
   public userController: UserController = new UserController();
@@ -14,7 +15,7 @@ export class UserRoutes {
     app
       .route("/api/v1/users/chw")
       // POST endpoint add community health worker
-      .post([validJWTNeeded, superAdminOnly], this.userController.addNewCommunityHealthWorker);
+      .post([validJWTNeeded, superAdminOnly, check('phoneNumber').isLength({ max: 11, min: 11 })], this.userController.addNewCommunityHealthWorker);
 
     app
       .route("/api/v1/users/practitioners")

@@ -3,5 +3,6 @@ export const mapUserDataToResponse = user => ({
   lastname: user.lastName,
   publicaddress: user.publicAddress,
   dateofbirth: user.dateOfBirth,
-  idnumber: user.idNumber
+  idnumber: user.idNumber,
+  phoneNumber: user.phoneNumber
 });
