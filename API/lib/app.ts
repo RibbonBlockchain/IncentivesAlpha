@@ -11,6 +11,7 @@ import * as mongoose from "mongoose";
 import * as cors from "cors";
 
 const isDocker = require("is-docker");
+import expressValidator = require('express-validator');
 
 const {
 	MONGO_USERNAME,

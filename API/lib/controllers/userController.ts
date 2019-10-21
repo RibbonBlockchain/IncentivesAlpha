@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
 import { Request, Response } from "express";
 import { body } from "express-validator";
+import { mapUserDataToResponse } from "../serializers/userDataSerializer";
 
 
 const User = mongoose.model("User", UserSchema);
@@ -81,7 +82,7 @@ export class UserController {
       if (err) {
         res.send(err);
       }
-      res.json({ status: 200, data: user });
+      res.json({ status: 200, data: mapUserDataToResponse(user) });
     });
   }
 
