@@ -12,9 +12,8 @@
   font-family: $font;
   font-size: calculateRem(16);
   top: 0;
-}
-
-img {
-  width: calculateRem(40);
-  height: calculateRem(40);
+  img {
+    width: calculateRem(40);
+    height: calculateRem(40);
+  }
 }
