@@ -1,6 +1,6 @@
 export const formatAddress = address => {
-  let pre = address.toLowerCase().slice(0, 12);
-  let post = address.toLowerCase().slice(address.length - 4);
+  let pre = address.slice(0, 12);
+  let post = address.slice(address.length - 4);
 
   return `${pre}...${post}`;
 };

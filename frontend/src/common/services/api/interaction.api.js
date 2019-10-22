@@ -4,7 +4,7 @@
  */
 import HTTP from "./http";
 
-export default class Interactions extends HTTP {
+export default class InteractionsAPI extends HTTP {
   constructor() {
     super();
   }

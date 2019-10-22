@@ -1,39 +1,27 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import Logo from "../../common/components/Logo";
 import User from "../../common/components/User";
 import WalletModal from "../Wallet";
-
 import Dashboard from "../Dashboard/Dashboard";
 import CreateInteraction from "../Interactions/Create";
 import ListInteractions from "../Interactions/List";
-
 import CreatePractitioner from "../Practitioners/Create";
 import ListPractitioners from "../Practitioners/List";
-
 import CreatePatient from "../Patients/Create";
 import ListPatients from "../Patients/List";
-
 import CreateHealthWorker from "../HealthWorker/Create";
 import ListHealthWorker from "../HealthWorker/List";
-
+import { AddressLoader } from "../../common/components/Loader";
 import Onboard from "../Onboard";
 import Recorder from "../Recorder";
-
 import Profile from "../Profile";
-
 import styles from "./Home.module.scss";
-
-import { SHOW_WALLET } from "../../common/constants/wallet";
-import { LOAD_USER } from "../../common/constants/dashboard";
-
-import { getItem } from "../../common/utils/storage";
 import { formatLink } from "../../common/utils";
+import { allowedRoutes } from "../../common/constants/roles";
 
-import { getUser } from "./home.utils";
-
-import { allowedRoutes, routes } from "../../common/constants/roles";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useModal } from "../../common/providers/Modal.provider";
 
 function IsAllowedRoute({ component: C, appProps, ...rest }) {
   return (
@@ -49,30 +37,18 @@ function IsAllowedRoute({ component: C, appProps, ...rest }) {
   );
 }
 
-function Home(props) {
-  // to be removed when I start fetching data from backend and metamask
-  let address = getItem("address");
-  let roleType = Number(getItem("loginType"));
-  const { user } = useSelector(state => state.user);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    userDetails();
-  }, [user]);
-
-  async function userDetails() {
-    let user = await getUser(address);
-    dispatch({
-      type: LOAD_USER,
-      payload: user.data
-    });
-  }
+function Home() {
+  const [{ loginType, user }] = useWeb3();
+  const [{}, toggleModal] = useModal();
 
   function showWallet() {
-    dispatch({
-      type: SHOW_WALLET
+    toggleModal({
+      isVisible: true,
+      data: user,
+      modal: "wallet"
     });
   }
+
   return (
     <>
       <div className={styles.admin}>
@@ -82,13 +58,17 @@ function Home(props) {
           </Link>
           <div className={styles.toolbar}>
             <div></div>
-            <div className={styles.actions}>
-              <>
-                <Onboard />
-                <Recorder />
-              </>
-              <User onClick={showWallet} address={address} />
-            </div>
+            {user && user.publicaddress ? (
+              <div className={styles.actions}>
+                <>
+                  <Onboard />
+                  <Recorder />
+                </>
+                <User onClick={showWallet} address={user.publicaddress} />
+              </div>
+            ) : (
+              <AddressLoader />
+            )}
           </div>
         </header>
         <nav className={styles.admin__nav}>
@@ -102,7 +82,7 @@ function Home(props) {
                 Home
               </NavLink>
             </li>
-            {allowedRoutes[roleType].map(
+            {allowedRoutes[loginType].map(
               (route, index) =>
                 !route.includes("/new") && (
                   <li key={index} className={styles.menu__item}>
@@ -116,11 +96,13 @@ function Home(props) {
                   </li>
                 )
             )}
-            <li className={styles.menu__item}>
-              <div className={styles.menu__link} onClick={showWallet}>
-                My Profile
-              </div>
-            </li>
+            {user && user.publicaddress && (
+              <li className={styles.menu__item}>
+                <div className={styles.menu__link} onClick={showWallet}>
+                  My Profile
+                </div>
+              </li>
+            )}
           </ul>
         </nav>
         <main className={styles.admin__main}>
@@ -128,49 +110,49 @@ function Home(props) {
             <Route path="/app/home" component={Dashboard} />
             <IsAllowedRoute
               exact
-              appProps={roleType}
+              appProps={loginType}
               path="/app/interactions"
               component={ListInteractions}
             />
             <IsAllowedRoute
               exact
-              appProps={roleType}
+              appProps={loginType}
               path="/app/interactions/new"
               component={CreateInteraction}
             />
             <IsAllowedRoute
-              appProps={roleType}
+              appProps={loginType}
               exact
               path="/app/practitioners"
               component={ListPractitioners}
             />
             <IsAllowedRoute
               exact
-              appProps={roleType}
+              appProps={loginType}
               path="/app/practitioners/new"
               component={CreatePractitioner}
             />
             <IsAllowedRoute
               exact
-              appProps={roleType}
+              appProps={loginType}
               path="/app/patients"
               component={ListPatients}
             />
             <IsAllowedRoute
               exact
-              appProps={roleType}
+              appProps={loginType}
               path="/app/patients/new"
               component={CreatePatient}
             />
 
             <IsAllowedRoute
-              appProps={roleType}
+              appProps={loginType}
               exact
               path="/app/health-workers"
               component={ListHealthWorker}
             />
             <IsAllowedRoute
-              appProps={roleType}
+              appProps={loginType}
               path="/app/health-workers/new"
               exact
               component={CreateHealthWorker}
@@ -178,7 +160,7 @@ function Home(props) {
             <Route path="/app/profile" component={Profile} />
             <Redirect from="*" to="/app/home" />
           </Switch>
-          <WalletModal {...props} />
+          <WalletModal />
         </main>
       </div>
     </>

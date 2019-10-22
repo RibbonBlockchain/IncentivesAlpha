@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import useForm from "react-hook-form";
+import {
+  useUsersList,
+  useTransactions
+} from "../../common/providers/API.provider";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useAlert } from "../../common/providers/Modal.provider";
 import { Table, AutoSizer, Column } from "react-virtualized";
-import { loadUsers, getRoleCount, makeDonation } from "./dashboard.utils";
+import { getRoleCount, makeDonation } from "./dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
-import { LOAD_DATA } from "../../common/constants/dashboard";
-import { getItem } from "../../common/utils/storage";
 import Card from "../../common/components/Card";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
-import { SHOW_ALERT } from "../../common/constants/alert";
-import { getLogsByUser } from "../../common/utils/logger";
+import { DesktopLoader } from "../../common/components/Loader";
 import * as moment from "moment";
 import styles from "./Dashboard.module.scss";
 
-function DashboardTable({ data }) {
+function DashboardTable({ data, type }) {
   const [donateModal, setDonateModal] = useState(false);
-  let type = Number(getItem("loginType"));
 
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No data found</div>;
@@ -47,7 +48,7 @@ function DashboardTable({ data }) {
   }
 
   const DonationModal = ({ visible }) => {
-    let dispatch = useDispatch();
+    const [{ message }, toggle] = useAlert();
     const { handleSubmit, register, errors, formState } = useForm({
       mode: "onChange"
     });
@@ -58,14 +59,16 @@ function DashboardTable({ data }) {
         message: values.message
       };
       let result = await makeDonation(data);
-      dispatch({
-        type: SHOW_ALERT,
-        payload: result.message
+      toggle({
+        isVisible: true,
+        message: result.message,
+        data: {}
       });
+
       e.target.reset();
     }
     return (
-      <Modal visible={visible} windowClassName={styles.modalWindow}>
+      <Modal visible={visible && !message} windowClassName={styles.modalWindow}>
         <div className={styles.cnt}>
           <h4>Make Donation</h4>
           <form
@@ -249,56 +252,35 @@ function Stats({ users, type }) {
 function HandleViews({ type, transactions }) {
   switch (type) {
     case roleNames.SUPER_ADMIN:
-      return <DashboardTable data={transactions} />;
+      return <DashboardTable type={type} data={transactions} />;
     case roleNames.HEALTH_WORKER:
-      return <DashboardTable data={transactions} />;
+      return <DashboardTable type={type} data={transactions} />;
     case roleNames.PRACTITIONER:
-      return <DashboardTable data={transactions} />;
+      return <DashboardTable type={type} data={transactions} />;
     case roleNames.PATIENT:
-      return <DashboardTable data={transactions} />;
+      return <DashboardTable type={type} data={transactions} />;
     default:
       // todo replace this with 404 page
-      throw new Error("Unknown login Type");
+      throw new Error("Unknown Type");
   }
 }
 
 export default function Dashboard() {
-  let loginRole = getItem("loginType");
-  let address = getItem("address");
-  const [data, setData] = useState({
-    users: [],
-    transactions: []
-  });
-
-  useEffect(() => {
-    getUsers();
-    loadTransactions();
-  }, []);
-
-  async function getUsers() {
-    let users = await loadUsers();
-    setData({
-      users,
-      transactions: data.transactions
-    });
-  }
-
-  async function loadTransactions() {
-    let transactions = await getLogsByUser(address);
-    setData({
-      users: data.users,
-      transactions: transactions.data
-    });
-  }
+  const [{ address, loginType }] = useWeb3();
+  const [{ users }] = useUsersList();
+  const [{ transactionLogs }] = useTransactions();
 
   return (
     <>
-      <Stats type={Number(loginRole)} users={data.users} />
-      {loginRole !== null && (
-        <HandleViews
-          transactions={data.transactions}
-          type={Number(loginRole)}
-        />
+      {loginType > 0 && address ? (
+        <>
+          <Stats type={Number(loginType)} users={users} />
+          {loginType !== null && (
+            <HandleViews transactions={transactionLogs} type={loginType} />
+          )}
+        </>
+      ) : (
+        <DesktopLoader />
       )}
     </>
   );

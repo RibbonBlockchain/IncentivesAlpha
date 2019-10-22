@@ -5,7 +5,7 @@
 import HTTP from "./http";
 import { getItem } from "../../utils/storage";
 
-export default class LogAPU extends HTTP {
+export default class LogAPI extends HTTP {
   constructor() {
     super();
   }

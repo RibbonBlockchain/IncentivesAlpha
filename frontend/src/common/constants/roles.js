@@ -13,6 +13,7 @@ export const roles = {
 };
 
 export const allowedRoutes = [
+  [],
   [
     "/app/practitioners",
     "/app/practitioners/new",

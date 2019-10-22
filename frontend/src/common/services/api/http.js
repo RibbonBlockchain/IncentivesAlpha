@@ -72,16 +72,8 @@ const handleRequest = async function(method, url, reqStruct) {
       ...DEFAULT_HEADERS,
       ...reqStruct.headers
     }
-  }).then(response => response.json());
-  //   return await axios({
-  //     method,
-  //     url,
-  //     data: {
-  //       ...reqStruct.body
-  //     },
-  //     headers: {
-  //       ...DEFAULT_HEADERS,
-  //       ...reqStruct.headers
-  //     }
-  //   });
+  })
+    .then(response => response.json())
+    .then(response => response.data || response)
+    .catch(error => error);
 };

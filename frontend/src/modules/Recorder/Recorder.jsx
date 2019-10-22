@@ -1,32 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import useForm from "react-hook-form";
 import Select from "react-select";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
-import * as moment from "moment";
 import styles from "./Recorder.module.scss";
-import { SHOW_ALERT } from "../../common/constants/alert";
-import { LOAD_DATA } from "../../common/constants/dashboard";
-import { getItem, clear } from "../../common/utils/storage";
-import { loadUsers, getByRole } from "../Dashboard/dashboard.utils";
-import { roleNames, roles } from "../../common/constants/roles";
+import { getByRole } from "../Dashboard/dashboard.utils";
+import { roleNames } from "../../common/constants/roles";
+import { recordInteraction } from "./recorder.utils";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useAlert } from "../../common/providers/Modal.provider";
+import { useUsersList } from "../../common/providers/API.provider";
 
 export default function Recorder() {
   const [visible, setVisible] = useState(false);
-  let dispatch = useDispatch();
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  async function getUsers() {
-    let users = await loadUsers();
-    dispatch({
-      type: LOAD_DATA,
-      payload: users
-    });
-  }
-  let loginType = getItem("loginType");
+  const [{ loginType, user }] = useWeb3();
+  const [{ users }] = useUsersList();
 
   return (
     <>
@@ -42,45 +30,54 @@ export default function Recorder() {
       <RecorderModal
         visible={visible}
         type={loginType}
+        users={users}
+        user={user}
         onDismiss={() => setVisible(false)}
       />
     </>
   );
 }
 
-function RecorderModal({ visible, onDismiss, type }) {
-  const { handleSubmit, register, errors, formState } = useForm({
+function RecorderModal({ visible, onDismiss, type, users, user }) {
+  const { handleSubmit, register } = useForm({
     mode: "onChange"
   });
+  const [{}, toggle] = useAlert();
   const [record, setRecord] = useState({
     patient: {},
     practitioner: {},
     prescriptions: [],
     activities: []
   });
-  let dispatch = useDispatch();
-  const { data } = useSelector(state => state.dapp);
-
-  let patients = getByRole(data, roleNames.PATIENT);
-  let practitioners = getByRole(data, roleNames.PRACTITIONER);
+  let patients = getByRole(users, roleNames.PATIENT);
+  let practitioners = getByRole(users, roleNames.PRACTITIONER);
   let activityList = [];
   let prescriptionList = [];
 
-  async function onSubmit(values, e) {
+  async function onSubmit(values) {
     let data = {
       ...values,
-      //   dateOfBirth: moment(date).format("YYYY/M/D"),
-      role: type
-      //   phoneNumber: phoneNumber.value
+      patient: record.patient,
+      practitioner: record.practitioner,
+      user,
+      activities: record.activities,
+      prescriptions: record.prescriptions
     };
-    // let newUser = await createNewUser(data);
+
+    let interaction = await recordInteraction(data);
+    if (interaction.error) {
+      toggle({
+        isVisible: true,
+        message: interaction.error
+      });
+    } else {
+      toggle({
+        isVisible: true,
+        message: `Interaction has been recorded successfully`
+      });
+    }
   }
 
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" }
-  ];
   return (
     <>
       <Modal
@@ -135,44 +132,50 @@ function RecorderModal({ visible, onDismiss, type }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.layout}>
-                <div className={styles.layout__item}>
-                  <label htmlFor="activity">Activity</label>
-                  <Select
-                    value={record.activities}
-                    placeholder="Select Activity"
-                    name="activities"
-                    isMulti
-                    onChange={activities =>
-                      setRecord({
-                        practitioner: record.practitioner,
-                        patient: record.patient,
-                        prescriptions: record.prescriptions,
-                        activities
-                      })
-                    }
-                    options={activityList}
-                  />
+              <fieldset>
+                <legend>Prescriptions</legend>
+                <div className={styles.layout}>
+                  <div className={styles.layout__item}>
+                    <label htmlFor="activity">Activity</label>
+                    <Select
+                      value={record.activities}
+                      placeholder="Select Activity"
+                      name={`activities`}
+                      isMulti
+                      onChange={activities =>
+                        setRecord({
+                          practitioner: record.practitioner,
+                          patient: record.patient,
+                          prescriptions: record.prescriptions,
+                          activities
+                        })
+                      }
+                      options={activityList}
+                    />
+                  </div>
+                  <div className={styles.layout__item}>
+                    <label htmlFor="prescriptions">Prescriptions</label>
+                    <Select
+                      value={record.prescriptions}
+                      placeholder="Select prescriptions"
+                      name={`prescriptions`}
+                      isMulti
+                      onChange={prescriptions =>
+                        setRecord({
+                          practitioner: record.practitioner,
+                          patient: record.patient,
+                          prescriptions,
+                          activities: record.activities
+                        })
+                      }
+                      options={prescriptionList}
+                    />
+                  </div>
+                  <div className={styles.layout__item}>
+                    <span>Add More</span>
+                  </div>
                 </div>
-                <div className={styles.layout__item}>
-                  <label htmlFor="prescriptions">Prescriptions</label>
-                  <Select
-                    value={record.prescriptions}
-                    placeholder="Select prescriptions"
-                    name="prescriptions"
-                    isMulti
-                    onChange={prescriptions =>
-                      setRecord({
-                        practitioner: record.practitioner,
-                        patient: record.patient,
-                        prescriptions,
-                        activities: record.activities
-                      })
-                    }
-                    options={prescriptionList}
-                  />
-                </div>
-              </div>
+              </fieldset>
               <div className={styles.layout__item}>
                 <div className={[styles.input].join(" ")}>
                   <label htmlFor="notes">Additional notes</label>

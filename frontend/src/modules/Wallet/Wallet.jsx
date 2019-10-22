@@ -1,25 +1,18 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../common/components/Modal";
 import Blockies from "../../common/components/Blockies";
 import Button from "../../common/components/Button";
 import Balance from "../../common/components/Balance";
 import { roles } from "../../common/constants/roles";
-import { HIDE_WALLET } from "../../common/constants/wallet";
-import { clear, getItem } from "../../common/utils/storage";
+import { clear } from "../../common/utils/storage";
+import { useModal } from "../../common/providers/Modal.provider";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import * as moment from "moment";
 import styles from "./Wallet.module.scss";
+import { withRouter } from "react-router-dom";
 
-function Profile({ history, user }) {
-  const dispatch = useDispatch();
+function Profile({ user, data, handleProfileNavigation }) {
   let ticker = "USD";
-
-  async function handleProfileNavigation() {
-    await dispatch({
-      type: HIDE_WALLET
-    });
-    history.push("/app/profile");
-  }
-
   async function handleSignOut() {
     clear();
     window.location.reload();
@@ -38,14 +31,25 @@ function Profile({ history, user }) {
       <div className={styles.information}>
         <h4
           className={styles.header}
-        >{`${user.lastName} ${user.firstName}`}</h4>
+        >{`${data.lastname} ${data.firstname}`}</h4>
         <span className={styles.heading}>
-          Logged In as: <strong>{roles[user.role].replace("_", " ")}</strong>
+          Logged in as: <strong>{roles[user.role].replace("_", " ")}</strong>
         </span>
         <div className={styles.wallet}>
-          <small>{user.address}</small>
+          <small>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://blockscout.com/poa/sokol/address/${data.publicaddress}`}
+            >
+              {data.publicaddress}
+            </a>
+          </small>
           <span>
-            <Balance balance={user.balance} ticker={ticker} />
+            <Balance
+              balance={Number(user.balance).toFixed(4)}
+              ticker={ticker}
+            />
           </span>
         </div>
         <div className={styles.description}>
@@ -54,7 +58,9 @@ function Profile({ history, user }) {
         </div>
         <div className={styles.dob}>
           <span className={styles.heading}>Date of Birth</span>
-          <span className={styles.wrapper}>{user.dob}</span>
+          <span className={styles.wrapper}>
+            {moment(data.dateofbirth).format("DD/MM/YYYY")}
+          </span>
         </div>
       </div>
       <div className={styles.actions}>
@@ -72,24 +78,28 @@ function Profile({ history, user }) {
     </div>
   );
 }
-export default function Wallet({ history }) {
-  const { visible } = useSelector(state => state.wallet);
-  const { user } = useSelector(state => state.user);
-  const dispatch = useDispatch();
+function Wallet({ history }) {
+  const [{ isVisible, data, modal }, toggleModal] = useModal();
+  const [{ loginType, balance }] = useWeb3();
 
   function onClickClose() {
-    dispatch({
-      type: HIDE_WALLET
+    toggleModal({
+      isVisible: false,
+      data: null,
+      modal: null
     });
   }
 
-  let isOpen = visible && user;
-  let data = {
-    ...user,
-    balance: "0.0",
-    role: getItem("loginType")
-  };
+  function handleProfileNavigation() {
+    onClickClose();
+    history.push("/app/profile");
+  }
 
+  let isOpen = isVisible && modal === "wallet";
+  let details = {
+    balance,
+    role: loginType
+  };
   return (
     <Modal
       visible={isOpen}
@@ -97,8 +107,14 @@ export default function Wallet({ history }) {
       windowClassName={styles.modalWindow}
     >
       <div className={styles.cnt}>
-        <Profile history={history} user={data} />
+        <Profile
+          user={details}
+          data={data}
+          handleProfileNavigation={handleProfileNavigation}
+        />
       </div>
     </Modal>
   );
 }
+
+export default withRouter(Wallet);

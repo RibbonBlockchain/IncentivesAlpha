@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { ethers } from "ethers";
-import { useDispatch } from "react-redux";
 import useForm from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -13,21 +11,16 @@ import { roleNames, roles } from "../../common/constants/roles";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
 import styles from "./Onboard.module.scss";
-import { SHOW_ALERT } from "../../common/constants/alert";
-import { getItem } from "../../common/utils/storage";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useAlert } from "../../common/providers/Modal.provider";
 
 export default function Onboard() {
   const [onboardOptions, setOnboardOptions] = useState(false);
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
-  const {
-    handleSubmit,
-    register,
-    errors,
-    formState,
-    setValue,
-    triggerValidation
-  } = useForm({
+  const [{ loginType }] = useWeb3();
+  const [{}, toggle] = useAlert();
+  const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
   });
 
@@ -36,10 +29,6 @@ export default function Onboard() {
     value: null,
     isValid: false
   });
-
-  let dispatch = useDispatch();
-
-  let loginType = getItem("loginType");
 
   function showOption() {
     setOnboardOptions(true);
@@ -83,20 +72,23 @@ export default function Onboard() {
     let newUser = await createNewUser(data);
     if (newUser.error) {
       if (newUser.error === 11000) {
-        dispatch({
-          type: SHOW_ALERT,
-          payload: `Wallet Address ${values.publicAddress} already has an associated account`
+        toggle({
+          isVisible: true,
+          message: `Wallet Address ${values.publicAddress} already has an associated account`,
+          data: {}
         });
       } else {
-        dispatch({
-          type: SHOW_ALERT,
-          payload: newUser.error
+        toggle({
+          isVisible: true,
+          message: newUser.error,
+          data: {}
         });
       }
     } else {
-      dispatch({
-        type: SHOW_ALERT,
-        payload: `${formatRoleName(type)} has been registered successfully`
+      toggle({
+        isVisible: true,
+        message: `${formatRoleName(type)} has been registered successfully`,
+        data: {}
       });
       clearForm(e);
     }
