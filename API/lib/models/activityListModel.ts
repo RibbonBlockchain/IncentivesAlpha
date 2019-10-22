@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 export const ActivityListSchema = new Schema({
   activityTitle: {
     type: String,
-    required: "Enter an interaction title"
+    required: "Enter an activity title"
   },
   activityDescription: {
     type: String,
@@ -13,7 +13,7 @@ export const ActivityListSchema = new Schema({
   },
   activityReward: {
     type: Number,
-    required: "Interaction reward is required"
+    required: "Activity reward is required"
   },
   createdDate: {
     type: Date,

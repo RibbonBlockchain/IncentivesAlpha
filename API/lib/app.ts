@@ -8,6 +8,7 @@ import { AuthRoutes } from "./routes/authRoute";
 import { LogRoutes } from "./routes/logRoutes";
 import { ActivityListRoutes } from "./routes/activityListRoutes";
 import { InteractionRoutes } from "./routes/patientInteractionRoutes";
+import { PrescriptionListRoutes } from "./routes/prescriptionRoutes";
 import * as mongoose from "mongoose";
 import * as cors from "cors";
 
@@ -29,6 +30,7 @@ class App {
 	public activityRoutes: ActivityListRoutes = new ActivityListRoutes();
 	public logRoutes: LogRoutes = new LogRoutes();
 	public interactionRoutes: InteractionRoutes = new InteractionRoutes();
+	public prescriptionRoutes: PrescriptionListRoutes = new PrescriptionListRoutes();
 	// public mongoUrl: string = 'mongodb://localhost/Ribbon-Incentives-API-DB';
 	// public mongoUrl: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
 	public mongoUrl: string;
@@ -61,6 +63,7 @@ class App {
 		this.activityRoutes.routes(this.app);
 		this.logRoutes.routes(this.app);
 		this.interactionRoutes.routes(this.app);
+		this.prescriptionRoutes.routes(this.app);
 	}
 
 	private config(): void {
