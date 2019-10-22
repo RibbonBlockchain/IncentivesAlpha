@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useForm from "react-hook-form";
 import DatePicker from "react-datepicker";
+import { ethers } from "ethers";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import QRScanner from "qr-code-scanner";
@@ -20,7 +21,14 @@ export default function Onboard() {
   const [type, setType] = useState(null);
   const [{ loginType }] = useWeb3();
   const [{}, toggle] = useAlert();
-  const { handleSubmit, register, errors, formState } = useForm({
+  const {
+    handleSubmit,
+    register,
+    errors,
+    formState,
+    setValue,
+    triggerValidation
+  } = useForm({
     mode: "onChange"
   });
 
@@ -117,9 +125,10 @@ export default function Onboard() {
           setValue("publicAddress", address);
           triggerValidation({ name: "publicAddress", value: address });
         } else {
-          dispatch({
-            type: SHOW_ALERT,
-            payload: `Address ${address} does not match checksum`
+          toggle({
+            isVisible: true,
+            message: `Address ${address} does not match checksum`,
+            data: {}
           });
         }
       },

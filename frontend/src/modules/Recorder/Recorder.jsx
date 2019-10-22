@@ -132,50 +132,44 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                   </div>
                 </div>
               </div>
-              <fieldset>
-                <legend>Prescriptions</legend>
-                <div className={styles.layout}>
-                  <div className={styles.layout__item}>
-                    <label htmlFor="activity">Activity</label>
-                    <Select
-                      value={record.activities}
-                      placeholder="Select Activity"
-                      name={`activities`}
-                      isMulti
-                      onChange={activities =>
-                        setRecord({
-                          practitioner: record.practitioner,
-                          patient: record.patient,
-                          prescriptions: record.prescriptions,
-                          activities
-                        })
-                      }
-                      options={activityList}
-                    />
-                  </div>
-                  <div className={styles.layout__item}>
-                    <label htmlFor="prescriptions">Prescriptions</label>
-                    <Select
-                      value={record.prescriptions}
-                      placeholder="Select prescriptions"
-                      name={`prescriptions`}
-                      isMulti
-                      onChange={prescriptions =>
-                        setRecord({
-                          practitioner: record.practitioner,
-                          patient: record.patient,
-                          prescriptions,
-                          activities: record.activities
-                        })
-                      }
-                      options={prescriptionList}
-                    />
-                  </div>
-                  <div className={styles.layout__item}>
-                    <span>Add More</span>
-                  </div>
+              <div className={styles.layout}>
+                <div className={styles.layout__item}>
+                  <label htmlFor="activity">Activity</label>
+                  <Select
+                    value={record.activities}
+                    placeholder="Select Activity"
+                    name={`activities`}
+                    isMulti
+                    onChange={activities =>
+                      setRecord({
+                        practitioner: record.practitioner,
+                        patient: record.patient,
+                        prescriptions: record.prescriptions,
+                        activities
+                      })
+                    }
+                    options={activityList}
+                  />
                 </div>
-              </fieldset>
+                <div className={styles.layout__item}>
+                  <label htmlFor="prescriptions">Prescriptions</label>
+                  <Select
+                    value={record.prescriptions}
+                    placeholder="Select prescriptions"
+                    name={`prescriptions`}
+                    isMulti
+                    onChange={prescriptions =>
+                      setRecord({
+                        practitioner: record.practitioner,
+                        patient: record.patient,
+                        prescriptions,
+                        activities: record.activities
+                      })
+                    }
+                    options={prescriptionList}
+                  />
+                </div>
+              </div>
               <div className={styles.layout__item}>
                 <div className={[styles.input].join(" ")}>
                   <label htmlFor="notes">Additional notes</label>

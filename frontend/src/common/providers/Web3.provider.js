@@ -86,7 +86,7 @@ export const useWeb3 = () => {
     const userAPI = new UserAPI();
     let { provider, ethers, signer } = await registryContract.getInstance();
 
-    let address = getItem("address") || (await signer.getAddress());
+    let address = (await signer.getAddress()) || getItem("address");
     let balance = await provider.getBalance(address);
     let loginType = await registryContract.getUserRole(address);
     let token = getItem("token") || null;
