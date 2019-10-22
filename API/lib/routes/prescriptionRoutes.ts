@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { PrescriptionListController } from "../controllers/prescriptionController";
-import { validJWTNeeded, superAdminOnly } from "../validators/authValidation";
+import { validJWTNeeded, superAdminOnly, superAdminAndCommunityHealthWorkerOnly } from "../validators/authValidation";
 
 export class PrescriptionListRoutes {
   public prescriptionListController: PrescriptionListController = new PrescriptionListController();
@@ -9,7 +9,7 @@ export class PrescriptionListRoutes {
     // Users
     app
       .route("/api/v1/prescriptions")
-      .get([validJWTNeeded, superAdminOnly], this.prescriptionListController.getAllPrescriptions)
+      .get([validJWTNeeded, superAdminAndCommunityHealthWorkerOnly], this.prescriptionListController.getAllPrescriptions)
 
       // POST endpoint
       .post([validJWTNeeded, superAdminOnly], this.prescriptionListController.addPrescription);

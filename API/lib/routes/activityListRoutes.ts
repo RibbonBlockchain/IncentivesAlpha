@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ActivityListController } from "../controllers/activityController";
-import { validJWTNeeded, superAdminOnly } from "../validators/authValidation";
+import { validJWTNeeded, superAdminOnly, superAdminAndCommunityHealthWorkerOnly } from "../validators/authValidation";
 
 export class ActivityListRoutes {
   public activityListController: ActivityListController = new ActivityListController();
@@ -9,7 +9,7 @@ export class ActivityListRoutes {
     // Users
     app
       .route("/api/v1/activities")
-      .get([validJWTNeeded, superAdminOnly], this.activityListController.getAllActivities)
+      .get([validJWTNeeded, superAdminAndCommunityHealthWorkerOnly], this.activityListController.getAllActivities)
 
       // POST endpoint
       .post([validJWTNeeded, superAdminOnly], this.activityListController.addActivity);
