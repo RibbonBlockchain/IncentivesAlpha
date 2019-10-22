@@ -43,10 +43,34 @@ export const PatientInteractionSchema = new Schema({
             }
         }
     ],
-    serviceRatings: {
-        type: Number,
-        required: "Enter a service rating"
-    },
+    serviceRatings: [
+      {
+            health_services: {
+                type: Number,
+                required: "Enter health services rating"
+            },
+            medicines: {
+                type: Number,
+                required: "Enter medicines rating"
+            },
+            patient_safety: {
+                type: Number,
+                required: "Enter patient safety rating"
+            },
+            cleanliness: {
+                type: Number,
+                required: "Enter cleanliness rating"
+            },
+            staff_attitude: {
+                type: Number,
+                required: "Enter staff attitude rating"
+            },
+            waiting_time: {
+                type: Number,
+                required: "Enter waiting time rating"
+            }
+      }
+    ],
     transactionLogs: [
         {
             paying_address: {
