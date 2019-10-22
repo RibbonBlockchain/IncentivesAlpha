@@ -18,7 +18,9 @@ interface IVault {
         address payable _patient,
         address payable _practitioner,
         address payable _CHW,
-        uint256 _amountEach
+        uint256 _patientAmount,
+        uint256 _practitionerAmount,
+        uint256 _CHWAmount
     )
         external;
 

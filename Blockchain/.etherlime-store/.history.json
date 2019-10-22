@@ -66797,6 +66797,440 @@
           "result": "Successfully Waited For Transaction"
         }
       ]
+    },
+    "142": {
+      "actions": [
+        {
+          "eventTimestamp": 1571763545024,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Admin",
+          "transactionHash": "0x6b030356ea80c6fff480de614d2068eace1d0c51705c630efa57b380d593c12e",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "668080",
+          "networkID": 77,
+          "result": "0xEd5138058CB23DF0cB2d5549d3E7A6F14908f1a1",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763553983,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Vault",
+          "transactionHash": "0x7c9f2d4deda95b79c395d437e53b49cc38ec3af922daaba0423acc629261e6a0",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "54408",
+          "networkID": 77,
+          "result": "0x166F87ae336d2194Ff4EdD9FB4394CB4517e26e4",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763563063,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Registry",
+          "transactionHash": "0xa6f1d703008b584746c3c8fb9490953b22b7db6fc5f82cca2f4f6ebc25ac84d6",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "920484",
+          "networkID": 77,
+          "result": "0xA368F3B8Df80Fd072ebFE9df82c8e9b2bBA9516a",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763572818,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Init Admin",
+          "transactionHash": "0xb42c52e2c0ab63fe4a5dacdc38b701ce782d57afcddfddb77ea389810a29b527",
+          "status": 0,
+          "gasPrice": "1000000000",
+          "gasUsed": "65294",
+          "networkID": 77,
+          "result": "Successfully Waited For Transaction"
+        }
+      ]
+    },
+    "143": {
+      "actions": [
+        {
+          "eventTimestamp": 1571763648118,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Admin",
+          "transactionHash": "0x5f925f205bcbcb392b9c40941bbb41d0ff0b7e10e43f38738605827b88cd56ba",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "668080",
+          "networkID": 5777,
+          "result": "0xF1066A2F6C86546Bba3855DD82DE7425031142Ca",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763648182,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Vault",
+          "transactionHash": "0x52affd07c674a82cd71cfe445e51ecb8a07a6e68c4c78092a511a7a5cf1957cb",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "54408",
+          "networkID": 5777,
+          "result": "0xD6D1C99b4EB028b55C8093cC38F2cFD6d79F2Ebd",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763648276,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Registry",
+          "transactionHash": "0x447384d578232c308d5046e528adb1282568588dd07177e4003029701d8063e4",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "920484",
+          "networkID": 5777,
+          "result": "0x4Ca3Da89Dce97CDA38266e3c26d9B80DFe30c3c3",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763648378,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Init Admin",
+          "transactionHash": "0xfef7f1a2ae701373d2178869ec03e64bc2529bb639914108165d4394654c4afe",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "65294",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        }
+      ]
+    },
+    "144": {
+      "actions": [
+        {
+          "eventTimestamp": 1571763677677,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Admin",
+          "transactionHash": "0x914ed27c680f7eca86e87a01562344a2eeb829a15ad709db6a5d540b57305dd7",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "668080",
+          "networkID": 5777,
+          "result": "0x1Ea62B553896A8dC753a5602579A501e63bBa529",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763677732,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Vault",
+          "transactionHash": "0xc4a0bd14cbe442e445ba48fb8ff57dd3e25ebf74674fcbf5f350a2026a1fba6a",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "54408",
+          "networkID": 5777,
+          "result": "0xD148584309501c4081fFa0FB364F4E3bfBBFe14D",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763677838,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Registry",
+          "transactionHash": "0xb5aeaceead45aa6dfefae1bdbc6a4aafe343aa1b363c6da79212e5f35a9c0215",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "920484",
+          "networkID": 5777,
+          "result": "0x013227e8c189f24F8A46Af45D8Cc286Cb82365f0",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763677923,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Init Admin",
+          "transactionHash": "0x4b782258db1fa5af149023d2598eb56addb5cfbbf41561e9274cd78d42669eb2",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "65294",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        }
+      ]
+    },
+    "145": {
+      "actions": [
+        {
+          "eventTimestamp": 1571763696630,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Admin",
+          "transactionHash": "0x59fe5096de1c96548175b3b27567acc7e262d24dd880260d65f9ae4a012a217b",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "668080",
+          "networkID": 5777,
+          "result": "0xE792b7e84F34f690c39D05A5648EcAAE2D8C6103",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763696701,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Vault",
+          "transactionHash": "0x7dea677b81c67af325e2710c012713414bf468cb87183c3959435319aa2b135a",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "54408",
+          "networkID": 5777,
+          "result": "0xb1C3652066CfB9B8A6318243A628d1DE6FfF6439",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763696814,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Registry",
+          "transactionHash": "0x3254caafd10ad18271b27ceec8f3a26ea41aafef22af80d7f4a29fb75207e30a",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "920484",
+          "networkID": 5777,
+          "result": "0x0511076bf63C93a7575499508243D2B652996a05",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763696890,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Init Admin",
+          "transactionHash": "0xab1b153d2442bea5507d11f81d0df616582ccc56f481b36976927382ba89336d",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "65294",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        }
+      ]
+    },
+    "146": {
+      "actions": [
+        {
+          "eventTimestamp": 1571763822707,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Admin",
+          "transactionHash": "0xd87111dd4c41e0789ff864769a3344984dfdf7ff99f261d625894598a885e109",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "668016",
+          "networkID": 5777,
+          "result": "0x5311348A9A920BBfF2D467e5Fe5018884e4cf83B",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763822795,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Vault",
+          "transactionHash": "0xdf614dfce65eb1b950f9d6f567d1b6f24fcc99d03dc2577cfd741cf2e4b680f8",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "1032189",
+          "networkID": 5777,
+          "result": "0xDe6E958DECb83513958Baf7eBcB27cCF2019f52e",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763822886,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Registry",
+          "transactionHash": "0xe931f44ab0768e3e2ccef43620c31c9b53b08b2f9f0a9fd66c76240cc3b92b19",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "920484",
+          "networkID": 5777,
+          "result": "0x7A2BB95073543A876Ded72f2638aBB5b02117edc",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763822962,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Init Admin",
+          "transactionHash": "0x50aaf4900f5a5e3cf16278a96122ef6c6efb414b77d2e9782da8d787b9be0204",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "65294",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763823057,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Init vault",
+          "transactionHash": "0x4e030bc2a8228eeecc58c59109521f1db6304477f49037de977464412483808f",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "48797",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763823131,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Adding admin User 1",
+          "transactionHash": "0x7913f2b58e6c2ec8d35e8ca1f3459f51fc422c48e79cf4fd0d249877dd4d7565",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "44602",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763823212,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Adding admin User 2",
+          "transactionHash": "0xd3728428ba5b447fb010cb97a492b353638201b3b4c1a64f29a00c2dfc534302",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "44602",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763823289,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Adding admin User 3",
+          "transactionHash": "0x0c3518ef7188141678175c035b8f76772a5feb7b6848a76aac3eb7d77a166fe3",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "44602",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763823375,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Adding admin User 4",
+          "transactionHash": "0xae499f044378efc0d61273eb88b8b4b1a17b0a6df261091e5d766e6366bdee48",
+          "status": 0,
+          "gasPrice": "200000",
+          "gasUsed": "44602",
+          "networkID": 5777,
+          "result": "Successfully Waited For Transaction"
+        }
+      ]
+    },
+    "147": {
+      "actions": [
+        {
+          "eventTimestamp": 1571763847734,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Admin",
+          "transactionHash": "0x8fdfe50ba98bb614ad33462e3e3e0c6727738153c838375e5adf714be99233a6",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "668016",
+          "networkID": 77,
+          "result": "0x6a107ED419aaF6DdDBB1F5b2d75C10966CD86caA",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763858314,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Vault",
+          "transactionHash": "0xb6f49690890342a6146af0f6074a8ecfb9246c6c3184d425aee25a899e806b8f",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "1032189",
+          "networkID": 77,
+          "result": "0xCb0bB361fDCcD3EE16e1c0dF5c72f27b2F584042",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763868184,
+          "deployerType": "JSONRPCPrivateKeyDeployer",
+          "nameOrLabel": "Registry",
+          "transactionHash": "0x40e661fdd314800be229931d439fac4e1d133036b3d8fb7376e83a5070168e4c",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "920484",
+          "networkID": 77,
+          "result": "0x67A6E4Eb3BBd2Fd932fdc376670CDa975EA3e423",
+          "solcVersion": "0.5.10+commit.5a6ea5b1.Emscripten.clang",
+          "verification": false
+        },
+        {
+          "eventTimestamp": 1571763875863,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Init Admin",
+          "transactionHash": "0x59dbdda156203b9093eaafafd99626de286c2dee59f05106e73bf4de1b567121",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "65294",
+          "networkID": 77,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763890001,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Init vault",
+          "transactionHash": "0x7af77b84e1058856ee625cfb6e4956b50152be7690b3dc05050fab9676c3e93d",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "48797",
+          "networkID": 77,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763895772,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Adding admin User 1",
+          "transactionHash": "0x119cb73e335e5b2175acec15b4e5c1df69521f967f59f5ecb7053ec4c4320264",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "44602",
+          "networkID": 77,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763902191,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Adding admin User 2",
+          "transactionHash": "0x1f62a145de4c41f82c51dbc5bdae870aa2fd063cf46f89cd892d3fcdd041b5ca",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "44602",
+          "networkID": 77,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763915196,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Adding admin User 3",
+          "transactionHash": "0x06d85d32e085e9f4c64a93701f3203a1f0f9dd856f03d4eb60530c9ba1f2d1ae",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "44602",
+          "networkID": 77,
+          "result": "Successfully Waited For Transaction"
+        },
+        {
+          "eventTimestamp": 1571763926953,
+          "deployerType": "DeployedContractWrapper",
+          "nameOrLabel": "Adding admin User 4",
+          "transactionHash": "0x491c8c1c067874d6b0603e0f4e25cfea45ea06123787a9c5e3b24a2e8fd0f9d4",
+          "status": 0,
+          "gasPrice": "20000000000",
+          "gasUsed": "44602",
+          "networkID": 77,
+          "result": "Successfully Waited For Transaction"
+        }
+      ]
     }
   }
 }

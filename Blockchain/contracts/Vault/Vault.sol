@@ -19,7 +19,7 @@ contract Vault is IVault, WhitelistAdminRole {
     address payable internal _creator;
 
     event recivedDonation(uint256 _amount, address _from, string _message);
-    event payoutRecord(address _pat, address prac, address _chw, uint256 _amount);
+    event payoutRecord(address _pat, address _prac, address _chw, uint256 _patAmount, uint256 _practAmount, uint256 _chwAmount);
 
     constructor(
         address _admin
@@ -80,16 +80,20 @@ contract Vault is IVault, WhitelistAdminRole {
         address payable _patient,
         address payable _practitioner,
         address payable _CHW,
-        uint256 _amountEach
+        uint256 _patientAmount,
+        uint256 _practitionerAmount,
+        uint256 _CHWAmount
     )
         external
         onlyAdminsAndCHW()
         isActive()
     {
         uint256 balance = address(this).balance;
+
+        uint256 _totalTransfer = _patientAmount + _practitionerAmount + _CHWAmount;
         
         require(
-            _amountEach.mul(3) >= balance,
+            _totalTransfer <= balance,
             "Insuficient balance in vault to compleate payout"
         );
         require(
@@ -99,11 +103,11 @@ contract Vault is IVault, WhitelistAdminRole {
             ,"Revert, a user in the payout was inactive"
         );
 
-        _patient.transfer(_amountEach);
-        _practitioner.transfer(_amountEach);
-        _CHW.transfer(_amountEach);
+        _patient.transfer(_patientAmount);
+        _practitioner.transfer(_practitionerAmount);
+        _CHW.transfer(_CHWAmount);
 
-        emit payoutRecord(_patient, _practitioner, _CHW, _amountEach);
+        emit payoutRecord(_patient, _practitioner, _CHW, _patientAmount, _practitionerAmount, _CHWAmount);
     }
 
     /**

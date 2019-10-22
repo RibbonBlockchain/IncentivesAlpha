@@ -87,6 +87,15 @@ const deploy = async (network, secret) => {
     addUser3Tx,
     "Adding admin User 3"
   );
+
+  let addUser4Tx = await registryDeployed.addUser(
+    "0xd685883dC1532aF422895ed58bc8159D55FDBEe3",
+    1
+  ); //gugu
+  await registryDeployed.verboseWaitForTransaction(
+    addUser4Tx,
+    "Adding admin User 4"
+  );
 };
 //
 module.exports = {
