@@ -235,6 +235,10 @@ function Stats({ users, type }) {
             <div className={styles.count}>0</div>
             <div className={styles.heading}>Transactions completed</div>
           </Card>
+          <Card classNames={styles.card__light_pink}>
+            <div className={styles.count}>0</div>
+            <div className={styles.heading}>Transactions Failed</div>
+          </Card>
         </div>
       )}
       {roleNames.PATIENT === type && (
@@ -242,6 +246,10 @@ function Stats({ users, type }) {
           <Card classNames={styles.card__light_orange}>
             <div className={styles.count}>0</div>
             <div className={styles.heading}>Transactions completed</div>
+          </Card>
+          <Card classNames={styles.card__light_pink}>
+            <div className={styles.count}>0</div>
+            <div className={styles.heading}>Transactions Failed</div>
           </Card>
         </div>
       )}

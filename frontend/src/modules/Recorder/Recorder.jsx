@@ -7,6 +7,7 @@ import styles from "./Recorder.module.scss";
 import { getByRole } from "../Dashboard/dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
 import { recordInteraction } from "./recorder.utils";
+import Rating from "../../common/components/Rating";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
 import { useUsersList } from "../../common/providers/API.provider";
@@ -47,12 +48,14 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     patient: {},
     practitioner: {},
     prescriptions: [],
-    activities: []
+    activities: [],
+    ratings: []
   });
   let patients = getByRole(users, roleNames.PATIENT);
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
   let activityList = [];
   let prescriptionList = [];
+  let ratingList = [];
 
   async function onSubmit(values) {
     let data = {
@@ -169,6 +172,16 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     options={prescriptionList}
                   />
                 </div>
+              </div>
+              <div className={styles.layout__item}>
+                {ratingList.length > 0 && (
+                  <fieldset>
+                    <legend>Rate the services</legend>
+                    {ratingList.map((rating, index) => (
+                      <Rating key={index} selected={rating} />
+                    ))}
+                  </fieldset>
+                )}
               </div>
               <div className={styles.layout__item}>
                 <div className={[styles.input].join(" ")}>

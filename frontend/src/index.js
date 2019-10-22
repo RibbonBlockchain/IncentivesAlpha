@@ -5,26 +5,33 @@ import Router from "./modules/App";
 import * as serviceWorker from "./serviceWorker";
 import "react-virtualized/styles.css";
 
+import ErrorBoundary from "./common/components/ErrorBoundary";
+
 import Web3Provider from "./common/providers/Web3.provider";
 import ModalProvider from "./common/providers/Modal.provider";
 import APIProvider from "./common/providers/API.provider";
+import ConfigProvider from "./common/providers/Config.provider";
 
 const ContextProviders = ({ children }) => (
   <>
-    <Web3Provider>
-      <ModalProvider>
-        <APIProvider>{children}</APIProvider>
-      </ModalProvider>
-    </Web3Provider>
+    <ConfigProvider>
+      <Web3Provider>
+        <ModalProvider>
+          <APIProvider>{children}</APIProvider>
+        </ModalProvider>
+      </Web3Provider>
+    </ConfigProvider>
   </>
 );
 
 ReactDOM.render(
-  <ContextProviders>
-    <BrowserRouter>
-      <Router />
-    </BrowserRouter>
-  </ContextProviders>,
+  <ErrorBoundary>
+    <ContextProviders>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </ContextProviders>
+  </ErrorBoundary>,
   document.getElementById("root")
 );
 

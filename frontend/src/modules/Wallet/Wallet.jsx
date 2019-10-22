@@ -7,12 +7,12 @@ import { roles } from "../../common/constants/roles";
 import { clear } from "../../common/utils/storage";
 import { useModal } from "../../common/providers/Modal.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useCurrency } from "../../common/providers/Config.provider";
 import * as moment from "moment";
 import styles from "./Wallet.module.scss";
 import { withRouter } from "react-router-dom";
 
-function Profile({ user, data, handleProfileNavigation }) {
-  let ticker = "USD";
+function Profile({ user, data, handleProfileNavigation, currency }) {
   async function handleSignOut() {
     clear();
     window.location.reload();
@@ -48,7 +48,7 @@ function Profile({ user, data, handleProfileNavigation }) {
           <span>
             <Balance
               balance={Number(user.balance).toFixed(4)}
-              ticker={ticker}
+              ticker={currency}
             />
           </span>
         </div>
@@ -81,6 +81,7 @@ function Profile({ user, data, handleProfileNavigation }) {
 function Wallet({ history }) {
   const [{ isVisible, data, modal }, toggleModal] = useModal();
   const [{ loginType, balance }] = useWeb3();
+  const [{ currency }] = useCurrency();
 
   function onClickClose() {
     toggleModal({
@@ -110,6 +111,7 @@ function Wallet({ history }) {
         <Profile
           user={details}
           data={data}
+          currency={currency}
           handleProfileNavigation={handleProfileNavigation}
         />
       </div>
