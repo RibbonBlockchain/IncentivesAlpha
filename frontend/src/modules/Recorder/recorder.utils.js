@@ -4,18 +4,37 @@ import InteractionAPI from "../../common/services/api/interaction.api";
 export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
   let interactionAPI = new InteractionAPI();
-  let { patient, practitioner, chw } = data;
+  let {
+    patient,
+    practitioner,
+    user,
+    amount,
+    activities,
+    prescriptions,
+    serviceRatings
+  } = data;
 
   let payoutInformation = {
-    patient: patient.address,
-    practitioner: practitioner.address,
-    chw: chw.address
+    patient: patient.value.publicaddress,
+    practitioner: practitioner.value.publicaddress,
+    chw: user.publicaddress,
+    amount
   };
+
+  let rewards = [];
 
   try {
     let tx = await vaultContract.payout(payoutInformation);
     if (tx.transactionHash) {
-      let interaction = await interactionAPI.createInteraction(data);
+      let details = {
+        patientId: patient.value._id,
+        practitionerId: practitioner.value._id,
+        activities,
+        prescriptions,
+        rewards,
+        serviceRatings
+      };
+      let interaction = await interactionAPI.createInteraction(details);
       if (interaction.error) {
         return {
           error: interaction.error

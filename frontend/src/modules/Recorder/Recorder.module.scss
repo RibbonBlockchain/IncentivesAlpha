@@ -94,7 +94,10 @@ img {
 
 .form_input {
   color: $text-color;
-  input {
+  input,
+  .react_select_container,
+  .react-select__control,
+  .react-select__value-container {
     background: transparent;
     border: none;
     color: $text-color;

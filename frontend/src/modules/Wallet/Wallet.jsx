@@ -7,7 +7,7 @@ import { roles } from "../../common/constants/roles";
 import { clear } from "../../common/utils/storage";
 import { useModal } from "../../common/providers/Modal.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
-import { useCurrency } from "../../common/providers/Config.provider";
+import { useApp } from "../../common/providers/App.provider";
 import * as moment from "moment";
 import styles from "./Wallet.module.scss";
 import { withRouter } from "react-router-dom";
@@ -81,7 +81,7 @@ function Profile({ user, data, handleProfileNavigation, currency }) {
 function Wallet({ history }) {
   const [{ isVisible, data, modal }, toggleModal] = useModal();
   const [{ loginType, balance }] = useWeb3();
-  const [{ currency }] = useCurrency();
+  const [{ currency }] = useApp();
 
   function onClickClose() {
     toggleModal({

@@ -40,7 +40,7 @@ export const getByRole = (users, role) => {
     if (user.role === role) {
       data.push({
         label: user.idNumber,
-        value: user.idNumber
+        value: user
       });
     }
   });

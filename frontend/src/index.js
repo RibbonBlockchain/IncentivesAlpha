@@ -10,17 +10,17 @@ import ErrorBoundary from "./common/components/ErrorBoundary";
 import Web3Provider from "./common/providers/Web3.provider";
 import ModalProvider from "./common/providers/Modal.provider";
 import APIProvider from "./common/providers/API.provider";
-import ConfigProvider from "./common/providers/Config.provider";
+import AppProvider from "./common/providers/App.provider";
 
 const ContextProviders = ({ children }) => (
   <>
-    <ConfigProvider>
+    <AppProvider>
       <Web3Provider>
         <ModalProvider>
           <APIProvider>{children}</APIProvider>
         </ModalProvider>
       </Web3Provider>
-    </ConfigProvider>
+    </AppProvider>
   </>
 );
 

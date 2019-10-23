@@ -9,6 +9,7 @@ import { roleNames } from "../../common/constants/roles";
 import { recordInteraction } from "./recorder.utils";
 import Rating from "../../common/components/Rating";
 import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useApp } from "../../common/providers/App.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
 import { useUsersList } from "../../common/providers/API.provider";
 
@@ -43,6 +44,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
   const { handleSubmit, register } = useForm({
     mode: "onChange"
   });
+  const [{ activities, prescriptions }] = useApp();
   const [{}, toggle] = useAlert();
   const [record, setRecord] = useState({
     patient: {},
@@ -53,8 +55,6 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
   });
   let patients = getByRole(users, roleNames.PATIENT);
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
-  let activityList = [];
-  let prescriptionList = [];
   let ratingList = [];
 
   async function onSubmit(values) {
@@ -64,7 +64,8 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
       practitioner: record.practitioner,
       user,
       activities: record.activities,
-      prescriptions: record.prescriptions
+      prescriptions: record.prescriptions,
+      serviceRatings: record.ratings
     };
 
     let interaction = await recordInteraction(data);
@@ -100,7 +101,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     <Select
                       value={record.patient}
                       placeholder="Patient ID Number"
-                      name="patient"
+                      className={[styles.react_select_container]}
                       onChange={patient =>
                         setRecord({
                           practitioner: record.practitioner,
@@ -121,10 +122,9 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     <Select
                       value={record.practitioner}
                       placeholder="Practitioner ID Number"
-                      name="practitioner"
-                      onChange={practitioner =>
+                      onChange={practitioners =>
                         setRecord({
-                          practitioner,
+                          practitioners,
                           patient: record.patient,
                           prescriptions: record.prescriptions,
                           activities: record.activities
@@ -151,7 +151,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                         activities
                       })
                     }
-                    options={activityList}
+                    options={activities}
                   />
                 </div>
                 <div className={styles.layout__item}>
@@ -169,7 +169,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                         activities: record.activities
                       })
                     }
-                    options={prescriptionList}
+                    options={prescriptions}
                   />
                 </div>
               </div>

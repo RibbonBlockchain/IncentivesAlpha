@@ -7,12 +7,14 @@ import React, {
   useCallback
 } from "react";
 
-const ConfigContext = createContext();
+const AppContext = createContext();
 
-const useConfigContext = () => useContext(ConfigContext);
+const useAppContext = () => useContext(AppContext);
 
 const initialState = () => ({
-  currency: "eth"
+  currency: "eth",
+  activities: [],
+  prescriptions: []
 });
 
 const LOAD_CONFIGURATION = "config/LOAD_CONFIGURATION";
@@ -42,21 +44,36 @@ export default function Provider({ children }) {
   }, []);
 
   return (
-    <ConfigContext.Provider
+    <AppContext.Provider
       value={useMemo(() => [state, { update }], [state, update])}
     >
       {children}
-    </ConfigContext.Provider>
+    </AppContext.Provider>
   );
 }
 
-export const useCurrency = () => {
-  const [{ currency }, { update }] = useConfigContext();
+export const useApp = () => {
+  const [
+    { currency, activities, prescriptions, ratings },
+    { update }
+  ] = useAppContext();
+
+  useEffect(() => {
+    loadCurrency();
+    loadActivities();
+    loadPrescriptions();
+    loadRatings();
+  }, [currency, activities, prescriptions, ratings]);
 
   const loadCurrency = () => {
     //   go to api to fetch app setup details
     // update the state
   };
+  const loadActivities = () => {};
 
-  return [{ currency }, loadCurrency];
+  const loadPrescriptions = () => {};
+
+  const loadRatings = () => {};
+
+  return [{ currency, activities, prescriptions, ratings }, loadCurrency];
 };

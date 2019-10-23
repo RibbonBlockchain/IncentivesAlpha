@@ -287,10 +287,10 @@ export default function Onboard() {
                     <input
                       className={[styles.form_input].join(" ")}
                       placeholder="0x0..."
-                      disabled={
-                        type === roleNames.PATIENT ||
-                        type === roleNames.PRACTITIONER
-                      }
+                      //   disabled={
+                      //     type === roleNames.PATIENT ||
+                      //     type === roleNames.PRACTITIONER
+                      //   }
                       ref={register({
                         required: "Wallet Address is required",
                         pattern: {
