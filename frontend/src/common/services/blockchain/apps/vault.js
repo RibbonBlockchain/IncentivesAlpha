@@ -51,7 +51,7 @@ export default class VaultContract extends BlockchainService {
         ethers.utils.parseEther(practitionerAmount.toString()),
         ethers.utils.parseEther(chwAmount.toString()),
         {
-          gasLimit: ethers.utils.hexlify(80000)
+          value: "0x0"
         }
       );
       return await waitForConfirmation(provider, tx);

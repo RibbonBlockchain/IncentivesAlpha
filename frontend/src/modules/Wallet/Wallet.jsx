@@ -48,7 +48,7 @@ function Profile({ user, data, handleProfileNavigation, currency }) {
           <span>
             <Balance
               balance={Number(user.balance).toFixed(4)}
-              ticker={currency}
+              ticker={currency.toString().toUpperCase()}
             />
           </span>
         </div>

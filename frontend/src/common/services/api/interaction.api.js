@@ -3,6 +3,7 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
+import { getItem } from "../../utils/storage";
 
 export default class InteractionsAPI extends HTTP {
   constructor() {
@@ -17,7 +18,9 @@ export default class InteractionsAPI extends HTTP {
    * @returns {Promise.<Object>}
    */
   async listInteractions() {
-    return await this.getRequest("interactions");
+    return await this.getRequest("interactions", {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 
   /**
@@ -29,7 +32,9 @@ export default class InteractionsAPI extends HTTP {
    * @returns {Promise.<Object>}
    */
   async createInteraction(data) {
-    return await this.postRequest("interactions", data);
+    return await this.postRequest("interactions", data, {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 
   /**
@@ -41,9 +46,8 @@ export default class InteractionsAPI extends HTTP {
    * @returns {Promise.<Object>}
    */
   async updateInteraction(data) {
-    return await this.patchRequest(
-      `interactions/${data.address.toLowerCase()}`,
-      data
-    );
+    return await this.patchRequest(`interactions/${data.address}`, data, {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 }

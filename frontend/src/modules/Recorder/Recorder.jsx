@@ -82,17 +82,17 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     };
 
     let interaction = await recordInteraction(data);
-    // if (interaction.error) {
-    //   toggle({
-    //     isVisible: true,
-    //     message: interaction.error
-    //   });
-    // } else {
-    //   toggle({
-    //     isVisible: true,
-    //     message: `Interaction has been recorded successfully`
-    //   });
-    // }
+    if (interaction.error) {
+      toggle({
+        isVisible: true,
+        message: interaction.error
+      });
+    } else {
+      toggle({
+        isVisible: true,
+        message: `Interaction has been recorded successfully`
+      });
+    }
   }
 
   function clearDismiss() {
@@ -179,7 +179,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.layout}>
+              {activities.length > 0 && (
                 <div className={styles.layout__item}>
                   <label htmlFor="activity">Activity</label>
                   <Select
@@ -209,6 +209,8 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     options={activities}
                   />
                 </div>
+              )}
+              {prescriptions.length > 0 && (
                 <div className={styles.layout__item}>
                   <label htmlFor="prescriptions">Prescriptions</label>
                   <Select
@@ -238,7 +240,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     options={prescriptions}
                   />
                 </div>
-              </div>
+              )}
               <div className={styles.layout__item}>
                 {ratingList.length > 0 && (
                   <fieldset>

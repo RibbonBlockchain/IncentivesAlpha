@@ -158,6 +158,15 @@ function DashboardTable({ data, type }) {
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
                 width={200}
               />
+              {type !== roleNames.PRACTITIONER && (
+                <Column
+                  label="Practitioner"
+                  cellRenderer={renderTxLink}
+                  dataKey="practitioner"
+                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                  width={300}
+                />
+              )}
               {type !== roleNames.PATIENT && (
                 <Column
                   label="Patient"
@@ -167,22 +176,22 @@ function DashboardTable({ data, type }) {
                   width={300}
                 />
               )}
-              {type !== roleNames.HEALTH_WORKER && (
-                <Column
-                  label="Practitioner"
-                  cellRenderer={renderTxLink}
-                  dataKey="practitioner"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={300}
-                />
-              )}
               <Column
                 label="Interactions"
                 cellRenderer={renderTxLink}
                 dataKey="interactions"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={500}
+                width={300}
               />
+              {type < roleNames.HEALTH_WORKER && (
+                <Column
+                  label="Registered By"
+                  cellRenderer={renderStatus}
+                  dataKey="chw"
+                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                  width={200}
+                />
+              )}
               <Column
                 label="Total Payout"
                 cellRenderer={renderStatus}
