@@ -2,13 +2,11 @@
 
 .modalWindow {
   background: #313541;
-  color: #ffffff;
 }
 
 .modalFormWindow {
   background: #313541;
   width: 50%;
-  color: #ffffff;
   small {
     color: $red;
   }
@@ -41,6 +39,7 @@ textarea {
 
 .form_heading {
   text-align: center;
+  color: #ffffff;
 }
 
 a {
@@ -141,4 +140,16 @@ img {
 .react-select-container {
   outline: none;
   background: transparent;
+}
+
+.select__menu {
+  background: $background !important;
+  .select__menu-list {
+    background: $background !important;
+    .select__option,
+    .select__option--is-focused {
+      color: $text-color;
+      font-weight: 600;
+    }
+  }
 }

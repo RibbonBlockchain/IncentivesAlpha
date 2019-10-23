@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import useForm from "react-hook-form";
-import Select from "react-select";
+import Select, { components } from "react-select";
+import makeAnimated from "react-select/animated";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
 import styles from "./Recorder.module.scss";
-import { getByRole } from "../Dashboard/dashboard.utils";
+import {
+  getByRole,
+  formatActivityOptions,
+  formatPrescriptionOptions
+} from "../Dashboard/dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
 import { recordInteraction } from "./recorder.utils";
 import Rating from "../../common/components/Rating";
@@ -12,6 +17,22 @@ import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
 import { useUsersList } from "../../common/providers/API.provider";
+
+const animatedComponents = makeAnimated();
+
+const ProfileComponent = props => {
+  const { innerProps, innerRef } = props;
+  return (
+    <div ref={innerRef} {...innerProps} className="custom-option">
+      <h4>{`${props.value.firstName} ${props.value.lastName}`}</h4>
+      <div className="sub">{props.data.publicAddress} </div>
+    </div>
+  );
+};
+
+function formatLabel({ firstName, lastName, publicAddress }) {
+  return `${firstName} ${lastName}`;
+}
 
 export default function Recorder() {
   const [visible, setVisible] = useState(false);
@@ -44,20 +65,21 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
   const { handleSubmit, register } = useForm({
     mode: "onChange"
   });
-  const [{ activities, prescriptions }] = useApp();
+  const [{ activityList, prescriptionList }] = useApp();
   const [{}, toggle] = useAlert();
   const [record, setRecord] = useState({
     patient: {},
     practitioner: {},
     prescriptions: [],
     activities: [],
-    ratings: []
+    ratings: [],
+    notes: ""
   });
   let patients = getByRole(users, roleNames.PATIENT);
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
+  let activities = formatActivityOptions(activityList);
+  let prescriptions = formatPrescriptionOptions(prescriptionList);
   let ratingList = [];
-
-  console.log(activities);
 
   async function onSubmit(values) {
     let data = {
@@ -67,21 +89,36 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
       user,
       activities: record.activities,
       prescriptions: record.prescriptions,
-      serviceRatings: record.ratings
+      serviceRatings: record.ratings,
+      amount: await record.activities
+        .map(activity => activity.value.activityReward)
+        .reduce((activity, acc) => activity + acc, 0)
     };
 
     let interaction = await recordInteraction(data);
-    if (interaction.error) {
-      toggle({
-        isVisible: true,
-        message: interaction.error
-      });
-    } else {
-      toggle({
-        isVisible: true,
-        message: `Interaction has been recorded successfully`
-      });
-    }
+    // if (interaction.error) {
+    //   toggle({
+    //     isVisible: true,
+    //     message: interaction.error
+    //   });
+    // } else {
+    //   toggle({
+    //     isVisible: true,
+    //     message: `Interaction has been recorded successfully`
+    //   });
+    // }
+  }
+
+  function clearDismiss() {
+    setRecord({
+      patient: {},
+      practitioner: {},
+      activities: [],
+      prescriptions: [],
+      ratings: [],
+      notes: ""
+    });
+    onDismiss();
   }
 
   return (
@@ -103,7 +140,17 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     <Select
                       value={record.patient}
                       placeholder="Patient ID Number"
-                      className={[styles.react_select_container]}
+                      classNamePrefix="select"
+                      className={styles.select__menu}
+                      theme={theme => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          neutral30: "#313541",
+                          primary: "black"
+                        }
+                      })}
                       onChange={patient =>
                         setRecord({
                           practitioner: record.practitioner,
@@ -123,15 +170,25 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     </label>
                     <Select
                       value={record.practitioner}
+                      components={{ ProfileComponent }}
                       placeholder="Practitioner ID Number"
-                      onChange={practitioners =>
+                      theme={theme => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          neutral30: "#313541",
+                          primary: "black"
+                        }
+                      })}
+                      onChange={practitioner => {
                         setRecord({
-                          practitioners,
+                          practitioner,
                           patient: record.patient,
                           prescriptions: record.prescriptions,
                           activities: record.activities
-                        })
-                      }
+                        });
+                      }}
                       options={practitioners}
                     />
                   </div>
@@ -144,7 +201,17 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     value={record.activities}
                     placeholder="Select Activity"
                     name={`activities`}
+                    components={animatedComponents}
                     isMulti
+                    theme={theme => ({
+                      ...theme,
+                      borderRadius: 0,
+                      colors: {
+                        ...theme.colors,
+                        neutral30: "#313541",
+                        primary: "black"
+                      }
+                    })}
                     onChange={activities =>
                       setRecord({
                         practitioner: record.practitioner,
@@ -163,6 +230,16 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     placeholder="Select prescriptions"
                     name={`prescriptions`}
                     isMulti
+                    components={animatedComponents}
+                    theme={theme => ({
+                      ...theme,
+                      borderRadius: 0,
+                      colors: {
+                        ...theme.colors,
+                        neutral30: "#313541",
+                        primary: "black"
+                      }
+                    })}
                     onChange={prescriptions =>
                       setRecord({
                         practitioner: record.practitioner,
@@ -202,13 +279,13 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
               <Button
                 type="button"
                 text={"Cancel"}
-                onClick={onDismiss}
+                onClick={clearDismiss}
                 classNames={[styles.button].join(" ")}
               ></Button>
               <Button
                 text="Save"
                 classNames={[styles.button, styles.button_primary].join(" ")}
-                button="submit"
+                button="button"
               ></Button>
             </div>
           </div>

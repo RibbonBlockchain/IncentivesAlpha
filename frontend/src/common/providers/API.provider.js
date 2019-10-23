@@ -83,7 +83,12 @@ export const useUsersList = () => {
 
   const fetchInteractions = async address => {
     let interactions = await interactionsAPI.listInteractions();
-    update(interactions);
+    update({
+      users: state.users,
+      user: state.user,
+      interactions,
+      transactionLogs: state.transactionLogs
+    });
   };
 
   return [state, fetchUsers, fetchInteractions];

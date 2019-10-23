@@ -40,16 +40,19 @@ export default class VaultContract extends BlockchainService {
     practitionerAmount,
     chwAmount
   }) {
-    let { provider } = await this.getInstance();
+    let { provider, ethers } = await this.getInstance();
     let contract = await this.contract;
     try {
       let tx = await contract.payout(
         patient,
         practitioner,
         chw,
-        patientAmount,
-        practitionerAmount,
-        chwAmount
+        ethers.utils.parseEther(patientAmount.toString()),
+        ethers.utils.parseEther(practitionerAmount.toString()),
+        ethers.utils.parseEther(chwAmount.toString()),
+        {
+          gasLimit: ethers.utils.hexlify(80000)
+        }
       );
       return await waitForConfirmation(provider, tx);
     } catch (error) {

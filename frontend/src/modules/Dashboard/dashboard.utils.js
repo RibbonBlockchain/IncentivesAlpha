@@ -34,6 +34,20 @@ export const makeDonation = async ({ value, message }) => {
   }
 };
 
+export const formatActivityOptions = options => {
+  return options.map(option => ({
+    label: option.activityTitle,
+    value: option._id
+  }));
+};
+
+export const formatPrescriptionOptions = options => {
+  return options.map(option => ({
+    label: option.prescriptionTitle,
+    value: option._id
+  }));
+};
+
 export const getByRole = (users, role) => {
   let data = [];
   users.map(user => {

@@ -15,21 +15,21 @@ const useAppContext = () => useContext(AppContext);
 
 const initialState = () => ({
   currency: "eth",
-  activities: [],
-  prescriptions: []
+  activityList: [],
+  prescriptionList: []
 });
 
 const LOAD_CONFIGURATION = "config/LOAD_CONFIGURATION";
 
 const reducer = (state, { type, payload }) => {
-  const { currency, activities, prescriptions } = payload;
+  const { currency, activityList, prescriptionList } = payload;
   switch (type) {
     case LOAD_CONFIGURATION:
       return {
         ...state,
         currency,
-        ...activities,
-        ...prescriptions
+        activityList,
+        prescriptionList
       };
     default: {
       throw new Error(`Unknown action type ${type}`);
@@ -61,38 +61,22 @@ export const useApp = () => {
 
   const prescriptionAPI = new PrescriptionAPI();
   const activityAPI = new ActivityAPI();
-  const { currency, activities, prescriptions, ratings } = state;
+  const { currency, activityList, prescriptionList, ratings } = state;
 
   useEffect(() => {
-    loadCurrency();
-    loadActivities();
-    loadPrescriptions();
-    loadRatings();
+    loadAppConfigs();
   }, []);
 
-  const loadCurrency = async () => {
-    //   go to api to fetch app setup details
-    // update the state
-  };
-  const loadActivities = async () => {
-    let activities = await activityAPI.listActivities();
+  const loadAppConfigs = async () => {
+    let activityList = await activityAPI.listActivities();
+    let prescriptionList = await prescriptionAPI.listPrescriptions();
+
     update({
-      activities,
+      activityList,
       currency: state.currency,
-      prescriptions: state.prescriptions
+      prescriptionList
     });
   };
 
-  const loadPrescriptions = async () => {
-    let prescriptions = await prescriptionAPI.listPrescriptions();
-    update({
-      activities: state.activities,
-      currency: state.currency,
-      prescriptions
-    });
-  };
-
-  const loadRatings = async () => {};
-
-  return [{ currency, activities, prescriptions, ratings }, loadCurrency];
+  return [{ currency, activityList, prescriptionList, ratings }];
 };

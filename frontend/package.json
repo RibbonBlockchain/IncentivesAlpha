@@ -25,7 +25,7 @@
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.1",
-    "react-select": "^2.0.0-beta.7",
+    "react-select": "^3.0.8",
     "react-sortable-hoc": "^1.10.1",
     "react-virtualized": "^9.21.1",
     "web3connect": "^1.0.0-beta.22"
