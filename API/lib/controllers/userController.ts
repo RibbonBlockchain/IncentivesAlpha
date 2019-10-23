@@ -29,7 +29,7 @@ export class UserController {
   }
 
   public async addNewPractitioner(req: Request, res: Response) {
-    if(req.body.role!=3){
+    if(req.body.role!=4){
       res.status(400).send({status:400, error:"Please ensure role is 2 for practitioner"})
     }
     else{
@@ -49,7 +49,7 @@ export class UserController {
   }
 
   public async addNewPatient(req: Request, res: Response) {
-    if(req.body.role!=4){
+    if(req.body.role!=3){
       res.status(400).send({status:400, error:"Please ensure role is 3 for patient"})
     }
     else{
