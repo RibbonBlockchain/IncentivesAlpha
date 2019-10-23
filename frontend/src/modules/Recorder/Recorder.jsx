@@ -16,14 +16,51 @@ import Rating from "../../common/components/Rating";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
-import { useUsersList } from "../../common/providers/API.provider";
+import { useData } from "../../common/providers/API.provider";
 
 const animatedComponents = makeAnimated();
+
+const SelectStyle = {
+  control: (base, state) => ({
+    ...base
+  }),
+  menu: base => ({
+    ...base,
+    borderRadius: 0,
+    background: "#313541",
+    cursor: "pointer",
+    marginTop: 0
+  }),
+  menuList: base => ({
+    ...base,
+    borderRadius: 0,
+    cursor: "pointer",
+    padding: 0
+  })
+};
+
+const formatOptionLabel = ({ label, value }) => {
+  return (
+    <>
+      {value && (
+        <>
+          <div className={styles.optionLabel}>
+            <div className={styles.optionLabel__heading}>
+              <span>{`${value.firstName} ${value.lastName}`}</span>
+              <span>{label}</span>
+            </div>
+            <small>{value.publicAddress}</small>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
 
 export default function Recorder() {
   const [visible, setVisible] = useState(false);
   const [{ loginType, user }] = useWeb3();
-  const [{ users }] = useUsersList();
+  const [{ users }] = useData();
 
   return (
     <>
@@ -136,6 +173,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                           primary: "black"
                         }
                       })}
+                      formatOptionLabel={formatOptionLabel}
                       onChange={patient =>
                         setRecord({
                           practitioner: record.practitioner,
@@ -145,6 +183,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                         })
                       }
                       options={patients}
+                      styles={SelectStyle}
                     />
                   </div>
                 </div>
@@ -166,6 +205,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                           primary: "black"
                         }
                       })}
+                      formatOptionLabel={formatOptionLabel}
                       onChange={practitioner => {
                         setRecord({
                           practitioner,
@@ -175,6 +215,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                         });
                       }}
                       options={practitioners}
+                      styles={SelectStyle}
                     />
                   </div>
                 </div>
@@ -207,6 +248,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                       })
                     }
                     options={activities}
+                    styles={SelectStyle}
                   />
                 </div>
               )}
@@ -238,6 +280,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                       })
                     }
                     options={prescriptions}
+                    styles={SelectStyle}
                   />
                 </div>
               )}

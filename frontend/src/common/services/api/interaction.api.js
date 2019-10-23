@@ -24,6 +24,19 @@ export default class InteractionsAPI extends HTTP {
   }
 
   /**
+   * List interactions
+   *
+   * @async
+   * @method listInteractions
+   * @returns {Promise.<Object>}
+   */
+  async listInteractionByAddress(address, role) {
+    return await this.postRequest(`interactions/${address}`, role, {
+      authorization: `Bearer ${getItem("token")}`
+    });
+  }
+
+  /**
    * Create Interaction
    *
    * @async

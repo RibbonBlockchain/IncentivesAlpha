@@ -30,8 +30,7 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         ...users,
-        ...interactions,
-        ...transactionLogs
+        ...interactions
       };
     default: {
       throw new Error(`Unexpected action type ${type}`);
@@ -47,8 +46,7 @@ export default function Provider({ children }) {
       type: UPDATE,
       payload: {
         users,
-        interactions,
-        transactionLogs
+        interactions
       }
     });
   });
@@ -61,34 +59,28 @@ export default function Provider({ children }) {
   );
 }
 
-export const useUsersList = () => {
+export const useData = () => {
   const usersAPI = new UserAPI();
   const interactionsAPI = new InteractionsAPI();
   const [state, { update }] = useAPIContext();
+  const [{ address, loginType }] = useWeb3();
 
   useEffect(() => {
-    fetchUsers();
+    fetchData();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchData = async () => {
     let users = await usersAPI.listUsers();
+    let interactions = await interactionsAPI.listInteractionByAddress(address, {
+      role: loginType
+    });
     update({
-      users,
-      interactions: state.interactions,
-      transactionLogs: state.transactionLogs
+      users: users.length > 0 ? users : state.users,
+      interactions: interactions.length > 0 ? interactions : state.interactions
     });
   };
 
-  const fetchInteractions = async address => {
-    let interactions = await interactionsAPI.listInteractions();
-    update({
-      users: state.users,
-      interactions,
-      transactionLogs: state.transactionLogs
-    });
-  };
-
-  return [state, fetchUsers, fetchInteractions];
+  return [state, fetchData];
 };
 
 export const useTransactions = () => {

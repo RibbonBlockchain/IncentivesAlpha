@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import useForm from "react-hook-form";
-import {
-  useUsersList,
-  useTransactions
-} from "../../common/providers/API.provider";
+import { useData, useTransactions } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
 import { Table, AutoSizer, Column } from "react-virtualized";
@@ -309,8 +306,10 @@ function HandleViews({ type, transactions }) {
 
 export default function Dashboard() {
   const [{ address, loginType }] = useWeb3();
-  const [{ users }] = useUsersList();
+  const [{ users, interactions }] = useData();
   const [{ transactionLogs }] = useTransactions();
+
+  console.log(interactions);
 
   return (
     <>
@@ -318,7 +317,7 @@ export default function Dashboard() {
         <>
           <Stats type={Number(loginType)} users={users} />
           {loginType !== null && (
-            <HandleViews transactions={transactionLogs} type={loginType} />
+            <HandleViews transactions={[]} type={loginType} />
           )}
         </>
       ) : (
