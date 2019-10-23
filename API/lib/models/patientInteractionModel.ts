@@ -3,18 +3,22 @@ import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const PatientInteractionSchema = new Schema({
-    patientId: {
+    patientAddress: {
         type: String,
-        required: "Enter a patient id"
+        required: "Enter a patient Address"
     },
-    practitionerId: {
+    practitionerAddress: {
         type: String,
-        required: "Enter a practitioner id"
+        required: "Enter a practitioner Address"
+    },
+    chwAddress:{
+        type: String,
+        required: "Enter a chw Address"
     },
     activities: [
         {
             activityId: {
-                type: Number,
+                type: String,
                 required: "Enter a valid activity id"
             }
         }
@@ -22,7 +26,7 @@ export const PatientInteractionSchema = new Schema({
     prescriptions: [
         {
             prescriptionId: {
-                type: Number,
+                type: String,
                 required: "Enter a valid prescription id"
             }
         }

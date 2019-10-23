@@ -14,5 +14,9 @@ export class InteractionRoutes {
       .get([validJWTNeeded], this.interactionController.getAllPatientInteractions)
 
       .post([validJWTNeeded], this.interactionController.addPatientInteraction);
+    
+      app
+      .route("/api/v1/interactions/:userAddress")
+      .post([validJWTNeeded], this.interactionController.getPatientInteractionByAddress)
   }
 }
