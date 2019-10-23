@@ -29,8 +29,9 @@ export const recordInteraction = async data => {
     let tx = await vaultContract.payout(payoutInformation);
     if (tx.transactionHash) {
       let details = {
-        patientId: patient.value._id,
-        practitionerId: practitioner.value._id,
+        patientAddress: patient.value.publicAddress,
+        practitionerAddress: practitioner.value.publicAddress,
+        chwAddress: user.publicaddress,
         activities:
           activities.length > 0
             ? activities.map(activity => ({
@@ -53,22 +54,18 @@ export const recordInteraction = async data => {
         serviceRatings
       };
       let interaction = await interactionAPI.createInteraction(details);
-      if (interaction.error) {
-        return {
-          error: interaction.error
-        };
-      } else if (interaction.message.code) {
-        return {
-          error: interaction.message.code
-        };
-      } else if (interaction.message.errors) {
-        return {
-          error: interaction.message._message
-        };
+      if (interaction._id) {
+        return interaction;
       } else {
-        return {
-          interaction
-        };
+        if (interaction.message.errors) {
+          return {
+            error: interaction.message._message
+          };
+        } else {
+          return {
+            error: interaction.error
+          };
+        }
       }
     } else {
       return {
