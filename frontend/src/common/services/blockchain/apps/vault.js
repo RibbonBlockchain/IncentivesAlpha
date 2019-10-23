@@ -32,11 +32,25 @@ export default class VaultContract extends BlockchainService {
 
   async kill() {}
 
-  async payout({ patient, practitioner, chw, amount }) {
+  async payout({
+    patient,
+    practitioner,
+    chw,
+    patientAmount,
+    practitionerAmount,
+    chwAmount
+  }) {
     let { provider } = await this.getInstance();
     let contract = await this.contract;
     try {
-      let tx = await contract.payout(patient, practitioner, chw, amount);
+      let tx = await contract.payout(
+        patient,
+        practitioner,
+        chw,
+        patientAmount,
+        practitionerAmount,
+        chwAmount
+      );
       return await waitForConfirmation(provider, tx);
     } catch (error) {
       return error;

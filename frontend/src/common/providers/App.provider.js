@@ -6,6 +6,8 @@ import React, {
   useEffect,
   useCallback
 } from "react";
+import PrescriptionAPI from "../services/api/prescription.api";
+import ActivityAPI from "../services/api/activity.api";
 
 const AppContext = createContext();
 
@@ -20,12 +22,14 @@ const initialState = () => ({
 const LOAD_CONFIGURATION = "config/LOAD_CONFIGURATION";
 
 const reducer = (state, { type, payload }) => {
-  const { currency } = payload;
+  const { currency, activities, prescriptions } = payload;
   switch (type) {
     case LOAD_CONFIGURATION:
       return {
         ...state,
-        currency
+        currency,
+        ...activities,
+        ...prescriptions
       };
     default: {
       throw new Error(`Unknown action type ${type}`);
@@ -53,27 +57,42 @@ export default function Provider({ children }) {
 }
 
 export const useApp = () => {
-  const [
-    { currency, activities, prescriptions, ratings },
-    { update }
-  ] = useAppContext();
+  const [state, { update }] = useAppContext();
+
+  const prescriptionAPI = new PrescriptionAPI();
+  const activityAPI = new ActivityAPI();
+  const { currency, activities, prescriptions, ratings } = state;
 
   useEffect(() => {
     loadCurrency();
     loadActivities();
     loadPrescriptions();
     loadRatings();
-  }, [currency, activities, prescriptions, ratings]);
+  }, []);
 
-  const loadCurrency = () => {
+  const loadCurrency = async () => {
     //   go to api to fetch app setup details
     // update the state
   };
-  const loadActivities = () => {};
+  const loadActivities = async () => {
+    let activities = await activityAPI.listActivities();
+    update({
+      activities,
+      currency: state.currency,
+      prescriptions: state.prescriptions
+    });
+  };
 
-  const loadPrescriptions = () => {};
+  const loadPrescriptions = async () => {
+    let prescriptions = await prescriptionAPI.listPrescriptions();
+    update({
+      activities: state.activities,
+      currency: state.currency,
+      prescriptions
+    });
+  };
 
-  const loadRatings = () => {};
+  const loadRatings = async () => {};
 
   return [{ currency, activities, prescriptions, ratings }, loadCurrency];
 };

@@ -57,6 +57,8 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
   let ratingList = [];
 
+  console.log(activities);
+
   async function onSubmit(values) {
     let data = {
       ...values,

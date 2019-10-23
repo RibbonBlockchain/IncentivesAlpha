@@ -18,7 +18,9 @@ export const recordInteraction = async data => {
     patient: patient.value.publicaddress,
     practitioner: practitioner.value.publicaddress,
     chw: user.publicaddress,
-    amount
+    patientAmount: amount,
+    practitionerAmount: amount,
+    chwAmount: amount
   };
 
   let rewards = [];
