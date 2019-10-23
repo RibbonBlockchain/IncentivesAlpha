@@ -20,7 +20,7 @@ function DashboardTable({ data, type }) {
   const [donateModal, setDonateModal] = useState(false);
 
   function _noRowsRenderer() {
-    return <div className={styles.noRows}>No data found</div>;
+    return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }
 
   function _rowClassName({ index }) {
@@ -152,18 +152,43 @@ function DashboardTable({ data, type }) {
               ].join(" ")}
             >
               <Column
-                label="Tx Hash"
+                label="Date"
+                cellRenderer={renderDate}
+                dataKey="date"
+                className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                width={200}
+              />
+              {type !== roleNames.PATIENT && (
+                <Column
+                  label="Patient"
+                  cellRenderer={renderTxLink}
+                  dataKey="patient"
+                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                  width={300}
+                />
+              )}
+              {type !== roleNames.HEALTH_WORKER && (
+                <Column
+                  label="Practitioner"
+                  cellRenderer={renderTxLink}
+                  dataKey="practitioner"
+                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                  width={300}
+                />
+              )}
+              <Column
+                label="Interactions"
                 cellRenderer={renderTxLink}
-                dataKey="txn_hash"
+                dataKey="interactions"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
                 width={500}
               />
               <Column
-                label="Transaction Date and Time"
-                cellRenderer={renderDate}
-                dataKey="txn_date"
+                label="Total Payout"
+                cellRenderer={renderStatus}
+                dataKey="payout"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={500}
+                width={200}
               />
               <Column
                 label="Status"

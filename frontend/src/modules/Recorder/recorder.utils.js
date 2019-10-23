@@ -17,13 +17,15 @@ export const recordInteraction = async data => {
   let amount = "0.1";
 
   let payoutInformation = {
-    patient: patient.value.publicAddress,
-    practitioner: practitioner.value.publicAddress,
+    patient: "0xe0b2CaE02Cd112044b482bb41f67A03446eCB431",
+    practitioner: "0x4FE53D30B9baAb8a6E563a515d8468b0Cda54989",
     chw: user.publicaddress,
     patientAmount: amount,
     practitionerAmount: amount,
     chwAmount: amount
   };
+
+  console.log(payoutInformation);
 
   try {
     let tx = await vaultContract.payout(payoutInformation);

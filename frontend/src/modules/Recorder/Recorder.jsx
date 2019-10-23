@@ -20,20 +20,6 @@ import { useUsersList } from "../../common/providers/API.provider";
 
 const animatedComponents = makeAnimated();
 
-const ProfileComponent = props => {
-  const { innerProps, innerRef } = props;
-  return (
-    <div ref={innerRef} {...innerProps} className="custom-option">
-      <h4>{`${props.value.firstName} ${props.value.lastName}`}</h4>
-      <div className="sub">{props.data.publicAddress} </div>
-    </div>
-  );
-};
-
-function formatLabel({ firstName, lastName, publicAddress }) {
-  return `${firstName} ${lastName}`;
-}
-
 export default function Recorder() {
   const [visible, setVisible] = useState(false);
   const [{ loginType, user }] = useWeb3();
@@ -138,10 +124,9 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                   <div className={[styles.input].join(" ")}>
                     <label htmlFor="patientIDNumber">Patient ID Number</label>
                     <Select
+                      isSearchable
                       value={record.patient}
                       placeholder="Patient ID Number"
-                      classNamePrefix="select"
-                      className={styles.select__menu}
                       theme={theme => ({
                         ...theme,
                         borderRadius: 0,
@@ -169,8 +154,8 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                       Practitioner ID Number
                     </label>
                     <Select
+                      isSearchable
                       value={record.practitioner}
-                      components={{ ProfileComponent }}
                       placeholder="Practitioner ID Number"
                       theme={theme => ({
                         ...theme,
@@ -198,6 +183,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                 <div className={styles.layout__item}>
                   <label htmlFor="activity">Activity</label>
                   <Select
+                    isSearchable
                     value={record.activities}
                     placeholder="Select Activity"
                     name={`activities`}
@@ -226,6 +212,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                 <div className={styles.layout__item}>
                   <label htmlFor="prescriptions">Prescriptions</label>
                   <Select
+                    isSearchable
                     value={record.prescriptions}
                     placeholder="Select prescriptions"
                     name={`prescriptions`}

@@ -72,38 +72,38 @@ function Home() {
           </div>
         </header>
         <nav className={styles.admin__nav}>
-          <ul className={styles.menu}>
-            <li className={styles.menu__item}>
-              <NavLink
-                activeClassName={styles.active}
-                className={styles.menu__link}
-                to="/app/home"
-              >
-                Home
-              </NavLink>
-            </li>
-            {allowedRoutes[loginType].map(
-              (route, index) =>
-                !route.includes("/new") && (
-                  <li key={index} className={styles.menu__item}>
-                    <NavLink
-                      activeClassName={styles.active}
-                      className={styles.menu__link}
-                      to={route}
-                    >
-                      {formatLink(route)}
-                    </NavLink>
-                  </li>
-                )
-            )}
-            {user && user.publicaddress && (
+          {user && user.publicaddress && (
+            <ul className={styles.menu}>
+              <li className={styles.menu__item}>
+                <NavLink
+                  activeClassName={styles.active}
+                  className={styles.menu__link}
+                  to="/app/home"
+                >
+                  Home
+                </NavLink>
+              </li>
+              {allowedRoutes[loginType].map(
+                (route, index) =>
+                  !route.includes("/new") && (
+                    <li key={index} className={styles.menu__item}>
+                      <NavLink
+                        activeClassName={styles.active}
+                        className={styles.menu__link}
+                        to={route}
+                      >
+                        {formatLink(route)}
+                      </NavLink>
+                    </li>
+                  )
+              )}
               <li className={styles.menu__item}>
                 <div className={styles.menu__link} onClick={showWallet}>
                   My Profile
                 </div>
               </li>
-            )}
-          </ul>
+            </ul>
+          )}
         </nav>
         <main className={styles.admin__main}>
           <Switch>

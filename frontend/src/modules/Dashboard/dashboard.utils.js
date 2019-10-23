@@ -35,28 +35,35 @@ export const makeDonation = async ({ value, message }) => {
 };
 
 export const formatActivityOptions = options => {
-  return options.map(option => ({
-    label: option.activityTitle,
-    value: option._id
-  }));
+  return (
+    options.length > 0 &&
+    options.map(option => ({
+      label: option.activityTitle,
+      value: option._id
+    }))
+  );
 };
 
 export const formatPrescriptionOptions = options => {
-  return options.map(option => ({
-    label: option.prescriptionTitle,
-    value: option._id
-  }));
+  return (
+    options.length > 0 &&
+    options.map(option => ({
+      label: option.prescriptionTitle,
+      value: option._id
+    }))
+  );
 };
 
 export const getByRole = (users, role) => {
   let data = [];
-  users.map(user => {
-    if (user.role === role) {
-      data.push({
-        label: user.idNumber,
-        value: user
-      });
-    }
-  });
+  users.length > 0 &&
+    users.map(user => {
+      if (user.role === role) {
+        data.push({
+          label: user.idNumber,
+          value: user
+        });
+      }
+    });
   return data;
 };

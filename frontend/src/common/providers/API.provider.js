@@ -64,7 +64,6 @@ export default function Provider({ children }) {
 export const useUsersList = () => {
   const usersAPI = new UserAPI();
   const interactionsAPI = new InteractionsAPI();
-  const [{ address }] = useWeb3();
   const [state, { update }] = useAPIContext();
 
   useEffect(() => {
@@ -75,7 +74,6 @@ export const useUsersList = () => {
     let users = await usersAPI.listUsers();
     update({
       users,
-      user: state.user,
       interactions: state.interactions,
       transactionLogs: state.transactionLogs
     });
@@ -85,7 +83,6 @@ export const useUsersList = () => {
     let interactions = await interactionsAPI.listInteractions();
     update({
       users: state.users,
-      user: state.user,
       interactions,
       transactionLogs: state.transactionLogs
     });
@@ -108,7 +105,6 @@ export const useTransactions = () => {
       address && (await transactionLogsAPI.listLogsByUser(address));
     update({
       users: state.users,
-      user: state.user,
       interactions: state.interactions,
       transactionLogs
     });
