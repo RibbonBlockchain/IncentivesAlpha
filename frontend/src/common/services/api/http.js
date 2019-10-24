@@ -30,15 +30,7 @@ export default class HTTP {
    */
   async postRequest(url, body, headers = {}) {
     let endpoint = `${config.API_ENDPOINT}/${url}`;
-    return fetch(endpoint, {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        ...DEFAULT_HEADERS,
-        ...headers
-      }
-    }).then(response => response.json());
-    // return await handleRequest("POST", endpoint, { body, headers });
+    return await handleRequest("POST", endpoint, { body, headers });
   }
 
   /**
@@ -73,15 +65,15 @@ export default class HTTP {
 }
 
 const handleRequest = async function(method, url, reqStruct) {
-  return await axios({
+  return await fetch(url, {
     method,
-    url,
-    data: {
-      ...reqStruct.body
-    },
+    body: reqStruct.body && JSON.stringify(reqStruct.body),
     headers: {
       ...DEFAULT_HEADERS,
       ...reqStruct.headers
     }
-  });
+  })
+    .then(response => response.json())
+    .then(response => response.data || response)
+    .catch(error => error);
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./List.module.scss";
+// import styles from "./List.module.scss";
 
 export default function ListPractitioners() {
   return (

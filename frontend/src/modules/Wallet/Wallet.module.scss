@@ -48,6 +48,9 @@
   span {
     margin-top: calculateRem(10);
   }
+  a {
+    color: $link-color;
+  }
 }
 
 .information {

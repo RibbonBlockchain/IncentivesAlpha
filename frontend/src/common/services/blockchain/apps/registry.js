@@ -1,6 +1,7 @@
 import BlockchainService from "../index";
 import Registry from "../abis/Registry.json";
 import { config } from "../../../constants/config";
+import { waitForConfirmation } from "../utils";
 
 let registryAddress = config.REGISTRY_CONTRACT_ADDRESS;
 
@@ -19,22 +20,23 @@ export default class RegistryContract extends BlockchainService {
   }
 
   async addWhitelistAdmin(address) {
-    let { ethers } = await this.getInstance();
+    let { provider } = await this.getInstance();
     let contract = await this.contract;
-    console.log(contract);
     try {
-      //   return await contract.addWhitelistAdmin(address);
+      let tx = await contract.addWhitelistAdmin(address);
+      return await waitForConfirmation(provider, tx);
     } catch (error) {
       return error;
     }
   }
   async addUser(address, role) {
-    let { ethers } = await this.getInstance();
+    let { ethers, provider } = await this.getInstance();
     let contract = await this.contract;
     try {
-      return await contract.addUser(address, role, {
+      let tx = await contract.addUser(address, role, {
         gasLimit: ethers.utils.hexlify(80000)
       });
+      return await waitForConfirmation(provider, tx);
     } catch (error) {
       return error;
     }

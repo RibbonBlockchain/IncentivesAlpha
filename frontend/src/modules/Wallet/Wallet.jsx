@@ -1,33 +1,18 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../common/components/Modal";
 import Blockies from "../../common/components/Blockies";
 import Button from "../../common/components/Button";
 import Balance from "../../common/components/Balance";
 import { roles } from "../../common/constants/roles";
-import { HIDE_WALLET } from "../../common/constants/wallet";
-import { clear, getItem } from "../../common/utils/storage";
+import { clear } from "../../common/utils/storage";
+import { useModal } from "../../common/providers/Modal.provider";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useApp } from "../../common/providers/App.provider";
+import * as moment from "moment";
 import styles from "./Wallet.module.scss";
+import { withRouter } from "react-router-dom";
 
-function Profile({ history }) {
-  const dispatch = useDispatch();
-  let ticker = "USD";
-  let data = {
-    address: getItem("address"),
-    firstName: "Nnachi",
-    lastName: "Onuwa",
-    dob: "November 23rd",
-    balance: "0.0",
-    role: getItem("loginType")
-  };
-
-  async function handleProfileNavigation() {
-    await dispatch({
-      type: HIDE_WALLET
-    });
-    history.push("/app/profile");
-  }
-
+function Profile({ user, data, handleProfileNavigation, currency }) {
   async function handleSignOut() {
     clear();
     window.location.reload();
@@ -35,10 +20,10 @@ function Profile({ history }) {
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
-        {data.address && (
+        {user.address && (
           <Blockies
             className={styles.blockies}
-            address={data.address}
+            address={user.address}
             imageSize={40}
           />
         )}
@@ -46,23 +31,36 @@ function Profile({ history }) {
       <div className={styles.information}>
         <h4
           className={styles.header}
-        >{`${data.lastName} ${data.firstName}`}</h4>
+        >{`${data.lastname} ${data.firstname}`}</h4>
         <span className={styles.heading}>
-          Logged In as: <strong>{roles[data.role].replace("_", " ")}</strong>
+          Logged in as: <strong>{roles[user.role].replace("_", " ")}</strong>
         </span>
         <div className={styles.wallet}>
-          <small>{data.address}</small>
+          <small>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://blockscout.com/poa/sokol/address/${data.publicaddress}`}
+            >
+              {data.publicaddress}
+            </a>
+          </small>
           <span>
-            <Balance balance={data.balance} ticker={ticker} />
+            <Balance
+              balance={Number(user.balance).toFixed(4)}
+              ticker={currency.toString().toUpperCase()}
+            />
           </span>
         </div>
         <div className={styles.description}>
           <span className={styles.heading}>Bio</span>
-          <span className={styles.wrapper}>{data.bio || "Not available"}</span>
+          <span className={styles.wrapper}>{user.bio || "Not available"}</span>
         </div>
         <div className={styles.dob}>
           <span className={styles.heading}>Date of Birth</span>
-          <span className={styles.wrapper}>{data.dob}</span>
+          <span className={styles.wrapper}>
+            {moment(data.dateofbirth).format("DD/MM/YYYY")}
+          </span>
         </div>
       </div>
       <div className={styles.actions}>
@@ -80,25 +78,45 @@ function Profile({ history }) {
     </div>
   );
 }
-export default function Wallet({ history }) {
-  const { visible } = useSelector(state => state.wallet);
-  const dispatch = useDispatch();
+function Wallet({ history }) {
+  const [{ isVisible, data, modal }, toggleModal] = useModal();
+  const [{ loginType, balance }] = useWeb3();
+  const [{ currency }] = useApp();
 
   function onClickClose() {
-    dispatch({
-      type: HIDE_WALLET
+    toggleModal({
+      isVisible: false,
+      data: null,
+      modal: null
     });
   }
 
+  function handleProfileNavigation() {
+    onClickClose();
+    history.push("/app/profile");
+  }
+
+  let isOpen = isVisible && modal === "wallet";
+  let details = {
+    balance,
+    role: loginType
+  };
   return (
     <Modal
-      visible={visible}
+      visible={isOpen}
       onClickClose={onClickClose}
       windowClassName={styles.modalWindow}
     >
       <div className={styles.cnt}>
-        <Profile history={history} />
+        <Profile
+          user={details}
+          data={data}
+          currency={currency}
+          handleProfileNavigation={handleProfileNavigation}
+        />
       </div>
     </Modal>
   );
 }
+
+export default withRouter(Wallet);

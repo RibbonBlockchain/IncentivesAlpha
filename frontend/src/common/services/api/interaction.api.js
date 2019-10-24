@@ -3,8 +3,9 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
+import { getItem } from "../../utils/storage";
 
-export default class Interactions extends HTTP {
+export default class InteractionsAPI extends HTTP {
   constructor() {
     super();
   }
@@ -17,7 +18,22 @@ export default class Interactions extends HTTP {
    * @returns {Promise.<Object>}
    */
   async listInteractions() {
-    return await this.getRequest("interactions");
+    return await this.getRequest("interactions", {
+      authorization: `Bearer ${getItem("token")}`
+    });
+  }
+
+  /**
+   * List interactions
+   *
+   * @async
+   * @method listInteractions
+   * @returns {Promise.<Object>}
+   */
+  async listInteractionByAddress(address, role) {
+    return await this.postRequest(`interactions/${address}`, role, {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 
   /**
@@ -29,7 +45,9 @@ export default class Interactions extends HTTP {
    * @returns {Promise.<Object>}
    */
   async createInteraction(data) {
-    return await this.postRequest("interactions", data);
+    return await this.postRequest("interactions", data, {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 
   /**
@@ -41,9 +59,8 @@ export default class Interactions extends HTTP {
    * @returns {Promise.<Object>}
    */
   async updateInteraction(data) {
-    return await this.patchRequest(
-      `interactions/${data.address.toLowerCase()}`,
-      data
-    );
+    return await this.patchRequest(`interactions/${data.address}`, data, {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 }

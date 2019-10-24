@@ -6,10 +6,6 @@ import HTTP from "./http";
 import { getItem } from "../../utils/storage";
 
 export default class UserAPI extends HTTP {
-  constructor() {
-    super();
-  }
-
   /**
    * List Users Request
    *
@@ -46,7 +42,9 @@ export default class UserAPI extends HTTP {
    * @returns {Promise.<Object>}
    */
   async getUserByAddress(address) {
-    return await this.getRequest(`users/${address.toLowerCase()}`);
+    return await this.getRequest(`users/${address}`, {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 
   /**
@@ -58,7 +56,7 @@ export default class UserAPI extends HTTP {
    * @returns {Promise.<Object>}
    */
   async listUsersByRole(role) {
-    return await this.getRequest(`users/${role.toLowerCase()}`);
+    return await this.getRequest(`users/${role}`);
   }
 
   /**
@@ -70,7 +68,7 @@ export default class UserAPI extends HTTP {
    * @returns {Promise.<Object>}
    */
   async updateUser(data) {
-    return await this.patchRequest(`users/${data.address.toLowerCase()}`, data);
+    return await this.patchRequest(`users/${data.address}`, data);
   }
 
   async deactivateUser() {}

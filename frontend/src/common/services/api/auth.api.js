@@ -6,10 +6,6 @@
 import HTTP from "./http";
 
 export default class AuthAPI extends HTTP {
-  constructor() {
-    super();
-  }
-
   /**
    * Authenticate user
    *

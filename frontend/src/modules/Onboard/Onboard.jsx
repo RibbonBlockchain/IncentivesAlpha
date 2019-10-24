@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import useForm from "react-hook-form";
 import DatePicker from "react-datepicker";
+import { ethers } from "ethers";
 import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import QRScanner from "qr-code-scanner";
 import * as moment from "moment";
 import "react-phone-number-input/style.css";
 import { createNewUser } from "./onboard.utils";
@@ -11,14 +12,23 @@ import { roleNames, roles } from "../../common/constants/roles";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
 import styles from "./Onboard.module.scss";
-import { SHOW_ALERT } from "../../common/constants/alert";
-import { getItem, clear } from "../../common/utils/storage";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useAlert } from "../../common/providers/Modal.provider";
 
 export default function Onboard() {
   const [onboardOptions, setOnboardOptions] = useState(false);
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
-  const { handleSubmit, register, errors, formState } = useForm({
+  const [{ loginType }] = useWeb3();
+  const [{}, toggle] = useAlert();
+  const {
+    handleSubmit,
+    register,
+    errors,
+    formState,
+    setValue,
+    triggerValidation
+  } = useForm({
     mode: "onChange"
   });
 
@@ -28,12 +38,14 @@ export default function Onboard() {
     isValid: false
   });
 
-  let dispatch = useDispatch();
-
-  let loginType = getItem("loginType");
-
   function showOption() {
     setOnboardOptions(true);
+  }
+
+  function showAdminForm() {
+    setOnboardOptions(false);
+    setVisible(true);
+    setType(roleNames.SUPER_ADMIN);
   }
 
   function showPatientForm() {
@@ -68,20 +80,23 @@ export default function Onboard() {
     let newUser = await createNewUser(data);
     if (newUser.error) {
       if (newUser.error === 11000) {
-        dispatch({
-          type: SHOW_ALERT,
-          payload: `Wallet Address ${values.publicAddress} already has an associated account`
+        toggle({
+          isVisible: true,
+          message: `Wallet Address ${values.publicAddress} already has an associated account`,
+          data: {}
         });
       } else {
-        dispatch({
-          type: SHOW_ALERT,
-          payload: "An error occured. Please try again"
+        toggle({
+          isVisible: true,
+          message: newUser.error,
+          data: {}
         });
       }
     } else {
-      dispatch({
-        type: SHOW_ALERT,
-        payload: `${formatRoleName(type)} has been registered successfully`
+      toggle({
+        isVisible: true,
+        message: `${formatRoleName(type)} has been registered successfully`,
+        data: {}
       });
       clearForm(e);
     }
@@ -103,6 +118,24 @@ export default function Onboard() {
     return formState.isValid && phoneNumber.isValid ? false : true;
   }
 
+  function captureAddressFromQRCodeDisplay() {
+    QRScanner.initiate({
+      onResult: address => {
+        if (ethers.utils.getAddress(address)) {
+          setValue("publicAddress", address);
+          triggerValidation({ name: "publicAddress", value: address });
+        } else {
+          toggle({
+            isVisible: true,
+            message: `Address ${address} does not match checksum`,
+            data: {}
+          });
+        }
+      },
+      timeout: 20000
+    });
+  }
+
   const OnboardOptions = ({ visible }) => {
     return (
       <Modal visible={visible} windowClassName={styles.modalWindow}>
@@ -110,6 +143,7 @@ export default function Onboard() {
           <h4>Pick a profile</h4>
           {loginType == Number(roleNames.SUPER_ADMIN) && (
             <>
+              <Button onClick={showAdminForm} text="Add Administrator" />
               <Button onClick={showCHWForm} text="Health Worker Profile" />
               <Button
                 onClick={showPractitionerForm}
@@ -153,6 +187,14 @@ export default function Onboard() {
                 .toString()
                 .toLowerCase()}
             </h2>
+            <div className={styles.actions}>
+              <Button
+                text="Capture Wallet Address"
+                classNames={[styles.button, styles.button_primary].join(" ")}
+                onClick={captureAddressFromQRCodeDisplay}
+                button="button"
+              ></Button>
+            </div>
             <div className={styles.form_body}>
               <div className={[styles.layout].join(" ")}>
                 <div className={styles.layout__item}>
@@ -245,6 +287,10 @@ export default function Onboard() {
                     <input
                       className={[styles.form_input].join(" ")}
                       placeholder="0x0..."
+                      //   disabled={
+                      //     type === roleNames.PATIENT ||
+                      //     type === roleNames.PRACTITIONER
+                      //   }
                       ref={register({
                         required: "Wallet Address is required",
                         pattern: {

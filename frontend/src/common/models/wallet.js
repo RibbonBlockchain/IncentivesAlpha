@@ -1,5 +1,5 @@
-const alertInitialState = {
-  visible: false,
+const initialState = {
+  visible: false
 };
 
-export { alertInitialState };
+export { initialState };
