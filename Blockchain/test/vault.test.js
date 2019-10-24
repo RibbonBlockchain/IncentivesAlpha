@@ -86,6 +86,8 @@ describe("Vault tests", async () => {
                     pat.signer.address,
                     prac.signer.address,
                     chw.signer.address,
+                    amountEach,
+                    amountEach,
                     amountEach
                 );
                 balance = await vaultInstance.balance();
@@ -106,6 +108,8 @@ describe("Vault tests", async () => {
                     pat.signer.address,
                     prac.signer.address,
                     chw.signer.address,
+                    amountEach,
+                    amountEach,
                     amountEach
                 );
                 balance = await vaultInstance.balance();
@@ -156,6 +160,8 @@ describe("Vault tests", async () => {
                         pat.signer.address,
                         prac.signer.address,
                         chw.signer.address,
+                        amountEach,
+                        amountEach,
                         amountEach
                     );
                     assert.equal(true, false, "User was able to create payout with incorrect permissions");

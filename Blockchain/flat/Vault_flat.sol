@@ -1,15 +1,14 @@
 pragma solidity 0.5.10;
 
 interface IVault {
-
-    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }
     
     /**
       * @notice Allows the vault to receive funds from the admin contract. This
       *         will mint tokens that will be owned by the vault until they are
       *         spent as payouts.
+      * @param  _message : A message assosicated with the donation.
       */
-    function donateFunds() external payable;
+    function donateFunds(string calldata _message) external payable;
 
     /**
       * @notice Allows a CHW to create payouts. The `msg.sender` is verified
@@ -19,7 +18,9 @@ interface IVault {
         address payable _patient,
         address payable _practitioner,
         address payable _CHW,
-        uint256 _amountEach
+        uint256 _patientAmount,
+        uint256 _practitionerAmount,
+        uint256 _CHWAmount
     )
         external;
 
@@ -40,8 +41,6 @@ interface IVault {
 
 interface IRegistry {
 
-    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }
-
     /**
       * @notice Allows the adding of a user as any user role. If the
       *         `msg.sender` is the admin contract, any user role may be added.
@@ -61,19 +60,19 @@ interface IRegistry {
     function updateUser(address _user, uint8 _newUserRole) external;
 
     /**
-      * @notice Allows the vault contract to record a payout.
+      * @notice Allows the vault contract to verify an account for a payout.
       */
-    function recordPayout(address _user, uint256 _amount) external;
+    function verifyPayout(address _user) external view returns(bool);
     
     /**
       * @notice Returns the role of the user.
       */
-    function getUserRole(address _user) external returns(UserRole);
+    function getUserRole(address _user) external view returns(uint8);
 
     /**
-      * @notice Returns the balance of the user.
+      * @return bool : If the contract is currently active.
       */
-    function balanceOf(address _user) external returns(uint256);
+    function isAlive() external view returns(bool);
     
     /**
       * @notice Allows the admin contract to kill the registry, which will
@@ -84,27 +83,10 @@ interface IRegistry {
 
 interface IAdmin {
 
-    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }
-
-    /**
-      * @notice Sends funds to the vault.
-      */
-    function donateFunds() external payable;
-
-    /**
-      * @notice Allows the admin contract to add a user as any user role.
-      */
-    function addUser(address _user, uint8 _userRole) external;
-
     /**
       * @notice Allows the admin contract to remove a user.
       */
-    function removeUser(address _user) external;
-
-    /**
-      * @notice Allows the admin contract to update the role of the user.
-      */
-    function updateUser(address _user, uint8 _newUserRole) external;
+    function removeUserFromRegistry(address _user) external;
 
     /**
       * @notice Allows the admin of the admin contract to kill the eco-system.
@@ -319,6 +301,9 @@ contract Vault is IVault, WhitelistAdminRole {
     // Creator address
     address payable internal _creator;
 
+    event recivedDonation(uint256 _amount, address _from, string _message);
+    event payoutRecord(address _pat, address _prac, address _chw, uint256 _patAmount, uint256 _practAmount, uint256 _chwAmount);
+
     constructor(
         address _admin
     )
@@ -347,12 +332,22 @@ contract Vault is IVault, WhitelistAdminRole {
         _;
     }
 
+    modifier onlyAdminsAndCHW() {
+        require(
+            _registryInstance.getUserRole(msg.sender) == 1 ||
+            _registryInstance.getUserRole(msg.sender) == 2,
+            "User does not have correct permissions to make payout"
+        );
+        _;
+    }
+
     /**
       * @dev This allows admin addresses/contract to update/set the address
       *      of the vault contract
       */
     function init(address _registry) external onlyWhitelistAdmin() {
         _registryInstance = IRegistry(_registry);
+        _active = true;
     }
 
     /**
@@ -360,39 +355,42 @@ contract Vault is IVault, WhitelistAdminRole {
       *         will mint tokens that will be owned by the vault until they are
       *         spent as payouts.
       */
-    function donateFunds() external payable onlyAdminContract() isActive() {
-        
+    function donateFunds(string calldata _message) external payable isActive() {
+        emit recivedDonation(msg.value, msg.sender, _message);
     }
 
     function payout(
         address payable _patient,
         address payable _practitioner,
         address payable _CHW,
-        uint256 _amountEach
+        uint256 _patientAmount,
+        uint256 _practitionerAmount,
+        uint256 _CHWAmount
     )
         external
+        onlyAdminsAndCHW()
         isActive()
     {
         uint256 balance = address(this).balance;
-        // check with registry that msg.sender is chw
+
+        uint256 _totalTransfer = _patientAmount + _practitionerAmount + _CHWAmount;
+        
         require(
-            _amountEach.mul(3) >= balance,
+            _totalTransfer <= balance,
             "Insuficient balance in vault to compleate payout"
         );
         require(
-            uint8(_registryInstance.getUserRole(_patient)) != uint8(UserRole.INACTIVE) &&
-            uint8(_registryInstance.getUserRole(_practitioner)) != uint8(UserRole.INACTIVE) &&
-            uint8(_registryInstance.getUserRole(_CHW)) != uint8(UserRole.INACTIVE)
+            _registryInstance.verifyPayout(_patient) &&
+            _registryInstance.verifyPayout(_practitioner) &&
+            _registryInstance.verifyPayout(_CHW)
             ,"Revert, a user in the payout was inactive"
         );
 
-        _patient.transfer(_amountEach);
-        _practitioner.transfer(_amountEach);
-        _CHW.transfer(_amountEach);
+        _patient.transfer(_patientAmount);
+        _practitioner.transfer(_practitionerAmount);
+        _CHW.transfer(_CHWAmount);
 
-        _registryInstance.recordPayout(_patient, _amountEach);
-        _registryInstance.recordPayout(_practitioner, _amountEach);
-        _registryInstance.recordPayout(_CHW, _amountEach);
+        emit payoutRecord(_patient, _practitioner, _CHW, _patientAmount, _practitionerAmount, _CHWAmount);
     }
 
     /**
@@ -400,10 +398,25 @@ contract Vault is IVault, WhitelistAdminRole {
       *         vault send all collateral to the admin contract owner, as well
       *         as burn all remaining tokens.
       */
-    function kill() external onlyWhitelistAdmin() isActive() {
+    function kill() external onlyAdminContract() {
         _active = false;
 
         uint256 balance = address(this).balance;
         _creator.transfer(balance);
+    }
+
+    /**
+      * @return bool : If the contract is currently active.
+      */
+    function isAlive() external view returns(bool) {
+        return _active;
+    }
+
+    function balance() external view returns(uint256) {
+        return address(this).balance;
+    }
+
+    function() external payable {
+        emit recivedDonation(msg.value, msg.sender, "fallback function donation");
     }
 }
