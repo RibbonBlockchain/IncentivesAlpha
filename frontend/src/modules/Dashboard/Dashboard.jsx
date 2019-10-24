@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useForm from "react-hook-form";
 import { useData, useTransactions } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
@@ -306,10 +306,11 @@ function HandleViews({ type, transactions }) {
 
 export default function Dashboard() {
   const [{ address, loginType }] = useWeb3();
-  const [{ users, interactions }] = useData();
-  const [{ transactionLogs }] = useTransactions();
+  const [{ users, interactions }, fetchData] = useData();
 
-  console.log(interactions);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>

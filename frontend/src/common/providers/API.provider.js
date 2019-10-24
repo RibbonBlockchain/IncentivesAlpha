@@ -65,10 +65,6 @@ export const useData = () => {
   const [state, { update }] = useAPIContext();
   const [{ address, loginType }] = useWeb3();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     let users = await usersAPI.listUsers();
     let interactions = await interactionsAPI.listInteractionByAddress(address, {
