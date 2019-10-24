@@ -1,14 +1,30 @@
 @import "../../common/styles/variables";
 
-a {
-  color: #dc5a60;
-  text-decoration: none;
+.dashboard {
+  margin-top: calculateRem(20);
+}
+.count {
+  margin-bottom: calculateRem(20);
+  font-size: calculateRem(20);
+  font-weight: 500;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
+.heading {
+  color: $background;
 }
 
-// @todo
-// fix mobile responsiveness
+.card__light_orange {
+  background: $orange-bg;
+}
+
+.card__light_blue {
+  background: $blue-bg;
+}
+
+.card__light_pink {
+  background: $pink-bg;
+}
+
+.card__light_purple {
+  background: $purple-bg;
+}

@@ -14,7 +14,11 @@ function AuthenticatedRoute({ component: C, appProps, ...rest }) {
     <Route
       {...rest}
       render={props =>
-        appProps ? <C {...props} {...appProps} /> : <Redirect to="/" />
+        appProps.address && appProps.token && appProps.loginType ? (
+          <C {...props} {...appProps} />
+        ) : (
+          <Redirect to="/" />
+        )
       }
     />
   );
@@ -25,14 +29,22 @@ function UnAuthenticated({ component: C, appProps, ...rest }) {
     <Route
       {...rest}
       render={props =>
-        !appProps ? <C {...props} {...appProps} /> : <Redirect to="/app" />
+        !(appProps.address && appProps.token && appProps.loginType) ? (
+          <C {...props} {...appProps} />
+        ) : (
+          <Redirect to="/app" />
+        )
       }
     />
   );
 }
 
 function Router() {
-  let user = getItem("address");
+  let user = {
+    address: getItem("address"),
+    token: getItem("token"),
+    loginType: getItem("loginType")
+  };
   return (
     <>
       <Switch>

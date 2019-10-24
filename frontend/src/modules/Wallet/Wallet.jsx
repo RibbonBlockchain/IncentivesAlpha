@@ -4,19 +4,21 @@ import Modal from "../../common/components/Modal";
 import Blockies from "../../common/components/Blockies";
 import Button from "../../common/components/Button";
 import Balance from "../../common/components/Balance";
+import { roles } from "../../common/constants/roles";
 import { HIDE_WALLET } from "../../common/constants/wallet";
-import { removeItem } from "../../common/utils/storage";
+import { clear, getItem } from "../../common/utils/storage";
 import styles from "./Wallet.module.scss";
 
 function Profile({ history }) {
   const dispatch = useDispatch();
   let ticker = "USD";
   let data = {
-    address: "0x9A8A9958ac1B70c49ccE9693CCb0230f13F63505",
+    address: getItem("address"),
     firstName: "Nnachi",
     lastName: "Onuwa",
     dob: "November 23rd",
-    balance: "0.0"
+    balance: "0.0",
+    role: getItem("loginType")
   };
 
   async function handleProfileNavigation() {
@@ -27,7 +29,7 @@ function Profile({ history }) {
   }
 
   async function handleSignOut() {
-    await removeItem("address");
+    clear();
     window.location.reload();
   }
   return (
@@ -45,6 +47,9 @@ function Profile({ history }) {
         <h4
           className={styles.header}
         >{`${data.lastName} ${data.firstName}`}</h4>
+        <span className={styles.heading}>
+          Logged In as: <strong>{roles[data.role].replace("_", " ")}</strong>
+        </span>
         <div className={styles.wallet}>
           <small>{data.address}</small>
           <span>

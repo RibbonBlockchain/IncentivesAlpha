@@ -3,7 +3,8 @@ import { config } from "../../constants/config";
 
 const { POA_RPC, PRIVATE_KEY } = config;
 
-const init = function(provider) {
+const init = async function() {
+  let provider = window.web3.currentProvider;
   let providerEngine =
     typeof provider != "undefined" && provider.hasOwnProperty("selectedAddress")
       ? new ethers.providers.Web3Provider(provider)
@@ -11,7 +12,7 @@ const init = function(provider) {
           url: POA_RPC
         });
 
-  let signer = providerEngine.getSigner();
+  let signer = await providerEngine.getSigner();
   let wallet = new ethers.Wallet(PRIVATE_KEY, providerEngine);
 
   return {
@@ -27,10 +28,10 @@ export default class BlockchainService {
     this.getInstance();
   }
 
-  async getInstance(provider) {
+  async getInstance() {
     return new Promise(async (resolve, reject) => {
       try {
-        const initializeApps = await init(provider);
+        const initializeApps = await init();
         resolve(initializeApps);
       } catch (err) {
         reject(err);
@@ -38,17 +39,16 @@ export default class BlockchainService {
     });
   }
 
-  async initializeContract(address, contractABI, provider) {
-    return this.getInstance(provider)
-      .then(async result => {
-        return await new result.ethers.Contract(
-          address,
-          contractABI.abi,
-          result.provider
-        );
-      })
-      .catch(err => {
-        return err;
-      });
+  async initializeContract(address, contractABI) {
+    try {
+      let instance = await this.getInstance();
+      return await new instance.ethers.Contract(
+        address,
+        contractABI.abi,
+        instance.signer
+      );
+    } catch (error) {
+      return error;
+    }
   }
 }

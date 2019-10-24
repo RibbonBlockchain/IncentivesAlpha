@@ -1,6 +1,6 @@
 export const formatAddress = address => {
   let pre = address.toLowerCase().slice(0, 12);
-  let post = address.toLowerCase().slice(14, 18);
+  let post = address.toLowerCase().slice(address.length - 4);
 
   return `${pre}...${post}`;
 };
@@ -19,4 +19,13 @@ export const fromHex = hex => {
     string += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
   }
   return string;
+};
+
+export const formatLink = link => {
+  return (
+    link
+      .substr(5)
+      .charAt(0)
+      .toUpperCase() + link.substr(6).replace("-", " ")
+  );
 };

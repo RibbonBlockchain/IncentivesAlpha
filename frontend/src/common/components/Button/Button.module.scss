@@ -9,6 +9,7 @@
   cursor: pointer;
   &:disabled {
     background: $background;
+    padding: calculateRem(12) calculateRem(32) !important;
     cursor: default;
   }
 }

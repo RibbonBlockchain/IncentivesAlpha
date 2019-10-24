@@ -7,6 +7,7 @@ export default function Modal({
   modalClassName,
   windowClassName,
   contentClassName,
+  closeClassName,
   onClickClose
 }) {
   return (
@@ -17,7 +18,10 @@ export default function Modal({
     >
       <div className={`${styles.window} ${windowClassName}`}>
         {onClickClose && (
-          <div className={styles.close} onClick={onClickClose}>
+          <div
+            className={[styles.close, closeClassName].join(" ")}
+            onClick={onClickClose}
+          >
             +
           </div>
         )}

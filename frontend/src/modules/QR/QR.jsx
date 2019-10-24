@@ -17,7 +17,7 @@ function QRCodeWallet({ wallet }) {
   );
 }
 
-export default function RegisterWithQR({ history }) {
+export default function RegisterWithQR() {
   const [qrCode, setQRCode] = useState(false);
   const { visible, message } = useSelector(state => state.qrRegistration);
   const dispatch = useDispatch();

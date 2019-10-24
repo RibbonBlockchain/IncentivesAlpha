@@ -1,5 +1,5 @@
 import BlockchainService from "../index";
-import IAdmin from "../abis/IAdmin.json";
+import Admin from "../abis/Admin.json";
 
 import { config } from "../../../constants/config";
 
@@ -8,8 +8,7 @@ let adminAddress = config.ADMIN_CONTRACT_ADDRESS;
 export default class AdminContract extends BlockchainService {
   constructor() {
     super();
-    // this.blockchainService = new BlockchainService();
-    this.contract = this.initializeContract(adminAddress, IAdmin);
+    this.contract = this.initializeContract(adminAddress, Admin);
     this.addUser = this.addUser.bind(this);
     this.address = this.address.bind(this);
     this.donateFunds = this.donateFunds.bind(this);
@@ -18,9 +17,13 @@ export default class AdminContract extends BlockchainService {
   }
 
   async addUser(address, role) {
-    return await this.contract.then(contract =>
-      contract.addUser(address, role)
-    );
+    let { ethers } = await this.getInstance();
+    let contract = await this.contract;
+    try {
+      return await contract.addUser(address, role);
+    } catch (error) {
+      return error;
+    }
   }
 
   async address() {

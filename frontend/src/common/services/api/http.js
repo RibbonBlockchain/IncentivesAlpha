@@ -38,6 +38,7 @@ export default class HTTP {
         ...headers
       }
     }).then(response => response.json());
+    // return await handleRequest("POST", endpoint, { body, headers });
   }
 
   /**

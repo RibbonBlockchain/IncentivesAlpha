@@ -3,8 +3,9 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
+import { getItem } from "../../utils/storage";
 
-export default class SuperAdmin extends HTTP {
+export default class UserAPI extends HTTP {
   constructor() {
     super();
   }
@@ -17,7 +18,9 @@ export default class SuperAdmin extends HTTP {
    * @returns {Promise.<Object>}
    */
   async listUsers() {
-    return await this.getRequest("users");
+    return await this.getRequest("users", {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 
   /**
@@ -28,8 +31,10 @@ export default class SuperAdmin extends HTTP {
    * @param {Object} [data]
    * @returns {Promise.<Object>}
    */
-  async createUser(data) {
-    return await this.postRequest("users", data);
+  async createUser(data, url) {
+    return await this.postRequest(`users/${url}`, data, {
+      authorization: `Bearer ${getItem("token")}`
+    });
   }
 
   /**

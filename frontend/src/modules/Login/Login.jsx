@@ -6,52 +6,47 @@ import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
 
 import { config } from "../../common/constants/config";
-import { authenticateUser } from "../../common/utils/web3/auth";
 
 import Logo from "../../common/components/Logo";
 import styles from "./Login.module.scss";
 import { SHOW_ALERT } from "../../common/constants/alert";
 import { SHOW_QR_REGISTRATION_MODAL } from "../../common/constants/qr";
 
-import { setItem } from "../../common/utils/storage";
+import { authenticateUser, approveUser } from "./login.utils";
 
 import { USER_NOT_FOUND } from "../../common/constants/error_codes";
 
-function Login({ history }) {
+function Login() {
+  const dispatch = useDispatch();
+
   let { WALLET_CONNECT, PORTIS, FORTMATIC, NETWORK } = config;
 
   async function processLogin(provider) {
-    await authenticateUser(provider)
-      .then(async result => {
-        if (result.response.error) {
-          if (result.response.error === USER_NOT_FOUND) {
-            await dispatch({
+    try {
+      let authenticatedUser = await authenticateUser(provider);
+      if (authenticatedUser.error) {
+        if (authenticatedUser.error === USER_NOT_FOUND) {
+            dispatch({
               type: SHOW_QR_REGISTRATION_MODAL,
-              payload: result.ethAddress
+              payload: authenticatedUser.publicAddress
             });
-          } else {
-            await dispatch({
-              type: SHOW_ALERT,
-              payload: result.response.error.toString()
-            });
-          }
         } else {
-          //   await history.replace(history.location.pathname);
-          await setItem("token", result.response.token);
-          await setItem("address", result.ethAddress);
-          //   todo replace this
-          window.location.reload();
-        }
-      })
-      .catch(
-        async error =>
-          await dispatch({
+          dispatch({
             type: SHOW_ALERT,
-            payload: error.toString()
-          })
-      );
+            payload: authenticatedUser.error.toString()
+          });
+        }
+      } else {
+        approveUser(authenticatedUser);
+      }
+    } catch (error) {
+        dispatch({
+          type: SHOW_ALERT,
+          payload: JSON.stringify(error)
+        });
+    }
   }
-  const dispatch = useDispatch();
+
   return (
     <>
       <div className={styles.container}>
