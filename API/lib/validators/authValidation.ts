@@ -29,7 +29,7 @@ export const superAdminOnly = (req, res, next) => {
     try {
         let publicAddress = req.jwt.payload.publicAddress;
         User.findOne({ publicAddress }).then(user => {
-            if(user.role!=0){
+            if(user.role!=1){
                 return res.status(401).send({status:401, error:"You are not authorized to view this content"})
             } else {
                 return next()
@@ -44,10 +44,25 @@ export const communityHealthWorkerOnly = (req, res, next) => {
     try {
         let publicAddress = req.jwt.payload.publicAddress;
         User.findOne({ publicAddress }).then(user => {
-            if(user.role!=1){
+            if(user.role!=2){
                 return res.status(401).send({status:401, error:"You are not authorized to view this content"})
             } else {
                 return next()
+            }
+        })
+    }catch (err){
+        return res.status(403).send({status:403, error:"Invalid token signature"});
+    }
+}
+
+export const superAdminAndCommunityHealthWorkerOnly = (req, res, next) => {
+    try {
+        let publicAddress = req.jwt.payload.publicAddress;
+        User.findOne({ publicAddress }).then(user => {
+            if(user.role===2 || user.role===1){
+                return next()
+            } else {
+                return res.status(401).send({status:401, error:"You are not authorized to view this content"})
             }
         })
     }catch (err){

@@ -8,42 +8,34 @@ const log = mongoose.model(
 );
 
 export class LogController {
-  public addNewLog(req: Request, res: Response) {
+  public async addNewLog(req: Request, res: Response) {
     try{
         let newLog = new log(req.body);
 
-        newLog.save((err, newlog) => {
-
-        res.status(200).json({ status: 200, data: newlog });
-        });
+        await newLog.save(
+          newLog
+          ).then(async newlog =>{
+            res.status(201).json({ status: 201, data: newlog });
+          }).catch(error => {
+            res.status(400).json({status:400, message:"Bad Request, duplicate transaction hash"})
+          })
     }catch{
-        res.status(400).json({status:400, message:"Duplicate Transaction hash"})
+        res.status(500).json({status:500, message:"Server Error"})
     }
   }
 
-  public getAllLogs(req: Request, res: Response) {
-    log.find({ txn_address: req.params.txn_address }, (err, address) => {
-        if (err) {
-          res.send(err);
-        }
-        res.json({ status: 200, data: address });
-      });
-    }
-
-//   public updateInteractionDetails(req: Request, res: Response) {
-//     interactionList.updateOne(
-//       { interactionId: req.params.interactionId },
-//       {
-//         $set: {
-//           interactionReward: req.body.interactionReward
-//         }
-//       },
-//       (err, interaction) => {
-//         if (err) {
-//           res.send(err);
-//         }
-//         res.json({ status: 200, data: interaction });
-//       }
-//     );
-//   }
+  public async getAllLogs(req: Request, res: Response) {
+    try {
+        await log.find({ 
+            txn_address: 
+            req.params.txn_address 
+        }).then(async logs => {
+            res.json({ status: 200, data: logs })
+        }).catch(error => {
+            res.status(404).json({status:404, message:"Address not found"})
+        })
+      }catch{
+          res.status(500).json({status:500, message:"Server Error"})
+      }  
+  }
 }

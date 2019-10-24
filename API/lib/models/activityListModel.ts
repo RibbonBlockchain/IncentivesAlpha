@@ -2,18 +2,18 @@ import * as mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-export const InteractionListSchema = new Schema({
-  interactionTitle: {
+export const ActivityListSchema = new Schema({
+  activityTitle: {
     type: String,
-    required: "Enter an interaction title"
+    required: "Enter an activity title"
   },
-  interactionDescription: {
+  activityDescription: {
     type: String,
     required: false
   },
-  interactionReward: {
+  activityReward: {
     type: Number,
-    required: "Interaction reward is required"
+    required: "Activity reward is required"
   },
   createdDate: {
     type: Date,

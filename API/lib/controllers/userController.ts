@@ -9,7 +9,7 @@ const User = mongoose.model("User", UserSchema);
 
 export class UserController {
   public async addNewCommunityHealthWorker(req: Request, res: Response) {
-    if(req.body.role!=1){
+    if(req.body.role!=2){
       res.status(400).send({status:400, error:"Please ensure role is 1 for community health worker"})
     }
     else{
@@ -29,7 +29,7 @@ export class UserController {
   }
 
   public async addNewPractitioner(req: Request, res: Response) {
-    if(req.body.role!=2){
+    if(req.body.role!=4){
       res.status(400).send({status:400, error:"Please ensure role is 2 for practitioner"})
     }
     else{
@@ -78,12 +78,22 @@ export class UserController {
   }
 
   public async getUserByWalletAddress(req: Request, res: Response) {
-    await User.findOne({ publicAddress: req.params.userAddress }, (err, user) => {
-      if (err) {
-        res.send(err);
-      }
-      res.json({ status: 200, data: mapUserDataToResponse(user) });
-    });
+    try {
+      await User.findOne(
+        { 
+          publicAddress: 
+          req.params.userAddress 
+        }).then(async user => {
+          res.json({ status: 200, data: mapUserDataToResponse(user) });
+        }).catch(error => {
+          res.status(404).json({
+            status:404,
+            message: "User with wallet address doesnot exist"
+          });
+        })
+    }catch(err){
+      res.status(404).json({ message: err.toString() });
+    }
   }
 
   public async updateUserDetails(req: Request, res: Response) {
