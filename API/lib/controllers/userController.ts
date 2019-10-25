@@ -9,62 +9,77 @@ const User = mongoose.model("User", UserSchema);
 
 export class UserController {
   public async addNewCommunityHealthWorker(req: Request, res: Response) {
-    if(req.body.role!=2){
-      res.status(400).send({status:400, error:"Please ensure role is 1 for community health worker"})
-    }
-    else{
-      let form_data = req.body;
-      //add required nonce field for login challenge
-      let nonce = Math.floor(Math.random() * 1000000);
-      form_data.nonce = nonce;
-      let newUser = new User(form_data);
-
-      await newUser.save((err, user) => {
-        if (err) {
-          res.send({ message: err });
-        }
-        res.json({ status: 200, data: user });
-      });
+    try{
+      if(req.body.role!=2){
+        res.status(400).send({status:400, error:"Please ensure role is 2 for community health worker"})
+      }
+      else{
+        let form_data = req.body;
+        //add required nonce field for login challenge
+        let nonce = Math.floor(Math.random() * 1000000);
+        form_data.nonce = nonce;
+        let newUser = new User(form_data);
+  
+        await newUser.save().then(
+          async user => {
+            res.status(201).json({ status: 201, data: user });
+          }
+        ).catch(error => {
+          res.status(400).json({status:400, message:"Duplicate address"})
+        })
+      }
+    }catch{
+      res.status(500).json({status:500, message:"Server Error"})
     }
   }
 
   public async addNewPractitioner(req: Request, res: Response) {
-    if(req.body.role!=4){
-      res.status(400).send({status:400, error:"Please ensure role is 2 for practitioner"})
-    }
-    else{
-      let form_data = req.body;
-      //add required nonce field for login challenge
-      let nonce = Math.floor(Math.random() * 1000000);
-      form_data.nonce = nonce;
-      let newUser = new User(form_data);
-
-      await newUser.save((err, user) => {
-        if (err) {
-          res.send({ message: err });
-        }
-        res.json({ status: 200, data: user });
-      });
+    try{
+      if(req.body.role!=4){
+        res.status(400).send({status:400, error:"Please ensure role is 4 for Practitioner"})
+      }
+      else{
+        let form_data = req.body;
+        //add required nonce field for login challenge
+        let nonce = Math.floor(Math.random() * 1000000);
+        form_data.nonce = nonce;
+        let newUser = new User(form_data);
+  
+        await newUser.save().then(
+          async user => {
+            res.status(201).json({ status: 201, data: user });
+          }
+        ).catch(error => {
+          res.status(400).json({status:400, message:"Duplicate address"})
+        })
+      }
+    }catch{
+      res.status(500).json({status:500, message:"Server Error"})
     }
   }
 
   public async addNewPatient(req: Request, res: Response) {
-    if(req.body.role!=3){
-      res.status(400).send({status:400, error:"Please ensure role is 3 for patient"})
-    }
-    else{
-      let form_data = req.body;
-      //add required nonce field for login challenge
-      let nonce = Math.floor(Math.random() * 1000000);
-      form_data.nonce = nonce;
-      let newUser = new User(form_data);
-
-      await newUser.save((err, user) => {
-        if (err) {
-          res.send({ message: err });
-        }
-        res.json({ status: 200, data: user });
-      });
+    try{
+      if(req.body.role!=3){
+        res.status(400).send({status:400, error:"Please ensure role is 3 for patient"})
+      }
+      else{
+        let form_data = req.body;
+        //add required nonce field for login challenge
+        let nonce = Math.floor(Math.random() * 1000000);
+        form_data.nonce = nonce;
+        let newUser = new User(form_data);
+  
+        await newUser.save().then(
+          async user => {
+            res.status(201).json({ status: 201, data: user });
+          }
+        ).catch(error => {
+          res.status(400).json({status:400, message:"Duplicate address"})
+        })
+      }
+    }catch{
+      res.status(500).json({status:500, message:"Server Error"})
     }
   }
 
