@@ -1,3 +1,1 @@
-import QRCodeDisplay from "./QRCodeDisplay";
-
-export default QRCodeDisplay;
+export { default } from "./QRCodeDisplay";

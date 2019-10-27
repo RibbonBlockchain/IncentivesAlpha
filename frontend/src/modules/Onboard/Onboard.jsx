@@ -38,10 +38,6 @@ export default function Onboard() {
     isValid: false
   });
 
-  function showOption() {
-    setOnboardOptions(true);
-  }
-
   function showAdminForm() {
     setOnboardOptions(false);
     setVisible(true);
@@ -136,9 +132,13 @@ export default function Onboard() {
     });
   }
 
-  const OnboardOptions = ({ visible }) => {
+  const OnboardOptions = ({ visible, onClickClose }) => {
     return (
-      <Modal visible={visible} windowClassName={styles.modalWindow}>
+      <Modal
+        visible={visible}
+        onClickClose={onClickClose}
+        windowClassName={styles.modalWindow}
+      >
         <div className={styles.cnt}>
           <h4>Pick a profile</h4>
           {loginType == Number(roleNames.SUPER_ADMIN) && (
@@ -168,11 +168,9 @@ export default function Onboard() {
 
   return (
     <>
-      {loginType < roleNames.PRACTITIONER && (
-        <div className={styles.actions}>
-          <Button onClick={() => showOption()} text="New Account" />
-        </div>
-      )}
+      <div className={styles.actions}>
+        <Button onClick={() => setOnboardOptions(true)} text="New Account" />
+      </div>
       <Modal
         visible={visible}
         onClickClose={hideForm}
@@ -287,10 +285,6 @@ export default function Onboard() {
                     <input
                       className={[styles.form_input].join(" ")}
                       placeholder="0x0..."
-                      //   disabled={
-                      //     type === roleNames.PATIENT ||
-                      //     type === roleNames.PRACTITIONER
-                      //   }
                       ref={register({
                         required: "Wallet Address is required",
                         pattern: {
@@ -345,7 +339,10 @@ export default function Onboard() {
           </div>
         </form>
       </Modal>
-      <OnboardOptions visible={onboardOptions} />
+      <OnboardOptions
+        visible={onboardOptions}
+        onClickClose={() => setOnboardOptions(false)}
+      />
     </>
   );
 }

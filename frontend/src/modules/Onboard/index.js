@@ -1,3 +1,1 @@
-import Onboard from "./Onboard";
-
-export default Onboard;
+export { default } from "./Onboard";

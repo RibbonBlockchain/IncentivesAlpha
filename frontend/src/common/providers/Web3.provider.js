@@ -11,6 +11,7 @@ import AuthAPI from "../services/api/auth.api";
 import UserAPI from "../services/api/user.api";
 import { useAlert } from "./Modal.provider";
 import { setItem, getItem } from "../utils/storage";
+import { getNetworkDetails } from "../utils";
 
 const Web3Context = createContext();
 
@@ -21,13 +22,14 @@ const initialState = () => ({
   address: null,
   loginType: 0,
   balance: 0,
-  user: {}
+  user: {},
+  network: "Unknown"
 });
 
 const UPDATE_WEB3 = "web3/UPDATE_WEB3";
 
 const reducer = (state, { type, payload }) => {
-  let { token, address, loginType, balance, user } = payload;
+  let { token, address, loginType, balance, user, network } = payload;
   switch (type) {
     case UPDATE_WEB3:
       return {
@@ -36,7 +38,8 @@ const reducer = (state, { type, payload }) => {
         address,
         balance,
         loginType,
-        user
+        user,
+        network
       };
     default: {
       throw new Error(`Unknown action type ${type}`);
@@ -68,6 +71,7 @@ export const useWeb3 = () => {
     { address, token, balance, user, loginType },
     { update }
   ] = useWeb3Context();
+  const [, toggleModal] = useAlert();
 
   const login = async ({ token, address, loginType }) => {
     update({ token, address, loginType });
@@ -86,66 +90,31 @@ export const useWeb3 = () => {
     const userAPI = new UserAPI();
     let { provider, ethers, signer } = await registryContract.getInstance();
 
-    let address = (await signer.getAddress()) || getItem("address");
-    let balance = await provider.getBalance(address);
-    let loginType = await registryContract.getUserRole(address);
-    let token = getItem("token") || null;
-    let user = await userAPI.getUserByAddress(address);
-
-    await update({
-      address,
-      balance: ethers.utils.formatEther(balance),
-      loginType,
-      token,
-      user
-    });
+    let network = await getNetworkDetails(provider, signer, registryContract);
+    if (network.error) {
+      toggleModal({
+        isVisible: true,
+        message: network.error
+      });
+    } else {
+      let {
+        networkAddress,
+        currentBalance,
+        currentNetwork,
+        loginType
+      } = network;
+      let token = getItem("token") || null;
+      let user = await userAPI.getUserByAddress(networkAddress);
+      await update({
+        address: networkAddress,
+        balance: ethers.utils.formatEther(currentBalance),
+        loginType,
+        token,
+        user,
+        network: currentNetwork
+      });
+    }
   };
 
   return [{ address, token, loginType, balance, user }, login];
-};
-
-const processLogin = async () => {
-  let registryContract = new RegistryContract();
-  let authAPI = new AuthAPI();
-  let { ethers, signer, provider } = await registryContract.getInstance();
-  try {
-    let nonce = `Signing into RibbonBlockchain Dapp`;
-    let signature = await signer.signMessage(nonce);
-    let publicAddress = await signer.getAddress();
-    let recoveredAddress = await ethers.utils.verifyMessage(nonce, signature);
-    if (recoveredAddress !== publicAddress) {
-      return {
-        error: `Address recovered do not match, original ${publicAddress} versus computed ${recoveredAddress}`
-      };
-    }
-    try {
-      let authWithAPI = await authAPI.authenticate({
-        publicAddress,
-        signature
-      });
-      if (authWithAPI.error) {
-        return {
-          error: authWithAPI.error,
-          publicAddress
-        };
-      } else {
-        let loginType = await registryContract.getUserRole(publicAddress);
-        let balance = await provider.getBalance(publicAddress);
-        return {
-          authWithAPI,
-          publicAddress,
-          loginType,
-          balance: ethers.utils.formatEther(balance)
-        };
-      }
-    } catch (error) {
-      return {
-        error
-      };
-    }
-  } catch (error) {
-    return {
-      error
-    };
-  }
 };

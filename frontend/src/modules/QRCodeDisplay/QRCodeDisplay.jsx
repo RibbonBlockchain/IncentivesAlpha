@@ -13,7 +13,7 @@ export default function RegisterWithQR() {
 
   useEffect(() => {
     updateQRCodeImage();
-  }, [data]);
+  }, []);
 
   function updateQRCodeImage() {
     setQR({ image: "" });

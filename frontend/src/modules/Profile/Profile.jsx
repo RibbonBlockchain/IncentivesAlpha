@@ -11,15 +11,13 @@ export default function Profile() {
   const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
   });
-  const [{}, toggle] = useAlert();
+  const [, toggle] = useAlert();
   const [{ address, user }] = useWeb3();
 
   async function onSubmit(values, e) {
     let data = {
       ...values,
       address
-      //   dateOfBirth: moment(date).format("YYYY/M/D"),
-      //   phoneNumber: phoneNumber.value
     };
     let user = await updateUserProfile(data);
     if (user.error) {

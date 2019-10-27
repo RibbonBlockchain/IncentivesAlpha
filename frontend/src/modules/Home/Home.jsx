@@ -3,7 +3,8 @@ import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import Logo from "../../common/components/Logo";
 import User from "../../common/components/User";
 import WalletModal from "../Wallet";
-import Dashboard from "../Dashboard/Dashboard";
+import NetworkModal from "../Network";
+import Dashboard from "../Dashboard";
 import CreateInteraction from "../Interactions/Create";
 import ListInteractions from "../Interactions/List";
 import CreatePractitioner from "../Practitioners/Create";
@@ -18,7 +19,7 @@ import Recorder from "../Recorder";
 import Profile from "../Profile";
 import styles from "./Home.module.scss";
 import { formatLink } from "../../common/utils";
-import { allowedRoutes } from "../../common/constants/roles";
+import { allowedRoutes, roleNames } from "../../common/constants/roles";
 
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useModal } from "../../common/providers/Modal.provider";
@@ -60,10 +61,12 @@ function Home() {
             <div></div>
             {user && user.publicaddress ? (
               <div className={styles.actions}>
-                <>
-                  <Onboard />
-                  <Recorder />
-                </>
+                {loginType < roleNames.PATIENT && (
+                  <>
+                    <Onboard />
+                    <Recorder />
+                  </>
+                )}
                 <User onClick={showWallet} address={user.publicaddress} />
               </div>
             ) : (
@@ -72,7 +75,7 @@ function Home() {
           </div>
         </header>
         <nav className={styles.admin__nav}>
-          {user && user.publicaddress && (
+          {typeof loginType === "number" && user && user.publicaddress && (
             <ul className={styles.menu}>
               <li className={styles.menu__item}>
                 <NavLink
@@ -161,6 +164,7 @@ function Home() {
             <Redirect from="*" to="/app/home" />
           </Switch>
           <WalletModal />
+          <NetworkModal />
         </main>
       </div>
     </>
