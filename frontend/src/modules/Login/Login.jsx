@@ -12,9 +12,9 @@ import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useModal, useAlert } from "../../common/providers/Modal.provider";
 
 function Login() {
-  const [{}, login] = useWeb3();
-  const [{}, toggle] = useAlert();
-  const [{}, toggleModal] = useModal();
+  const [, login] = useWeb3();
+  const [, toggle] = useAlert();
+  const [, toggleModal] = useModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const loginUser = async () => {
@@ -86,7 +86,7 @@ function Login() {
             </div>
             <div className={styles.headline}>
               <small>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit
+                {/* Lorem ipsum, dolor sit amet consectetur adipisicing elit */}
               </small>
             </div>
           </div>

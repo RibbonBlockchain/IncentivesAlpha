@@ -9,12 +9,11 @@ export const loadUsers = async () => {
 };
 
 export const getRoleCount = (userList, role) => {
-  return (
-    userList.length > 0 &&
-    userList
-      .map(object => object.role === role)
-      .reduce((accumulator, object) => accumulator + object, 0)
-  );
+  return userList.length > 0
+    ? userList
+        .map(object => object.role === role)
+        .reduce((accumulator, object) => accumulator + object, 0)
+    : "0";
 };
 
 export const makeDonation = async ({ value, message }) => {

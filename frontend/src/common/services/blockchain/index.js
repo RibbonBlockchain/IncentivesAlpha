@@ -13,12 +13,10 @@ const init = async function() {
         });
 
   let signer = await providerEngine.getSigner();
-  let wallet = new ethers.Wallet(PRIVATE_KEY, providerEngine);
 
   return {
     provider: providerEngine,
     signer,
-    wallet,
     ethers
   };
 };
@@ -39,12 +37,12 @@ export default class BlockchainService {
     });
   }
 
-  async initializeContract(address, contractABI) {
+  async initializeContract(address, contract) {
     try {
       let instance = await this.getInstance();
       return await new instance.ethers.Contract(
         address,
-        contractABI.abi,
+        contract.abi,
         instance.signer
       );
     } catch (error) {

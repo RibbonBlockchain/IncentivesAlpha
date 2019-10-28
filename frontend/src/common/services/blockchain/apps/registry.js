@@ -43,7 +43,11 @@ export default class RegistryContract extends BlockchainService {
   async balanceOf() {}
   async getUserRole(address) {
     let contract = await this.contract;
-    return await contract.getUserRole(address);
+    try {
+      return await contract.getUserRole(address);
+    } catch (error) {
+      return error;
+    }
   }
   async recordPayout() {}
   async removeUser() {}

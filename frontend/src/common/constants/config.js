@@ -13,7 +13,7 @@ export const config = {
     process.env.REACT_APP_PRIVATE_KEY ||
     "0x190f12957983e77f3750d8a3529eaa4775abac27f21c30e11cc018f682905dca",
 
-  NETWORK: process.env.REACT_APP_NETWORK || "kovan",
+  DEFAULT_NETWORK: process.env.REACT_APP_NETWORK || 77,
   // Auth
   API_ENDPOINT:
     process.env.REACT_APP_API_ENDPOINT ||
