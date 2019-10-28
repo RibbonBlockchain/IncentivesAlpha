@@ -12,7 +12,21 @@ import * as moment from "moment";
 import styles from "./Wallet.module.scss";
 import { withRouter } from "react-router-dom";
 
-function Profile({ user, data, handleProfileNavigation, currency }) {
+function Send() {
+  return;
+}
+
+function Receive() {
+  return;
+}
+
+function Profile({
+  user,
+  data,
+  handleProfileNavigation,
+  currency,
+  showQRCode
+}) {
   async function handleSignOut() {
     clear();
     window.location.reload();
@@ -45,12 +59,32 @@ function Profile({ user, data, handleProfileNavigation, currency }) {
               {data.publicaddress}
             </a>
           </small>
-          <span>
+          <>
             <Balance
               balance={Number(user.balance).toFixed(4)}
               ticker={currency.toString().toUpperCase()}
             />
-          </span>
+            <div className={styles.actions}>
+              <Button
+                classNames={[
+                  styles.button,
+                  styles.button_small,
+                  styles.button_primary
+                ].join(" ")}
+                text="Send"
+                onClick={handleProfileNavigation}
+              />
+              <Button
+                classNames={[
+                  styles.button,
+                  styles.button_small,
+                  styles.button_primary
+                ].join(" ")}
+                text="Receive"
+                onClick={showQRCode}
+              />
+            </div>
+          </>
         </div>
         <div className={styles.description}>
           <span className={styles.heading}>Bio</span>
@@ -112,6 +146,15 @@ function Wallet({ history }) {
           user={details}
           data={data}
           currency={currency}
+          showQRCode={() =>
+            toggleModal({
+              isVisible: true,
+              data: {
+                publicAddress: data.publicaddress
+              },
+              modal: "qr"
+            })
+          }
           handleProfileNavigation={handleProfileNavigation}
         />
       </div>
