@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
+import useForm from "react-hook-form";
 import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { Table, AutoSizer, Column } from "react-virtualized";
@@ -229,19 +230,15 @@ function HandleViews({ type, transactions }) {
 
 export default function Dashboard() {
   const [{ address, loginType }] = useWeb3();
-  const [{ users, interactions }, fetchData] = useData();
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [{ users, interactions }] = useData();
 
   return (
     <>
-      {loginType > 0 && address ? (
+      {address && typeof loginType === "number" ? (
         <>
           <Stats type={Number(loginType)} users={users} />
           {loginType !== null && (
-            <HandleViews transactions={[]} type={loginType} />
+            <HandleViews transactions={interactions} type={loginType} />
           )}
         </>
       ) : (

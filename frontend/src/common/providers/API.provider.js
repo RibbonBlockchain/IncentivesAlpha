@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import UserAPI from "../services/api/user.api";
 import InteractionsAPI from "../services/api/interaction.api";
-import LogAPI from "../services/api/log.api";
 import { useWeb3 } from "./Web3.provider";
 
 const APIContext = createContext();
@@ -17,8 +16,7 @@ const useAPIContext = () => useContext(APIContext);
 
 const initialState = () => ({
   users: [],
-  interactions: [],
-  transactionLogs: []
+  interactions: []
 });
 
 const UPDATE = "api/UPDATE";
@@ -26,7 +24,7 @@ const UPDATE = "api/UPDATE";
 const reducer = (state, { type, payload }) => {
   switch (type) {
     case UPDATE:
-      const { users, interactions, transactionLogs } = payload;
+      const { users, interactions } = payload;
       return {
         ...state,
         ...users,
@@ -41,7 +39,7 @@ const reducer = (state, { type, payload }) => {
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
 
-  const update = useCallback((users, user, interactions, transactionLogs) => {
+  const update = useCallback((users, interactions) => {
     dispatch({
       type: UPDATE,
       payload: {
@@ -62,40 +60,33 @@ export default function Provider({ children }) {
 export const useData = () => {
   const usersAPI = new UserAPI();
   const interactionsAPI = new InteractionsAPI();
-  const [state, { update }] = useAPIContext();
+  const [{ users, interactions }, { update }] = useAPIContext();
   const [{ address, loginType }] = useWeb3();
 
-  const fetchData = async () => {
-    let users = await usersAPI.listUsers();
-    let interactions = await interactionsAPI.listInteractionByAddress(address, {
-      role: loginType
-    });
-    update({
-      users: users.length > 0 ? users : state.users,
-      interactions: interactions.length > 0 ? interactions : state.interactions
-    });
-  };
-
-  return [state, fetchData];
-};
-
-export const useTransactions = () => {
-  const transactionLogsAPI = new LogAPI();
-  const [{ address }] = useWeb3();
-  const [state, { update }] = useAPIContext();
-
   useEffect(() => {
-    fetchTransactionLogs();
-  }, [address]);
+    fetchData();
+  }, []);
 
-  const fetchTransactionLogs = async () => {
-    let transactionLogs =
-      address && (await transactionLogsAPI.listLogsByUser(address));
-    update({
-      users: state.users,
-      interactions: state.interactions,
-      transactionLogs
-    });
+  const fetchData = async () => {
+    if (address !== null) {
+      let listUsers = await usersAPI.listUsers();
+      let listInteractions = await interactionsAPI.listInteractionByAddress(
+        address,
+        {
+          role: loginType
+        }
+      );
+      update({
+        users: listUsers,
+        interactions: listInteractions
+      });
+    } else {
+      update({
+        users,
+        interactions
+      });
+    }
   };
-  return [state, fetchTransactionLogs];
+
+  return [{ users, interactions }, fetchData];
 };

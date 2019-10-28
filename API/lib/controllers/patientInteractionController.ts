@@ -42,7 +42,14 @@ export class PatientInteractionListController {
 
   public async getPatientInteractionByAddress(req: Request, res: Response) {
     try{
-      if(parseInt(req.body.role)===2){
+      if(parseInt(req.body.role)===1){
+        await patientInteractionList.find({
+        }).then(async interactions => {
+          res.json({ status: 200, data: interactions });
+        }).catch(error => {
+          res.status(404)
+        })
+      }else if(parseInt(req.body.role)===2){
         await patientInteractionList.find({
           chwAddress: req.params.userAddress
         }).then(async interactions => {
