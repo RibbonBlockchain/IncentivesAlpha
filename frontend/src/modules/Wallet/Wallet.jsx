@@ -1,4 +1,7 @@
 import React from "react";
+import useForm from "react-hook-form";
+import * as moment from "moment";
+import { withRouter } from "react-router-dom";
 import Modal from "../../common/components/Modal";
 import Blockies from "../../common/components/Blockies";
 import Button from "../../common/components/Button";
@@ -8,24 +11,15 @@ import { clear } from "../../common/utils/storage";
 import { useModal } from "../../common/providers/Modal.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
-import * as moment from "moment";
 import styles from "./Wallet.module.scss";
-import { withRouter } from "react-router-dom";
-
-function Send() {
-  return;
-}
-
-function Receive() {
-  return;
-}
 
 function Profile({
   user,
   data,
   handleProfileNavigation,
+  showSendModal,
   currency,
-  showQRCode
+  showQRCodeModal
 }) {
   async function handleSignOut() {
     clear();
@@ -72,7 +66,7 @@ function Profile({
                   styles.button_primary
                 ].join(" ")}
                 text="Send"
-                onClick={handleProfileNavigation}
+                onClick={showSendModal}
               />
               <Button
                 classNames={[
@@ -81,7 +75,7 @@ function Profile({
                   styles.button_primary
                 ].join(" ")}
                 text="Receive"
-                onClick={showQRCode}
+                onClick={showQRCodeModal}
               />
             </div>
           </>
@@ -130,6 +124,25 @@ function Wallet({ history }) {
     history.push("/app/profile");
   }
 
+  function handleSendWalletModal() {
+    toggleModal({
+      isVisible: true,
+      data: null,
+      modal: "send"
+    });
+  }
+
+  function handleQRCodeModal() {
+    toggleModal({
+      isVisible: true,
+      data: {
+        publicAddress: `ethereum:${data.publicaddress}`,
+        message: ""
+      },
+      modal: "qr"
+    });
+  }
+
   let isOpen = isVisible && modal === "wallet";
   let details = {
     balance,
@@ -146,15 +159,8 @@ function Wallet({ history }) {
           user={details}
           data={data}
           currency={currency}
-          showQRCode={() =>
-            toggleModal({
-              isVisible: true,
-              data: {
-                publicAddress: data.publicaddress
-              },
-              modal: "qr"
-            })
-          }
+          showQRCodeModal={handleQRCodeModal}
+          showSendModal={handleSendWalletModal}
           handleProfileNavigation={handleProfileNavigation}
         />
       </div>

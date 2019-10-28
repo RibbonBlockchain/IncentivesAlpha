@@ -1,0 +1,37 @@
+@import "../../common/styles/variables";
+
+.modalWindow {
+  background: #313541;
+  color: #ffffff;
+}
+
+.modalFormWindow {
+  background: #313541;
+  color: #ffffff;
+  small {
+    color: $red;
+  }
+}
+
+.cnt {
+  font-family: $font;
+  padding: calculateRem(30);
+  display: flex;
+  flex-direction: column;
+  h4 {
+    align-self: center;
+  }
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+input,
+textarea {
+  color: $text-color;
+}
+
+textarea {
+  resize: none;
+}

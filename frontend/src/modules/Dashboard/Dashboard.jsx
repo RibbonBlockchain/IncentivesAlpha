@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react";
-import useForm from "react-hook-form";
-import { useData, useTransactions } from "../../common/providers/API.provider";
+import React, { useEffect } from "react";
+import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
-import { useAlert } from "../../common/providers/Modal.provider";
 import { Table, AutoSizer, Column } from "react-virtualized";
-import { getRoleCount, makeDonation } from "./dashboard.utils";
+import { getRoleCount } from "./dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
 import Card from "../../common/components/Card";
 import Button from "../../common/components/Button";
-import Modal from "../../common/components/Modal";
+import { useModal } from "../../common/providers/Modal.provider";
 import { DesktopLoader } from "../../common/components/Loader";
 import * as moment from "moment";
 import styles from "./Dashboard.module.scss";
 
 function DashboardTable({ data, type }) {
-  const [donateModal, setDonateModal] = useState(false);
+  const [, toggleModal] = useModal();
 
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
@@ -44,92 +42,17 @@ function DashboardTable({ data, type }) {
     return <>{moment(rowData.txn_date).utc()}</>;
   }
 
-  const DonationModal = ({ visible }) => {
-    const [{ message }, toggle] = useAlert();
-    const { handleSubmit, register, errors, formState } = useForm({
-      mode: "onChange"
-    });
-
-    async function onSubmit(values, e) {
-      let data = {
-        value: Number(values.amount),
-        message: values.message
-      };
-      let result = await makeDonation(data);
-      toggle({
-        isVisible: true,
-        message: result.message,
-        data: {}
-      });
-
-      e.target.reset();
-    }
-    return (
-      <Modal visible={visible && !message} windowClassName={styles.modalWindow}>
-        <div className={styles.cnt}>
-          <h4>Make Donation</h4>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className={styles.modalFormWindow}
-          >
-            <div className={styles.layout__item}>
-              <div className={[styles.input].join(" ")}>
-                <label htmlFor="amount">Amount in (eth)</label>
-                <input
-                  className={[styles.form_input].join(" ")}
-                  placeholder="amount"
-                  name="amount"
-                  type="number"
-                  step={0.0001}
-                  ref={register({
-                    required: "Amount is required",
-                    pattern: {}
-                  })}
-                />
-                <small> {errors.amount && errors.amount.message}</small>
-              </div>
-            </div>
-            <div className={styles.layout__item}>
-              <div className={[styles.input].join(" ")}>
-                <label htmlFor="message">Message</label>
-                <textarea
-                  className={[styles.form_input].join(" ")}
-                  placeholder="message (optional)"
-                  name="message"
-                  ref={register}
-                />
-                <small> {errors.message && errors.message.message}</small>
-              </div>
-            </div>
-            <div className={styles.actions}>
-              <Button
-                type="button"
-                text={"Cancel"}
-                classNames={[styles.button].join(" ")}
-                onClick={() => setDonateModal(false)}
-              ></Button>
-              <Button
-                text="Donate"
-                classNames={[styles.button, styles.button_primary].join(" ")}
-                disabled={!formState.isValid}
-                button="submit"
-              ></Button>
-            </div>
-          </form>
-        </div>
-      </Modal>
-    );
-  };
   return (
     <>
       {roleNames.SUPER_ADMIN === type && (
         <div className={styles.actions}>
           <Button
-            onClick={() => setDonateModal(true)}
+            onClick={() =>
+              toggleModal({ isVisible: true, modal: "donate", data: null })
+            }
             classNames={styles.button_primary}
             text="Donate"
           />
-          <DonationModal visible={donateModal} />
         </div>
       )}
       <Card classNames={[styles.table, styles.card__white].join(" ")}>

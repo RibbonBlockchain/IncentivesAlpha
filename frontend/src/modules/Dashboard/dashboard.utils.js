@@ -34,6 +34,20 @@ export const makeDonation = async ({ value, message }) => {
   }
 };
 
+export const sendTokens = async ({ amount, receipient, message }) => {
+  let vaultContract = new VaultContract();
+  let memo = message ? message : `Sending ${amount} tokens to ${receipient}`;
+
+  let tx = await vaultContract.sendTokens({ amount, receipient });
+  if (tx.hash) {
+    return {
+      message: `${amount} tokens has been sent to ${receipient}`
+    };
+  } else {
+    return tx;
+  }
+};
+
 export const formatActivityOptions = options => {
   return (
     options.length > 0 &&
