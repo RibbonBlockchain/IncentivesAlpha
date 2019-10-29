@@ -1,33 +1,34 @@
 import * as mongoose from "mongoose";
+import {FKHelper} from "./helpers/foreign-key-helper";
 
 const Schema = mongoose.Schema;
 
 export const PatientInteractionSchema = new Schema({
-    patientAddress: {
-        type: String,
-        required: "Enter a patient Address"
-    },
-    practitionerAddress: {
-        type: String,
-        required: "Enter a practitioner Address"
-    },
-    chwAddress:{
-        type: String,
-        required: "Enter a chw Address"
-    },
+    patientAddress: [{
+		type: Schema.ObjectId,
+		ref: 'User',
+	}],
+    practitionerAddress: [{
+		type: Schema.ObjectId,
+		ref: 'User',
+	}],
+    chwAddress:[{
+		type: Schema.ObjectId,
+		ref: 'User',
+	}],
     activities: [
         {
             activityId: {
-                type: String,
-                required: "Enter a valid activity id"
+                type: Schema.ObjectId,
+		        ref: 'ActivityList',
             }
         }
     ],
     prescriptions: [
         {
             prescriptionId: {
-                type: String,
-                required: "Enter a valid prescription id"
+                type: Schema.ObjectId,
+		        ref: 'PrescriptionList',
             }
         }
     ],
@@ -104,3 +105,15 @@ export const PatientInteractionSchema = new Schema({
         }
     ]
 })
+
+PatientInteractionSchema.pre('find', autoPopulateForeigns)
+PatientInteractionSchema.pre('findOne', autoPopulateForeigns)
+
+function autoPopulateForeigns (next) {
+  this.populate('activityId')
+  .populate('prescriptionId')
+  .populate('patientAddress', ['firstName', 'lastName', 'publicAddress'])
+  .populate('chwAddress', ['firstName', 'lastName', 'publicAddress'])
+  .populate('practitionerAddress', ['firstName', 'lastName', 'publicAddress'])
+  next()
+}

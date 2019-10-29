@@ -1,6 +1,13 @@
 import * as mongoose from "mongoose";
+import { UserSchema } from "../models/userModel";
 import { PatientInteractionSchema } from "../models/patientInteractionModel";
 import { Request, Response } from "express";
+
+
+const User = mongoose.model(
+  "User", 
+  UserSchema
+);
 
 const patientInteractionList = mongoose.model(
   "InteractionList",
@@ -43,36 +50,66 @@ export class PatientInteractionListController {
   public async getPatientInteractionByAddress(req: Request, res: Response) {
     try{
       if(parseInt(req.body.role)===1){
-        await patientInteractionList.find({
-        }).then(async interactions => {
-          res.json({ status: 200, data: interactions });
-        }).catch(error => {
-          res.status(404)
-        })
+        await User.findOne({
+          publicAddress: 
+          req.params.userAddress
+        }).then(
+          async user => {
+            await patientInteractionList.find({
+
+            })
+            .then(async interactions => {
+              res.json({ status: 200, data: interactions });
+            }).catch(error => {
+              res.status(404)
+            })
+          }
+        )
       }else if(parseInt(req.body.role)===2){
-        await patientInteractionList.find({
-          chwAddress: req.params.userAddress
-        }).then(async interactions => {
-          res.json({ status: 200, data: interactions });
-        }).catch(error => {
-          res.status(404)
-        })
+        await User.findOne({
+          publicAddress: 
+          req.params.userAddress
+        }).then(
+          async user => {
+            await patientInteractionList.find({
+              chwAddress: user._id
+            }).then(async interactions => {
+              res.json({ status: 200, data: interactions });
+            }).catch(error => {
+              res.status(404)
+            })
+          }
+        )
       }else if(parseInt(req.body.role)===3){
-        await patientInteractionList.find({
-          patientAddress: req.params.userAddress
-        }).then(async interactions => {
-          res.json({ status: 200, data: interactions });
-        }).catch(error => {
-          res.status(404)
-        })
+        await User.findOne({
+          publicAddress: 
+          req.params.userAddress
+        }).then(
+          async user => {
+            await patientInteractionList.find({
+              patientAddress: user._id
+            }).then(async interactions => {
+              res.json({ status: 200, data: interactions });
+            }).catch(error => {
+              res.status(404)
+            })
+          }
+        )
       }else{
-        await patientInteractionList.find({
-          practitionerAddress: req.params.userAddress
-        }).then(async interactions => {
-          res.json({ status: 200, data: interactions });
-        }).catch(error => {
-          res.status(404)
-        })
+        await User.findOne({
+          publicAddress: 
+          req.params.userAddress
+        }).then(
+          async user => {
+            await patientInteractionList.find({
+              practitionerAddress: user._id
+            }).then(async interactions => {
+              res.json({ status: 200, data: interactions });
+            }).catch(error => {
+              res.status(404)
+            })
+          }
+        )
       }
     }catch{
       res.status(500).json({status:500, message:"Server Error"})
