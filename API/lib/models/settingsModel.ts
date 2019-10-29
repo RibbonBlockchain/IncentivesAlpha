@@ -17,9 +17,9 @@ export const SettingsSchema = new Schema({
     },
     ratings: [
         {
-            rating: {
+            ratingName: {
                 type: String,
-            }
+            },
         }
     ]
 })
