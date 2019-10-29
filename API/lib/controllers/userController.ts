@@ -3,6 +3,7 @@ import { UserSchema } from "../models/userModel";
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import { mapUserDataToResponse } from "../serializers/userDataSerializer";
+import { getCurrentUserAddress } from "../validators/authValidation";
 
 
 const User = mongoose.model("User", UserSchema);
@@ -15,9 +16,14 @@ export class UserController {
       }
       else{
         let form_data = req.body;
+        //check for the user who is adding the community health worker
+
+        let loggedInUserId = getCurrentUserAddress(req, res)
+
         //add required nonce field for login challenge
         let nonce = Math.floor(Math.random() * 1000000);
         form_data.nonce = nonce;
+        form_data.onBoardedBy = loggedInUserId;
         let newUser = new User(form_data);
   
         await newUser.save().then(
@@ -41,8 +47,13 @@ export class UserController {
       else{
         let form_data = req.body;
         //add required nonce field for login challenge
+
+        let loggedInUserId = getCurrentUserAddress(req, res)
+
+
         let nonce = Math.floor(Math.random() * 1000000);
         form_data.nonce = nonce;
+        form_data.onBoardedBy = loggedInUserId;
         let newUser = new User(form_data);
   
         await newUser.save().then(
@@ -65,9 +76,13 @@ export class UserController {
       }
       else{
         let form_data = req.body;
+
+        let loggedInUserId = getCurrentUserAddress(req, res)
+
         //add required nonce field for login challenge
         let nonce = Math.floor(Math.random() * 1000000);
         form_data.nonce = nonce;
+        form_data.onBoardedBy = loggedInUserId;
         let newUser = new User(form_data);
   
         await newUser.save().then(
