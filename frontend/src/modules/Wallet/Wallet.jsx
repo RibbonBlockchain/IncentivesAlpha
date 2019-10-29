@@ -136,7 +136,10 @@ function Wallet({ history }) {
     toggleModal({
       isVisible: true,
       data: {
-        publicAddress: `ethereum:${data.publicaddress}`,
+        details: {
+          publicAddress: data.publicaddress,
+          type: "receive"
+        },
         message: ""
       },
       modal: "qr"

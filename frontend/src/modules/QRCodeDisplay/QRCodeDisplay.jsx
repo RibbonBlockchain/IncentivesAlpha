@@ -13,12 +13,20 @@ export default function RegisterWithQR() {
 
   useEffect(() => {
     updateQRCodeImage();
-  }, []);
+  }, [data]);
 
-  function updateQRCodeImage() {
+  console.log(qr);
+
+  async function updateQRCodeImage() {
+    let address = null;
     setQR({ image: "" });
-    if (data && data.publicAddress) {
-      let image = qrImage.imageSync(data.publicAddress, { type: "svg" });
+    if (data && data.details && data.details.publicAddress) {
+      if (data.details.type === "onboard") {
+        address = data.details.publicAddress;
+      } else if (data.details.type === "receive") {
+        address = `ethereum:${data.details.publicAddress}`;
+      }
+      let image = await qrImage.imageSync(address, { type: "svg" });
       setQR({ image, data });
     }
   }
@@ -39,13 +47,13 @@ export default function RegisterWithQR() {
         <div className={styles.header}>
           {qr.image ? (
             <>
-              {qr.data.message && <h3>{qr.data.message}</h3>}
+              {data && data && <h3>{data.message}</h3>}
               <div
                 className={styles.qrWallet}
                 dangerouslySetInnerHTML={{ __html: qr.image.toString() }}
-                {...qr.data.publicAddress}
+                {...qr.data.details.publicAddress}
               ></div>
-              <span>{qr.data.publicAddress.split(":")[1]}</span>
+              <span>{qr.data.details.publicAddress}</span>
             </>
           ) : null}
         </div>

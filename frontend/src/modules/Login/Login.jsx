@@ -33,7 +33,10 @@ function Login() {
         toggleModal({
           isVisible: true,
           data: {
-            publicAddress: `ethereum:${publicAddress}`,
+            details: {
+              publicAddress,
+              type: "onboard"
+            },
             message: "Share this QR Code with the Community Health Worker"
           },
           modal: "qr"

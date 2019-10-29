@@ -1,6 +1,10 @@
-export const waitForConfirmation = async (provider, tx) => {
+export const waitForConfirmation = async (provider, signer, tx) => {
   try {
-    return await tx.wait(1);
+    let gas = await provider.estimateGas(tx);
+    tx.gasLimit = gas;
+    console.log(gas);
+    let signer = await signer.sendTransaction(tx);
+    console.log(signer);
   } catch (error) {
     return error;
   }

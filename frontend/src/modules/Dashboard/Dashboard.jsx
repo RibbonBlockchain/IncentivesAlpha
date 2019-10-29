@@ -35,12 +35,34 @@ function DashboardTable({ data, type }) {
     );
   }
 
+  function renderPatient({ rowData }) {
+    return (
+      <h5>{`${rowData.patient.firstName} ${rowData.patient.lastName} `}</h5>
+    );
+  }
+
+  function renderPractitioner({ rowData }) {
+    return (
+      <h5>{`${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `}</h5>
+    );
+  }
+
+  function renderHealthWorker({ rowData }) {
+    return <h5>{`${rowData.chw.firstName} ${rowData.chw.lastName} `}</h5>;
+  }
+
   function renderStatus({ rowData }) {
     return <>{rowData.status == 1 ? "Confirmed" : "Failed"}</>;
   }
 
   function renderDate({ rowData }) {
-    return <>{moment(rowData.txn_date).utc()}</>;
+    return (
+      <h5>
+        {moment(rowData.createdDate)
+          .utc()
+          .format("YYYY-MM-DD HH:mm")}
+      </h5>
+    );
   }
 
   return (
@@ -72,18 +94,11 @@ function DashboardTable({ data, type }) {
                 styles.ReactVirtualized__Table__headerColumn
               ].join(" ")}
             >
-              <Column
-                label="Date"
-                cellRenderer={renderDate}
-                dataKey="date"
-                className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={200}
-              />
               {type !== roleNames.PRACTITIONER && (
                 <Column
                   label="Practitioner"
-                  cellRenderer={renderTxLink}
-                  dataKey="practitioner"
+                  cellRenderer={renderPractitioner}
+                  dataKey="practitionerAddress"
                   className={styles.ReactVirtualized__Table__rowColumn_ticker}
                   width={300}
                 />
@@ -91,29 +106,29 @@ function DashboardTable({ data, type }) {
               {type !== roleNames.PATIENT && (
                 <Column
                   label="Patient"
-                  cellRenderer={renderTxLink}
-                  dataKey="patient"
+                  cellRenderer={renderPatient}
+                  dataKey="patientAddress"
                   className={styles.ReactVirtualized__Table__rowColumn_ticker}
                   width={300}
                 />
               )}
-              <Column
+              {/* <Column
                 label="Interactions"
                 cellRenderer={renderTxLink}
                 dataKey="interactions"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
                 width={300}
-              />
+              /> */}
               {type < roleNames.HEALTH_WORKER && (
                 <Column
                   label="Registered By"
-                  cellRenderer={renderStatus}
-                  dataKey="chw"
+                  cellRenderer={renderHealthWorker}
+                  dataKey="chwAddress"
                   className={styles.ReactVirtualized__Table__rowColumn_ticker}
                   width={200}
                 />
               )}
-              <Column
+              {/* <Column
                 label="Total Payout"
                 cellRenderer={renderStatus}
                 dataKey="payout"
@@ -126,6 +141,13 @@ function DashboardTable({ data, type }) {
                 dataKey="status"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
                 width={100}
+              /> */}
+              <Column
+                label="Date"
+                cellRenderer={renderDate}
+                dataKey="createdDate"
+                className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                width={150}
               />
             </Table>
           )}

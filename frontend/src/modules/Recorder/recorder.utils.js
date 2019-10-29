@@ -29,9 +29,9 @@ export const recordInteraction = async data => {
     let tx = await vaultContract.payout(payoutInformation);
     if (tx.transactionHash) {
       let details = {
-        patientAddress: patient.value.publicAddress,
-        practitionerAddress: practitioner.value.publicAddress,
-        chwAddress: user.publicaddress,
+        patient: patient.value._id,
+        practitioner: practitioner.value._id,
+        chw: user._id,
         activities:
           activities.length > 0
             ? activities.map(activity => ({

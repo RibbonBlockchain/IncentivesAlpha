@@ -65,7 +65,7 @@ export const useData = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [address]);
 
   const fetchData = async () => {
     if (address !== null) {
