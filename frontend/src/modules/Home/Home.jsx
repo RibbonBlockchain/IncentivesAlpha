@@ -3,8 +3,9 @@ import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import Logo from "../../common/components/Logo";
 import User from "../../common/components/User";
 import WalletModal from "../Wallet";
-import NetworkModal from "../Network";
-import Dashboard from "../Dashboard";
+import DonateModal from "../Donate";
+import SendModal from "../Send";
+import Dashboard from "../Dashboard/Dashboard";
 import CreateInteraction from "../Interactions/Create";
 import ListInteractions from "../Interactions/List";
 import CreatePractitioner from "../Practitioners/Create";
@@ -164,7 +165,8 @@ function Home() {
             <Redirect from="*" to="/app/home" />
           </Switch>
           <WalletModal />
-          <NetworkModal />
+          <DonateModal />
+          <SendModal />
         </main>
       </div>
     </>

@@ -49,4 +49,22 @@ export default class BlockchainService {
       return error;
     }
   }
+
+  async sendTokens({ amount, receipient, message }) {
+    try {
+      let { signer, ethers } = await this.getInstance();
+      const transaction = {
+        to: receipient,
+        nonce: 0,
+        // gasLimit: 0,
+        // gasPrice: 0,
+        // data: `0x${ethers.utils.hexlify(message)}`,
+        value: ethers.utils.parseEther(amount),
+        chainId: ethers.utils.getNetwork("homestead").chainId
+      };
+      return await signer.sendTransaction(transaction);
+    } catch (error) {
+      return error.message;
+    }
+  }
 }

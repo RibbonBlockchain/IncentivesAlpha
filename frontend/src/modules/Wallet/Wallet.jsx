@@ -1,4 +1,7 @@
 import React from "react";
+import useForm from "react-hook-form";
+import * as moment from "moment";
+import { withRouter } from "react-router-dom";
 import Modal from "../../common/components/Modal";
 import Blockies from "../../common/components/Blockies";
 import Button from "../../common/components/Button";
@@ -8,11 +11,16 @@ import { clear } from "../../common/utils/storage";
 import { useModal } from "../../common/providers/Modal.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
-import * as moment from "moment";
 import styles from "./Wallet.module.scss";
-import { withRouter } from "react-router-dom";
 
-function Profile({ user, data, handleProfileNavigation, currency }) {
+function Profile({
+  user,
+  data,
+  handleProfileNavigation,
+  showSendModal,
+  currency,
+  showQRCodeModal
+}) {
   async function handleSignOut() {
     clear();
     window.location.reload();
@@ -45,12 +53,32 @@ function Profile({ user, data, handleProfileNavigation, currency }) {
               {data.publicaddress}
             </a>
           </small>
-          <span>
+          <>
             <Balance
               balance={Number(user.balance).toFixed(4)}
               ticker={currency.toString().toUpperCase()}
             />
-          </span>
+            <div className={styles.actions}>
+              <Button
+                classNames={[
+                  styles.button,
+                  styles.button_small,
+                  styles.button_primary
+                ].join(" ")}
+                text="Send"
+                onClick={showSendModal}
+              />
+              <Button
+                classNames={[
+                  styles.button,
+                  styles.button_small,
+                  styles.button_primary
+                ].join(" ")}
+                text="Receive"
+                onClick={showQRCodeModal}
+              />
+            </div>
+          </>
         </div>
         <div className={styles.description}>
           <span className={styles.heading}>Bio</span>
@@ -96,6 +124,25 @@ function Wallet({ history }) {
     history.push("/app/profile");
   }
 
+  function handleSendWalletModal() {
+    toggleModal({
+      isVisible: true,
+      data: null,
+      modal: "send"
+    });
+  }
+
+  function handleQRCodeModal() {
+    toggleModal({
+      isVisible: true,
+      data: {
+        publicAddress: `ethereum:${data.publicaddress}`,
+        message: ""
+      },
+      modal: "qr"
+    });
+  }
+
   let isOpen = isVisible && modal === "wallet";
   let details = {
     balance,
@@ -112,6 +159,8 @@ function Wallet({ history }) {
           user={details}
           data={data}
           currency={currency}
+          showQRCodeModal={handleQRCodeModal}
+          showSendModal={handleSendWalletModal}
           handleProfileNavigation={handleProfileNavigation}
         />
       </div>

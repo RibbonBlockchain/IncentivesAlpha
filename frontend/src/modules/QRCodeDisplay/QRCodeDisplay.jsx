@@ -19,7 +19,7 @@ export default function RegisterWithQR() {
     setQR({ image: "" });
     if (data && data.publicAddress) {
       let image = qrImage.imageSync(data.publicAddress, { type: "svg" });
-      setQR({ image, data: data.publicAddress });
+      setQR({ image, data });
     }
   }
 
@@ -37,13 +37,16 @@ export default function RegisterWithQR() {
     >
       <div className={styles.cnt}>
         <div className={styles.header}>
-          <h3>Share this QR Code with the Community Health Worker</h3>
           {qr.image ? (
-            <div
-              className={styles.qrWallet}
-              dangerouslySetInnerHTML={{ __html: qr.image.toString() }}
-              {...qr.data.publicAddress}
-            ></div>
+            <>
+              {qr.data.message && <h3>{qr.data.message}</h3>}
+              <div
+                className={styles.qrWallet}
+                dangerouslySetInnerHTML={{ __html: qr.image.toString() }}
+                {...qr.data.publicAddress}
+              ></div>
+              <span>{qr.data.publicAddress.split(":")[1]}</span>
+            </>
           ) : null}
         </div>
       </div>

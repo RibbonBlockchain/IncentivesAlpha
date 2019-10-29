@@ -12,4 +12,7 @@
     padding: calculateRem(12) calculateRem(32) !important;
     cursor: default;
   }
+  &_small {
+    padding: calculateRem(10);
+  }
 }
