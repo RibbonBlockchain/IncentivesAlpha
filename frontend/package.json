@@ -2,6 +2,7 @@
   "name": "dapp",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@portis/web3": "^2.0.0-beta.43",
     "@walletconnect/web3-provider": "^1.0.0-beta.36",
