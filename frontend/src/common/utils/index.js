@@ -66,11 +66,9 @@ export const getNetworkDetails = async (provider, signer, contract) => {
     }
   } catch (error) {
     return {
-      error: new Error(
-        `Network error occured. Please make sure you are on ${await getNetworkName(
-          Number(config.DEFAULT_NETWORK)
-        )}`
-      )
+      error: `Network error occured. Please make sure you are on ${await getNetworkName(
+        Number(config.DEFAULT_NETWORK)
+      )}`
     };
   }
 };
