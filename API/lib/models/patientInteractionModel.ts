@@ -1,33 +1,34 @@
 import * as mongoose from "mongoose";
+import {FKHelper} from "./helpers/foreign-key-helper";
 
 const Schema = mongoose.Schema;
 
 export const PatientInteractionSchema = new Schema({
-    patientAddress: {
-        type: String,
-        required: "Enter a patient Address"
+    patient: {
+		type: Schema.ObjectId,
+        ref: 'User',
     },
-    practitionerAddress: {
-        type: String,
-        required: "Enter a practitioner Address"
-    },
-    chwAddress:{
-        type: String,
-        required: "Enter a chw Address"
-    },
+    practitioner: {
+		type: Schema.ObjectId,
+		ref: 'User',
+	},
+    chw:{
+		type: Schema.ObjectId,
+		ref: 'User',
+	},
     activities: [
         {
             activityId: {
-                type: String,
-                required: "Enter a valid activity id"
+                type: Schema.ObjectId,
+		        ref: 'ActivityList',
             }
         }
     ],
     prescriptions: [
         {
             prescriptionId: {
-                type: String,
-                required: "Enter a valid prescription id"
+                type: Schema.ObjectId,
+		        ref: 'PrescriptionList',
             }
         }
     ],
@@ -48,32 +49,7 @@ export const PatientInteractionSchema = new Schema({
         }
     ],
     serviceRatings: [
-      {
-            health_services: {
-                type: Number,
-                required: "Enter health services rating"
-            },
-            medicines: {
-                type: Number,
-                required: "Enter medicines rating"
-            },
-            patient_safety: {
-                type: Number,
-                required: "Enter patient safety rating"
-            },
-            cleanliness: {
-                type: Number,
-                required: "Enter cleanliness rating"
-            },
-            staff_attitude: {
-                type: Number,
-                required: "Enter staff attitude rating"
-            },
-            waiting_time: {
-                type: Number,
-                required: "Enter waiting time rating"
-            }
-      }
+      
     ],
     transactionLogs: [
         {
@@ -102,5 +78,21 @@ export const PatientInteractionSchema = new Schema({
                 default: 0
             }
         }
-    ]
+    ],
+    createdDate: {
+        type: Date,
+        default: Date.now
+    }
 })
+
+PatientInteractionSchema.pre('find', autoPopulateForeigns)
+PatientInteractionSchema.pre('findOne', autoPopulateForeigns)
+
+function autoPopulateForeigns (next) {
+  this.populate('activityId')
+  .populate('prescriptionId')
+  .populate('patient', ['firstName', 'lastName', 'publicAddress'])
+  .populate('chw', ['firstName', 'lastName', 'publicAddress'])
+  .populate('practitioner', ['firstName', 'lastName', 'publicAddress'])
+  next()
+}

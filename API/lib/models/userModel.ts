@@ -34,8 +34,13 @@ export const UserSchema = new Schema({
   },
   phoneNumber: {
     type: String,
-    required: "Please Enter a Mobile Number"
+    required: "Please Enter a Mobile Number",
+    index: { unique:true }
   },
+  onBoardedBy:{
+		type: Schema.ObjectId,
+		ref: 'User',
+	},
   createdDate: {
     type: Date,
     default: Date.now

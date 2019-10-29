@@ -70,6 +70,22 @@ export const superAdminAndCommunityHealthWorkerOnly = (req, res, next) => {
     }
 }
 
+export const getCurrentUserAddress = (req, res) => {
+    if (req.headers['authorization']) {
+        try {
+            let authorization = req.headers['authorization'].split(' ');
+
+            const decoded = jwt.verify(authorization[1], config.secret);
+            return decoded.payload.id
+
+        } catch (err) {
+            return res.status(403).send({status:403, error:"Invalid token signature"});
+        }
+    } else {
+        return res.status(401).send({status:401, error:"unathorized"});
+    }
+}
+
 // export const addressOwnerOnly = (req, res, next) => {
 //     try {
 //         let publicAddress = req.jwt.payload.publicAddress;
