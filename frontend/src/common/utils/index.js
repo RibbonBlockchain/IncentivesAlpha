@@ -36,6 +36,11 @@ export const formatLink = link => {
 export const getNetworkDetails = async (provider, signer, contract) => {
   try {
     let currentNetwork = await provider.getNetwork();
+    console.log(
+      currentNetwork.chainId,
+      typeof config.DEFAULT_NETWORK,
+      config.DEFAULT_NETWORK
+    );
     if (currentNetwork.chainId === Number(config.DEFAULT_NETWORK)) {
       let networkAddress = await signer.getAddress();
       let currentBalance = await provider.getBalance(networkAddress);
