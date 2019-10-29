@@ -4,18 +4,18 @@ import {FKHelper} from "./helpers/foreign-key-helper";
 const Schema = mongoose.Schema;
 
 export const PatientInteractionSchema = new Schema({
-    patientAddress: [{
+    patient: {
+		type: Schema.ObjectId,
+        ref: 'User',
+    },
+    practitioner: {
 		type: Schema.ObjectId,
 		ref: 'User',
-	}],
-    practitionerAddress: [{
+	},
+    chw:{
 		type: Schema.ObjectId,
 		ref: 'User',
-	}],
-    chwAddress:[{
-		type: Schema.ObjectId,
-		ref: 'User',
-	}],
+	},
     activities: [
         {
             activityId: {
@@ -49,32 +49,7 @@ export const PatientInteractionSchema = new Schema({
         }
     ],
     serviceRatings: [
-      {
-            health_services: {
-                type: Number,
-                required: "Enter health services rating"
-            },
-            medicines: {
-                type: Number,
-                required: "Enter medicines rating"
-            },
-            patient_safety: {
-                type: Number,
-                required: "Enter patient safety rating"
-            },
-            cleanliness: {
-                type: Number,
-                required: "Enter cleanliness rating"
-            },
-            staff_attitude: {
-                type: Number,
-                required: "Enter staff attitude rating"
-            },
-            waiting_time: {
-                type: Number,
-                required: "Enter waiting time rating"
-            }
-      }
+      
     ],
     transactionLogs: [
         {
@@ -103,7 +78,11 @@ export const PatientInteractionSchema = new Schema({
                 default: 0
             }
         }
-    ]
+    ],
+    createdDate: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 PatientInteractionSchema.pre('find', autoPopulateForeigns)
@@ -112,8 +91,8 @@ PatientInteractionSchema.pre('findOne', autoPopulateForeigns)
 function autoPopulateForeigns (next) {
   this.populate('activityId')
   .populate('prescriptionId')
-  .populate('patientAddress', ['firstName', 'lastName', 'publicAddress'])
-  .populate('chwAddress', ['firstName', 'lastName', 'publicAddress'])
-  .populate('practitionerAddress', ['firstName', 'lastName', 'publicAddress'])
+  .populate('patient', ['firstName', 'lastName', 'publicAddress'])
+  .populate('chw', ['firstName', 'lastName', 'publicAddress'])
+  .populate('practitioner', ['firstName', 'lastName', 'publicAddress'])
   next()
 }

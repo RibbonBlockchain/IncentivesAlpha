@@ -25,7 +25,7 @@ export class UserController {
             res.status(201).json({ status: 201, data: user });
           }
         ).catch(error => {
-          res.status(400).json({status:400, message:"Duplicate address"})
+          res.status(400).json({status:400, message:"Duplicate address or Phone Number"})
         })
       }
     }catch{
@@ -50,7 +50,7 @@ export class UserController {
             res.status(201).json({ status: 201, data: user });
           }
         ).catch(error => {
-          res.status(400).json({status:400, message:"Duplicate address"})
+          res.status(400).json({status:400, message:"Duplicate address or Phone Number"})
         })
       }
     }catch{
@@ -75,7 +75,7 @@ export class UserController {
             res.status(201).json({ status: 201, data: user });
           }
         ).catch(error => {
-          res.status(400).json({status:400, message:"Duplicate address"})
+          res.status(400).json({status:400, message:"Duplicate address or Phone Number"})
         })
       }
     }catch{

@@ -72,7 +72,7 @@ export class PatientInteractionListController {
         }).then(
           async user => {
             await patientInteractionList.find({
-              chwAddress: user._id
+              chw: user._id
             }).then(async interactions => {
               res.json({ status: 200, data: interactions });
             }).catch(error => {
@@ -87,7 +87,7 @@ export class PatientInteractionListController {
         }).then(
           async user => {
             await patientInteractionList.find({
-              patientAddress: user._id
+              patient: user._id
             }).then(async interactions => {
               res.json({ status: 200, data: interactions });
             }).catch(error => {
@@ -102,7 +102,7 @@ export class PatientInteractionListController {
         }).then(
           async user => {
             await patientInteractionList.find({
-              practitionerAddress: user._id
+              practitioner: user._id
             }).then(async interactions => {
               res.json({ status: 200, data: interactions });
             }).catch(error => {
