@@ -1,4 +1,5 @@
 import { config } from "../constants/config";
+import { ethers } from "ethers";
 
 export const formatAddress = address => {
   let pre = address.toLowerCase().slice(0, 12);
@@ -35,7 +36,7 @@ export const formatLink = link => {
 export const getNetworkDetails = async (provider, signer, contract) => {
   try {
     let currentNetwork = await provider.getNetwork();
-    if (currentNetwork.chainId === config.DEFAULT_NETWORK) {
+    if (currentNetwork.chainId === Number(config.DEFAULT_NETWORK)) {
       let networkAddress = await signer.getAddress();
       let currentBalance = await provider.getBalance(networkAddress);
       let loginType = await contract.getUserRole(networkAddress);
@@ -53,12 +54,31 @@ export const getNetworkDetails = async (provider, signer, contract) => {
       }
     } else {
       return {
-        error: `Unknown network selected. Please switch to ${config.DEFAULT_NETWORK}`
+        error: `Unknown network selected. Please switch to ${await getNetworkName(
+          Number(config.DEFAULT_NETWORK)
+        )}`
       };
     }
   } catch (error) {
     return {
       error: new Error(error)
     };
+  }
+};
+
+export const getNetworkName = async id => {
+  switch (id) {
+    case 1:
+      return "Main Network";
+    case 3:
+      return "Ropsten Testnet";
+    case 4:
+      return "Rinkeby Testnet";
+    case 42:
+      return "Kovan Testnet";
+    case 77:
+      return "Sokol Testnet";
+    default:
+      return "Local Testnet";
   }
 };
