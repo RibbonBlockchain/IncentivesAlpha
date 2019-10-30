@@ -7,7 +7,6 @@ import React, {
   useCallback
 } from "react";
 import RegistryContract from "../services/blockchain/apps/registry";
-import AuthAPI from "../services/api/auth.api";
 import UserAPI from "../services/api/user.api";
 import { useAlert } from "./Modal.provider";
 import { setItem, getItem } from "../utils/storage";
@@ -82,39 +81,38 @@ export const useWeb3 = () => {
   };
 
   useEffect(() => {
+    const getWalletDetails = async () => {
+      let registryContract = new RegistryContract();
+      const userAPI = new UserAPI();
+      let { provider, ethers, signer } = await registryContract.getInstance();
+
+      let network = await getNetworkDetails(provider, signer, registryContract);
+      if (network.error) {
+        toggleModal({
+          isVisible: true,
+          message: network.error
+        });
+      } else {
+        let {
+          networkAddress,
+          currentBalance,
+          currentNetwork,
+          loginType
+        } = network;
+        let token = getItem("token") || null;
+        let user = await userAPI.getUserByAddress(networkAddress);
+        await update({
+          address: networkAddress,
+          balance: ethers.utils.formatEther(currentBalance),
+          loginType,
+          token,
+          user,
+          network: currentNetwork
+        });
+      }
+    };
     getWalletDetails();
   }, []);
-
-  const getWalletDetails = async () => {
-    let registryContract = new RegistryContract();
-    const userAPI = new UserAPI();
-    let { provider, ethers, signer } = await registryContract.getInstance();
-
-    let network = await getNetworkDetails(provider, signer, registryContract);
-    if (network.error) {
-      toggleModal({
-        isVisible: true,
-        message: network.error
-      });
-    } else {
-      let {
-        networkAddress,
-        currentBalance,
-        currentNetwork,
-        loginType
-      } = network;
-      let token = getItem("token") || null;
-      let user = await userAPI.getUserByAddress(networkAddress);
-      await update({
-        address: networkAddress,
-        balance: ethers.utils.formatEther(currentBalance),
-        loginType,
-        token,
-        user,
-        network: currentNetwork
-      });
-    }
-  };
 
   return [{ address, token, loginType, balance, user }, login];
 };

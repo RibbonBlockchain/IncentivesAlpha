@@ -49,10 +49,7 @@ export default class VaultContract extends BlockchainService {
         chw,
         ethers.utils.parseEther(patientAmount.toString()),
         ethers.utils.parseEther(practitionerAmount.toString()),
-        ethers.utils.parseEther(chwAmount.toString()),
-        {
-          value: "0x0"
-        }
+        ethers.utils.parseEther(chwAmount.toString())
       );
       return await waitForConfirmation(provider, tx);
     } catch (error) {

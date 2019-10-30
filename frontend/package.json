@@ -5,6 +5,7 @@
   "homepage": ".",
   "dependencies": {
     "@portis/web3": "^2.0.0-beta.43",
+    "@truffle/contract": "^4.0.37",
     "@walletconnect/web3-provider": "^1.0.0-beta.36",
     "axios": "^0.19.0",
     "chroma-js": "^2.0.6",
@@ -29,6 +30,7 @@
     "react-select": "^3.0.8",
     "react-sortable-hoc": "^1.10.1",
     "react-virtualized": "^9.21.1",
+    "truffle-contract": "^4.0.31",
     "web3connect": "^1.0.0-beta.22"
   },
   "scripts": {

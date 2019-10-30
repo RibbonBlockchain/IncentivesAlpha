@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { config } from "../../constants/config";
 
-const { POA_RPC, PRIVATE_KEY } = config;
+const { POA_RPC } = config;
 
 const init = async function() {
   let provider = window.web3.currentProvider;
