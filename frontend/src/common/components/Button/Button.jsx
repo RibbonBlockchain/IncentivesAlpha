@@ -2,12 +2,21 @@ import React from "react";
 import ReactImageFallback from "react-image-fallback";
 import styles from "./Button.module.scss";
 
-function Button({ classNames, text, image, onClick, altImage, disabled }) {
+function Button({
+  classNames,
+  text,
+  image,
+  onClick,
+  altImage,
+  disabled,
+  type
+}) {
   return (
     <button
       disabled={disabled}
       className={[styles.button, classNames].join(" ")}
       onClick={onClick}
+      type={type}
     >
       {image && (
         <ReactImageFallback

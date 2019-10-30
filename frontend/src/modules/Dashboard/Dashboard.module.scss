@@ -1,14 +1,128 @@
 @import "../../common/styles/variables";
 
-a {
-  color: #dc5a60;
-  text-decoration: none;
+.modalWindow {
+  background: #313541;
+  color: #ffffff;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
+.modalFormWindow {
+  background: #313541;
+  color: #ffffff;
+  small {
+    color: $red;
+  }
 }
 
-// @todo
-// fix mobile responsiveness
+.cnt {
+  font-family: $font;
+  padding: calculateRem(30);
+  display: flex;
+  flex-direction: column;
+  h4 {
+    align-self: center;
+  }
+}
+
+.dashboard {
+  margin-top: calculateRem(20);
+}
+.count {
+  margin-bottom: calculateRem(20);
+  font-size: calculateRem(20);
+  font-weight: 500;
+}
+
+.heading {
+  color: $background;
+}
+
+.card__light_orange {
+  background: $orange-bg;
+}
+
+.card__light_blue {
+  background: $blue-bg;
+}
+
+.card__light_pink {
+  background: $pink-bg;
+}
+
+.card__light_purple {
+  background: $purple-bg;
+}
+
+.card__white {
+  background: $text-color;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+input,
+textarea {
+  color: $text-color;
+}
+
+textarea {
+  resize: none;
+}
+
+.table {
+  margin-top: calculateRem(10);
+}
+.headerRow,
+.evenRow,
+.oddRow {
+  border-bottom: 1px solid #e0e0e0;
+}
+.oddRow {
+  background-color: #fafafa;
+}
+.headerColumn {
+  text-transform: none;
+}
+
+.noRows {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  color: #bdbdbd;
+}
+
+.ReactVirtualized__Table__headerColumn {
+  font-size: 0.8rem;
+  color: #818181;
+  font-weight: 600;
+}
+
+.ReactVirtualized__Table__rowColumn_ticker {
+  font-size: 1rem;
+  color: #262a4b;
+  font-weight: 600;
+}
+
+.ReactVirtualized__Table__rowColumn {
+  font-size: 1rem;
+  color: #262a4b;
+  font-weight: 500;
+}
+
+@media (min-width: 320px) and (max-width: 768px) {
+  .ReactVirtualized__Table__headerColumn {
+    font-size: 0.7rem;
+  }
+
+  .ReactVirtualized__Table__rowColumn_ticker {
+    font-size: 0.7rem;
+  }
+
+  .ReactVirtualized__Table__rowColumn {
+    font-size: 0.7rem;
+    text-align: center;
+  }
+}

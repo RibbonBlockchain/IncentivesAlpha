@@ -1,8 +1,8 @@
 import BlockchainService from "../index";
-import IVault from "../abis/IVault.json";
+import Vault from "../abis/Vault.json";
 
 import { config } from "../../../constants/config";
-import { toHex } from "../../../utils";
+import { waitForConfirmation } from "../utils";
 
 let vaultAddress = config.VAULT_CONTRACT_ADDRESS;
 
@@ -10,16 +10,53 @@ export default class VaultContract extends BlockchainService {
   constructor() {
     super();
     this.blockchainService = new BlockchainService();
-    this.contract = this.initializeContract(vaultAddress, IVault);
+    this.contract = this.initializeContract(vaultAddress, Vault);
   }
 
-  static async address() {}
+  async address() {}
 
-  static async donateFunds() {}
+  async donateFunds(value, message) {
+    let { ethers, provider } = await this.getInstance();
+    let contract = await this.contract;
+    try {
+      let tx = await contract.donateFunds(message, {
+        value: ethers.utils.parseEther(value.toString())
+      });
+      return await waitForConfirmation(provider, tx);
+    } catch (error) {
+      return error;
+    }
+  }
 
-  static async init() {}
+  async init() {}
 
-  static async kill() {}
+  async kill() {}
 
-  static async payout() {}
+  async payout({
+    patient,
+    practitioner,
+    chw,
+    patientAmount,
+    practitionerAmount,
+    chwAmount
+  }) {
+    let { provider, ethers } = await this.getInstance();
+    let contract = await this.contract;
+    try {
+      let tx = await contract.payout(
+        patient,
+        practitioner,
+        chw,
+        ethers.utils.parseEther(patientAmount.toString()),
+        ethers.utils.parseEther(practitionerAmount.toString()),
+        ethers.utils.parseEther(chwAmount.toString()),
+        {
+          value: "0x0"
+        }
+      );
+      return await waitForConfirmation(provider, tx);
+    } catch (error) {
+      return error;
+    }
+  }
 }

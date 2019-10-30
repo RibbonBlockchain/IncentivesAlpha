@@ -1,17 +1,37 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { ConnectedRouter } from "connected-react-router";
+import { BrowserRouter } from "react-router-dom";
 import Router from "./modules/App";
-import store, { history } from "./common/redux";
 import * as serviceWorker from "./serviceWorker";
+import "react-virtualized/styles.css";
+
+import ErrorBoundary from "./common/components/ErrorBoundary";
+
+import Web3Provider from "./common/providers/Web3.provider";
+import ModalProvider from "./common/providers/Modal.provider";
+import APIProvider from "./common/providers/API.provider";
+import AppProvider from "./common/providers/App.provider";
+
+const ContextProviders = ({ children }) => (
+  <>
+    <AppProvider>
+      <Web3Provider>
+        <ModalProvider>
+          <APIProvider>{children}</APIProvider>
+        </ModalProvider>
+      </Web3Provider>
+    </AppProvider>
+  </>
+);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Router />
-    </ConnectedRouter>
-  </Provider>,
+  <ErrorBoundary>
+    <ContextProviders>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </ContextProviders>
+  </ErrorBoundary>,
   document.getElementById("root")
 );
 

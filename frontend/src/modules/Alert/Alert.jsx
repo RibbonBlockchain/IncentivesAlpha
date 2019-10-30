@@ -1,15 +1,13 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { HIDE_ALERT } from "../../common/constants/alert";
+import { useAlert } from "../../common/providers/Modal.provider";
 import styles from "./Alert.module.scss";
 
 function Alert() {
-  const { visible, message } = useSelector(state => state.alert);
-  const dispatch = useDispatch();
+  const [{ isVisible, message }, toggle] = useAlert();
 
   return (
     <>
-      {visible && (
+      {isVisible && message && (
         <div className={[styles.alertWrapper, styles.active].join(" ")}>
           <div className={styles.alert}>
             <div className={styles.msg}>{message}</div>
@@ -17,8 +15,9 @@ function Alert() {
               <div
                 className={styles.textButton}
                 onClick={() =>
-                  dispatch({
-                    type: HIDE_ALERT
+                  toggle({
+                    isVisible: false,
+                    message: null
                   })
                 }
               >

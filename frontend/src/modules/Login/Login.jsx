@@ -1,59 +1,54 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import Web3Connect from "web3connect";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
-
 import { config } from "../../common/constants/config";
-import { authenticateUser } from "../../common/utils/web3/auth";
-
 import Logo from "../../common/components/Logo";
 import styles from "./Login.module.scss";
-import { SHOW_ALERT } from "../../common/constants/alert";
-import { SHOW_QR_REGISTRATION_MODAL } from "../../common/constants/qr";
+import { authenticateUser } from "./login.utils";
+import { TableLoader } from "../../common/components/Loader";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useModal, useAlert } from "../../common/providers/Modal.provider";
 
-import { setItem } from "../../common/utils/storage";
+function Login() {
+  const [, login] = useWeb3();
+  const [, toggle] = useAlert();
+  const [, toggleModal] = useModal();
+  const [isLoading, setIsLoading] = useState(false);
 
-import { USER_NOT_FOUND } from "../../common/constants/error_codes";
+  const loginUser = async () => {
+    setIsLoading(true);
+    let result = await authenticateUser();
+    let { authWithAPI, publicAddress, loginType } = result;
+    if (result.error) {
+      setIsLoading(false);
+      if (result.error.code == -32603) {
+        toggle({
+          isVisible: true,
+          message: result.error.stack.split(".")[0].split(":")[2]
+        });
+      } else {
+        setIsLoading(false);
+        toggleModal({
+          isVisible: true,
+          data: {
+            publicAddress: `ethereum:${publicAddress}`,
+            message: "Share this QR Code with the Community Health Worker"
+          },
+          modal: "qr"
+        });
+      }
+    } else {
+      setIsLoading(false);
+      login({ token: authWithAPI.token, address: publicAddress, loginType });
+    }
+  };
 
-function Login({ history }) {
   let { WALLET_CONNECT, PORTIS, FORTMATIC, NETWORK } = config;
-
-  async function processLogin(provider) {
-    await authenticateUser(provider)
-      .then(async result => {
-        if (result.response.error) {
-          if (result.response.error === USER_NOT_FOUND) {
-            await dispatch({
-              type: SHOW_QR_REGISTRATION_MODAL,
-              payload: result.ethAddress
-            });
-          } else {
-            await dispatch({
-              type: SHOW_ALERT,
-              payload: result.response.error.toString()
-            });
-          }
-        } else {
-          //   await history.replace(history.location.pathname);
-          await setItem("token", result.response.token);
-          await setItem("address", result.ethAddress);
-          //   todo replace this
-          window.location.reload();
-        }
-      })
-      .catch(
-        async error =>
-          await dispatch({
-            type: SHOW_ALERT,
-            payload: error.toString()
-          })
-      );
-  }
-  const dispatch = useDispatch();
   return (
     <>
+      {isLoading && <TableLoader />}
       <div className={styles.container}>
         <div className={styles.login_bg}></div>
         <div className={styles.login_box}>
@@ -81,18 +76,18 @@ function Login({ history }) {
                     }
                   }
                 }}
-                onConnect={provider => processLogin(provider)}
-                onClose={() => {
-                  dispatch({
-                    type: SHOW_ALERT,
-                    payload: "Action was terminated by user"
-                  });
-                }}
+                onConnect={loginUser}
+                onClose={() =>
+                  toggle({
+                    isVisible: true,
+                    message: "Action was terminated by user"
+                  })
+                }
               />
             </div>
             <div className={styles.headline}>
               <small>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit
+                {/* Lorem ipsum, dolor sit amet consectetur adipisicing elit */}
               </small>
             </div>
           </div>

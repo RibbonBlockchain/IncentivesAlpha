@@ -6,7 +6,10 @@ import { Routes } from "./routes/walletRoutes";
 import { UserRoutes } from "./routes/userRoutes";
 import { AuthRoutes } from "./routes/authRoute";
 import { LogRoutes } from "./routes/logRoutes";
-import { InteractionListRoutes } from "./routes/interactionListRoutes";
+import { ActivityListRoutes } from "./routes/activityListRoutes";
+import { InteractionRoutes } from "./routes/patientInteractionRoutes";
+import { PrescriptionListRoutes } from "./routes/prescriptionRoutes";
+import { SettingsRoutes } from "./routes/settingsRoutes";
 import * as mongoose from "mongoose";
 import * as cors from "cors";
 
@@ -25,15 +28,18 @@ class App {
 	public routePrv: Routes = new Routes();
 	public userRoutes: UserRoutes = new UserRoutes();
 	public authRoutes: AuthRoutes = new AuthRoutes();
-	public interactionRoutes: InteractionListRoutes = new InteractionListRoutes();
+	public activityRoutes: ActivityListRoutes = new ActivityListRoutes();
 	public logRoutes: LogRoutes = new LogRoutes();
+	public interactionRoutes: InteractionRoutes = new InteractionRoutes();
+	public prescriptionRoutes: PrescriptionListRoutes = new PrescriptionListRoutes();
+	public settingsRoutes: SettingsRoutes = new SettingsRoutes();
 	// public mongoUrl: string = 'mongodb://localhost/Ribbon-Incentives-API-DB';
 	// public mongoUrl: string = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
 	public mongoUrl: string;
 
 	// options for cors middleware
 	public corsOption: cors.CorsOptions = {
-		allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+		allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token", "Authorization"],
 		credentials: true,
 		methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
 		origin: '*',
@@ -56,8 +62,11 @@ class App {
 		this.routePrv.routes(this.app);
 		this.userRoutes.routes(this.app);
 		this.authRoutes.routes(this.app);
-		this.interactionRoutes.routes(this.app);
+		this.activityRoutes.routes(this.app);
 		this.logRoutes.routes(this.app);
+		this.interactionRoutes.routes(this.app);
+		this.prescriptionRoutes.routes(this.app);
+		this.settingsRoutes.routes(this.app);
 	}
 
 	private config(): void {

@@ -1,1 +1,16 @@
 @import "../../common/styles/variables";
+.form {
+  small {
+    color: $red;
+  }
+  input {
+    // background: transparent;
+    // border: none;
+    // color: $background;
+    // background-color: none !important;
+  }
+}
+
+.background {
+  background: #313541;
+}
