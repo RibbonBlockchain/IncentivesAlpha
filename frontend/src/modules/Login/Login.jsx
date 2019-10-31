@@ -17,9 +17,9 @@ function Login() {
   const [, toggleModal] = useModal();
   const [isLoading, setIsLoading] = useState(false);
 
-  const loginUser = async () => {
+  const loginUser = async provider => {
     setIsLoading(true);
-    let result = await authenticateUser();
+    let result = await authenticateUser(provider);
     let { authWithAPI, publicAddress, loginType } = result;
     if (result.error) {
       setIsLoading(false);
@@ -28,8 +28,7 @@ function Login() {
           isVisible: true,
           message: result.error.stack.split(".")[0].split(":")[2]
         });
-      } else {
-        setIsLoading(false);
+      } else if (result.error === "USER_NOT_FOUND_ERR") {
         toggleModal({
           isVisible: true,
           data: {
@@ -41,6 +40,11 @@ function Login() {
           },
           modal: "qr"
         });
+      } else {
+        toggle({
+          isVisible: true,
+          message: result.error.message
+        });
       }
     } else {
       setIsLoading(false);
@@ -48,7 +52,7 @@ function Login() {
     }
   };
 
-  let { WALLET_CONNECT, PORTIS, FORTMATIC, NETWORK } = config;
+  let { WALLET_CONNECT, PORTIS, FORTMATIC } = config;
   return (
     <>
       {isLoading && <TableLoader />}
@@ -58,7 +62,6 @@ function Login() {
           <div className={styles.form}>
             <div className={styles.login_box}>
               <Web3Connect.Button
-                network={NETWORK}
                 providerOptions={{
                   walletconnect: {
                     package: WalletConnectProvider,
@@ -79,7 +82,7 @@ function Login() {
                     }
                   }
                 }}
-                onConnect={loginUser}
+                onConnect={provider => loginUser(provider)}
                 onClose={() =>
                   toggle({
                     isVisible: true,

@@ -75,19 +75,11 @@ export default function Onboard() {
     };
     let newUser = await createNewUser(data);
     if (newUser.error) {
-      if (newUser.error === 11000) {
-        toggle({
-          isVisible: true,
-          message: `Wallet Address ${values.publicAddress} already has an associated account`,
-          data: {}
-        });
-      } else {
-        toggle({
-          isVisible: true,
-          message: newUser.error,
-          data: {}
-        });
-      }
+      toggle({
+        isVisible: true,
+        message: newUser.error,
+        data: {}
+      });
     } else {
       toggle({
         isVisible: true,
@@ -95,6 +87,7 @@ export default function Onboard() {
         data: {}
       });
       clearForm(e);
+      setVisible(false);
     }
   }
 

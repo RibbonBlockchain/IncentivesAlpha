@@ -1,6 +1,7 @@
-export const waitForConfirmation = async (provider, tx) => {
+export const waitForConfirmation = async tx => {
   try {
-    return await tx.wait(1);
+    let wait = await tx.wait(1);
+    return wait;
   } catch (error) {
     return error;
   }

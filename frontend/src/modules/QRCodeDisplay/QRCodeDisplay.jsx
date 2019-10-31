@@ -15,8 +15,6 @@ export default function RegisterWithQR() {
     updateQRCodeImage();
   }, [data]);
 
-  console.log(qr);
-
   async function updateQRCodeImage() {
     let address = null;
     setQR({ image: "" });

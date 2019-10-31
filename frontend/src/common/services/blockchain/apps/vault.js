@@ -32,26 +32,31 @@ export default class VaultContract extends BlockchainService {
 
   async kill() {}
 
-  async payout({
-    patient,
-    practitioner,
-    chw,
-    patientAmount,
-    practitionerAmount,
-    chwAmount
-  }) {
-    let { provider, ethers } = await this.getInstance();
+  async payout({ patient, practitioner, chw, amount }) {
+    let { ethers, signer } = await this.getInstance();
     let contract = await this.contract;
     try {
-      let tx = await contract.payout(
+      let patientAmountInEthers = ethers.utils.parseEther(amount.toString());
+      let practitionerAmountInEthers = ethers.utils.parseEther(
+        amount.toString()
+      );
+      let chwAmountInEthers = ethers.utils.parseEther(amount.toString());
+
+      let contractFunction = contract.payout(
         patient,
         practitioner,
         chw,
-        ethers.utils.parseEther(patientAmount.toString()),
-        ethers.utils.parseEther(practitionerAmount.toString()),
-        ethers.utils.parseEther(chwAmount.toString())
+        patientAmountInEthers,
+        practitionerAmountInEthers,
+        chwAmountInEthers
       );
-      return await waitForConfirmation(provider, tx);
+
+      let tx = {
+        data: contractFunction.data
+      };
+
+      let result = await signer.sendTransaction(tx);
+      return await waitForConfirmation(result);
     } catch (error) {
       return error;
     }

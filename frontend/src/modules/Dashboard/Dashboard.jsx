@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import useForm from "react-hook-form";
+import React, { useEffect } from "react";
 import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { Table, AutoSizer, Column } from "react-virtualized";
@@ -37,18 +36,32 @@ function DashboardTable({ data, type }) {
 
   function renderPatient({ rowData }) {
     return (
-      <h5>{`${rowData.patient.firstName} ${rowData.patient.lastName} `}</h5>
+      <h5>
+        {rowData.patient
+          ? `${rowData.patient.firstName} ${rowData.patient.lastName} `
+          : `Not Available`}
+      </h5>
     );
   }
 
   function renderPractitioner({ rowData }) {
     return (
-      <h5>{`${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `}</h5>
+      <h5>
+        {rowData.practitioner
+          ? `${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `
+          : `Not Available`}
+      </h5>
     );
   }
 
   function renderHealthWorker({ rowData }) {
-    return <h5>{`${rowData.chw.firstName} ${rowData.chw.lastName} `}</h5>;
+    return (
+      <h5>
+        {rowData.chw
+          ? `${rowData.chw.firstName} ${rowData.chw.lastName} `
+          : `Not Available`}
+      </h5>
+    );
   }
 
   function renderStatus({ rowData }) {
@@ -251,8 +264,17 @@ function HandleViews({ type, transactions }) {
 }
 
 export default function Dashboard() {
-  const [{ address, loginType }] = useWeb3();
-  const [{ users, interactions }] = useData();
+  const [{ address, loginType }, , getWalletDetails] = useWeb3();
+  const [{ users, interactions }, fetchData] = useData();
+
+  useEffect(() => {
+    loadData();
+  }, [loginType]);
+
+  const loadData = async () => {
+    await getWalletDetails();
+    await fetchData();
+  };
 
   return (
     <>

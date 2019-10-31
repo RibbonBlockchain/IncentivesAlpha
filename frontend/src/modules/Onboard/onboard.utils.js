@@ -16,9 +16,9 @@ export async function createNewUser(data) {
         return {
           error: user.error
         };
-      } else if (user.message.code) {
+      } else if (user.message) {
         return {
-          error: user.message.code
+          error: user.message
         };
       } else {
         return {

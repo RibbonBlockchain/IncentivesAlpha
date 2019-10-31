@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useForm from "react-hook-form";
-import Select, { components } from "react-select";
+import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
@@ -88,7 +88,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
   const { handleSubmit, register } = useForm({
     mode: "onChange"
   });
-  const [{ activityList, prescriptionList }] = useApp();
+  const [{ activityList, prescriptionList }, loadDetails] = useApp();
   const [{}, toggle] = useAlert();
   const [record, setRecord] = useState({
     patient: {},
@@ -98,11 +98,27 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     ratings: [],
     notes: ""
   });
+  const [, fetchData] = useData();
+
+  useEffect(() => {
+    loadDetails();
+  }, []);
+
   let patients = getByRole(users, roleNames.PATIENT);
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
   let activities = formatActivityOptions(activityList);
   let prescriptions = formatPrescriptionOptions(prescriptionList);
   let ratingList = [];
+
+  function isValid() {
+    let { patient, practitioner, activities, prescriptions } = record;
+    let state =
+      patient.hasOwnProperty("_id") &&
+      practitioner.hasOwnProperty("_id") &&
+      activities.length > 0 &&
+      prescriptions.length > 0;
+    return state ? true : false;
+  }
 
   async function onSubmit(values) {
     let data = {
@@ -125,10 +141,12 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
         message: interaction.error
       });
     } else {
+      await fetchData();
       toggle({
         isVisible: true,
         message: `Interaction has been recorded successfully`
       });
+      onDismiss();
     }
   }
 
@@ -316,6 +334,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
               ></Button>
               <Button
                 text="Save"
+                disabled={!isValid}
                 classNames={[styles.button, styles.button_primary].join(" ")}
                 button="button"
               ></Button>

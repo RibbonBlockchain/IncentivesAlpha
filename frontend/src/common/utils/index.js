@@ -1,6 +1,6 @@
 import { config } from "../constants/config";
 import { ethers } from "ethers";
-
+import { getItem } from "./storage";
 export const formatAddress = address => {
   let pre = address.toLowerCase().slice(0, 12);
   let post = address.toLowerCase().slice(address.length - 4);
@@ -33,16 +33,11 @@ export const formatLink = link => {
   );
 };
 
-export const getNetworkDetails = async (provider, signer, contract) => {
+export const getNetworkDetails = async (provider, contract) => {
   try {
     let currentNetwork = await provider.getNetwork();
-    console.log(
-      currentNetwork.chainId,
-      typeof config.DEFAULT_NETWORK,
-      config.DEFAULT_NETWORK
-    );
+    let networkAddress = getItem("address");
     if (currentNetwork.chainId === Number(config.DEFAULT_NETWORK)) {
-      let networkAddress = await signer.getAddress();
       let currentBalance = await provider.getBalance(networkAddress);
       let loginType = await contract.getUserRole(networkAddress);
       if (typeof loginType === "number") {
@@ -53,18 +48,15 @@ export const getNetworkDetails = async (provider, signer, contract) => {
           loginType
         };
       } else {
-        return {
-          error: "An error occured. Please check your network and try again"
-        };
+        await window.ethereum.enable();
       }
     } else {
       return {
-        error: `Unknown network selected. Please switch to ${await getNetworkName(
-          Number(config.DEFAULT_NETWORK)
-        )}`
+        error: "Web3 Provider found"
       };
     }
   } catch (error) {
+    console.log(error);
     return {
       error: `Network error occured. Please make sure you are on ${await getNetworkName(
         Number(config.DEFAULT_NETWORK)

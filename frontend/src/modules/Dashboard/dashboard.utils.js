@@ -52,7 +52,7 @@ export const formatActivityOptions = options => {
     options.length > 0 &&
     options.map(option => ({
       label: option.activityTitle,
-      value: option._id
+      value: option
     }))
   );
 };

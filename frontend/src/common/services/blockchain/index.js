@@ -4,7 +4,7 @@ import { config } from "../../constants/config";
 const { POA_RPC } = config;
 
 const init = async function() {
-  let provider = window.web3.currentProvider;
+  let provider = window && window.web3 && window.web3.currentProvider;
   let providerEngine =
     typeof provider != "undefined" && provider.hasOwnProperty("selectedAddress")
       ? new ethers.providers.Web3Provider(provider)

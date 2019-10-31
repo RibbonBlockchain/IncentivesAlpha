@@ -8,68 +8,70 @@ export const recordInteraction = async data => {
     patient,
     practitioner,
     user,
-    // amount,
+    amount,
     activities,
     prescriptions,
     serviceRatings
   } = data;
 
-  let amount = "0.0000000001";
-
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
-    patientAmount: amount,
-    practitionerAmount: amount,
-    chwAmount: amount
+    amount
   };
 
   try {
-    let tx = await vaultContract.payout(payoutInformation);
-    if (tx.transactionHash) {
-      let details = {
-        patient: patient.value._id,
-        practitioner: practitioner.value._id,
-        chw: user._id,
-        activities:
-          activities.length > 0
-            ? activities.map(activity => ({
-                activityId: activity.value
-              }))
-            : activities,
-        prescriptions:
-          prescriptions.length > 0
-            ? prescriptions.map(prescription => ({
-                prescriptionId: prescription.value
-              }))
-            : prescriptions,
-        rewards: [
-          {
-            patientReward: amount,
-            practitionerReward: amount,
-            chwReward: amount
-          }
-        ],
-        serviceRatings
-      };
-      let interaction = await interactionAPI.createInteraction(details);
-      if (interaction._id) {
-        return interaction;
-      } else {
-        if (interaction.message.errors) {
-          return {
-            error: interaction.message._message
-          };
+    if (amount > 0) {
+      let tx = await vaultContract.payout(payoutInformation);
+      if (tx.transactionHash) {
+        let details = {
+          patient: patient.value._id,
+          practitioner: practitioner.value._id,
+          chw: user._id,
+          activities:
+            activities.length > 0
+              ? activities.map(activity => ({
+                  activityId: activity.value
+                }))
+              : activities,
+          prescriptions:
+            prescriptions.length > 0
+              ? prescriptions.map(prescription => ({
+                  prescriptionId: prescription.value
+                }))
+              : prescriptions,
+          rewards: [
+            {
+              patientReward: amount,
+              practitionerReward: amount,
+              chwReward: amount
+            }
+          ],
+          serviceRatings
+        };
+        let interaction = await interactionAPI.createInteraction(details);
+        if (interaction._id) {
+          return interaction;
         } else {
-          return {
-            error: interaction.error
-          };
+          if (interaction.message.errors) {
+            return {
+              error: interaction.message._message
+            };
+          } else {
+            return {
+              error: interaction.error
+            };
+          }
         }
+      } else {
+        return {
+          error: `An error occured. Please try again`
+        };
       }
     } else {
       return {
-        error: `An error occured. Please try again`
+        error: `Please select activities and prescriptions`
       };
     }
   } catch (error) {
