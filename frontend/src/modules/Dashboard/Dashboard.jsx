@@ -86,17 +86,15 @@ function DashboardTable({ data, type }) {
 
   return (
     <>
-      {roleNames.SUPER_ADMIN === type && (
-        <div className={styles.actions}>
-          <Button
-            onClick={() =>
-              toggleModal({ isVisible: true, modal: "donate", data: null })
-            }
-            classNames={styles.button_primary}
-            text="Donate"
-          />
-        </div>
-      )}
+      <div className={styles.actions}>
+        <Button
+          onClick={() =>
+            toggleModal({ isVisible: true, modal: "donate", data: null })
+          }
+          classNames={styles.button_primary}
+          text="Donate"
+        />
+      </div>
       <Card classNames={[styles.table, styles.card__white].join(" ")}>
         <AutoSizer disableHeight>
           {({ width }) => (
