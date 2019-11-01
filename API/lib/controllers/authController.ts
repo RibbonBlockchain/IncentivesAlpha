@@ -45,7 +45,7 @@ export class AuthController {
 								if (error) {
 									res.status(401).send({ error })
 								} else {
-									res.status(200).send({ token, user })
+									res.status(200).send({ token })
 								}
 							}
 						)
