@@ -33,10 +33,10 @@ export const formatLink = link => {
   );
 };
 
-export const getNetworkDetails = async (provider, contract) => {
+export const getNetworkDetails = async (provider, signer, contract) => {
   try {
-    let currentNetwork = await provider.getNetwork();
     let networkAddress = getItem("address");
+    let currentNetwork = await provider.getNetwork();
     if (currentNetwork.chainId === Number(config.DEFAULT_NETWORK)) {
       let currentBalance = await provider.getBalance(networkAddress);
       let loginType = await contract.getUserRole(networkAddress);
@@ -49,10 +49,23 @@ export const getNetworkDetails = async (provider, contract) => {
         };
       } else {
         await window.ethereum.enable();
+        networkAddress = await signer.getAddress();
+        let currentBalance = await provider.getBalance(networkAddress);
+        let loginType = await contract.getUserRole(networkAddress);
+        if (typeof loginType === "number") {
+          return {
+            currentNetwork,
+            networkAddress,
+            currentBalance,
+            loginType
+          };
+        }
       }
     } else {
       return {
-        error: "Web3 Provider found"
+        error: `Network error occured. Please make sure you are on ${await getNetworkName(
+          Number(config.DEFAULT_NETWORK)
+        )}`
       };
     }
   } catch (error) {

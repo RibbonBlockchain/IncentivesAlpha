@@ -11,12 +11,13 @@ import {
   formatPrescriptionOptions
 } from "../Dashboard/dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
-import { recordInteraction } from "./recorder.utils";
+import { recordInteraction, recordInteractionOnDB } from "./recorder.utils";
 import Rating from "../../common/components/Rating";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
 import { useData } from "../../common/providers/API.provider";
+import { useTransactionStatus } from "../../common/providers/TransactionStatus.provider";
 
 const animatedComponents = makeAnimated();
 
@@ -88,7 +89,13 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
   const { handleSubmit, register } = useForm({
     mode: "onChange"
   });
+  const [loading, setLoading] = useState(false);
   const [{ activityList, prescriptionList }, loadDetails] = useApp();
+  const [
+    ,
+    checkTransactionStatus,
+    closeTransactionStatus
+  ] = useTransactionStatus();
   const [{}, toggle] = useAlert();
   const [record, setRecord] = useState({
     patient: {},
@@ -133,20 +140,34 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
         .map(activity => activity.value.activityReward)
         .reduce((activity, acc) => activity + acc, 0)
     };
-
+    setLoading(true);
     let interaction = await recordInteraction(data);
     if (interaction.error) {
+      setLoading(false);
       toggle({
         isVisible: true,
         message: interaction.error
       });
     } else {
-      await fetchData();
-      toggle({
-        isVisible: true,
-        message: `Interaction has been recorded successfully`
-      });
-      onDismiss();
+      await checkTransactionStatus(interaction);
+      let record = await recordInteractionOnDB(data);
+      closeTransactionStatus();
+      if (record.error) {
+        setLoading(false);
+        toggle({
+          isVisible: true,
+          message: record.error,
+          data: {}
+        });
+      } else {
+        fetchData();
+        clearDismiss();
+        setLoading(false);
+        toggle({
+          isVisible: true,
+          message: `Interaction has been recorded successfully`
+        });
+      }
     }
   }
 
@@ -334,7 +355,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
               ></Button>
               <Button
                 text="Save"
-                disabled={!isValid}
+                disabled={loading}
                 classNames={[styles.button, styles.button_primary].join(" ")}
                 button="button"
               ></Button>

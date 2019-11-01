@@ -23,12 +23,10 @@ export const makeDonation = async ({ value, message }) => {
 
   let tx = await vaultContract.donateFunds(value, memo);
   if (tx.hash) {
-    return {
-      message: "Donation has been received."
-    };
+    return tx.hash;
   } else {
     return {
-      message: tx.stack.split(":")[2]
+      error: tx.stack.split(":")[2]
     };
   }
 };
@@ -39,11 +37,11 @@ export const sendTokens = async ({ amount, receipient, message }) => {
 
   let tx = await vaultContract.sendTokens({ amount, receipient });
   if (tx.hash) {
-    return {
-      message: `${amount} tokens has been sent to ${receipient}`
-    };
+    return tx.hash;
   } else {
-    return tx;
+    return {
+      error: tx.stack.split(":")[2]
+    };
   }
 };
 

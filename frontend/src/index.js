@@ -11,13 +11,16 @@ import Web3Provider from "./common/providers/Web3.provider";
 import ModalProvider from "./common/providers/Modal.provider";
 import APIProvider from "./common/providers/API.provider";
 import AppProvider from "./common/providers/App.provider";
+import TransactionStatusProvider from "./common/providers/TransactionStatus.provider";
 
 const ContextProviders = ({ children }) => (
   <>
     <AppProvider>
       <Web3Provider>
         <ModalProvider>
-          <APIProvider>{children}</APIProvider>
+          <APIProvider>
+            <TransactionStatusProvider>{children}</TransactionStatusProvider>
+          </APIProvider>
         </ModalProvider>
       </Web3Provider>
     </AppProvider>

@@ -37,7 +37,9 @@ function DashboardTable({ data, type }) {
   function renderPatient({ rowData }) {
     return (
       <h5>
-        {rowData.patient
+        {rowData.patient &&
+        rowData.patient.firstName &&
+        rowData.patient.lastName
           ? `${rowData.patient.firstName} ${rowData.patient.lastName} `
           : `Not Available`}
       </h5>
@@ -47,7 +49,9 @@ function DashboardTable({ data, type }) {
   function renderPractitioner({ rowData }) {
     return (
       <h5>
-        {rowData.practitioner
+        {rowData.practitioner &&
+        rowData.practitioner.firstName &&
+        rowData.practitioner.lastName
           ? `${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `
           : `Not Available`}
       </h5>
@@ -57,7 +61,7 @@ function DashboardTable({ data, type }) {
   function renderHealthWorker({ rowData }) {
     return (
       <h5>
-        {rowData.chw
+        {rowData.chw && rowData.chw.firstName && rowData.chw.lastName
           ? `${rowData.chw.firstName} ${rowData.chw.lastName} `
           : `Not Available`}
       </h5>
@@ -71,9 +75,11 @@ function DashboardTable({ data, type }) {
   function renderDate({ rowData }) {
     return (
       <h5>
-        {moment(rowData.createdDate)
-          .utc()
-          .format("YYYY-MM-DD HH:mm")}
+        {rowData.createdDate
+          ? moment(rowData.createdDate)
+              .utc()
+              .format("YYYY-MM-DD HH:mm")
+          : "Not Available"}
       </h5>
     );
   }

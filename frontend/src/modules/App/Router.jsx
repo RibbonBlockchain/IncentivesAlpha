@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Alert from "../Alert";
+import TransactionStatus from "../TransactionStatus";
 import QRCodeDisplay from "../QRCodeDisplay";
 import Login from "../Login";
 import Home from "../Home";
@@ -58,6 +59,7 @@ export default function Router() {
       </Switch>
       <Alert />
       <QRCodeDisplay />
+      <TransactionStatus />
     </>
   );
 }

@@ -7,19 +7,28 @@ import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import QRScanner from "qr-code-scanner";
 import * as moment from "moment";
 import "react-phone-number-input/style.css";
-import { createNewUser } from "./onboard.utils";
+import { createNewUser, recordNewUser } from "./onboard.utils";
 import { roleNames, roles } from "../../common/constants/roles";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
 import styles from "./Onboard.module.scss";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
+import { useTransactionStatus } from "../../common/providers/TransactionStatus.provider";
+import { useData } from "../../common/providers/API.provider";
 
 export default function Onboard() {
   const [onboardOptions, setOnboardOptions] = useState(false);
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
+  const [, fetchData] = useData();
   const [{ loginType }] = useWeb3();
+  const [loading, setLoading] = useState(false);
+  const [
+    ,
+    checkTransactionStatus,
+    closeTransactionStatus
+  ] = useTransactionStatus();
   const [{}, toggle] = useAlert();
   const {
     handleSubmit,
@@ -73,21 +82,37 @@ export default function Onboard() {
       role: type,
       phoneNumber: phoneNumber.value
     };
+    setLoading(true);
     let newUser = await createNewUser(data);
     if (newUser.error) {
+      setLoading(false);
       toggle({
         isVisible: true,
         message: newUser.error,
         data: {}
       });
     } else {
-      toggle({
-        isVisible: true,
-        message: `${formatRoleName(type)} has been registered successfully`,
-        data: {}
-      });
-      clearForm(e);
-      setVisible(false);
+      await checkTransactionStatus(newUser);
+      let record = await recordNewUser(data);
+      closeTransactionStatus();
+      if (record.error) {
+        setLoading(false);
+        toggle({
+          isVisible: true,
+          message: record.error,
+          data: {}
+        });
+      } else {
+        await fetchData();
+        clearForm(e);
+        setVisible(false);
+        setLoading(false);
+        toggle({
+          isVisible: true,
+          message: `${formatRoleName(type)} has been registered successfully`,
+          data: {}
+        });
+      }
     }
   }
 
@@ -325,7 +350,7 @@ export default function Onboard() {
               <Button
                 text="Save"
                 classNames={[styles.button, styles.button_primary].join(" ")}
-                disabled={checkValidation()}
+                disabled={checkValidation() || loading}
                 button="submit"
               ></Button>
             </div>

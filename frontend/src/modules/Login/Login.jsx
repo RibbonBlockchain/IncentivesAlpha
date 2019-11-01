@@ -60,6 +60,9 @@ function Login() {
         <div className={styles.login_bg}></div>
         <div className={styles.login_box}>
           <div className={styles.form}>
+            <div className={styles.headline}>
+              <h3>Insert client logo here</h3>
+            </div>
             <div className={styles.login_box}>
               <Web3Connect.Button
                 providerOptions={{
@@ -90,11 +93,6 @@ function Login() {
                   })
                 }
               />
-            </div>
-            <div className={styles.headline}>
-              <small>
-                {/* Lorem ipsum, dolor sit amet consectetur adipisicing elit */}
-              </small>
             </div>
           </div>
           <div className={styles.logo}>

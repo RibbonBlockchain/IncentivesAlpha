@@ -7,26 +7,26 @@ function Alert() {
 
   return (
     <>
-      {isVisible && message && (
-        <div className={[styles.alertWrapper, styles.active].join(" ")}>
-          <div className={styles.alert}>
-            <div className={styles.msg}>{message}</div>
-            <div className={styles.actions}>
-              <div
-                className={styles.textButton}
-                onClick={() =>
-                  toggle({
-                    isVisible: false,
-                    message: null
-                  })
-                }
-              >
-                Close
-              </div>
+      <div
+        className={`${styles.cnt} ${isVisible && message ? styles.active : ""}`}
+      >
+        <div className={styles.data}>
+          <div className={styles.status}>{message}</div>
+          <div className={styles.name}>
+            <div
+              className={styles.close}
+              onClick={() =>
+                toggle({
+                  isVisible: false,
+                  message: null
+                })
+              }
+            >
+              +
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 }

@@ -6,6 +6,7 @@ import { useApp } from "../../common/providers/App.provider";
 import Modal from "../../common/components/Modal";
 import Button from "../../common/components/Button";
 import styles from "./Send.module.scss";
+import { useTransactionStatus } from "../../common/providers/TransactionStatus.provider";
 
 export default function Send() {
   const [{ modal, isVisible }, toggleModal] = useModal();
@@ -14,6 +15,7 @@ export default function Send() {
   const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
   });
+  const [, checkTransactionStatus] = useTransactionStatus();
 
   async function onSubmit(values, e) {
     let data = {
@@ -22,13 +24,20 @@ export default function Send() {
       message: values.message
     };
     let result = await sendTokens(data);
-    toggle({
-      isVisible: true,
-      message: result.message ? result.message : result,
-      data: {}
-    });
-
-    e.target.reset();
+    if (result.error) {
+      toggle({
+        isVisible: true,
+        message: result.error,
+        data: {}
+      });
+    } else {
+      await checkTransactionStatus(result);
+      toggleModal({
+        isVisible: false,
+        modal: ""
+      });
+      e.target.reset();
+    }
   }
   return (
     <Modal

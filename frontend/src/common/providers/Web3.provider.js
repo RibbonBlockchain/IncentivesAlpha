@@ -77,13 +77,13 @@ export const useWeb3 = () => {
     setItem("token", token);
     setItem("address", address);
 
-    window.location.reload();
+    // window.location.reload();
   };
 
   const getWalletDetails = async () => {
     let registryContract = new RegistryContract();
     const userAPI = new UserAPI();
-    let { provider, ethers } = await registryContract.getInstance();
+    let { provider, ethers, signer } = await registryContract.getInstance();
 
     let {
       networkAddress,
@@ -91,7 +91,7 @@ export const useWeb3 = () => {
       currentNetwork,
       loginType,
       error
-    } = await getNetworkDetails(provider, registryContract);
+    } = await getNetworkDetails(provider, signer, registryContract);
     if (error) {
       toggleModal({
         isVisible: true,
