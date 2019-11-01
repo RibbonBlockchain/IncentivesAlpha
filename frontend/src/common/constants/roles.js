@@ -38,6 +38,8 @@ export const routes = [
 
 export const getRoleURL = role => {
   switch (role) {
+    case roleNames.SUPER_ADMIN:
+      return "admin";
     case roleNames.HEALTH_WORKER:
       return "chw";
     case roleNames.PATIENT:
