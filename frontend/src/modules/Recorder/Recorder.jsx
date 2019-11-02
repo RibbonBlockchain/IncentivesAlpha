@@ -40,17 +40,49 @@ const SelectStyle = {
   })
 };
 
-const formatOptionLabel = ({ label, value }) => {
+const formatUserOptionLabel = ({ label, value }) => {
+  return (
+    <>
+      {value && (
+        <>
+          <div className={styles.optionLabel}>
+            <div className={styles.optionLabel_user__heading}>
+              <span>{`${value.firstName} ${value.lastName}`}</span>
+              <span>{label}</span>
+            </div>
+            <small>{value.publicAddress}</small>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
+
+const formatActivityOptionLabel = ({ label, value }) => {
   return (
     <>
       {value && (
         <>
           <div className={styles.optionLabel}>
             <div className={styles.optionLabel__heading}>
-              <span>{`${value.firstName} ${value.lastName}`}</span>
-              <span>{label}</span>
+              <span>{`${label}`}</span>
             </div>
-            <small>{value.publicAddress}</small>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
+
+const formatPrescriptionOptionLabel = ({ label, value }) => {
+  return (
+    <>
+      {value && (
+        <>
+          <div className={styles.optionLabel}>
+            <div className={styles.optionLabel__heading}>
+              <span>{`${label}`}</span>
+            </div>
           </div>
         </>
       )}
@@ -212,7 +244,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                           primary: "black"
                         }
                       })}
-                      formatOptionLabel={formatOptionLabel}
+                      formatOptionLabel={formatUserOptionLabel}
                       onChange={patient =>
                         setRecord({
                           practitioner: record.practitioner,
@@ -244,7 +276,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                           primary: "black"
                         }
                       })}
-                      formatOptionLabel={formatOptionLabel}
+                      formatOptionLabel={formatUserOptionLabel}
                       onChange={practitioner => {
                         setRecord({
                           practitioner,
@@ -266,6 +298,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     isSearchable
                     value={record.activities}
                     placeholder="Select Activity"
+                    formatOptionLabel={formatActivityOptionLabel}
                     name={`activities`}
                     components={animatedComponents}
                     isMulti
@@ -300,6 +333,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     placeholder="Select prescriptions"
                     name={`prescriptions`}
                     isMulti
+                    formatOptionLabel={formatPrescriptionOptionLabel}
                     components={animatedComponents}
                     theme={theme => ({
                       ...theme,

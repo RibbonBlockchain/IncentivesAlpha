@@ -156,19 +156,20 @@ img {
 .optionLabel {
   display: flex;
   flex-direction: column;
-  color: #939ba1;
-  &__heading {
-    display: flex;
-    justify-content: space-between;
+  color: #000000;
+  &_user {
+    &__heading {
+      display: flex;
+      justify-content: space-between;
+    }
+    span {
+      font-size: calculateRem(14);
+      font-family: $font;
+      font-weight: 600;
+    }
   }
-  span {
-    font-size: calculateRem(14);
-    font-family: $font;
-    font-weight: 600;
-  }
-
   small {
-    color: #939ba1;
+    color: #000000;
     text-align: right;
   }
 }

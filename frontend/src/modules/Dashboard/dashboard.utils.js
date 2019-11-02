@@ -61,7 +61,7 @@ export const formatPrescriptionOptions = options => {
     options.length > 0 &&
     options.map(option => ({
       label: option.prescriptionTitle,
-      value: option._id
+      value: option
     }))
   );
 };
