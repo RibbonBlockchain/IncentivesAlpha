@@ -22,6 +22,7 @@ export const makeDonation = async ({ value, message }) => {
   let memo = message ? message : "Making donation";
 
   let tx = await vaultContract.donateFunds(value, memo);
+  console.log(tx);
   if (tx.hash) {
     return tx.hash;
   } else {

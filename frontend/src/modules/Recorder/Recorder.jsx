@@ -135,7 +135,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
       user,
       activities: record.activities,
       prescriptions: record.prescriptions,
-      serviceRatings: record.ratings,
+      serviceRatings: ratingList,
       amount: await record.activities
         .map(activity => activity.value.activityReward)
         .reduce((activity, acc) => activity + acc, 0)

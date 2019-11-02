@@ -1,6 +1,6 @@
 import BlockchainService from "../index";
 import Vault from "../abis/Vault.json";
-
+import * as unit from "ethjs-unit";
 import { config } from "../../../constants/config";
 
 let vaultAddress = config.VAULT_CONTRACT_ADDRESS;
@@ -19,7 +19,7 @@ export default class VaultContract extends BlockchainService {
     let contract = await this.contract;
     try {
       return await contract.donateFunds(message, {
-        value: ethers.utils.parseEther(value.toString())
+        value: ethers.utils.parseUnits(value.toString(), 18)
       });
     } catch (error) {
       return error;
@@ -30,30 +30,33 @@ export default class VaultContract extends BlockchainService {
 
   async kill() {}
 
-  async payout({ patient, practitioner, chw, amount }) {
-    let { ethers, signer } = await this.getInstance();
-    let contract = await this.contract;
+  async payout({
+    patient,
+    practitioner,
+    chw,
+    patientAmount,
+    practitionerAmount,
+    chwAmount
+  }) {
     try {
-      let patientAmountInEthers = ethers.utils.parseEther(amount.toString());
-      let practitionerAmountInEthers = ethers.utils.parseEther(
-        amount.toString()
+      let { ethers } = await this.getInstance();
+      let contract = await this.contract;
+      console.log(patientAmount, practitionerAmount, chwAmount);
+      let patAmount = ethers.utils.parseUnits(patientAmount.toString(), 18);
+      let practAmount = ethers.utils.parseUnits(
+        practitionerAmount.toString(),
+        18
       );
-      let chwAmountInEthers = ethers.utils.parseEther(amount.toString());
-
-      let contractFunction = contract.payout(
+      let chAmount = ethers.utils.parseUnits(chwAmount.toString(), 18);
+      console.log(patAmount, practAmount, chAmount);
+      return await contract.payout(
         patient,
         practitioner,
         chw,
-        patientAmountInEthers,
-        practitionerAmountInEthers,
-        chwAmountInEthers
+        patAmount,
+        practAmount,
+        chAmount
       );
-
-      let tx = {
-        data: contractFunction.data
-      };
-
-      return await signer.sendTransaction(tx);
     } catch (error) {
       return error;
     }

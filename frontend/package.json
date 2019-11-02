@@ -11,6 +11,7 @@
     "chroma-js": "^2.0.6",
     "ethereumjs-util": "^6.1.0",
     "ethers": "^4.0.37",
+    "ethjs-unit": "^0.1.6",
     "fortmatic": "^0.8.2",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",

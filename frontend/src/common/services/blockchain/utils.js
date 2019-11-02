@@ -6,18 +6,6 @@ const TRANSACTION_STATUSES = {
   Pending: 2
 };
 
-const waitOneMoreBlock = async function(prevBlockNumber, provider) {
-  return new Promise(resolve => {
-    setTimeout(async () => {
-      const blockNumber = await provider.getBlockNumber();
-      if (prevBlockNumber === blockNumber) {
-        return waitOneMoreBlock(prevBlockNumber);
-      }
-      resolve();
-    }, 30000);
-  });
-};
-
 export const getTxStatus = async txHash => {
   let blockchainService = new BlockchainService();
   let { provider } = await blockchainService.getInstance();
@@ -26,8 +14,6 @@ export const getTxStatus = async txHash => {
   }
   const txReceipt = await provider.getTransactionReceipt(txHash);
   if (txReceipt) {
-    await waitOneMoreBlock(txReceipt.blockNumber, provider);
-
     return txReceipt.status
       ? TRANSACTION_STATUSES.Successful
       : TRANSACTION_STATUSES.Failed;
