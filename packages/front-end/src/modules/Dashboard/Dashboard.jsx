@@ -1,86 +1,82 @@
 import React, { useEffect } from "react";
+import * as moment from "moment";
 import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
-import { Table, AutoSizer, Column } from "react-virtualized";
+import {
+  VirtualizedTable,
+  Column,
+  AutoSizer
+} from "../../common/components/Table";
 import { getRoleCount } from "./dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
 import Card from "../../common/components/Card";
 import Button from "../../common/components/Button";
 import { useModal } from "../../common/providers/Modal.provider";
 import { DesktopLoader } from "../../common/components/Loader";
-import * as moment from "moment";
+import { Link, Heading } from "../../common/theme";
 import styles from "./Dashboard.module.scss";
+import { getBlockscoutLink } from "../../common/utils";
 
 function DashboardTable({ data, type }) {
   const [, toggleModal] = useModal();
 
-  function _noRowsRenderer() {
-    return <div className={styles.noRows}>No transaction recorded yet!</div>;
-  }
-
-  function _rowClassName({ index }) {
-    if (index < 0) {
-      return styles.headerRow;
-    } else {
-      return index % 2 === 0 ? styles.evenRow : styles.oddRow;
-    }
-  }
+  //   function _noRowsRenderer() {
+  //     return <div className={styles.noRows}>No transaction recorded yet!</div>;
+  //   }
 
   function renderTxLink({ rowData }) {
     return (
-      <a href={`https://blockscout.com/poa/sokol/tx/${rowData.txn_hash}`}>
-        {rowData.txt_hash}
-      </a>
+      <Heading>
+        <Link href={getBlockscoutLink(rowData.txn_hash, "transaction")}>
+          {rowData.txt_hash}
+        </Link>
+      </Heading>
     );
   }
 
   function renderPatient({ rowData }) {
     return (
-      <h5>
+      <Heading>
         {rowData.patient &&
         rowData.patient.firstName &&
         rowData.patient.lastName
           ? `${rowData.patient.firstName} ${rowData.patient.lastName} `
           : `Not Available`}
-      </h5>
+      </Heading>
     );
   }
 
   function renderPractitioner({ rowData }) {
     return (
-      <h5>
+      <Heading>
         {rowData.practitioner &&
         rowData.practitioner.firstName &&
         rowData.practitioner.lastName
           ? `${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `
           : `Not Available`}
-      </h5>
+      </Heading>
     );
   }
 
   function renderHealthWorker({ rowData }) {
     return (
-      <h5>
+      <Heading>
         {rowData.chw && rowData.chw.firstName && rowData.chw.lastName
           ? `${rowData.chw.firstName} ${rowData.chw.lastName} `
           : `Not Available`}
-      </h5>
+      </Heading>
     );
-  }
-
-  function renderStatus({ rowData }) {
-    return <>{rowData.status == 1 ? "Confirmed" : "Failed"}</>;
   }
 
   function renderDate({ rowData }) {
     return (
-      <h5>
+      <Heading>
         {rowData.createdDate
           ? moment(rowData.createdDate)
               .utc()
-              .format("YYYY-MM-DD HH:mm")
+              .format("dddd, MMMM Do YYYY HH:mm")
           : "Not Available"}
-      </h5>
+      </Heading>
     );
   }
 
@@ -97,81 +93,43 @@ function DashboardTable({ data, type }) {
           />
         </div>
       )}
-      <Card classNames={[styles.table, styles.card__white].join(" ")}>
-        <AutoSizer disableHeight>
-          {({ width }) => (
-            <Table
-              width={width}
-              height={400}
-              headerHeight={40}
-              noRowsRenderer={_noRowsRenderer}
-              rowHeight={40}
-              rowCount={data.length}
-              rowClassName={_rowClassName}
-              rowGetter={({ index }) => data[index]}
-              headerClassName={[
-                styles.ReactVirtualized__Table__headerColumn
-              ].join(" ")}
-            >
-              {type !== roleNames.PRACTITIONER && (
-                <Column
-                  label="Practitioner"
-                  cellRenderer={renderPractitioner}
-                  dataKey="practitionerAddress"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={300}
-                />
-              )}
-              {type !== roleNames.PATIENT && (
-                <Column
-                  label="Patient"
-                  cellRenderer={renderPatient}
-                  dataKey="patientAddress"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={300}
-                />
-              )}
-              {/* <Column
-                label="Interactions"
-                cellRenderer={renderTxLink}
-                dataKey="interactions"
-                className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={300}
-              /> */}
-              {type < roleNames.HEALTH_WORKER && (
-                <Column
-                  label="Registered By"
-                  cellRenderer={renderHealthWorker}
-                  dataKey="chwAddress"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={200}
-                />
-              )}
-              {/* <Column
-                label="Total Payout"
-                cellRenderer={renderStatus}
-                dataKey="payout"
-                className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={200}
-              />
-              <Column
-                label="Status"
-                cellRenderer={renderStatus}
-                dataKey="status"
-                className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={100}
-              /> */}
-              <Column
-                label="Date"
-                cellRenderer={renderDate}
-                dataKey="createdDate"
-                className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={150}
-              />
-            </Table>
-          )}
-        </AutoSizer>
-      </Card>
+      <VirtualizedTable
+        headerHeight={40}
+		rowHeight={40}
+        rowCount={data.length}
+        rowGetter={({ index }) => data[index]}
+      >
+        {type !== roleNames.PRACTITIONER && (
+          <Column
+            label="Practitioner"
+            cellRenderer={renderPractitioner}
+            dataKey="practitionerAddress"
+            width={300}
+          />
+        )}
+        {type !== roleNames.PATIENT && (
+          <Column
+            label="Patient"
+            cellRenderer={renderPatient}
+            dataKey="patientAddress"
+            width={300}
+          />
+        )}
+        {type < roleNames.HEALTH_WORKER && (
+          <Column
+            label="Registered By"
+            cellRenderer={renderHealthWorker}
+            dataKey="chwAddress"
+            width={200}
+          />
+        )}
+        <Column
+          label="Date"
+          cellRenderer={renderDate}
+          dataKey="createdDate"
+          width={300}
+        />
+      </VirtualizedTable>
     </>
   );
 }

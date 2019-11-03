@@ -88,7 +88,8 @@ export const CardWrapper = styled.div`
   perspective: 1000px;
   transition: all .25s ease-in-out;
   font-family: Quicksand, arial, sans-serif;
-//   background: ${({ theme }) => theme.textColor}
+  background: ${({ bgColor, theme }) =>
+    bgColor ? bgColor : theme.backgroundColor}
   border-radius: 0.5rem;
   &:focus,
   &:hover {
@@ -248,6 +249,7 @@ export const Wrapper = styled.div`
 
 export const TableWrapper = styled.div`
   outline: none;
+  max-height: 50vh;
   margin: 2rem 0;
   color: ${({ theme }) => theme.backgroundColor};
   .ReactVirtualized__Table {
@@ -359,7 +361,9 @@ export const ModalBody = styled.div`
   padding: 2rem;
 `;
 
-export const Heading = styled.h4``;
+export const Heading = styled.h3`
+  font-weight: 300;
+`;
 
 export const GridContainer = styled.div`
   padding-right: ${remUnit(30)};
