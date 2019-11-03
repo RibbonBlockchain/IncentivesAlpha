@@ -32,9 +32,9 @@ This monorepo contains JavaScript tools and applications that interact with Ribb
 
 | Name                                                 | Description                                                                                                                         |
 | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [`@ribbonblockchain/api`](/packages/API)             | Backend API built with Node, typscript express restful API that handles data capture for patients and all system wide interactions. |
-| [`@ribbonblockchain/Frontend`](/packages/Frontend)   | Frontend react application that patients, CHW, practitioners and admins interact with. [Link](https://alpha.ribbonblockchain.com)   |
-| [`@ribbonblockchain/Blockchain`](/packages/Frontend) | Solidity Smart contracts that control the funding distribution, allocation and assignment within the Ribbon ecosystem.              |
+| [`@ribbonblockchain/api`](/packages/back-end)             | Backend API built with Node, typscript express restful API that handles data capture for patients and all system wide interactions. |
+| [`@ribbonblockchain/frontend`](/packages/front-end)   | Frontend react application that patients, CHW, practitioners and admins interact with. [Link](https://alpha.ribbonblockchain.com)   |
+| [`@ribbonblockchain/blockchain`](/packages/smart-contract) | Solidity Smart contracts that control the funding distribution, allocation and assignment within the Ribbon ecosystem.              |
 
 Each section has it's own package and has it's own readme within the package that explains how to set it up and get running with that spesific component.
 
