@@ -6,6 +6,10 @@ import * as serviceWorker from "./serviceWorker";
 import "react-virtualized/styles.css";
 
 import ErrorBoundary from "./common/components/ErrorBoundary";
+import ThemeProvider, { GlobalStyle } from "./common/theme";
+import StorageProvider, {
+  Updater as StorageUpdater
+} from "./common/providers/Storage.provider";
 
 import Web3Provider from "./common/providers/Web3.provider";
 import ModalProvider from "./common/providers/Modal.provider";
@@ -13,26 +17,38 @@ import APIProvider from "./common/providers/API.provider";
 import AppProvider from "./common/providers/App.provider";
 import TransactionStatusProvider from "./common/providers/TransactionStatus.provider";
 
+const Updaters = () => (
+  <>
+    <StorageUpdater />
+  </>
+);
+
 const ContextProviders = ({ children }) => (
   <>
-    <AppProvider>
-      <Web3Provider>
-        <ModalProvider>
-          <APIProvider>
-            <TransactionStatusProvider>{children}</TransactionStatusProvider>
-          </APIProvider>
-        </ModalProvider>
-      </Web3Provider>
-    </AppProvider>
+    <StorageProvider>
+      <AppProvider>
+        <Web3Provider>
+          <ModalProvider>
+            <APIProvider>
+              <TransactionStatusProvider>{children}</TransactionStatusProvider>
+            </APIProvider>
+          </ModalProvider>
+        </Web3Provider>
+      </AppProvider>
+    </StorageProvider>
   </>
 );
 
 ReactDOM.render(
   <ErrorBoundary>
     <ContextProviders>
-      <BrowserRouter>
-        <Router />
-      </BrowserRouter>
+      <Updaters />
+      <ThemeProvider>
+        <BrowserRouter>
+          <GlobalStyle />
+          <Router />
+        </BrowserRouter>
+      </ThemeProvider>
     </ContextProviders>
   </ErrorBoundary>,
   document.getElementById("root")

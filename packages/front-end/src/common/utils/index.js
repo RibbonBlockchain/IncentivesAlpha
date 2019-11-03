@@ -1,4 +1,5 @@
 import { config } from "../constants/config";
+import { SUPPORTED_THEMES } from "../constants";
 import { ethers } from "ethers";
 import { getItem } from "./storage";
 export const formatAddress = address => {
@@ -93,4 +94,64 @@ export const getNetworkName = async id => {
     default:
       return "Local Testnet";
   }
+};
+
+export function getQueryParam(windowLocation, name) {
+  var q = windowLocation.search.match(new RegExp("[?&]" + name + "=([^&#?]*)"));
+  return q && q[1];
+}
+
+export function getAllQueryParams() {
+  let params = {};
+  params.theme = checkSupportedTheme(getQueryParam(window.location, "theme"));
+  return params;
+}
+
+export function checkSupportedTheme(themeName) {
+  if (themeName && themeName.toUpperCase() in SUPPORTED_THEMES) {
+    return themeName.toUpperCase();
+  }
+  return null;
+}
+
+export function shortenAddress(address, digits = 4) {
+  if (!isAddress(address)) {
+    throw Error(`Invalid 'address' parameter '${address}'.`);
+  }
+  return `${address.substring(0, digits + 2)}...${address.substring(
+    42 - digits
+  )}`;
+}
+
+export function shortenTransactionHash(hash, digits = 4) {
+  return `${hash.substring(0, digits + 2)}...${hash.substring(66 - digits)}`;
+}
+
+export function isAddress(value) {
+  try {
+    return ethers.utils.getAddress(value.toLowerCase());
+  } catch {
+    return false;
+  }
+}
+
+export function calculateGasMargin(value, margin) {
+  const offset = value.mul(margin).div(ethers.utils.bigNumberify(10000));
+  return value.add(offset);
+}
+
+export const remUnit = px => `${px / 16}rem`;
+
+export const getWidth = value => {
+  if (!value) return;
+
+  let width = (value / 12) * 100;
+  return `width: ${width}%;`;
+};
+
+export const getFlex = value => {
+  if (!value) return;
+
+  let flex = (value / 12) * 100;
+  return `flex: 0 0 ${flex}%;`;
 };
