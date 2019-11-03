@@ -32,6 +32,9 @@ export const UserSchema = new Schema({
     type: String,
     required: "Enter a valid id number"
   },
+  gender : {
+    type: String,
+  },
   phoneNumber: {
     type: String,
     required: "Please Enter a Mobile Number",

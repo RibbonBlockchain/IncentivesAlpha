@@ -13,6 +13,10 @@ export class UserRoutes {
       .get([validJWTNeeded], this.userController.getUsers)
 
     app
+      .route("/api/v1/users/admin")
+      .post([validJWTNeeded, superAdminOnly], this.userController.addAdministrator)
+
+    app
       .route("/api/v1/users/chw")
       // POST endpoint add community health worker
       .post([validJWTNeeded, superAdminOnly, check('phoneNumber').isLength({ max: 11, min: 11 })], this.userController.addNewCommunityHealthWorker);
