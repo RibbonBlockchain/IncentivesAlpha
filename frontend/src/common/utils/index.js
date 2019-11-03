@@ -1,6 +1,6 @@
 import { config } from "../constants/config";
 import { ethers } from "ethers";
-
+import { getItem } from "./storage";
 export const formatAddress = address => {
   let pre = address.toLowerCase().slice(0, 12);
   let post = address.toLowerCase().slice(address.length - 4);
@@ -35,9 +35,9 @@ export const formatLink = link => {
 
 export const getNetworkDetails = async (provider, signer, contract) => {
   try {
+    let networkAddress = getItem("address");
     let currentNetwork = await provider.getNetwork();
     if (currentNetwork.chainId === Number(config.DEFAULT_NETWORK)) {
-      let networkAddress = await signer.getAddress();
       let currentBalance = await provider.getBalance(networkAddress);
       let loginType = await contract.getUserRole(networkAddress);
       if (typeof loginType === "number") {
@@ -48,20 +48,32 @@ export const getNetworkDetails = async (provider, signer, contract) => {
           loginType
         };
       } else {
-        return {
-          error: "An error occured. Please check your network and try again"
-        };
+        await window.ethereum.enable();
+        networkAddress = await signer.getAddress();
+        let currentBalance = await provider.getBalance(networkAddress);
+        let loginType = await contract.getUserRole(networkAddress);
+        if (typeof loginType === "number") {
+          return {
+            currentNetwork,
+            networkAddress,
+            currentBalance,
+            loginType
+          };
+        }
       }
     } else {
       return {
-        error: `Unknown network selected. Please switch to ${await getNetworkName(
+        error: `Network error occured. Please make sure you are on ${await getNetworkName(
           Number(config.DEFAULT_NETWORK)
         )}`
       };
     }
   } catch (error) {
+    console.log(error);
     return {
-      error: new Error(error)
+      error: `Network error occured. Please make sure you are on ${await getNetworkName(
+        Number(config.DEFAULT_NETWORK)
+      )}`
     };
   }
 };

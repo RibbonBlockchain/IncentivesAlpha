@@ -72,7 +72,7 @@ img {
   align-items: center;
   align-content: center;
   position: relative;
-  padding: calculateRem(10);
+  padding: 0 calculateRem(10);
   margin: 0;
   font-size: 1rem;
 }
@@ -99,10 +99,19 @@ img {
     bottom: 0;
   }
   &__link {
-    display: block;
+    display: flex;
     padding: 1rem 2rem;
     color: #76808f;
     text-decoration: none;
+
+    span {
+      align-self: center;
+      font-size: calculateRem(14);
+    }
+    svg {
+      margin-right: calculateRem(10);
+      align-self: center;
+    }
 
     &:hover {
       color: #fff;

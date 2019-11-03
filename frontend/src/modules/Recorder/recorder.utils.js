@@ -3,78 +3,98 @@ import InteractionAPI from "../../common/services/api/interaction.api";
 
 export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
-  let interactionAPI = new InteractionAPI();
-  let {
-    patient,
-    practitioner,
-    user,
-    // amount,
-    activities,
-    prescriptions,
-    serviceRatings
-  } = data;
+  let { patient, practitioner, user, amount, serviceRatings } = data;
 
-  let amount = "0.0000000001";
+  let practitionerAmount =
+    (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount;
+
+  let chwAmount = amount * 0.15;
 
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
     patientAmount: amount,
-    practitionerAmount: amount,
-    chwAmount: amount
+    practitionerAmount,
+    chwAmount
   };
 
   try {
-    let tx = await vaultContract.payout(payoutInformation);
-    if (tx.transactionHash) {
-      let details = {
-        patientAddress: patient.value.publicAddress,
-        practitionerAddress: practitioner.value.publicAddress,
-        chwAddress: user.publicaddress,
-        activities:
-          activities.length > 0
-            ? activities.map(activity => ({
-                activityId: activity.value
-              }))
-            : activities,
-        prescriptions:
-          prescriptions.length > 0
-            ? prescriptions.map(prescription => ({
-                prescriptionId: prescription.value
-              }))
-            : prescriptions,
-        rewards: [
-          {
-            patientReward: amount,
-            practitionerReward: amount,
-            chwReward: amount
-          }
-        ],
-        serviceRatings
-      };
-      let interaction = await interactionAPI.createInteraction(details);
-      if (interaction._id) {
-        return interaction;
+    if (amount > 0) {
+      let tx = await vaultContract.payout(payoutInformation);
+      if (tx.hash) {
+        return tx.hash;
       } else {
-        if (interaction.message.errors) {
-          return {
-            error: interaction.message._message
-          };
-        } else {
-          return {
-            error: interaction.error
-          };
-        }
+        console.log(tx);
+        return {
+          error: `An error occured. Please try again`
+        };
       }
     } else {
       return {
-        error: `An error occured. Please try again`
+        error: `Please select activities and prescriptions`
       };
     }
   } catch (error) {
     return {
       error
     };
+  }
+};
+
+const sumRatings = ratings => {
+  return ratings.length > 0
+    ? Object.keys(ratings).reduce((acc, value) => acc + ratings[value], 0)
+    : 0;
+};
+
+export const recordInteractionOnDB = async ({
+  patient,
+  practitioner,
+  user,
+  amount,
+  activities,
+  prescriptions,
+  serviceRatings
+}) => {
+  let interactionAPI = new InteractionAPI();
+  let details = {
+    patient: patient.value._id,
+    practitioner: practitioner.value._id,
+    chw: user._id,
+    activities:
+      activities.length > 0
+        ? activities.map(activity => ({
+            activityId: activity.value
+          }))
+        : activities,
+    prescriptions:
+      prescriptions.length > 0
+        ? prescriptions.map(prescription => ({
+            prescriptionId: prescription.value
+          }))
+        : prescriptions,
+    rewards: [
+      {
+        patientReward: amount,
+        practitionerReward: amount,
+        chwReward: amount
+      }
+    ],
+    serviceRatings
+  };
+  let interaction = await interactionAPI.createInteraction(details);
+  if (interaction._id) {
+    return interaction;
+  } else {
+    if (interaction.message.errors) {
+      return {
+        error: interaction.message._message
+      };
+    } else {
+      return {
+        error: interaction.error
+      };
+    }
   }
 };

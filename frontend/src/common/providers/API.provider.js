@@ -9,6 +9,7 @@ import React, {
 import UserAPI from "../services/api/user.api";
 import InteractionsAPI from "../services/api/interaction.api";
 import { useWeb3 } from "./Web3.provider";
+import { getItem } from "../utils/storage";
 
 const APIContext = createContext();
 
@@ -61,31 +62,23 @@ export const useData = () => {
   const usersAPI = new UserAPI();
   const interactionsAPI = new InteractionsAPI();
   const [{ users, interactions }, { update }] = useAPIContext();
-  const [{ address, loginType }] = useWeb3();
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [{ loginType }] = useWeb3();
+  let address = getItem("address");
 
   const fetchData = async () => {
-    if (address !== null) {
-      let listUsers = await usersAPI.listUsers();
-      let listInteractions = await interactionsAPI.listInteractionByAddress(
-        address,
-        {
-          role: loginType
-        }
-      );
-      update({
-        users: listUsers,
-        interactions: listInteractions
-      });
-    } else {
-      update({
-        users,
-        interactions
-      });
-    }
+    let listUsers = await usersAPI.listUsers();
+    let listInteractions = await interactionsAPI.listInteractionByAddress(
+      address,
+      {
+        role: loginType
+      }
+    );
+    update({
+      users: listUsers,
+      interactions: listInteractions.sort(
+        (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+      )
+    });
   };
 
   return [{ users, interactions }, fetchData];

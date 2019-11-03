@@ -35,6 +35,7 @@
     }
   },
   "dependencies": {
+    "@truffle/contract": "^4.0.37",
     "react-hook-form": "^3.24.1"
   }
 }

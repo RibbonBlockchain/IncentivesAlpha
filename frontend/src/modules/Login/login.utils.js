@@ -1,12 +1,15 @@
+import { ethers } from "ethers";
 import IRegistry from "../../common/services/blockchain/apps/registry";
 import AuthAPI from "../../common/services/api/auth.api";
 import { setItem } from "../../common/utils/storage";
 
-export async function authenticateUser() {
+export async function authenticateUser(provider) {
   let contract = new IRegistry();
   let authAPI = new AuthAPI();
 
-  let { ethers, signer } = await contract.getInstance();
+  let providerEngine = new ethers.providers.Web3Provider(provider);
+
+  let signer = providerEngine.getSigner();
 
   try {
     let nonce = `Signing into RibbonBlockchain Dapp`;
@@ -49,6 +52,7 @@ export async function authenticateUser() {
       };
     }
   } catch (error) {
+    console.log(error);
     return {
       error
     };

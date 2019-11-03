@@ -22,13 +22,12 @@ export const makeDonation = async ({ value, message }) => {
   let memo = message ? message : "Making donation";
 
   let tx = await vaultContract.donateFunds(value, memo);
+  console.log(tx);
   if (tx.hash) {
-    return {
-      message: "Donation has been received."
-    };
+    return tx.hash;
   } else {
     return {
-      message: tx.stack.split(":")[2]
+      error: tx.stack.split(":")[2]
     };
   }
 };
@@ -39,11 +38,11 @@ export const sendTokens = async ({ amount, receipient, message }) => {
 
   let tx = await vaultContract.sendTokens({ amount, receipient });
   if (tx.hash) {
-    return {
-      message: `${amount} tokens has been sent to ${receipient}`
-    };
+    return tx.hash;
   } else {
-    return tx;
+    return {
+      error: tx.stack.split(":")[2]
+    };
   }
 };
 
@@ -52,7 +51,7 @@ export const formatActivityOptions = options => {
     options.length > 0 &&
     options.map(option => ({
       label: option.activityTitle,
-      value: option._id
+      value: option
     }))
   );
 };
@@ -62,7 +61,7 @@ export const formatPrescriptionOptions = options => {
     options.length > 0 &&
     options.map(option => ({
       label: option.prescriptionTitle,
-      value: option._id
+      value: option
     }))
   );
 };

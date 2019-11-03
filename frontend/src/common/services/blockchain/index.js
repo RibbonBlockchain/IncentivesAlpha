@@ -1,10 +1,10 @@
 import { ethers } from "ethers";
 import { config } from "../../constants/config";
 
-const { POA_RPC, PRIVATE_KEY } = config;
+const { POA_RPC } = config;
 
 const init = async function() {
-  let provider = window.web3.currentProvider;
+  let provider = window && window.web3 && window.web3.currentProvider;
   let providerEngine =
     typeof provider != "undefined" && provider.hasOwnProperty("selectedAddress")
       ? new ethers.providers.Web3Provider(provider)
@@ -56,9 +56,6 @@ export default class BlockchainService {
       const transaction = {
         to: receipient,
         nonce: 0,
-        // gasLimit: 0,
-        // gasPrice: 0,
-        // data: `0x${ethers.utils.hexlify(message)}`,
         value: ethers.utils.parseEther(amount),
         chainId: ethers.utils.getNetwork("homestead").chainId
       };

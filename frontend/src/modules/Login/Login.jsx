@@ -17,9 +17,9 @@ function Login() {
   const [, toggleModal] = useModal();
   const [isLoading, setIsLoading] = useState(false);
 
-  const loginUser = async () => {
+  const loginUser = async provider => {
     setIsLoading(true);
-    let result = await authenticateUser();
+    let result = await authenticateUser(provider);
     let { authWithAPI, publicAddress, loginType } = result;
     if (result.error) {
       setIsLoading(false);
@@ -28,15 +28,22 @@ function Login() {
           isVisible: true,
           message: result.error.stack.split(".")[0].split(":")[2]
         });
-      } else {
-        setIsLoading(false);
+      } else if (result.error === "USER_NOT_FOUND_ERR") {
         toggleModal({
           isVisible: true,
           data: {
-            publicAddress: `ethereum:${publicAddress}`,
+            details: {
+              publicAddress,
+              type: "onboard"
+            },
             message: "Share this QR Code with the Community Health Worker"
           },
           modal: "qr"
+        });
+      } else {
+        toggle({
+          isVisible: true,
+          message: result.error.message
         });
       }
     } else {
@@ -45,7 +52,7 @@ function Login() {
     }
   };
 
-  let { WALLET_CONNECT, PORTIS, FORTMATIC, NETWORK } = config;
+  let { WALLET_CONNECT, PORTIS, FORTMATIC } = config;
   return (
     <>
       {isLoading && <TableLoader />}
@@ -53,9 +60,11 @@ function Login() {
         <div className={styles.login_bg}></div>
         <div className={styles.login_box}>
           <div className={styles.form}>
+            <div className={styles.headline}>
+              <h3>Insert client logo here</h3>
+            </div>
             <div className={styles.login_box}>
               <Web3Connect.Button
-                network={NETWORK}
                 providerOptions={{
                   walletconnect: {
                     package: WalletConnectProvider,
@@ -76,7 +85,7 @@ function Login() {
                     }
                   }
                 }}
-                onConnect={loginUser}
+                onConnect={provider => loginUser(provider)}
                 onClose={() =>
                   toggle({
                     isVisible: true,
@@ -84,11 +93,6 @@ function Login() {
                   })
                 }
               />
-            </div>
-            <div className={styles.headline}>
-              <small>
-                {/* Lorem ipsum, dolor sit amet consectetur adipisicing elit */}
-              </small>
             </div>
           </div>
           <div className={styles.logo}>

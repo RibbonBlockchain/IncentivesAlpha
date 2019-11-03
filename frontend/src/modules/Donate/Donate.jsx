@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import useForm from "react-hook-form";
 import { makeDonation } from "../Dashboard/dashboard.utils";
 import { useModal, useAlert } from "../../common/providers/Modal.provider";
 import Modal from "../../common/components/Modal";
 import Button from "../../common/components/Button";
 import styles from "./Donate.module.scss";
+import { useTransactionStatus } from "../../common/providers/TransactionStatus.provider";
 
 export default function DonationModal() {
   const [{ modal, isVisible }, toggleModal] = useModal();
@@ -12,25 +13,38 @@ export default function DonationModal() {
   const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
   });
+  const [, checkTransactionStatus] = useTransactionStatus();
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit(values, e) {
     let data = {
       value: Number(values.amount),
       message: values.message
     };
+    setLoading(true);
     let result = await makeDonation(data);
-    toggle({
-      isVisible: true,
-      message: result.message,
-      data: {}
-    });
+    if (result.error) {
+      setLoading(false);
+      toggle({
+        isVisible: true,
+        message: result.error
+      });
+    } else {
+      await checkTransactionStatus(result);
+      setLoading(false);
+      e.target.reset();
+      closeModal();
+    }
+  }
 
-    e.target.reset();
+  function closeModal() {
+    toggleModal({ isVisible: false, modal: "", data: null });
   }
   return (
     <Modal
       visible={isVisible && modal === "donate"}
       windowClassName={styles.modalWindow}
+      onClickClose={closeModal}
     >
       <div className={styles.cnt}>
         <h4>Make Donation</h4>
@@ -72,14 +86,12 @@ export default function DonationModal() {
               type="button"
               text={"Cancel"}
               classNames={[styles.button].join(" ")}
-              onClick={() =>
-                toggleModal({ isVisible: false, modal: "", data: null })
-              }
+              onClick={closeModal}
             ></Button>
             <Button
               text="Donate"
               classNames={[styles.button, styles.button_primary].join(" ")}
-              disabled={!formState.isValid}
+              disabled={!formState.isValid || loading}
               button="submit"
             ></Button>
           </div>

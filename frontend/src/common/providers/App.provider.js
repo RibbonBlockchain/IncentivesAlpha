@@ -3,7 +3,6 @@ import React, {
   useContext,
   useReducer,
   useMemo,
-  useEffect,
   useCallback
 } from "react";
 import PrescriptionAPI from "../services/api/prescription.api";
@@ -63,14 +62,9 @@ export const useApp = () => {
   const activityAPI = new ActivityAPI();
   const { currency, activityList, prescriptionList, ratings } = state;
 
-  useEffect(() => {
-    loadAppConfigs();
-  }, []);
-
-  const loadAppConfigs = async () => {
+  const loadDetails = async () => {
     let activityList = await activityAPI.listActivities();
     let prescriptionList = await prescriptionAPI.listPrescriptions();
-
     update({
       activityList,
       currency: state.currency,
@@ -78,5 +72,5 @@ export const useApp = () => {
     });
   };
 
-  return [{ currency, activityList, prescriptionList, ratings }];
+  return [{ currency, activityList, prescriptionList, ratings }, loadDetails];
 };

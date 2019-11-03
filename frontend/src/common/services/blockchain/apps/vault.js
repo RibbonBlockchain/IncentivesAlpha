@@ -1,8 +1,7 @@
 import BlockchainService from "../index";
 import Vault from "../abis/Vault.json";
-
+import * as unit from "ethjs-unit";
 import { config } from "../../../constants/config";
-import { waitForConfirmation } from "../utils";
 
 let vaultAddress = config.VAULT_CONTRACT_ADDRESS;
 
@@ -16,13 +15,12 @@ export default class VaultContract extends BlockchainService {
   async address() {}
 
   async donateFunds(value, message) {
-    let { ethers, provider } = await this.getInstance();
+    let { ethers } = await this.getInstance();
     let contract = await this.contract;
     try {
-      let tx = await contract.donateFunds(message, {
-        value: ethers.utils.parseEther(value.toString())
+      return await contract.donateFunds(message, {
+        value: ethers.utils.parseUnits(value.toString(), 18)
       });
-      return await waitForConfirmation(provider, tx);
     } catch (error) {
       return error;
     }
@@ -40,21 +38,25 @@ export default class VaultContract extends BlockchainService {
     practitionerAmount,
     chwAmount
   }) {
-    let { provider, ethers } = await this.getInstance();
-    let contract = await this.contract;
     try {
-      let tx = await contract.payout(
+      let { ethers } = await this.getInstance();
+      let contract = await this.contract;
+      console.log(patientAmount, practitionerAmount, chwAmount);
+      let patAmount = ethers.utils.parseUnits(patientAmount.toString(), 18);
+      let practAmount = ethers.utils.parseUnits(
+        practitionerAmount.toString(),
+        18
+      );
+      let chAmount = ethers.utils.parseUnits(chwAmount.toString(), 18);
+      console.log(patAmount, practAmount, chAmount);
+      return await contract.payout(
         patient,
         practitioner,
         chw,
-        ethers.utils.parseEther(patientAmount.toString()),
-        ethers.utils.parseEther(practitionerAmount.toString()),
-        ethers.utils.parseEther(chwAmount.toString()),
-        {
-          value: "0x0"
-        }
+        patAmount,
+        practAmount,
+        chAmount
       );
-      return await waitForConfirmation(provider, tx);
     } catch (error) {
       return error;
     }

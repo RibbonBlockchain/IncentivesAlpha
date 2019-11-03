@@ -84,7 +84,7 @@ function Home() {
                   className={styles.menu__link}
                   to="/app/home"
                 >
-                  Home
+                  <span>Home</span>
                 </NavLink>
               </li>
               {allowedRoutes[loginType].map(
@@ -96,19 +96,20 @@ function Home() {
                         className={styles.menu__link}
                         to={route}
                       >
-                        {formatLink(route)}
+                        <span>{formatLink(route)}</span>
                       </NavLink>
                     </li>
                   )
               )}
               <li className={styles.menu__item}>
                 <div className={styles.menu__link} onClick={showWallet}>
-                  My Profile
+                  <span>My Profile</span>
                 </div>
               </li>
             </ul>
           )}
         </nav>
+        {}
         <main className={styles.admin__main}>
           <Switch>
             <Route path="/app/home" component={Dashboard} />
