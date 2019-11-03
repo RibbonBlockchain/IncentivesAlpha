@@ -1,13 +1,14 @@
 {
   "command": {
-    "publish": {
-      "allowBranch": "master",
-      "message": "chore(release): publish %s"
+    "run": {
+      "concurrency": 1,
+      "scope": "@incentivesalpha/*"
+    },
+    "bootstrap": {
+      "progress": true
     }
   },
-  "lerna": "2.9.0",
-  "npmClient": "yarn",
+  "hoist": true,
   "packages": ["packages/*"],
-  "useWorkspaces": true,
-  "version": "1.0.0"
+  "version": "independent"
 }

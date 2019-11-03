@@ -17,20 +17,26 @@ Ribbon channels donated, pledged or sponsored funding directly to patients, comm
 
 Our Incentives are distributed in DAI, an asset-backed, decentralized stablecoin on the Ethereum blockchain.
 
-This monorepo contains JavaScript tools and applications that interact with RibbonBlockchain's smart contracts.
-
-<!-- hide-on-docup-start -->
-
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [Packages](#packages)
 - [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Contributing](#contributing)
-- [Packages](#packages)
 - [Resources](#resources)
 
-<!-- hide-on-docup-stop -->
+## Packages
+
+This monorepo contains JavaScript tools and applications that interact with RibbonBlockchain's smart contracts. The ribbon platform consists of 3 key components right now. this will change in time. These are as follows:
+
+| Name                                                                                                                | Description                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`@ribbonblockchain/api`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/API)             | Backend API built with Node, typscript express restful API that handles data capture for patients and all system wide interactions.                    |
+| [`@ribbonblockchain/Frontend`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/Frontend)   | Frontend react application that patients, CHW, practitioners and admins interact with. [dapp.ribbonblockchain.com](https://alpha.ribbonblockchain.com) |
+| [`@ribbonblockchain/Blockchain`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/Frontend) | Solidity Smart contracts that control the funding distribution, allocation and assignment within the Ribbon ecosystem.                                 |
+
+Each section has it's own package and has it's own readme within the package that explains how to set it up and get running with that spesific component.
 
 ## Requirements
 
@@ -66,61 +72,11 @@ Thanks for your interest in RibbonBlockchain. There are many ways you can contri
 
 We happily await your pull requests and/or involvement in our [issues page](https://github.com/RibbonBlockchain/IncentivesAlpha/issues) and hope to see your username on our [list of contributors](https://github.com/RibbonBlockchain/IncentivesAlpha/graphs/contributors) 🎉🎉🎉
 
-## Packages
-
-| Name                                                                                                                  | Description                                                                                                                                                                                   |
-| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@ribbonblockchain/api`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/api)               | A module for interacting with RibbonBlockchain's smart contracts. A core dependency of most RibbonBlockchain projects.                                                                        |
-| [`@ribbonblockchain/incentives`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/incentives) | An interface to consume our apis. It allows users to see communicate with the smart contracts through our apis. See it live at [dapp.ribbonblockchain.com](https://dapp.ribbonblockchain.com) |
-
 ## Resources
 
-To get a full idea of what RibbonBlockchain is about, be sure to take a look at these other resources:
-=======
-# InsensitivesAlpha-
-Ribbon Blockchain incentives alpha monorepo.
-There are 3 main folders:
-[Blockchain](#blockchain)
-[WebApp](#webapp)
-[API](#api)
+To get a full idea of what RibbonBlockchain is about, be sure to take a look at these other resources
 
-## Blockchain
-This folder contains all the smart contracts as well as tests.
-
-### Set up
-In command line within this directory, run the following to set up all package dependencies. 
-```
-npm install
-```
-To compile the contracts and run the tests run:
-```
-npm run-script build
-```
-
-## WebApp
-This folder is for all the front end content.
-
-### Set up
-In command line within this directory, run the following to set up all package dependencies. 
-```
-npm install
-```
-To start the app run...
-```
-???
-```
-
-## API
-This folder is for all the API's connecting the front end to the contracts. 
-
-### Set up
-In command line within this directory, run the following to set up all package dependencies. 
-```
-npm install
-```
-To start the API's run...
-```
-???
-```
-
-
+1. [Home Page](https://ribbonblockchain.com)
+2. [MVP](https://dapp.ribbonblockchian.com)
+3. [Incentives concept](https://incentives.ribbonblockchain.com)
+4. [Twitter](https://twitter.com/RibbonPlatform)
