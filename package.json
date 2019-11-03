@@ -1,41 +1,35 @@
 {
-  "name": "ribbonblockchain",
+  "name": "incentivesalpha-monorepo",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "build": "lerna run build --stream",
-    "clean": "lerna clean --yes && rm -rf node_modules",
-    "prepare": "lerna run build --stream",
-    "release:dry-run": "lerna publish --exact --skip-git --skip-npm --cd-version prerelease --conventional-commits --yes",
-    "release:alpha": "lerna publish --exact --cd-version prerelease --conventional-commits",
-    "start": "lerna run --stream --no-sort --concurrency=999 start",
-    "cz": "npx git-cz"
+    "bootstrap": "lerna bootstrap --hoist",
+    "postinstall": "yarn run bootstrap",
+    "frontend:start": "lerna run --scope=@incentivesalpha/front-end --stream start",
+    "frontend:build": "lerna run --scope=@incentivesalpha/front-end --stream build",
+    "frontend:eject": "lerna run --scope=@incentivesalpha/front-end --stream eject",
+    "frontend:test": "lerna run --scope=@incentivesalpha/front-end --stream test",
+    "contracts:build": "lerna run --scope=@incentivesalpha/smart-contracts --stream build",
+    "contracts:deploy:local": "lerna run --scope=@incentivesalpha/smart-contracts --stream deploy:local",
+    "contracts:deploy:sokol": "lerna run --scope=@incentivesalpha/smart-contracts --stream deploy:sokol",
+    "contracts:start": "lerna run --scope=@incentivesalpha/smart-contracts --stream start",
+    "contracts:build": "lerna run --scope=@incentivesalpha/smart-contracts --stream build",
+    "contracts:test": "lerna run --scope=@incentivesalpha/smart-contracts --stream test",
+    "contracts:cover": "lerna run --scope=@incentivesalpha/smart-contracts --stream cover",
+    "contracts:cover": "lerna run --scope=@incentivesalpha/smart-contracts --stream cover",
+    "backend:start": "lerna run --scope=@incentivesalpha/back-end --stream start",
+    "backend:test": "lerna run --scope=@incentivesalpha/back-end --stream test",
+    "backend:build": "lerna run --scope=@incentivesalpha/back-end --stream build",
+    "backend:dev": "lerna run --scope=@incentivesalpha/back-end --stream dev",
+    "backend:prod": "lerna run --scope=@incentivesalpha/back-end --stream prod"
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
   },
-  "devDependencies": {
-    "commitizen": "^4.0.3",
-    "husky": "^3.0.5",
-    "lerna": "^3.13.1",
-    "prettier": "1.18.2",
-    "pretty-quick": "^1.11.1"
-  },
-  "version": "1.0.0",
-  "repository": "https://github.com/RibbonBlockchain/IncentivesAlpha.git",
-  "author": "RibbonBlockchain Engineers",
-  "license": "MIT",
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "dependencies": {
-    "@truffle/contract": "^4.0.37",
-    "react-hook-form": "^3.24.1"
+    "homedir": "^0.6.0",
+    "lerna": "^3.18.3",
+    "eslint": "^6.1.0"
   }
 }
