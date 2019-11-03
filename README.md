@@ -30,11 +30,11 @@ Our Incentives are distributed in DAI, an asset-backed, decentralized stablecoin
 
 This monorepo contains JavaScript tools and applications that interact with RibbonBlockchain's smart contracts. The ribbon platform consists of 3 key components right now. this will change in time. These are as follows:
 
-| Name                                                                                                                | Description                                                                                                                                            |
-| ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`@ribbonblockchain/api`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/API)             | Backend API built with Node, typscript express restful API that handles data capture for patients and all system wide interactions.                    |
-| [`@ribbonblockchain/Frontend`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/Frontend)   | Frontend react application that patients, CHW, practitioners and admins interact with. [dapp.ribbonblockchain.com](https://alpha.ribbonblockchain.com) |
-| [`@ribbonblockchain/Blockchain`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/Frontend) | Solidity Smart contracts that control the funding distribution, allocation and assignment within the Ribbon ecosystem.                                 |
+| Name                                                                                                                    | Description                                                                                                                                            |
+| ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`@ribbonblockchain/back-end`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/API)            | Backend API built with Node, typscript express restful API that handles data capture for patients and all system wide interactions.                    |
+| [`@ribbonblockchain/front-end`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/Frontend)      | Frontend react application that patients, CHW, practitioners and admins interact with. [dapp.ribbonblockchain.com](https://alpha.ribbonblockchain.com) |
+| [`@ribbonblockchain/smart-contract`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/Frontend) | Solidity Smart contracts that control the funding distribution, allocation and assignment within the Ribbon ecosystem.                                 |
 
 Each section has it's own package and has it's own readme within the package that explains how to set it up and get running with that spesific component.
 
@@ -59,10 +59,27 @@ yarn
 For development purposes there's a top-level `start` script that will watch and continuously compile all packages concurrently:
 
 ```bash
-yarn start
+yarn frontend:start
 ```
 
-For next steps, take a look at documentation for the individual package(s) you want to run and/or develop.
+For next steps, take a look at documentation for the individual package(s) you want to run and/or develop. Each package can be run from the root directory using Lerna. The main things you can do are outlined below:
+
+```bash
+    yarn frontend:start         # start run the front end server
+    yarn frontend:build         # build front end for production
+
+    yarn contracts:build        # compile the smart contracts
+    yarn contracts:deploy:local # deploy smart contract to local ganage instance
+    yarn contracts:deploy:sokol # deploy contract to sokol test POA network
+    yarn contracts:start        # start a local ganache-cli instance
+    yarn contracts:test         # run contract unit tests
+    yarn contracts:cover        # generate coverage report
+
+    yarn backend:test           # run API unit tests
+    yarn backend:build:         # build API for production
+    yarn backend:dev            # start API in development mode
+    yarn backend:prod           # start API in production mode
+```
 
 ## Contributing
 
