@@ -1,6 +1,8 @@
-# InsensitivesAlpha-
+# Back End
 
-Ribbon Blockchain insensitives alpha monorepo
+Ribbon blockchain has a RESTful API which is used to store patient information and healthcare interaction. Future implementations will see this replaced with something like 3Box to provided decentralized profiles for patients. For now however we need to have strict control over the medical records used within the system. As a result we store them within a MongoDB with a permissioned API in front of it which implements role based access control.
+
+This API is wrapped in a docker container along with the mongodb to make deployment of the infrastructure controllable, scalable and reproducible.
 
 ## Requirements
 
@@ -62,14 +64,4 @@ Run the kuberneties tunnel to connect to localhost
 
 ```
 minikube tunnel
-```
-
-Creation of Argo CD config
-
-```
-argocd app create incentives-api \
-  --repo https://github.com/RibbonBlockchain/IncentivesAlpha \
-  --path API \
-  --dest-server https://kubernetes.default.svc \
-  --dest-namespace default
 ```
