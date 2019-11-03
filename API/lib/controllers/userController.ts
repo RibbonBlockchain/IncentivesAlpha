@@ -9,6 +9,36 @@ import { getCurrentUserAddress } from "../validators/authValidation";
 const User = mongoose.model("User", UserSchema);
 
 export class UserController {
+  public async addAdministrator(req: Request, res: Response) {
+    try{
+      if(req.body.role!=1){
+        res.status(400).send({status:400, error:"Please ensure role is 1 for administrator"})
+      }
+      else{
+        let form_data = req.body;
+        //check for the user who is adding the community health worker
+
+        let loggedInUserId = getCurrentUserAddress(req, res)
+
+        //add required nonce field for login challenge
+        let nonce = Math.floor(Math.random() * 1000000);
+        form_data.nonce = nonce;
+        form_data.onBoardedBy = loggedInUserId;
+        let newUser = new User(form_data);
+  
+        await newUser.save().then(
+          async user => {
+            res.status(201).json({ status: 201, data: user });
+          }
+        ).catch(error => {
+          res.status(400).json({status:400, message:"Duplicate address or Phone Number"})
+        })
+      }
+    }catch{
+      res.status(500).json({status:500, message:"Server Error"})
+    }
+  }
+
   public async addNewCommunityHealthWorker(req: Request, res: Response) {
     try{
       if(req.body.role!=2){
