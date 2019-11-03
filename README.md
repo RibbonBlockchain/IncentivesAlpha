@@ -30,11 +30,12 @@ Our Incentives are distributed in DAI, an asset-backed, decentralized stablecoin
 
 This monorepo contains JavaScript tools and applications that interact with RibbonBlockchain's smart contracts. The ribbon platform consists of 3 key components right now. this will change in time. These are as follows:
 
-| Name                                                                                                                    | Description                                                                                                                                            |
-| ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`@ribbonblockchain/back-end`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/API)            | Backend API built with Node, typscript express restful API that handles data capture for patients and all system wide interactions.                    |
-| [`@ribbonblockchain/front-end`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/Frontend)      | Frontend react application that patients, CHW, practitioners and admins interact with. [dapp.ribbonblockchain.com](https://alpha.ribbonblockchain.com) |
-| [`@ribbonblockchain/smart-contract`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/Frontend) | Solidity Smart contracts that control the funding distribution, allocation and assignment within the Ribbon ecosystem.                                 |
+
+| Name                                                 | Description                                                                                                                         |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [`@ribbonblockchain/api`](/packages/back-end)             | Backend API built with Node, typscript express restful API that handles data capture for patients and all system wide interactions. |
+| [`@ribbonblockchain/frontend`](/packages/front-end)   | Frontend react application that patients, CHW, practitioners and admins interact with. [Link](https://alpha.ribbonblockchain.com)   |
+| [`@ribbonblockchain/blockchain`](/packages/smart-contract) | Solidity Smart contracts that control the funding distribution, allocation and assignment within the Ribbon ecosystem.              |
 
 Each section has it's own package and has it's own readme within the package that explains how to set it up and get running with that spesific component.
 
@@ -93,7 +94,7 @@ We happily await your pull requests and/or involvement in our [issues page](http
 
 To get a full idea of what RibbonBlockchain is about, be sure to take a look at these other resources
 
-1. [Home Page](https://ribbonblockchain.com)
-2. [MVP](https://dapp.ribbonblockchian.com)
-3. [Incentives concept](https://incentives.ribbonblockchain.com)
-4. [Twitter](https://twitter.com/RibbonPlatform)
+1. [Website](https://ribbonblockchain.com)
+2. [Alpha DApp](https://alpha.ribbonblockchian.com)
+   <!-- 3. [Incentives Proof of Concept](https://incentives.ribbonblockchain.com) -->
+3. [Twitter](https://twitter.com/RibbonPlatform)
