@@ -1,15 +1,23 @@
-# Blockchain
+# Smart Contract
 
-Contract addresses on sokol
+Ribbon blockchain uses a number of smart contracts deployed to the xDai network. These contracts govern how funds flow within the system. They act almost like a Dao to control all aspects of the payments between patients, helthcare workers and practitioners.
+
+### Contract addresses on sokol
+
+```
 Admin: 0xB1353e322b15884Eb36500BB5b5FDE989a42c693
 Vault: 0xEB8C8B9F19F824A95d5D2fA05f03fBE1fdCC4826
 Registry: 0x3d16A53647C09daD6f8F7Bc2D9918CD202cBbE58
+```
 
 ## Index
 
 [1. Getting started](#1-getting-started)
+
 [2. Trouble shooting](#2-trouble-shooting)
+
 [3. Security considerations](#3-security-considerations)
+
 [Contract architecture](#contract-architecture)
 
 ## 1. Getting started
@@ -17,13 +25,13 @@ Registry: 0x3d16A53647C09daD6f8F7Bc2D9918CD202cBbE58
 To set up dependencies run:
 
 ```
-npm install
+yarn install
 ```
 
 To compile contracts and run tests run:
 
 ```
-npm run-script build
+yarn run-script build
 ```
 
 ## 2. Trouble shooting
@@ -32,14 +40,14 @@ If when running the tests there is an issue (a function's parameters differ from
 If a change has been made to the contracts, occasionally it will incorrectly compile the contracts byte code. If this happens please run the following:
 
 ```
-npm run-script build-err
+yarn run-script build-err
 ```
 
 This script will require you to enter `y`, as you are deleting the build directory. This will not break anything.
 
 <!-- If you are linux please run:
 ```
-npm run-script build-err-lnx
+yarn run-script build-err-lnx
 ``` -->
 
 ## 3. Security considerations
@@ -56,8 +64,6 @@ InterfaceOfContract private _contractInstance;
 ```
 
 # Contract architecture
-
-// TODO insert diagram
 
 ## Contract breakdown
 
