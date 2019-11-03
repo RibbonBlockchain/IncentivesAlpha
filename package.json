@@ -1,9 +1,10 @@
 {
-  "name": "incentivesalpha-monorepo",
+  "name": "incentivesalpha",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --hoist",
-    "postinstall": "yarn run bootstrap",
+    "bootstrap": "lerna bootstrap",
+	"postinstall": "npm run bootstrap",
+	"cz": "git-cz",
     "frontend:start": "lerna run --scope=@incentivesalpha/front-end --stream start",
     "frontend:build": "lerna run --scope=@incentivesalpha/front-end --stream build",
     "frontend:eject": "lerna run --scope=@incentivesalpha/front-end --stream eject",
@@ -22,16 +23,30 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "pretty-quick --staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
     }
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "eslint": "^6.1.0",
     "homedir": "^0.6.0",
     "lerna": "^3.18.3"
   },
   "devDependencies": {
+    "cz-conventional-changelog": "^3.0.2",
     "prettier": "^1.18.2",
     "pretty-quick": "^2.0.0"
+  },
+  "version": "1.0.0",
+  "repository": "https://github.com/RibbonBlockchain/IncentivesAlpha.git",
+  "author": "Ribbon Blockchain Engineers",
+  "license": "MIT",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
