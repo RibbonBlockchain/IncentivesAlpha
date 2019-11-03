@@ -76,7 +76,7 @@ We happily await your pull requests and/or involvement in our [issues page](http
 
 To get a full idea of what RibbonBlockchain is about, be sure to take a look at these other resources
 
-1. [Home Page](ribbonblockchain.com)
-2. [MVP](dapp.ribbonblockchian.com)
-3. [Incentives concept](incentives.ribbonblockchain.com)
-4. [twitter](https://twitter.com/RibbonPlatform)
+1. [Home Page](https://ribbonblockchain.com)
+2. [MVP](https://dapp.ribbonblockchian.com)
+3. [Incentives concept](https://incentives.ribbonblockchain.com)
+4. [Twitter](https://twitter.com/RibbonPlatform)
