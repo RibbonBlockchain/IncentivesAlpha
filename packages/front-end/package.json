@@ -1,7 +1,8 @@
 {
   "name": "@incentivesalpha/front-end",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "author": "Ribbon Blockchain Engineers",
   "homepage": ".",
   "dependencies": {
     "@portis/web3": "^2.0.0-beta.43",

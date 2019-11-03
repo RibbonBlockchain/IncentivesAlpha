@@ -1,14 +1,12 @@
 {
   "command": {
-    "run": {
-      "concurrency": 1,
-      "scope": "@incentivesalpha/*"
-    },
-    "bootstrap": {
-      "progress": true
+    "publish": {
+      "allowBranch": "master",
+      "message": "chore(release): publish %s"
     }
   },
-  "hoist": true,
+  "lerna": "2.9.0",
   "packages": ["packages/*"],
+  "useWorkspaces": true,
   "version": "independent"
 }
