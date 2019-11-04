@@ -61,7 +61,7 @@ function Login() {
         <div className={styles.login_box}>
           <div className={styles.form}>
             <div className={styles.headline}>
-              <h3>Insert client logo here</h3>
+              <h3>Ribbon Incentives Ecosystem</h3>
             </div>
             <div className={styles.login_box}>
               <Web3Connect.Button
