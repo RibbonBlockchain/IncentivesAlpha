@@ -5,16 +5,16 @@ export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
   let { patient, practitioner, user, amount, serviceRatings } = data;
 
-  let practitionerAmount =
-    ((amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount) / 15;
+  let practitionerAmount = amount * 0.15;
+  // ((amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount);
 
-  let chwAmount = (amount * 0.15) / 15;
+  let chwAmount = amount * 0.15;
 
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
-    patientAmount: amount / 15,
+    patientAmount: amount,
     practitionerAmount,
     chwAmount
   };
@@ -27,7 +27,7 @@ export const recordInteraction = async data => {
       } else {
         console.log(tx);
         return {
-          error: `An error occured. Please try again`
+          error: tx
         };
       }
     } else {

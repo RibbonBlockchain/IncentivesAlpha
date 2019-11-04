@@ -42,27 +42,41 @@ export default class VaultContract extends BlockchainService {
       let { ethers, provider } = await this.getInstance();
       let contract = await this.contract;
       console.log(patientAmount, practitionerAmount, chwAmount);
-      let patientAmountToBeSent = ethers.utils.parseUnits(patientAmount.toString(), 18);
+      let patientAmountToBeSent = ethers.utils.parseUnits(
+        patientAmount.toString(),
+        18
+      );
       let practitionerAmountToBeSent = ethers.utils.parseUnits(
         practitionerAmount.toString(),
         18
       );
       let chwAmountToBeSent = ethers.utils.parseUnits(chwAmount.toString(), 18);
-      console.log(patientAmountToBeSent, practitionerAmountToBeSent, chwAmountToBeSent);
-      let totalAmountToBeTransfered = patientAmountToBeSent + practitionerAmountToBeSent + chwAmount;
-      let currentVaultBalance = await provider.getBalance(config.VAULT_CONTRACT_ADDRESS);
-      if (currentVaultBalance <= totalAmountToBeTransfered) {
-        return await contract.payout(
-          patient,
-          practitioner,
-          chw,
-          patientAmountToBeSent,
-          practitionerAmountToBeSent,
-          chwAmountToBeSent
-        );
-      } else {
-        return "Insufficient balance on vault";
-      }
+      console.log(
+        patientAmountToBeSent,
+        practitionerAmountToBeSent,
+        chwAmountToBeSent
+      );
+      let totalAmountToBeTransfered =
+        patientAmountToBeSent + practitionerAmountToBeSent + chwAmount;
+      let currentVaultBalance = await provider.getBalance(
+        config.VAULT_CONTRACT_ADDRESS
+      );
+      //   console.log(
+      //     ethers.utils.formatEther(currentVaultBalance.toString()),
+      //     ethers.utils.formatEther(totalAmountToBeTransfered)
+      //   );
+      //   if (currentVaultBalance <= totalAmountToBeTransfered) {
+      return await contract.payout(
+        patient,
+        practitioner,
+        chw,
+        patientAmountToBeSent,
+        practitionerAmountToBeSent,
+        chwAmountToBeSent
+      );
+      //   } else {
+      //     return "Insufficient balance on vault";
+      //   }
     } catch (error) {
       return error;
     }
