@@ -27,7 +27,7 @@ export const recordInteraction = async data => {
       } else {
         console.log(tx);
         return {
-          error: tx
+          error: tx.code ? tx.message : tx
         };
       }
     } else {

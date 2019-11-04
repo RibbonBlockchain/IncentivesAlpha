@@ -57,28 +57,29 @@ export default class VaultContract extends BlockchainService {
         chwAmountToBeSent
       );
       let totalAmountToBeTransfered =
-        patientAmountToBeSent + practitionerAmountToBeSent + chwAmount;
+        patientAmount + practitionerAmount + chwAmount;
       let currentVaultBalance = await provider.getBalance(
         config.VAULT_CONTRACT_ADDRESS
       );
-      //   console.log(
-      //     ethers.utils.formatEther(currentVaultBalance.toString()),
-      //     ethers.utils.formatEther(totalAmountToBeTransfered)
-      //   );
-      //   if (currentVaultBalance <= totalAmountToBeTransfered) {
-      return await contract.payout(
-        patient,
-        practitioner,
-        chw,
-        patientAmountToBeSent,
-        practitionerAmountToBeSent,
-        chwAmountToBeSent
+      let balance = Number(
+        ethers.utils.formatEther(currentVaultBalance.toString())
       );
-      //   } else {
-      //     return "Insufficient balance on vault";
-      //   }
+
+      if (totalAmountToBeTransfered <= balance) {
+        return await contract.payout(
+          patient,
+          practitioner,
+          chw,
+          patientAmountToBeSent,
+          practitionerAmountToBeSent,
+          chwAmountToBeSent
+        );
+      } else {
+        return "Insufficient balance on vault";
+      }
     } catch (error) {
-      return error;
+      console.log(error);
+      return "An error occured. Please try again";
     }
   }
 }
