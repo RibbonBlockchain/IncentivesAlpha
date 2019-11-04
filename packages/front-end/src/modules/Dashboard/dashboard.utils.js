@@ -51,7 +51,8 @@ export const formatActivityOptions = options => {
     options.length > 0 &&
     options.map(option => ({
       label: option.activityTitle,
-      value: option
+      value: option._id,
+      data: option
     }))
   );
 };
@@ -61,7 +62,7 @@ export const formatPrescriptionOptions = options => {
     options.length > 0 &&
     options.map(option => ({
       label: option.prescriptionTitle,
-      value: option
+      value: option._id
     }))
   );
 };

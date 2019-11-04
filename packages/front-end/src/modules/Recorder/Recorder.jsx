@@ -168,10 +168,11 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
       activities: record.activities,
       prescriptions: record.prescriptions,
       serviceRatings: ratingList,
-      amount: await record.activities
-        .map(activity => activity.value.activityReward)
+      amount: record.activities
+        .map(activity => activity.data.activityReward)
         .reduce((activity, acc) => activity + acc, 0)
     };
+    console.log(data);
     setLoading(true);
     let interaction = await recordInteraction(data);
     if (interaction.error) {

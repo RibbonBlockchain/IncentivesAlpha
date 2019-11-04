@@ -19,6 +19,8 @@ export const recordInteraction = async data => {
     chwAmount
   };
 
+  console.log(amount);
+
   try {
     if (amount > 0) {
       let tx = await vaultContract.payout(payoutInformation);
