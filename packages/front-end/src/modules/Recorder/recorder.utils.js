@@ -6,15 +6,15 @@ export const recordInteraction = async data => {
   let { patient, practitioner, user, amount, serviceRatings } = data;
 
   let practitionerAmount =
-    (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount;
+    ((amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount) / 15;
 
-  let chwAmount = amount * 0.15;
+  let chwAmount = (amount * 0.15) / 15;
 
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
-    patientAmount: amount,
+    patientAmount: amount / 15,
     practitionerAmount,
     chwAmount
   };

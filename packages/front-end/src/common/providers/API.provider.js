@@ -75,9 +75,12 @@ export const useData = () => {
     );
     update({
       users: listUsers,
-      interactions: listInteractions.sort(
-        (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
-      )
+      interactions:
+        listInteractions.length > 0
+          ? listInteractions.sort(
+              (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+            )
+          : []
     });
   };
 
