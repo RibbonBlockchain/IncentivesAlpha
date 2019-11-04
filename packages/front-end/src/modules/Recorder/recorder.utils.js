@@ -5,21 +5,19 @@ export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
   let { patient, practitioner, user, amount, serviceRatings } = data;
 
-  let practitionerAmount = amount * 0.15;
+  let practitionerAmount = Number(amount * 0.15).toFixed(6);
   // ((amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount);
 
-  let chwAmount = amount * 0.15;
+  let chwAmount = Number(amount * 0.15).toFixed(6);
 
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
-    patientAmount: amount,
+    patientAmount: Number(amount).toFixed(6),
     practitionerAmount,
     chwAmount
   };
-
-  console.log(amount);
 
   try {
     if (amount > 0) {
