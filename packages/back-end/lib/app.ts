@@ -13,7 +13,7 @@ import { SettingsRoutes } from "./routes/settingsRoutes";
 import * as mongoose from "mongoose";
 import * as cors from "cors";
 
-const isDocker = require("is-docker");
+// const isDocker = require("is-docker");
 
 const {
   MONGO_USERNAME,
@@ -54,15 +54,7 @@ class App {
   };
 
   constructor() {
-    if (isDocker()) {
-      this.mongoUrl = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
-      console.log("Running in docker mode");
-      console.log("Connecting to: ", this.mongoUrl);
-    } else {
-      this.mongoUrl = `mongodb://35.228.153.27:27017/Ribbon-Incentives-API-DB`;
-      console.log("Running in development mode. Will connect to staging DB");
-      console.log("Connecting to: ", this.mongoUrl);
-    }
+    this.mongoUrl = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
 
     this.config();
     this.mongoSetup();
@@ -91,12 +83,15 @@ class App {
   private mongoSetup(): void {
     mongoose.Promise = global.Promise;
     let mongoUrl = this.mongoUrl;
+    console.log("Connecting to mongo server on:", mongoUrl);
     var connectWithRetry = function() {
       mongoose.connect(
         mongoUrl,
         {
           useNewUrlParser: true,
-          useUnifiedTopology: true
+          useUnifiedTopology: true,
+          user: MONGO_USERNAME,
+          pass: MONGO_PASSWORD
         },
         function(err) {
           if (err) {
