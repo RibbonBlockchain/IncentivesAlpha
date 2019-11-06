@@ -1,3 +1,4 @@
+import * as mongoose from "mongoose";
 import { Request, Response, NextFunction } from "express";
 import { UserController } from "../controllers/userController";
 import {
@@ -5,10 +6,13 @@ import {
   superAdminOnly,
   communityHealthWorkerOnly
 } from "../validators/authValidation";
+import { UserSchema } from "../models/userModel";
 import { check, validationResult } from "express-validator";
 
+const User = mongoose.model("user", UserSchema)
+
 export class UserRoutes {
-  public userController: UserController = new UserController();
+  public userController: UserController = new UserController(User);
 
   public routes(app): void {
     // Users

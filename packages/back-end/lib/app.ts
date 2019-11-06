@@ -59,7 +59,8 @@ class App {
       console.log("Running in docker mode");
       console.log("Connecting to: ", this.mongoUrl);
     } else {
-      this.mongoUrl = `mongodb://35.228.153.27:27017/Ribbon-Incentives-API-DB`;
+      this.mongoUrl = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}
+      `;
       console.log("Running in development mode. Will connect to staging DB");
       console.log("Connecting to: ", this.mongoUrl);
     }
@@ -91,7 +92,7 @@ class App {
   private mongoSetup(): void {
     mongoose.Promise = global.Promise;
     let mongoUrl = this.mongoUrl;
-    var connectWithRetry = function() {
+    const connectWithRetry = function() {
       mongoose.connect(
         mongoUrl,
         {
@@ -104,7 +105,7 @@ class App {
               "Failed to connect to mongodb on startup - retrying in 1 sec",
               err
             );
-            setTimeout(connectWithRetry, 1000);
+            setTimeout(connectWithRetry, 5000);
           }
         }
       );

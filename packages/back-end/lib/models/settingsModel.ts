@@ -15,11 +15,11 @@ export const SettingsSchema = new Schema({
     type: Number,
     required: "chw percentage is required"
   },
-  ratings: [
+  ratingTypes: [
     {
-      ratingName: {
-        type: String
-      }
+      title: String,
+      rating: Number,
+      description: String
     }
   ]
 });
