@@ -13,8 +13,6 @@ import { SettingsRoutes } from "./routes/settingsRoutes";
 import * as mongoose from "mongoose";
 import * as cors from "cors";
 
-// const isDocker = require("is-docker");
-
 const {
   MONGO_USERNAME,
   MONGO_PASSWORD,
@@ -54,17 +52,7 @@ class App {
   };
 
   constructor() {
-
-    if (isDocker()) {
-      this.mongoUrl = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
-      console.log("Running in docker mode");
-      console.log("Connecting to: ", this.mongoUrl);
-    } else {
-      this.mongoUrl = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}
-      `;
-      console.log("Running in development mode. Will connect to staging DB");
-      console.log("Connecting to: ", this.mongoUrl);
-    }
+    this.mongoUrl = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
 
     this.config();
     this.mongoSetup();
