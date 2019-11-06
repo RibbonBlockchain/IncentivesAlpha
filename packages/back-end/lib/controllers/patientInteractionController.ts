@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
 import { PatientInteractionSchema } from "../models/patientInteractionModel";
 import { Request, Response } from "express";
+import * as moment from "moment";
 
 const User = mongoose.model("User", UserSchema);
 
@@ -46,6 +47,32 @@ export class PatientInteractionListController {
   public async getPatientInteractionByAddress(req: Request, res: Response) {
     try {
       if (parseInt(req.body.role) === 1) {
+        if(req.query){
+          const date_from = req.query['date_from'];
+          const date_to = req.query['date_to'];
+          let options = {};
+          if(date_from){
+              if(!options["createdDate"]) options["createdDate"] = {};
+              const dateFrom = moment(new Date(date_from)).toDate();
+              options["createdDate"]['$gte'] = dateFrom;
+          }
+
+          if(date_to){
+              if(!options["createdDate"]) options["createdDate"] = {};
+              const dateTo = moment(new Date(date_to)).toDate();
+              options["createdDate"]['$lte'] = dateTo;
+          }
+          console.log(options)
+
+          await patientInteractionList
+            .find(options)
+            .then(async interactions => {
+              res.json({status: 200, data: interactions})
+            })
+            .catch(error => {
+              res.status(404)
+            })
+        }
         await User.findOne({
           publicAddress: req.params.userAddress
         }).then(async user => {
@@ -58,6 +85,7 @@ export class PatientInteractionListController {
               res.status(404);
             });
         });
+
       } else if (parseInt(req.body.role) === 2) {
         await User.findOne({
           publicAddress: req.params.userAddress

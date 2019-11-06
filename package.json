@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-	"postinstall": "npm run bootstrap",
-	"cz": "git-cz",
+    "postinstall": "npm run bootstrap",
+    "cz": "git-cz",
     "frontend:start": "lerna run --scope=@incentivesalpha/front-end --stream start",
     "frontend:build": "lerna run --scope=@incentivesalpha/front-end --stream build",
     "frontend:eject": "lerna run --scope=@incentivesalpha/front-end --stream eject",
