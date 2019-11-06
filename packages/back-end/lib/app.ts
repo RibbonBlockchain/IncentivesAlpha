@@ -13,7 +13,7 @@ import { SettingsRoutes } from "./routes/settingsRoutes";
 import * as mongoose from "mongoose";
 import * as cors from "cors";
 
-const isDocker = require("is-docker");
+// const isDocker = require("is-docker");
 
 const {
   MONGO_USERNAME,
@@ -54,6 +54,7 @@ class App {
   };
 
   constructor() {
+
     if (isDocker()) {
       this.mongoUrl = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
       console.log("Running in docker mode");
@@ -92,12 +93,15 @@ class App {
   private mongoSetup(): void {
     mongoose.Promise = global.Promise;
     let mongoUrl = this.mongoUrl;
+
     const connectWithRetry = function() {
       mongoose.connect(
         mongoUrl,
         {
           useNewUrlParser: true,
-          useUnifiedTopology: true
+          useUnifiedTopology: true,
+          user: MONGO_USERNAME,
+          pass: MONGO_PASSWORD
         },
         function(err) {
           if (err) {
