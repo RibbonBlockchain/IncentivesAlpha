@@ -18,12 +18,13 @@ yarn-error.log
 .env*.local
 .poosh.cache
 
+#kube
+*secret.yaml
+
 .idea
 .vscode
 .cache
 key.txt
-
-
 
 #front end
 /node_modules
