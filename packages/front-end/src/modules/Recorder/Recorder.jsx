@@ -172,7 +172,6 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
         .map(activity => activity.data.activityReward)
         .reduce((activity, acc) => activity + acc, 0)
     };
-    console.log(data);
     setLoading(true);
     let interaction = await recordInteraction(data);
     if (interaction.error) {

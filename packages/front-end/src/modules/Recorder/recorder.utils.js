@@ -64,15 +64,11 @@ export const recordInteractionOnDB = async ({
     chw: user._id,
     activities:
       activities.length > 0
-        ? activities.map(activity => ({
-            activityId: activity.value
-          }))
+        ? activities.map(activity => activity.data._id)
         : activities,
     prescriptions:
       prescriptions.length > 0
-        ? prescriptions.map(prescription => ({
-            prescriptionId: prescription.value
-          }))
+        ? prescriptions.map(prescription => prescription.value)
         : prescriptions,
     rewards: [
       {
