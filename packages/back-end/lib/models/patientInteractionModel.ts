@@ -18,18 +18,14 @@ export const PatientInteractionSchema = new Schema({
   },
   activities: [
     {
-      activityId: {
-        type: Schema.ObjectId,
-        ref: "ActivityList"
-      }
+      type: Schema.ObjectId,
+      ref: "ActivityList"
     }
   ],
   prescriptions: [
     {
-      prescriptionId: {
-        type: Schema.ObjectId,
-        ref: "PrescriptionList"
-      }
+      type: Schema.ObjectId,
+      ref: "PrescriptionList"
     }
   ],
   rewards: [
@@ -87,8 +83,8 @@ PatientInteractionSchema.pre("find", autoPopulateForeigns);
 PatientInteractionSchema.pre("findOne", autoPopulateForeigns);
 
 function autoPopulateForeigns(next) {
-  this.populate("activityId")
-    .populate("prescriptionId")
+  this.populate("activities", ["activityTitle"])
+    .populate("prescriptions", ["prescriptionTitle"])
     .populate("patient", ["firstName", "lastName", "publicAddress"])
     .populate("chw", ["firstName", "lastName", "publicAddress"])
     .populate("practitioner", ["firstName", "lastName", "publicAddress"]);
