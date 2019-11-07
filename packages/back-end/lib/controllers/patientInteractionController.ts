@@ -50,6 +50,10 @@ export class PatientInteractionListController {
         if(req.query){
           const date_from = req.query['date_from'];
           const date_to = req.query['date_to'];
+          const date = req.query['date'];
+          const patient = req.query['patient_id'];
+          const practitioner = req.query['practitioner_id'];
+          const chw = req.query['chw_id'];
           let options = {};
           if(date_from){
               if(!options["createdDate"]) options["createdDate"] = {};
@@ -62,6 +66,28 @@ export class PatientInteractionListController {
               const dateTo = moment(new Date(date_to)).toDate();
               options["createdDate"]['$lte'] = dateTo;
           }
+
+          if(date) {
+            if(!options["createdDate"]) options["createdDate"] = {};
+            const dDate = moment(new Date(date)).toDate()
+            options["createdDate"] = dDate
+          }
+
+          if(patient){
+            if(!options["patient"]) options["patient"] = {};
+            options["patient"] = patient;
+          }
+
+          if(practitioner){
+            if(!options["practitioner"]) options["practitioner"] = {};
+            options["practitioner"] = practitioner;
+          }
+
+          if(chw){
+            if(!options["chw"]) options["chw"] = {};
+            options["chw"] = chw;
+          }
+
           console.log(options)
 
           await patientInteractionList
