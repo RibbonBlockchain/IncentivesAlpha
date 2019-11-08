@@ -2,11 +2,7 @@ import React, { useEffect } from "react";
 import * as moment from "moment";
 import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
-import {
-  VirtualizedTable,
-  Column,
-  AutoSizer
-} from "../../common/components/Table";
+import { Table, AutoSizer, Column } from "react-virtualized";
 import { getRoleCount } from "./dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
 import Card from "../../common/components/Card";
@@ -20,9 +16,9 @@ import { getBlockscoutLink } from "../../common/utils";
 function DashboardTable({ data, type }) {
   const [, toggleModal] = useModal();
 
-  //   function _noRowsRenderer() {
-  //     return <div className={styles.noRows}>No transaction recorded yet!</div>;
-  //   }
+  function _noRowsRenderer() {
+    return <div className={styles.noRows}>No transaction recorded yet!</div>;
+  }
 
   function renderTxLink({ rowData }) {
     return (
@@ -74,7 +70,7 @@ function DashboardTable({ data, type }) {
         {rowData.createdDate
           ? moment(rowData.createdDate)
               .utc()
-              .format("dddd, MMMM Do YYYY HH:mm")
+              .format("dddd, MMMM Do YYYY")
           : "Not Available"}
       </Heading>
     );
@@ -93,43 +89,59 @@ function DashboardTable({ data, type }) {
           />
         </div>
       )}
-      <VirtualizedTable
-        headerHeight={40}
-		rowHeight={40}
-        rowCount={data.length}
-        rowGetter={({ index }) => data[index]}
-      >
-        {type !== roleNames.PRACTITIONER && (
-          <Column
-            label="Practitioner"
-            cellRenderer={renderPractitioner}
-            dataKey="practitionerAddress"
-            width={300}
-          />
-        )}
-        {type !== roleNames.PATIENT && (
-          <Column
-            label="Patient"
-            cellRenderer={renderPatient}
-            dataKey="patientAddress"
-            width={300}
-          />
-        )}
-        {type < roleNames.HEALTH_WORKER && (
-          <Column
-            label="Registered By"
-            cellRenderer={renderHealthWorker}
-            dataKey="chwAddress"
-            width={200}
-          />
-        )}
-        <Column
-          label="Date"
-          cellRenderer={renderDate}
-          dataKey="createdDate"
-          width={300}
-        />
-      </VirtualizedTable>
+      <Card classNames={[styles.table].join(" ")}>
+        <AutoSizer disableHeight>
+          {({ width }) => (
+            <Table
+              width={width}
+              height={500}
+              headerHeight={40}
+              noRowsRenderer={_noRowsRenderer}
+              rowHeight={40}
+              rowCount={data.length}
+              rowGetter={({ index }) => data[index]}
+              headerClassName={[
+                styles.ReactVirtualized__Table__headerColumn
+              ].join(" ")}
+            >
+              {type !== roleNames.PRACTITIONER && (
+                <Column
+                  label="Practitioner"
+                  cellRenderer={renderPractitioner}
+                  dataKey="practitionerAddress"
+                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                  width={300}
+                />
+              )}
+              {type !== roleNames.PATIENT && (
+                <Column
+                  label="Patient"
+                  cellRenderer={renderPatient}
+                  dataKey="patientAddress"
+                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                  width={300}
+                />
+              )}
+              {type < roleNames.HEALTH_WORKER && (
+                <Column
+                  label="Registered By"
+                  cellRenderer={renderHealthWorker}
+                  dataKey="chwAddress"
+                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                  width={200}
+                />
+              )}
+              <Column
+                label="Date"
+                cellRenderer={renderDate}
+                dataKey="createdDate"
+                className={styles.ReactVirtualized__Table__rowColumn_ticker}
+                width={400}
+              />
+            </Table>
+          )}
+        </AutoSizer>
+      </Card>
     </>
   );
 }

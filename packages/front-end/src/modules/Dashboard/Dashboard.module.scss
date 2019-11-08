@@ -70,8 +70,30 @@ textarea {
   resize: none;
 }
 
+.background {
+  background: #313541;
+}
+
+.head_actions {
+  display: grid;
+  grid-template-columns: 3fr 3fr;
+  margin-bottom: calculateRem(20);
+  &_action {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+  h4 {
+    margin: 0;
+    align-self: center;
+  }
+  .csv_button {
+    margin: 0;
+  }
+}
+
 .table {
   margin-top: calculateRem(10);
+  color: $text-color;
 }
 .headerRow,
 .evenRow,

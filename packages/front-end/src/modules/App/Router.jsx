@@ -14,7 +14,11 @@ function AuthenticatedRoute({ component: C, appProps, ...rest }) {
     <Route
       {...rest}
       render={props =>
-        appProps.token ? <C {...props} {...appProps} /> : <Redirect to="/" />
+        appProps.token !== null ? (
+          <C {...props} {...appProps} />
+        ) : (
+          <Redirect to="/" />
+        )
       }
     />
   );
@@ -25,7 +29,7 @@ function UnAuthenticated({ component: C, appProps, ...rest }) {
     <Route
       {...rest}
       render={props =>
-        !appProps.token ? (
+        appProps.token === null ? (
           <C {...props} {...appProps} />
         ) : (
           <Redirect to="/app" />

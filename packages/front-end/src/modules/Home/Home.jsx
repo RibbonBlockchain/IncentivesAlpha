@@ -109,7 +109,6 @@ function Home() {
             </ul>
           )}
         </nav>
-        {}
         <main className={styles.admin__main}>
           <Switch>
             <Route path="/app/home" component={Dashboard} />

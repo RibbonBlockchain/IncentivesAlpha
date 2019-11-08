@@ -6,7 +6,6 @@ import * as serviceWorker from "./serviceWorker";
 import "react-virtualized/styles.css";
 
 import ErrorBoundary from "./common/components/ErrorBoundary";
-import ThemeProvider, { GlobalStyle } from "./common/theme";
 import StorageProvider, {
   Updater as StorageUpdater
 } from "./common/providers/Storage.provider";
@@ -43,12 +42,9 @@ ReactDOM.render(
   <ErrorBoundary>
     <ContextProviders>
       <Updaters />
-      <ThemeProvider>
-        <BrowserRouter>
-          <GlobalStyle />
-          <Router />
-        </BrowserRouter>
-      </ThemeProvider>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </ContextProviders>
   </ErrorBoundary>,
   document.getElementById("root")
