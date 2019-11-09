@@ -202,7 +202,6 @@ export default function ListPractitioners() {
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
               <Button
-                onClick={() => setVisible(true)}
                 className={styles.csv_button}
                 text="Download"
               />

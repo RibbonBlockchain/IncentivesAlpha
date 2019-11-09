@@ -16,6 +16,7 @@ import { generateReport } from "../../Dashboard/dashboard.utils";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
 import { useAlert } from "../../../common/providers/Modal.provider";
+import { useWeb3 } from "../../../common/providers/Web3.provider";
 
 const StyledTitle = styled.h3`
   font-weight: 300;
@@ -124,10 +125,90 @@ function DownloadCSV({ isOpen, onDismiss }) {
   );
 }
 
+function Stats({ type }) {
+  return (
+    <div className={styles.dashboard}>
+      {roleNames.SUPER_ADMIN === type && (
+        <div className={styles.layout}>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Patients Onboarded this week</div>
+          </Card>
+          <Card classNames={styles.card__light_blue}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>
+              Practitioners Onboarded this week
+            </div>
+          </Card>
+          <Card classNames={styles.card__light_pink}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>
+              Community Health Workers Onboarded this week
+            </div>
+          </Card>
+          <Card classNames={styles.card__light_purple}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Total payout this week</div>
+          </Card>
+        </div>
+      )}
+      {roleNames.HEALTH_WORKER === type && (
+        <div className={styles.layout}>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Patients Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_blue}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Practitioners Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_pink}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Activities Recorded</div>
+          </Card>
+          <Card classNames={styles.card__light_purple}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Total Earned</div>
+          </Card>
+        </div>
+      )}
+      {roleNames.PRACTITIONER === type && (
+        <div className={styles.layout}>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Patient Attended</div>
+          </Card>
+          <Card classNames={styles.card__light_pink}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Activities Participated in</div>
+          </Card>
+          <Card classNames={styles.card__light_pink}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Total Earned</div>
+          </Card>
+        </div>
+      )}
+      {roleNames.PATIENT === type && (
+        <div className={styles.layout}>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Activities participated in</div>
+          </Card>
+          <Card classNames={styles.card__light_pink}>
+            <div className={styles.count}>0/0</div>
+            <div className={styles.heading}>Total Earned</div>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ListPractitioners() {
   const [{ users }] = useData();
   const [state, setState] = useState([]);
   const [search, setSearch] = useState();
+  const [{ loginType }] = useWeb3();
   const [visible, setVisible] = useState(false);
   const fuse = new Fuse(state, {
     maxPatternLength: 32,
@@ -196,16 +277,13 @@ export default function ListPractitioners() {
 
   return (
     <>
+      <Stats type={Number(loginType)} />
       {state ? (
         <Card classNames={[styles.table, styles.white].join(" ")}>
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              <Button
-                onClick={() => setVisible(true)}
-                className={styles.csv_button}
-                text="Download"
-              />
+              <Button className={styles.csv_button} text="Download" />
               <input
                 className={[styles.form_input].join(" ")}
                 type="text"
