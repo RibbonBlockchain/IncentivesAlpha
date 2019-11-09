@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Table, AutoSizer, Column } from "react-virtualized";
+import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
 import * as moment from "moment";
 import Card from "../../../common/components/Card";
@@ -8,10 +9,13 @@ import { Link } from "../../../common/theme";
 import { useData } from "../../../common/providers/API.provider";
 import { getBlockscoutLink } from "../../../common/utils";
 import { roleNames } from "../../../common/constants/roles";
-import styles from "../../Dashboard/Dashboard.module.scss";
 import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
 import Modal from "../../../common/components/Modal";
+import { generateReport } from "../../Dashboard/dashboard.utils";
+import styles from "./List.module.scss";
+import { getItem } from "../../../common/utils/storage";
+import { useAlert } from "../../../common/providers/Modal.provider";
 
 const StyledTitle = styled.h3`
   font-weight: 300;
@@ -21,6 +25,31 @@ const StyledDate = styled(StyledTitle)``;
 const StyledAddress = styled(Link)``;
 
 function DownloadCSV({ isOpen, onDismiss }) {
+  const [, toggle] = useAlert();
+  const [loading, setLoading] = useState(false);
+  const address = getItem("address");
+  const [date, setDate] = useState({
+    from: new Date(),
+    to: new Date(new Date().getTime() + 60 * 60 * 24 * 1000)
+  });
+
+  const header = ["firstName", "lastName", "gender"];
+
+  async function generateReportAndDownload() {
+    setLoading(true);
+    let result = await generateReport(date, address, { header });
+    if (result.length > 0) {
+      setLoading(false);
+      onDismiss();
+    } else if (result.error) {
+      setLoading(false);
+      toggle({
+        isVisible: true,
+        message: result.error
+      });
+    }
+  }
+
   return (
     <>
       <Modal
@@ -29,7 +58,66 @@ function DownloadCSV({ isOpen, onDismiss }) {
         onClickClose={onDismiss}
       >
         <div className={styles.cnt}>
-          <div className={styles.header}></div>
+          <div className={styles.header}>
+            <div className={styles.modalFormWindow}>
+              <div className={styles.layout__item}>
+                <div className={styles.layout__full}>
+                  <div className={styles.input}>
+                    <label htmlFor="from">From</label>
+                    <DatePicker
+                      dateFormat="dd/MM/yyyy"
+                      selected={date.from}
+                      name="from"
+                      selectsStart
+                      className={styles.datepicker}
+                      placeholderText="from"
+                      startDate={date.from}
+                      endDate={date.to}
+                      onChange={selectedDate =>
+                        setDate({
+                          from: selectedDate,
+                          to: new Date(
+                            new Date(selectedDate).getTime() +
+                              60 * 60 * 24 * 10000
+                          )
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+                <div className={styles.layout__full}>
+                  <div className={styles.input}>
+                    <label htmlFor="to">To</label>
+                    <DatePicker
+                      dateFormat="dd/MM/yyyy"
+                      selected={date.to}
+                      name="to"
+                      selectsEnd
+                      className={styles.datepicker}
+                      placeholderText="to"
+                      endDate={date.to}
+                      minDate={date.from}
+                      onChange={selectedDate =>
+                        setDate({
+                          to: selectedDate,
+                          from: date.from
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className={styles.actions}>
+                <Button
+                  text="Download"
+                  onClick={generateReportAndDownload}
+                  classNames={[styles.button, styles.button_primary].join(" ")}
+                  disabled={loading}
+                  button="submit"
+                ></Button>
+              </div>
+            </div>
+          </div>
         </div>
       </Modal>
     </>
@@ -111,7 +199,7 @@ export default function ListPractitioners() {
       {state ? (
         <Card classNames={[styles.table, styles.white].join(" ")}>
           <div className={styles.head_actions}>
-            <h4>Interactions</h4>
+            <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
               <Button
                 onClick={() => setVisible(true)}

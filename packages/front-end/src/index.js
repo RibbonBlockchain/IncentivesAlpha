@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import Router from "./modules/App";
 import * as serviceWorker from "./serviceWorker";
 import "react-virtualized/styles.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 import ErrorBoundary from "./common/components/ErrorBoundary";
 import StorageProvider, {

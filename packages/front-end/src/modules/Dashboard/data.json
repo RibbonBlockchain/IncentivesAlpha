@@ -1,0 +1,466 @@
+{
+  "status": 200,
+  "data": [
+    {
+      "activities": [
+        {
+          "_id": "5dc284e9aadc3180b26c9998",
+          "activityTitle": "TB test skin/sputum"
+        },
+        {
+          "_id": "5dc284fcaadc3180b26c9999",
+          "activityTitle": "TB radiology test"
+        }
+      ],
+      "prescriptions": [
+        {
+          "_id": "5dc28663aadc3180b26c99ad",
+          "prescriptionTitle": "Albendazole"
+        },
+        {
+          "_id": "5dc28671aadc3180b26c99ae",
+          "prescriptionTitle": "Allopurinol"
+        }
+      ],
+      "serviceRatings": [
+        {
+          "health_services": 5,
+          "medicines": 5,
+          "patient_safety": 5,
+          "cleanliness": 5,
+          "staff_attitude": 5,
+          "waiting_time": 5
+        }
+      ],
+      "_id": "5dc3db61d1bdd7fdfef62338",
+      "patient": {
+        "_id": "5dc281b6aadc3180b26c998e",
+        "firstName": "Allan",
+        "lastName": "Katongole",
+        "publicAddress": "0x4370c6eDb419fA8a7ee111924B98c743cAf7D18A"
+      },
+      "practitioner": {
+        "_id": "5dc28196aadc3180b26c998d",
+        "firstName": "Allan ",
+        "lastName": "Kapson",
+        "publicAddress": "0x02d3d4cf8b58e8347cFbA9A12cc755175B448685"
+      },
+      "chw": {
+        "_id": "5dc28a0caadc3180b26c99fa",
+        "firstName": "Allan",
+        "lastName": "Practitioner2",
+        "publicAddress": "0x1D4f94F90a919EB646D9158Ca3B3ECEF3EBc7941"
+      },
+      "rewards": [
+        {
+          "_id": "5dc3db61d1bdd7fdfef62339",
+          "patientReward": 0.8,
+          "practitionerReward": 0.01,
+          "chwReward": 0.02
+        }
+      ],
+      "transactionLogs": [],
+      "createdDate": "2019-11-07T08:52:50.000Z",
+      "__v": 0
+    },
+    {
+      "activities": [
+        {
+          "_id": "5dc284e9aadc3180b26c9998",
+          "activityTitle": "TB test skin/sputum"
+        },
+        {
+          "_id": "5dc284fcaadc3180b26c9999",
+          "activityTitle": "TB radiology test"
+        }
+      ],
+      "prescriptions": [
+        {
+          "_id": "5dc28663aadc3180b26c99ad",
+          "prescriptionTitle": "Albendazole"
+        },
+        {
+          "_id": "5dc28671aadc3180b26c99ae",
+          "prescriptionTitle": "Allopurinol"
+        }
+      ],
+      "serviceRatings": [
+        {
+          "health_services": 5,
+          "medicines": 5,
+          "patient_safety": 5,
+          "cleanliness": 5,
+          "staff_attitude": 5,
+          "waiting_time": 5
+        }
+      ],
+      "_id": "5dc3e135eb6d3a115d5bed0c",
+      "patient": {
+        "_id": "5dc281b6aadc3180b26c998e",
+        "firstName": "Allan",
+        "lastName": "Katongole",
+        "publicAddress": "0x4370c6eDb419fA8a7ee111924B98c743cAf7D18A"
+      },
+      "practitioner": {
+        "_id": "5dc28196aadc3180b26c998d",
+        "firstName": "Allan ",
+        "lastName": "Kapson",
+        "publicAddress": "0x02d3d4cf8b58e8347cFbA9A12cc755175B448685"
+      },
+      "chw": {
+        "_id": "5dc28a0caadc3180b26c99fa",
+        "firstName": "Allan",
+        "lastName": "Practitioner2",
+        "publicAddress": "0x1D4f94F90a919EB646D9158Ca3B3ECEF3EBc7941"
+      },
+      "rewards": [
+        {
+          "_id": "5dc3e135eb6d3a115d5bed0d",
+          "patientReward": 0.8,
+          "practitionerReward": 0.01,
+          "chwReward": 0.02
+        }
+      ],
+      "transactionLogs": [],
+      "createdDate": "2019-11-07T09:17:41.632Z",
+      "__v": 0
+    },
+    {
+      "activities": [
+        {
+          "_id": "5dc284e9aadc3180b26c9998",
+          "activityTitle": "TB test skin/sputum"
+        },
+        {
+          "_id": "5dc284fcaadc3180b26c9999",
+          "activityTitle": "TB radiology test"
+        }
+      ],
+      "prescriptions": [
+        {
+          "_id": "5dc28663aadc3180b26c99ad",
+          "prescriptionTitle": "Albendazole"
+        },
+        {
+          "_id": "5dc28671aadc3180b26c99ae",
+          "prescriptionTitle": "Allopurinol"
+        }
+      ],
+      "serviceRatings": [
+        {
+          "health_services": 5,
+          "medicines": 5,
+          "patient_safety": 5,
+          "cleanliness": 5,
+          "staff_attitude": 5,
+          "waiting_time": 5
+        }
+      ],
+      "_id": "5dc3e137eb6d3a115d5bed0e",
+      "patient": {
+        "_id": "5dc281b6aadc3180b26c998e",
+        "firstName": "Allan",
+        "lastName": "Katongole",
+        "publicAddress": "0x4370c6eDb419fA8a7ee111924B98c743cAf7D18A"
+      },
+      "practitioner": {
+        "_id": "5dc28196aadc3180b26c998d",
+        "firstName": "Allan ",
+        "lastName": "Kapson",
+        "publicAddress": "0x02d3d4cf8b58e8347cFbA9A12cc755175B448685"
+      },
+      "chw": {
+        "_id": "5dc28a0caadc3180b26c99fa",
+        "firstName": "Allan",
+        "lastName": "Practitioner2",
+        "publicAddress": "0x1D4f94F90a919EB646D9158Ca3B3ECEF3EBc7941"
+      },
+      "rewards": [
+        {
+          "_id": "5dc3e137eb6d3a115d5bed0f",
+          "patientReward": 0.8,
+          "practitionerReward": 0.01,
+          "chwReward": 0.02
+        }
+      ],
+      "transactionLogs": [],
+      "createdDate": "2019-11-07T09:17:43.238Z",
+      "__v": 0
+    },
+    {
+      "activities": [
+        {
+          "_id": "5dc284e9aadc3180b26c9998",
+          "activityTitle": "TB test skin/sputum"
+        },
+        {
+          "_id": "5dc284fcaadc3180b26c9999",
+          "activityTitle": "TB radiology test"
+        }
+      ],
+      "prescriptions": [
+        {
+          "_id": "5dc28663aadc3180b26c99ad",
+          "prescriptionTitle": "Albendazole"
+        },
+        {
+          "_id": "5dc28671aadc3180b26c99ae",
+          "prescriptionTitle": "Allopurinol"
+        }
+      ],
+      "serviceRatings": [
+        {
+          "health_services": 5,
+          "medicines": 5,
+          "patient_safety": 5,
+          "cleanliness": 5,
+          "staff_attitude": 5,
+          "waiting_time": 5
+        }
+      ],
+      "_id": "5dc3e138eb6d3a115d5bed10",
+      "patient": {
+        "_id": "5dc281b6aadc3180b26c998e",
+        "firstName": "Allan",
+        "lastName": "Katongole",
+        "publicAddress": "0x4370c6eDb419fA8a7ee111924B98c743cAf7D18A"
+      },
+      "practitioner": {
+        "_id": "5dc28196aadc3180b26c998d",
+        "firstName": "Allan ",
+        "lastName": "Kapson",
+        "publicAddress": "0x02d3d4cf8b58e8347cFbA9A12cc755175B448685"
+      },
+      "chw": {
+        "_id": "5dc28a0caadc3180b26c99fa",
+        "firstName": "Allan",
+        "lastName": "Practitioner2",
+        "publicAddress": "0x1D4f94F90a919EB646D9158Ca3B3ECEF3EBc7941"
+      },
+      "rewards": [
+        {
+          "_id": "5dc3e138eb6d3a115d5bed11",
+          "patientReward": 0.8,
+          "practitionerReward": 0.01,
+          "chwReward": 0.02
+        }
+      ],
+      "transactionLogs": [],
+      "createdDate": "2019-11-07T09:17:44.610Z",
+      "__v": 0
+    },
+    {
+      "activities": [
+        {
+          "_id": "5dc284e9aadc3180b26c9998",
+          "activityTitle": "TB test skin/sputum"
+        },
+        {
+          "_id": "5dc284fcaadc3180b26c9999",
+          "activityTitle": "TB radiology test"
+        }
+      ],
+      "prescriptions": [
+        {
+          "_id": "5dc28663aadc3180b26c99ad",
+          "prescriptionTitle": "Albendazole"
+        },
+        {
+          "_id": "5dc28671aadc3180b26c99ae",
+          "prescriptionTitle": "Allopurinol"
+        }
+      ],
+      "serviceRatings": [
+        {
+          "health_services": 5,
+          "medicines": 5,
+          "patient_safety": 5,
+          "cleanliness": 5,
+          "staff_attitude": 5,
+          "waiting_time": 5
+        }
+      ],
+      "_id": "5dc3e139eb6d3a115d5bed12",
+      "patient": {
+        "_id": "5dc281b6aadc3180b26c998e",
+        "firstName": "Allan",
+        "lastName": "Katongole",
+        "publicAddress": "0x4370c6eDb419fA8a7ee111924B98c743cAf7D18A"
+      },
+      "practitioner": {
+        "_id": "5dc28196aadc3180b26c998d",
+        "firstName": "Allan ",
+        "lastName": "Kapson",
+        "publicAddress": "0x02d3d4cf8b58e8347cFbA9A12cc755175B448685"
+      },
+      "chw": {
+        "_id": "5dc28a0caadc3180b26c99fa",
+        "firstName": "Allan",
+        "lastName": "Practitioner2",
+        "publicAddress": "0x1D4f94F90a919EB646D9158Ca3B3ECEF3EBc7941"
+      },
+      "rewards": [
+        {
+          "_id": "5dc3e139eb6d3a115d5bed13",
+          "patientReward": 0.8,
+          "practitionerReward": 0.01,
+          "chwReward": 0.02
+        }
+      ],
+      "transactionLogs": [],
+      "createdDate": "2019-11-07T09:17:45.715Z",
+      "__v": 0
+    },
+    {
+      "activities": [
+        {
+          "_id": "5dc284e9aadc3180b26c9998",
+          "activityTitle": "TB test skin/sputum"
+        },
+        {
+          "_id": "5dc284fcaadc3180b26c9999",
+          "activityTitle": "TB radiology test"
+        }
+      ],
+      "prescriptions": [
+        {
+          "_id": "5dc28663aadc3180b26c99ad",
+          "prescriptionTitle": "Albendazole"
+        },
+        {
+          "_id": "5dc28671aadc3180b26c99ae",
+          "prescriptionTitle": "Allopurinol"
+        }
+      ],
+      "serviceRatings": [
+        {
+          "health_services": 5,
+          "medicines": 5,
+          "patient_safety": 5,
+          "cleanliness": 5,
+          "staff_attitude": 5,
+          "waiting_time": 5
+        }
+      ],
+      "_id": "5dc3e13aeb6d3a115d5bed14",
+      "patient": {
+        "_id": "5dc281b6aadc3180b26c998e",
+        "firstName": "Allan",
+        "lastName": "Katongole",
+        "publicAddress": "0x4370c6eDb419fA8a7ee111924B98c743cAf7D18A"
+      },
+      "practitioner": {
+        "_id": "5dc28196aadc3180b26c998d",
+        "firstName": "Allan ",
+        "lastName": "Kapson",
+        "publicAddress": "0x02d3d4cf8b58e8347cFbA9A12cc755175B448685"
+      },
+      "chw": {
+        "_id": "5dc28a0caadc3180b26c99fa",
+        "firstName": "Allan",
+        "lastName": "Practitioner2",
+        "publicAddress": "0x1D4f94F90a919EB646D9158Ca3B3ECEF3EBc7941"
+      },
+      "rewards": [
+        {
+          "_id": "5dc3e13aeb6d3a115d5bed15",
+          "patientReward": 0.8,
+          "practitionerReward": 0.01,
+          "chwReward": 0.02
+        }
+      ],
+      "transactionLogs": [],
+      "createdDate": "2019-11-07T09:17:46.844Z",
+      "__v": 0
+    },
+    {
+      "activities": [
+        { "_id": "5dc28422aadc3180b26c9990", "activityTitle": "Consultation" }
+      ],
+      "prescriptions": [
+        {
+          "_id": "5dc28616aadc3180b26c99a7",
+          "prescriptionTitle": "Acetazolamide"
+        }
+      ],
+      "serviceRatings": [],
+      "_id": "5dc48599f3bacd001d8b9ca6",
+      "patient": {
+        "_id": "5dc483eaf3bacd001d8b9ca4",
+        "firstName": "Jane",
+        "lastName": "Doe",
+        "publicAddress": "0xdb0B020Ab16129983045C80692fa1D1916133471"
+      },
+      "practitioner": {
+        "_id": "5dc48425f3bacd001d8b9ca5",
+        "firstName": "John",
+        "lastName": "Doe",
+        "publicAddress": "0x8f134c7A6bA2113ef87735b43149b038DD12Fd63"
+      },
+      "chw": {
+        "_id": "5dc2c0538c15495c253a4fb6",
+        "firstName": "Isaac",
+        "lastName": "Admin",
+        "publicAddress": "0x9A8A9958ac1B70c49ccE9693CCb0230f13F63505"
+      },
+      "rewards": [
+        {
+          "_id": "5dc48599f3bacd001d8b9ca7",
+          "patientReward": 0.01,
+          "practitionerReward": 0.01,
+          "chwReward": 0.01
+        }
+      ],
+      "transactionLogs": [],
+      "createdDate": "2019-11-07T20:59:05.601Z",
+      "__v": 0
+    },
+    {
+      "activities": [
+        { "_id": "5dc28422aadc3180b26c9990", "activityTitle": "Consultation" },
+        { "_id": "5dc28444aadc3180b26c9992", "activityTitle": "Survey" }
+      ],
+      "prescriptions": [
+        {
+          "_id": "5dc28616aadc3180b26c99a7",
+          "prescriptionTitle": "Acetazolamide"
+        },
+        {
+          "_id": "5dc28622aadc3180b26c99a8",
+          "prescriptionTitle": "Acetic acid 2% in alcohol"
+        }
+      ],
+      "serviceRatings": [],
+      "_id": "5dc59da5f3bacd001d8b9caf",
+      "patient": {
+        "_id": "5dc483eaf3bacd001d8b9ca4",
+        "firstName": "Jane",
+        "lastName": "Doe",
+        "publicAddress": "0xdb0B020Ab16129983045C80692fa1D1916133471"
+      },
+      "practitioner": {
+        "_id": "5dc48425f3bacd001d8b9ca5",
+        "firstName": "John",
+        "lastName": "Doe",
+        "publicAddress": "0x8f134c7A6bA2113ef87735b43149b038DD12Fd63"
+      },
+      "chw": {
+        "_id": "5dc2c0538c15495c253a4fb6",
+        "firstName": "Isaac",
+        "lastName": "Admin",
+        "publicAddress": "0x9A8A9958ac1B70c49ccE9693CCb0230f13F63505"
+      },
+      "rewards": [
+        {
+          "_id": "5dc59da5f3bacd001d8b9cb0",
+          "patientReward": 0.02,
+          "practitionerReward": 0.02,
+          "chwReward": 0.02
+        }
+      ],
+      "transactionLogs": [],
+      "createdDate": "2019-11-08T16:53:57.419Z",
+      "__v": 0
+    }
+  ]
+}

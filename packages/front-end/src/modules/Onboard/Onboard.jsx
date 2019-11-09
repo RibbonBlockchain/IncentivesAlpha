@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import useForm from "react-hook-form";
 import DatePicker from "react-datepicker";
 import { ethers } from "ethers";
-import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import QRScanner from "qr-code-scanner";
 import * as moment from "moment";
