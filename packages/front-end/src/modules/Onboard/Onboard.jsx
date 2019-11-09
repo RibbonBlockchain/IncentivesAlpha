@@ -157,16 +157,29 @@ export default function Onboard() {
         windowClassName={styles.modalWindow}
       >
         <div className={styles.cnt}>
-          <h4>Pick a profile</h4>
+          <h4>Create a User</h4>
           {loginType == Number(roleNames.SUPER_ADMIN) && (
             <>
-              <Button onClick={showAdminForm} text="Add Administrator" />
-              <Button onClick={showCHWForm} text="Health Worker Profile" />
               <Button
+                classNames={styles.button}
+                onClick={showAdminForm}
+                text="Administrator"
+              />
+              <Button
+                classNames={styles.button}
+                onClick={showCHWForm}
+                text="Health Worker Profile"
+              />
+              <Button
+                classNames={styles.button}
                 onClick={showPractitionerForm}
                 text="Practitioner Profile"
               />
-              <Button onClick={showPatientForm} text="Patient Profile" />
+              <Button
+                classNames={styles.button}
+                onClick={showPatientForm}
+                text="Patient Profile"
+              />
             </>
           )}
           {loginType == Number(roleNames.HEALTH_WORKER) && (
@@ -174,8 +187,13 @@ export default function Onboard() {
               <Button
                 onClick={showPractitionerForm}
                 text="Practitioner Profile"
+                classNames={styles.button}
               />
-              <Button onClick={showPatientForm} text="Patient Profile" />
+              <Button
+                classNames={styles.button}
+                onClick={showPatientForm}
+                text="Patient Profile"
+              />
             </>
           )}
         </div>
