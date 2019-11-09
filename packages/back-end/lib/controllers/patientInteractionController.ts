@@ -1,8 +1,8 @@
 import * as mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
 import { PatientInteractionSchema } from "../models/patientInteractionModel";
+import {filters} from "./helpers/helpers"
 import { Request, Response } from "express";
-import * as moment from "moment";
 
 const User = mongoose.model("User", UserSchema);
 
@@ -48,47 +48,7 @@ export class PatientInteractionListController {
     try {
       if (parseInt(req.body.role) === 1) {
         if(req.query){
-          const date_from = req.query['date_from'];
-          const date_to = req.query['date_to'];
-          const date = req.query['date'];
-          const patient = req.query['patient_id'];
-          const practitioner = req.query['practitioner_id'];
-          const chw = req.query['chw_id'];
-          let options = {};
-          if(date_from){
-              if(!options["createdDate"]) options["createdDate"] = {};
-              const dateFrom = moment(new Date(date_from)).toDate();
-              options["createdDate"]['$gte'] = dateFrom;
-          }
-
-          if(date_to){
-              if(!options["createdDate"]) options["createdDate"] = {};
-              const dateTo = moment(new Date(date_to)).toDate();
-              options["createdDate"]['$lte'] = dateTo;
-          }
-
-          if(date) {
-            if(!options["createdDate"]) options["createdDate"] = {};
-            const dDate = moment(new Date(date)).toDate()
-            options["createdDate"] = dDate
-          }
-
-          if(patient){
-            if(!options["patient"]) options["patient"] = {};
-            options["patient"] = patient;
-          }
-
-          if(practitioner){
-            if(!options["practitioner"]) options["practitioner"] = {};
-            options["practitioner"] = practitioner;
-          }
-
-          if(chw){
-            if(!options["chw"]) options["chw"] = {};
-            options["chw"] = chw;
-          }
-
-          console.log(options)
+          let options = filters(req.query)
 
           await patientInteractionList
             .find(options)
@@ -113,6 +73,23 @@ export class PatientInteractionListController {
         });
 
       } else if (parseInt(req.body.role) === 2) {
+        if(req.query){
+          let options = filters(req.query)
+          await User.findOne({
+            publicAddress: req.params.userAddress
+          }).then(async user => {
+            options["chw"] = user._id
+            await patientInteractionList
+              .find(options)
+              .then(async interactions => {
+                res.json({ status: 200, data: interactions });
+              })
+              .catch(error => {
+                res.status(404)
+              })
+          })
+        }
+        
         await User.findOne({
           publicAddress: req.params.userAddress
         }).then(async user => {
