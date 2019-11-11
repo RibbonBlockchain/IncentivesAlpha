@@ -105,6 +105,23 @@ export class PatientInteractionListController {
             });
         });
       } else if (parseInt(req.body.role) === 3) {
+        if(req.query){
+          let options = filters(req.query)
+          await User.findOne({
+            publicAddress: req.params.userAddress
+          }).then(async user => {
+            options["patient"] = user._id
+            await patientInteractionList
+              .find(options)
+              .then(async interactions => {
+                res.json({ status: 200, data: interactions });
+              })
+              .catch(error => {
+                res.status(404)
+              })
+          })
+        }
+        
         await User.findOne({
           publicAddress: req.params.userAddress
         }).then(async user => {
@@ -120,6 +137,23 @@ export class PatientInteractionListController {
             });
         });
       } else {
+        if(req.query){
+          let options = filters(req.query)
+          await User.findOne({
+            publicAddress: req.params.userAddress
+          }).then(async user => {
+            options["practitioner"] = user._id
+            await patientInteractionList
+              .find(options)
+              .then(async interactions => {
+                res.json({ status: 200, data: interactions });
+              })
+              .catch(error => {
+                res.status(404)
+              })
+          })
+        }
+
         await User.findOne({
           publicAddress: req.params.userAddress
         }).then(async user => {
