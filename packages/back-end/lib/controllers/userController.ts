@@ -25,12 +25,12 @@ export class UserController {
         let form_data = req.body;
         //check for the user who is adding the community health worker
 
-        // let loggedInUserId = getCurrentUserAddress(req, res);
+        let loggedInUserId = getCurrentUserAddress(req, res);
 
         //add required nonce field for login challenge
         let nonce = Math.floor(Math.random() * 1000000);
         form_data.nonce = nonce;
-        // form_data.onBoardedBy = loggedInUserId;
+        form_data.onBoardedBy = loggedInUserId;
         let newUser = new this.usermodel(form_data);
 
         await newUser
