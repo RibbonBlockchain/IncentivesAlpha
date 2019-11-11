@@ -19,7 +19,7 @@ export default class VaultContract extends BlockchainService {
     let contract = await this.contract;
     try {
       return await contract.donateFunds(message, {
-        value: ethers.utils.parseUnits(value.toString(), 18)
+        value: ethers.utils.parseUnits(value.toString(), 20)
       });
     } catch (error) {
       return error;
@@ -42,12 +42,12 @@ export default class VaultContract extends BlockchainService {
       let { ethers, provider } = await this.getInstance();
       let contract = await this.contract;
       console.log(patientAmount, practitionerAmount, chwAmount);
-      let patientAmountToBeSent = (patientAmount * 10 ** 18).toString();
+      let patientAmountToBeSent = (patientAmount * 10 ** 20).toString();
       let practitionerAmountToBeSent = (
         practitionerAmount *
-        10 ** 18
+        10 ** 20
       ).toString();
-      let chwAmountToBeSent = (chwAmount * 10 ** 18).toString();
+      let chwAmountToBeSent = (chwAmount * 10 ** 20).toString();
       console.log(
         patientAmountToBeSent,
         practitionerAmountToBeSent,
@@ -58,8 +58,7 @@ export default class VaultContract extends BlockchainService {
       let currentVaultBalance = await provider.getBalance(
         config.VAULT_CONTRACT_ADDRESS
       );
-	  let balance = currentVaultBalance.toString();
-	  console.log(balance, chwAmountToBeSent, practitionerAmountToBeSent, patientAmountToBeSent)
+      let balance = currentVaultBalance.toString();
 
       if (totalAmountToBeTransfered <= balance) {
         return await contract.payout(

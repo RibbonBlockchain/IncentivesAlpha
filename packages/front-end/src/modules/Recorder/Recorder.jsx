@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useForm from "react-hook-form";
 import Select from "react-select";
+import StarRatingComponent from "react-star-rating-component";
 import makeAnimated from "react-select/animated";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
@@ -122,7 +123,11 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     mode: "onChange"
   });
   const [loading, setLoading] = useState(false);
-  const [{ activityList, prescriptionList }, loadDetails] = useApp();
+  const [
+    { activityList, prescriptionList, ratingList },
+    loadDetails
+  ] = useApp();
+
   const [
     ,
     checkTransactionStatus,
@@ -134,9 +139,9 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     practitioner: {},
     prescriptions: [],
     activities: [],
-    ratings: [],
     notes: ""
   });
+  const [ratings, setRatings] = useState({});
   const [, fetchData] = useData();
 
   useEffect(() => {
@@ -147,7 +152,6 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
   let activities = formatActivityOptions(activityList);
   let prescriptions = formatPrescriptionOptions(prescriptionList);
-  let ratingList = [];
 
   function isValid() {
     let { patient, practitioner, activities, prescriptions } = record;
@@ -167,7 +171,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
       user,
       activities: record.activities,
       prescriptions: record.prescriptions,
-      serviceRatings: ratingList,
+      serviceRatings: ratings,
       amount: record.activities
         .map(activity => activity.data.activityReward)
         .reduce((activity, acc) => activity + acc, 0)
@@ -203,6 +207,22 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     }
   }
 
+  function handleRating(index, e) {
+    let currentRating = ratings;
+    if (typeof currentRating[index] === "undefined") {
+      setRatings({
+        ...currentRating,
+        [index]: e
+      });
+    } else {
+      delete currentRating[index];
+      setRatings({
+        ...currentRating,
+        [index]: e
+      });
+    }
+  }
+
   function clearDismiss() {
     setRecord({
       patient: {},
@@ -212,6 +232,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
       ratings: [],
       notes: ""
     });
+    setRatings({});
     onDismiss();
   }
 
@@ -358,14 +379,39 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                 </div>
               )}
               <div className={styles.layout__item}>
-                {ratingList.length > 0 && (
-                  <fieldset>
-                    <legend>Rate the services</legend>
-                    {ratingList.map((rating, index) => (
-                      <Rating key={index} selected={rating} />
-                    ))}
-                  </fieldset>
-                )}
+                {ratingList &&
+                  ratingList[0].ratingTypes &&
+                  ratingList[0].ratingTypes.length > 0 && (
+                    <fieldset>
+                      <legend>Rate the services</legend>
+                      {ratingList[0].ratingTypes.map((rating, index) => (
+                        <div className={styles.rating} key={index}>
+                          <StarRatingComponent
+                            starCount={5}
+                            name={index}
+                            starColor="#ffb400"
+                            emptyStarColor="#ffb400"
+                            value={ratings[index] ? ratings[index] : 0}
+                            onStarClick={e => handleRating(index, e)}
+                            renderStarIcon={(index, value) => {
+                              return (
+                                <span>
+                                  <i
+                                    className={
+                                      index <= value
+                                        ? "fas fa-star"
+                                        : "far fa-star"
+                                    }
+                                  />
+                                </span>
+                              );
+                            }}
+                          />
+                          <label htmlFor={index}>{rating.title}</label>
+                        </div>
+                      ))}
+                    </fieldset>
+                  )}
               </div>
               <div className={styles.layout__item}>
                 <div className={[styles.input].join(" ")}>

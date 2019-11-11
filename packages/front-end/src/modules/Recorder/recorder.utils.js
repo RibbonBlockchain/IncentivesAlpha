@@ -5,8 +5,9 @@ export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
   let { patient, practitioner, user, amount, serviceRatings } = data;
 
-  let practitionerAmount = Number(amount * 0.15).toFixed(6);
-  // ((amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount);
+  let practitionerAmount = Number(
+    (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount
+  ).toFixed(6);
 
   let chwAmount = Number(amount * 0.15).toFixed(6);
 
@@ -42,9 +43,9 @@ export const recordInteraction = async data => {
   }
 };
 
-const sumRatings = ratings => {
-  return ratings.length > 0
-    ? Object.keys(ratings).reduce((acc, value) => acc + ratings[value], 0)
+const sumRatings = serviceRatings => {
+  return typeof serviceRatings !== "undefined"
+    ? Object.entries(serviceRatings).reduce((acc, curVal) => acc + curVal[1], 0)
     : 0;
 };
 

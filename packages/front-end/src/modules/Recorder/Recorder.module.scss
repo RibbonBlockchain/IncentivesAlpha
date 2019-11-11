@@ -173,3 +173,11 @@ img {
     text-align: right;
   }
 }
+
+.rating {
+  display: flex;
+  label {
+    margin-left: calculateRem(5);
+    align-self: center;
+  }
+}
