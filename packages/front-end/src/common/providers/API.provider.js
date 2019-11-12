@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import UserAPI from "../services/api/user.api";
 import InteractionsAPI from "../services/api/interaction.api";
+import StatisticsAPI from "../services/api/statistics.api";
 import { useWeb3 } from "./Web3.provider";
 import { getItem } from "../utils/storage";
 
@@ -17,7 +18,8 @@ const useAPIContext = () => useContext(APIContext);
 
 const initialState = () => ({
   users: [],
-  interactions: []
+  interactions: [],
+  statistics: {}
 });
 
 const UPDATE = "api/UPDATE";
@@ -25,11 +27,12 @@ const UPDATE = "api/UPDATE";
 const reducer = (state, { type, payload }) => {
   switch (type) {
     case UPDATE:
-      const { users, interactions } = payload;
+      const { users, interactions, statistics } = payload;
       return {
         ...state,
         ...users,
-        ...interactions
+        ...interactions,
+        ...statistics
       };
     default: {
       throw new Error(`Unexpected action type ${type}`);
@@ -40,12 +43,13 @@ const reducer = (state, { type, payload }) => {
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
 
-  const update = useCallback((users, interactions) => {
+  const update = useCallback((users, interactions, statistics) => {
     dispatch({
       type: UPDATE,
       payload: {
         users,
-        interactions
+        interactions,
+        statistics
       }
     });
   });
@@ -61,7 +65,8 @@ export default function Provider({ children }) {
 export const useData = () => {
   const usersAPI = new UserAPI();
   const interactionsAPI = new InteractionsAPI();
-  const [{ users, interactions }, { update }] = useAPIContext();
+  const statisticsAPI = new StatisticsAPI();
+  const [{ users, interactions, statistics }, { update }] = useAPIContext();
   const [{ loginType }] = useWeb3();
   let address = getItem("address");
 
@@ -73,6 +78,9 @@ export const useData = () => {
         role: loginType
       }
     );
+    let listStatistics = await statisticsAPI.queryStats(address, {
+      role: loginType
+    });
     update({
       users: listUsers,
       interactions:
@@ -80,7 +88,8 @@ export const useData = () => {
           ? listInteractions.sort(
               (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
             )
-          : []
+          : [],
+      statistics: listStatistics
     });
   };
 
