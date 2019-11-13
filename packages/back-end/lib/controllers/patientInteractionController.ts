@@ -1,6 +1,7 @@
 import * as mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
 import { PatientInteractionSchema } from "../models/patientInteractionModel";
+import {filters} from "./helpers/helpers"
 import { Request, Response } from "express";
 
 const User = mongoose.model("User", UserSchema);
@@ -46,6 +47,18 @@ export class PatientInteractionListController {
   public async getPatientInteractionByAddress(req: Request, res: Response) {
     try {
       if (parseInt(req.body.role) === 1) {
+        if(req.query){
+          let options = filters(req.query)
+
+          await patientInteractionList
+            .find(options)
+            .then(async interactions => {
+              res.json({status: 200, data: interactions})
+            })
+            .catch(error => {
+              res.status(404)
+            })
+        }
         await User.findOne({
           publicAddress: req.params.userAddress
         }).then(async user => {
@@ -58,7 +71,25 @@ export class PatientInteractionListController {
               res.status(404);
             });
         });
+
       } else if (parseInt(req.body.role) === 2) {
+        if(req.query){
+          let options = filters(req.query)
+          await User.findOne({
+            publicAddress: req.params.userAddress
+          }).then(async user => {
+            options["chw"] = user._id
+            await patientInteractionList
+              .find(options)
+              .then(async interactions => {
+                res.json({ status: 200, data: interactions });
+              })
+              .catch(error => {
+                res.status(404)
+              })
+          })
+        }
+        
         await User.findOne({
           publicAddress: req.params.userAddress
         }).then(async user => {
@@ -74,6 +105,23 @@ export class PatientInteractionListController {
             });
         });
       } else if (parseInt(req.body.role) === 3) {
+        if(req.query){
+          let options = filters(req.query)
+          await User.findOne({
+            publicAddress: req.params.userAddress
+          }).then(async user => {
+            options["patient"] = user._id
+            await patientInteractionList
+              .find(options)
+              .then(async interactions => {
+                res.json({ status: 200, data: interactions });
+              })
+              .catch(error => {
+                res.status(404)
+              })
+          })
+        }
+        
         await User.findOne({
           publicAddress: req.params.userAddress
         }).then(async user => {
@@ -89,6 +137,23 @@ export class PatientInteractionListController {
             });
         });
       } else {
+        if(req.query){
+          let options = filters(req.query)
+          await User.findOne({
+            publicAddress: req.params.userAddress
+          }).then(async user => {
+            options["practitioner"] = user._id
+            await patientInteractionList
+              .find(options)
+              .then(async interactions => {
+                res.json({ status: 200, data: interactions });
+              })
+              .catch(error => {
+                res.status(404)
+              })
+          })
+        }
+
         await User.findOne({
           publicAddress: req.params.userAddress
         }).then(async user => {

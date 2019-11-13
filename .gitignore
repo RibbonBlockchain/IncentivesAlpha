@@ -17,6 +17,7 @@ coverage
 yarn-error.log
 .env*.local
 .poosh.cache
+./packages/back-end/.env
 
 #kube
 *secret.yaml

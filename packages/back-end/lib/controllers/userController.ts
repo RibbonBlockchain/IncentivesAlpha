@@ -1,15 +1,19 @@
-import * as mongoose from "mongoose";
-import { UserSchema } from "../models/userModel";
 import { Request, Response } from "express";
 import { body } from "express-validator";
 import { mapUserDataToResponse } from "../serializers/userDataSerializer";
 import { getCurrentUserAddress } from "../validators/authValidation";
 
-const User = mongoose.model("User", UserSchema);
+// const User = mongoose.model("User", UserSchema);
 
 export class UserController {
-  public async addAdministrator(req: Request, res: Response) {
-    try {
+  public usermodel: any;
+
+  constructor(User: any){
+    this.usermodel = User
+  }
+
+  public addAdministrator = async (req: Request, res: Response) => {
+    try{
       if (req.body.role != 1) {
         res
           .status(400)
@@ -27,7 +31,7 @@ export class UserController {
         let nonce = Math.floor(Math.random() * 1000000);
         form_data.nonce = nonce;
         form_data.onBoardedBy = loggedInUserId;
-        let newUser = new User(form_data);
+        let newUser = new this.usermodel(form_data);
 
         await newUser
           .save()
@@ -43,12 +47,12 @@ export class UserController {
               });
           });
       }
-    } catch {
+    }catch{
       res.status(500).json({ status: 500, message: "Server Error" });
     }
   }
 
-  public async addNewCommunityHealthWorker(req: Request, res: Response) {
+  public addNewCommunityHealthWorker = async (req: Request, res: Response) => {
     try {
       if (req.body.role != 2) {
         res
@@ -67,7 +71,7 @@ export class UserController {
         let nonce = Math.floor(Math.random() * 1000000);
         form_data.nonce = nonce;
         form_data.onBoardedBy = loggedInUserId;
-        let newUser = new User(form_data);
+        let newUser = new this.usermodel(form_data);
 
         await newUser
           .save()
@@ -88,7 +92,7 @@ export class UserController {
     }
   }
 
-  public async addNewPractitioner(req: Request, res: Response) {
+  public addNewPractitioner = async (req: Request, res: Response) => {
     try {
       if (req.body.role != 4) {
         res
@@ -106,7 +110,7 @@ export class UserController {
         let nonce = Math.floor(Math.random() * 1000000);
         form_data.nonce = nonce;
         form_data.onBoardedBy = loggedInUserId;
-        let newUser = new User(form_data);
+        let newUser = new this.usermodel(form_data);
 
         await newUser
           .save()
@@ -127,7 +131,7 @@ export class UserController {
     }
   }
 
-  public async addNewPatient(req: Request, res: Response) {
+  public addNewPatient = async (req: Request, res: Response) => {
     try {
       if (req.body.role != 3) {
         res
@@ -142,7 +146,7 @@ export class UserController {
         let nonce = Math.floor(Math.random() * 1000000);
         form_data.nonce = nonce;
         form_data.onBoardedBy = loggedInUserId;
-        let newUser = new User(form_data);
+        let newUser = new this.usermodel(form_data);
 
         await newUser
           .save()
@@ -163,8 +167,8 @@ export class UserController {
     }
   }
 
-  public async getUsers(req: Request, res: Response) {
-    await User.find({}, (err, users) => {
+  public getUsers = async (req: Request, res: Response) => {
+    await this.usermodel.find({}, (err, users) => {
       if (err) {
         res.send({ message: err });
       }
@@ -172,9 +176,9 @@ export class UserController {
     });
   }
 
-  public async getUserByWalletAddress(req: Request, res: Response) {
+  public getUserByWalletAddress = async (req: Request, res: Response) => {
     try {
-      await User.findOne({
+      await this.usermodel.findOne({
         publicAddress: req.params.userAddress
       })
         .then(async user => {
@@ -191,8 +195,8 @@ export class UserController {
     }
   }
 
-  public async updateUserDetails(req: Request, res: Response) {
-    await User.updateOne(
+  public updateUserDetails = async (req: Request, res: Response) => {
+    await this.usermodel.updateOne(
       { publicAddress: req.params.userAddress },
       {
         $set: {

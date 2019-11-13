@@ -28,10 +28,11 @@ export const validJWTNeeded = (req, res, next) => {
   }
 };
 
-export const superAdminOnly = (req, res, next) => {
+export const superAdminOnly = async(req, res, next) => {
   try {
     let publicAddress = req.jwt.payload.publicAddress;
-    User.findOne({ publicAddress }).then(user => {
+    await User.findOne({ publicAddress })
+    .then(async user => {
       if (user.role != 1) {
         return res
           .status(401)
@@ -42,6 +43,9 @@ export const superAdminOnly = (req, res, next) => {
       } else {
         return next();
       }
+    })
+    .catch(error => {
+      res.status(404).json({message: "User Account doesnt exist"})
     });
   } catch (err) {
     return res
