@@ -275,6 +275,7 @@ export default function Dashboard() {
   const [{ address, loginType }, , getWalletDetails] = useWeb3();
   const [{ users, interactions, dashboard }, fetchData] = useData();
 
+  console.log(dashboard.chw);
   useEffect(() => {
     const loadData = async () => {
       await getWalletDetails();

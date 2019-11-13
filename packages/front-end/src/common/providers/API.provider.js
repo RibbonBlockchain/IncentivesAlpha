@@ -135,7 +135,7 @@ export const useData = () => {
         practitioner: await getPractitionerData(listInteractions, address),
         chw: {
           patients: await getCHWStats(listUsers, roleNames.PATIENT, user),
-          practitioner: await getCHWStats(listUsers, roleNames.PATIENT, user),
+          practitioners: await getCHWStats(listUsers, roleNames.PATIENT, user),
           interactions: await getCHWData(listInteractions, address)
         }
       },
@@ -182,7 +182,7 @@ export const useData = () => {
       .startOf("day");
     let thisWeekData = [];
     let lastWeekData = [];
-    if (user && user._id && users.length > 0) {
+    if (users.length > 0) {
       await users
         .filter(user => user.role === type && user.onBoardedBy === user._id)
         .map(user => {
