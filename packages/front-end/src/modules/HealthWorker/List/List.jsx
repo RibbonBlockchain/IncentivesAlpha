@@ -125,85 +125,6 @@ function DownloadCSV({ isOpen, onDismiss }) {
   );
 }
 
-function Stats({ type }) {
-  return (
-    <div className={styles.dashboard}>
-      {roleNames.SUPER_ADMIN === type && (
-        <div className={styles.layout}>
-          <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Patients Onboarded this week</div>
-          </Card>
-          <Card classNames={styles.card__light_blue}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>
-              Practitioners Onboarded this week
-            </div>
-          </Card>
-          <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>
-              Community Health Workers Onboarded this week
-            </div>
-          </Card>
-          <Card classNames={styles.card__light_purple}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Total payout this week</div>
-          </Card>
-        </div>
-      )}
-      {roleNames.HEALTH_WORKER === type && (
-        <div className={styles.layout}>
-          <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Patients Registered</div>
-          </Card>
-          <Card classNames={styles.card__light_blue}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Practitioners Registered</div>
-          </Card>
-          <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Activities Recorded</div>
-          </Card>
-          <Card classNames={styles.card__light_purple}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Total Earned</div>
-          </Card>
-        </div>
-      )}
-      {roleNames.PRACTITIONER === type && (
-        <div className={styles.layout}>
-          <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Patient Attended</div>
-          </Card>
-          <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Activities Participated in</div>
-          </Card>
-          <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Total Earned</div>
-          </Card>
-        </div>
-      )}
-      {roleNames.PATIENT === type && (
-        <div className={styles.layout}>
-          <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Activities participated in</div>
-          </Card>
-          <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0/0</div>
-            <div className={styles.heading}>Total Earned</div>
-          </Card>
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default function ListPractitioners() {
   const [{ users }] = useData();
   const [state, setState] = useState([]);
@@ -277,7 +198,6 @@ export default function ListPractitioners() {
 
   return (
     <>
-      <Stats type={Number(loginType)} />
       {state ? (
         <Card classNames={[styles.table, styles.white].join(" ")}>
           <div className={styles.head_actions}>

@@ -13,7 +13,6 @@ import {
 } from "../Dashboard/dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
 import { recordInteraction, recordInteractionOnDB } from "./recorder.utils";
-import Rating from "../../common/components/Rating";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
@@ -378,10 +377,10 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                   />
                 </div>
               )}
-              <div className={styles.layout__item}>
-                {ratingList &&
-                  ratingList[0].ratingTypes &&
-                  ratingList[0].ratingTypes.length > 0 && (
+              {ratingList &&
+                ratingList[0].ratingTypes &&
+                ratingList[0].ratingTypes.length > 0 && (
+                  <div className={styles.layout__item}>
                     <fieldset>
                       <legend>Rate the services</legend>
                       {ratingList[0].ratingTypes.map((rating, index) => (
@@ -411,8 +410,8 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                         </div>
                       ))}
                     </fieldset>
-                  )}
-              </div>
+                  </div>
+                )}
               <div className={styles.layout__item}>
                 <div className={[styles.input].join(" ")}>
                   <label htmlFor="notes">Additional notes</label>

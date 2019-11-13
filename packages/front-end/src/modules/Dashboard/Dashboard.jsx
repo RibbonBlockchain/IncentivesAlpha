@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import * as moment from "moment";
 import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useApp } from "../../common/providers/App.provider";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import { getRoleCount } from "./dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
@@ -146,26 +147,30 @@ function DashboardTable({ data, type }) {
   );
 }
 
-function Stats({ users, type }) {
+function Stats({ users, type, dashboard }) {
+  const [{ currency }] = useApp();
   return (
     <div className={styles.dashboard}>
       {roleNames.SUPER_ADMIN === type && (
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.PATIENT)}
+              {dashboard.admin.patients.thisWeekData}/
+              {dashboard.admin.patients.lastWeekData}
             </div>
             <div className={styles.heading}>Patients Registered</div>
           </Card>
           <Card classNames={styles.card__light_blue}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.PRACTITIONER)}
+              {dashboard.admin.practitioners.thisWeekData}/
+              {dashboard.admin.practitioners.lastWeekData}
             </div>
             <div className={styles.heading}>Practitioners Registered</div>
           </Card>
           <Card classNames={styles.card__light_pink}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.HEALTH_WORKER)}
+              {dashboard.admin.chw.thisWeekData}/
+              {dashboard.admin.chw.lastWeekData}
             </div>
             <div className={styles.heading}>
               Community Health Workers Registered
@@ -173,7 +178,8 @@ function Stats({ users, type }) {
           </Card>
           <Card classNames={styles.card__light_purple}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.SUPER_ADMIN)}
+              {dashboard.admin.admin.thisWeekData}/
+              {dashboard.admin.admin.lastWeekData}
             </div>
             <div className={styles.heading}>Administrators</div>
           </Card>
@@ -183,39 +189,65 @@ function Stats({ users, type }) {
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.PATIENT)}
+              {dashboard.chw.patients.thisWeekData}/
+              {dashboard.chw.patients.lastWeekData}
             </div>
             <div className={styles.heading}>Patients Registered</div>
           </Card>
           <Card classNames={styles.card__light_blue}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.PRACTITIONER)}
+              {dashboard.chw.practitioners.thisWeekData}/
+              {dashboard.chw.practitioners.lastWeekData}
             </div>
             <div className={styles.heading}>Practitioners Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_blue}>
+            <div className={styles.count}>
+              {dashboard.chw.interactions.thisWeekData}/
+              {dashboard.chw.interactions.lastWeekData}
+            </div>
+            <div className={styles.heading}>Interactions Recorded</div>
+          </Card>
+          <Card classNames={styles.card__light_blue}>
+            <div className={styles.count}>
+              {`${
+                dashboard.chw.interactions.overall
+              } ${currency.toString().toUpperCase()}`}
+            </div>
+            <div className={styles.heading}>Total earned</div>
           </Card>
         </div>
       )}
       {roleNames.PRACTITIONER === type && (
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>0</div>
-            <div className={styles.heading}>Transactions completed</div>
+            <div className={styles.count}>
+              {dashboard.practitioner.thisWeekData}/
+              {dashboard.practitioner.lastWeekData}
+            </div>
+            <div className={styles.heading}>Interaction conducted</div>
           </Card>
           <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0</div>
-            <div className={styles.heading}>Transactions Failed</div>
+            <div className={styles.count}>{`${
+              dashboard.practitioner.overall
+            } ${currency.toString().toUpperCase()}`}</div>
+            <div className={styles.heading}>Total earned</div>
           </Card>
         </div>
       )}
       {roleNames.PATIENT === type && (
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>0</div>
-            <div className={styles.heading}>Transactions completed</div>
+            <div className={styles.count}>
+              {dashboard.patient.thisWeekData}/{dashboard.patient.lastWeekData}
+            </div>
+            <div className={styles.heading}>Interactions participated in</div>
           </Card>
           <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0</div>
-            <div className={styles.heading}>Transactions Failed</div>
+            <div className={styles.count}>{`${
+              dashboard.patient.overall
+            } ${currency.toString().toUpperCase()}`}</div>
+            <div className={styles.heading}>Total earned</div>
           </Card>
         </div>
       )}
@@ -241,22 +273,21 @@ function HandleViews({ type, transactions }) {
 
 export default function Dashboard() {
   const [{ address, loginType }, , getWalletDetails] = useWeb3();
-  const [{ users, interactions }, fetchData] = useData();
+  const [{ users, interactions, dashboard }, fetchData] = useData();
 
   useEffect(() => {
+    const loadData = async () => {
+      await getWalletDetails();
+      await fetchData();
+    };
     loadData();
   }, [loginType]);
-
-  const loadData = async () => {
-    await getWalletDetails();
-    await fetchData();
-  };
 
   return (
     <>
       {address && typeof loginType === "number" ? (
         <>
-          <Stats type={Number(loginType)} users={users} />
+          <Stats type={Number(loginType)} users={users} dashboard={dashboard} />
           {loginType !== null && (
             <HandleViews transactions={interactions} type={loginType} />
           )}
