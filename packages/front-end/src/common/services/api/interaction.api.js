@@ -63,4 +63,14 @@ export default class InteractionsAPI extends HTTP {
       authorization: `Bearer ${getItem("token")}`
     });
   }
+
+  async generateReport(address, date, data) {
+    return await this.postRequest(
+      `interactions/${address}?date_from=${date.from}&date_to=${date.to}`,
+      data,
+      {
+        authorization: `Bearer ${getItem("token")}`
+      }
+    );
+  }
 }

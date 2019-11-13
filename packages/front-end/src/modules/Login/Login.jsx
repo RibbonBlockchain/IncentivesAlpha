@@ -10,6 +10,7 @@ import { authenticateUser } from "./login.utils";
 import { TableLoader } from "../../common/components/Loader";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useModal, useAlert } from "../../common/providers/Modal.provider";
+import { clear } from "../../common/utils/storage";
 
 function Login() {
   const [, login] = useWeb3();
@@ -47,8 +48,21 @@ function Login() {
         });
       }
     } else {
-      setIsLoading(false);
-      login({ token: authWithAPI.token, address: publicAddress, loginType });
+      console.log(authWithAPI);
+      if (
+        authWithAPI.token !== null ||
+        typeof authWithAPI.token !== "undefined"
+      ) {
+        setIsLoading(false);
+        login({ token: authWithAPI.token, address: publicAddress, loginType });
+      } else {
+        toggle({
+          isVisible: true,
+          message: "Internal Server error."
+        });
+        clear("token");
+        clear("address");
+      }
     }
   };
 
@@ -61,7 +75,7 @@ function Login() {
         <div className={styles.login_box}>
           <div className={styles.form}>
             <div className={styles.headline}>
-              <h3>Insert client logo here</h3>
+              <h3>Ribbon Incentives Ecosystem</h3>
             </div>
             <div className={styles.login_box}>
               <Web3Connect.Button

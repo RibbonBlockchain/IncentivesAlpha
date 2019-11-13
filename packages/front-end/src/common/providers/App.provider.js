@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import PrescriptionAPI from "../services/api/prescription.api";
 import ActivityAPI from "../services/api/activity.api";
+import RatingAPI from "../services/api/rating.api";
 
 const AppContext = createContext();
 
@@ -15,20 +16,22 @@ const useAppContext = () => useContext(AppContext);
 const initialState = () => ({
   currency: "poa",
   activityList: [],
-  prescriptionList: []
+  prescriptionList: [],
+  ratings: []
 });
 
 const LOAD_CONFIGURATION = "config/LOAD_CONFIGURATION";
 
 const reducer = (state, { type, payload }) => {
-  const { currency, activityList, prescriptionList } = payload;
+  const { currency, activityList, prescriptionList, ratingList } = payload;
   switch (type) {
     case LOAD_CONFIGURATION:
       return {
         ...state,
         currency,
         activityList,
-        prescriptionList
+        prescriptionList,
+        ratingList
       };
     default: {
       throw new Error(`Unknown action type ${type}`);
@@ -60,17 +63,20 @@ export const useApp = () => {
 
   const prescriptionAPI = new PrescriptionAPI();
   const activityAPI = new ActivityAPI();
-  const { currency, activityList, prescriptionList, ratings } = state;
+  const ratingAPI = new RatingAPI();
+  const { currency, activityList, prescriptionList, ratingList } = state;
 
   const loadDetails = async () => {
     let activityList = await activityAPI.listActivities();
     let prescriptionList = await prescriptionAPI.listPrescriptions();
-    update({
+    let ratingList = await ratingAPI.listRatings();
+    await update({
       activityList,
       currency: state.currency,
-      prescriptionList
+      prescriptionList,
+      ratingList
     });
   };
 
-  return [{ currency, activityList, prescriptionList, ratings }, loadDetails];
+  return [{ currency, activityList, prescriptionList, ratingList }, loadDetails];
 };

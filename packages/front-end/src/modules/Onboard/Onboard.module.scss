@@ -20,6 +20,9 @@
   h4 {
     align-self: center;
   }
+  .button {
+    margin: calculateRem(10) 0;
+  }
 }
 
 .form_heading {

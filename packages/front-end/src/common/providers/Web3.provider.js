@@ -73,7 +73,8 @@ export const useWeb3 = () => {
   const [, toggleModal] = useAlert();
 
   const login = async ({ token, address, loginType }) => {
-    update({ token, address, loginType });
+	update({ token, address, loginType });
+	console.log(token)
     setItem("token", token);
     setItem("address", address);
 

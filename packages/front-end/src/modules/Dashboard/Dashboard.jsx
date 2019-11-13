@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
+import * as moment from "moment";
 import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
+import { useApp } from "../../common/providers/App.provider";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import { getRoleCount } from "./dashboard.utils";
 import { roleNames } from "../../common/constants/roles";
@@ -8,8 +10,9 @@ import Card from "../../common/components/Card";
 import Button from "../../common/components/Button";
 import { useModal } from "../../common/providers/Modal.provider";
 import { DesktopLoader } from "../../common/components/Loader";
-import * as moment from "moment";
+import { Link, Heading } from "../../common/theme";
 import styles from "./Dashboard.module.scss";
+import { getBlockscoutLink } from "../../common/utils";
 
 function DashboardTable({ data, type }) {
   const [, toggleModal] = useModal();
@@ -18,69 +21,59 @@ function DashboardTable({ data, type }) {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }
 
-  function _rowClassName({ index }) {
-    if (index < 0) {
-      return styles.headerRow;
-    } else {
-      return index % 2 === 0 ? styles.evenRow : styles.oddRow;
-    }
-  }
-
   function renderTxLink({ rowData }) {
     return (
-      <a href={`https://blockscout.com/poa/sokol/tx/${rowData.txn_hash}`}>
-        {rowData.txt_hash}
-      </a>
+      <Heading>
+        <Link href={getBlockscoutLink(rowData.txn_hash, "transaction")}>
+          {rowData.txt_hash}
+        </Link>
+      </Heading>
     );
   }
 
   function renderPatient({ rowData }) {
     return (
-      <h5>
+      <Heading>
         {rowData.patient &&
         rowData.patient.firstName &&
         rowData.patient.lastName
           ? `${rowData.patient.firstName} ${rowData.patient.lastName} `
           : `Not Available`}
-      </h5>
+      </Heading>
     );
   }
 
   function renderPractitioner({ rowData }) {
     return (
-      <h5>
+      <Heading>
         {rowData.practitioner &&
         rowData.practitioner.firstName &&
         rowData.practitioner.lastName
           ? `${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `
           : `Not Available`}
-      </h5>
+      </Heading>
     );
   }
 
   function renderHealthWorker({ rowData }) {
     return (
-      <h5>
+      <Heading>
         {rowData.chw && rowData.chw.firstName && rowData.chw.lastName
           ? `${rowData.chw.firstName} ${rowData.chw.lastName} `
           : `Not Available`}
-      </h5>
+      </Heading>
     );
-  }
-
-  function renderStatus({ rowData }) {
-    return <>{rowData.status == 1 ? "Confirmed" : "Failed"}</>;
   }
 
   function renderDate({ rowData }) {
     return (
-      <h5>
+      <Heading>
         {rowData.createdDate
           ? moment(rowData.createdDate)
               .utc()
-              .format("YYYY-MM-DD HH:mm")
+              .format("dddd, MMMM Do YYYY")
           : "Not Available"}
-      </h5>
+      </Heading>
     );
   }
 
@@ -97,17 +90,16 @@ function DashboardTable({ data, type }) {
           />
         </div>
       )}
-      <Card classNames={[styles.table, styles.card__white].join(" ")}>
+      <Card classNames={[styles.table].join(" ")}>
         <AutoSizer disableHeight>
           {({ width }) => (
             <Table
               width={width}
-              height={400}
+              height={500}
               headerHeight={40}
               noRowsRenderer={_noRowsRenderer}
               rowHeight={40}
               rowCount={data.length}
-              rowClassName={_rowClassName}
               rowGetter={({ index }) => data[index]}
               headerClassName={[
                 styles.ReactVirtualized__Table__headerColumn
@@ -131,13 +123,6 @@ function DashboardTable({ data, type }) {
                   width={300}
                 />
               )}
-              {/* <Column
-                label="Interactions"
-                cellRenderer={renderTxLink}
-                dataKey="interactions"
-                className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={300}
-              /> */}
               {type < roleNames.HEALTH_WORKER && (
                 <Column
                   label="Registered By"
@@ -147,26 +132,12 @@ function DashboardTable({ data, type }) {
                   width={200}
                 />
               )}
-              {/* <Column
-                label="Total Payout"
-                cellRenderer={renderStatus}
-                dataKey="payout"
-                className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={200}
-              />
-              <Column
-                label="Status"
-                cellRenderer={renderStatus}
-                dataKey="status"
-                className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={100}
-              /> */}
               <Column
                 label="Date"
                 cellRenderer={renderDate}
                 dataKey="createdDate"
                 className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                width={150}
+                width={400}
               />
             </Table>
           )}
@@ -176,26 +147,30 @@ function DashboardTable({ data, type }) {
   );
 }
 
-function Stats({ users, type }) {
+function Stats({ users, type, dashboard }) {
+  const [{ currency }] = useApp();
   return (
     <div className={styles.dashboard}>
       {roleNames.SUPER_ADMIN === type && (
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.PATIENT)}
+              {dashboard.admin.patients.thisWeekData}/
+              {dashboard.admin.patients.lastWeekData}
             </div>
             <div className={styles.heading}>Patients Registered</div>
           </Card>
           <Card classNames={styles.card__light_blue}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.PRACTITIONER)}
+              {dashboard.admin.practitioners.thisWeekData}/
+              {dashboard.admin.practitioners.lastWeekData}
             </div>
             <div className={styles.heading}>Practitioners Registered</div>
           </Card>
           <Card classNames={styles.card__light_pink}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.HEALTH_WORKER)}
+              {dashboard.admin.chw.thisWeekData}/
+              {dashboard.admin.chw.lastWeekData}
             </div>
             <div className={styles.heading}>
               Community Health Workers Registered
@@ -203,7 +178,8 @@ function Stats({ users, type }) {
           </Card>
           <Card classNames={styles.card__light_purple}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.SUPER_ADMIN)}
+              {dashboard.admin.admin.thisWeekData}/
+              {dashboard.admin.admin.lastWeekData}
             </div>
             <div className={styles.heading}>Administrators</div>
           </Card>
@@ -213,39 +189,65 @@ function Stats({ users, type }) {
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.PATIENT)}
+              {dashboard.chw.patients.thisWeekData}/
+              {dashboard.chw.patients.lastWeekData}
             </div>
             <div className={styles.heading}>Patients Registered</div>
           </Card>
           <Card classNames={styles.card__light_blue}>
             <div className={styles.count}>
-              {getRoleCount(users, roleNames.PRACTITIONER)}
+              {dashboard.chw.practitioners.thisWeekData}/
+              {dashboard.chw.practitioners.lastWeekData}
             </div>
             <div className={styles.heading}>Practitioners Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_blue}>
+            <div className={styles.count}>
+              {dashboard.chw.interactions.thisWeekData}/
+              {dashboard.chw.interactions.lastWeekData}
+            </div>
+            <div className={styles.heading}>Interactions Recorded</div>
+          </Card>
+          <Card classNames={styles.card__light_blue}>
+            <div className={styles.count}>
+              {`${
+                dashboard.chw.interactions.overall
+              } ${currency.toString().toUpperCase()}`}
+            </div>
+            <div className={styles.heading}>Total earned</div>
           </Card>
         </div>
       )}
       {roleNames.PRACTITIONER === type && (
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>0</div>
-            <div className={styles.heading}>Transactions completed</div>
+            <div className={styles.count}>
+              {dashboard.practitioner.thisWeekData}/
+              {dashboard.practitioner.lastWeekData}
+            </div>
+            <div className={styles.heading}>Interaction conducted</div>
           </Card>
           <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0</div>
-            <div className={styles.heading}>Transactions Failed</div>
+            <div className={styles.count}>{`${
+              dashboard.practitioner.overall
+            } ${currency.toString().toUpperCase()}`}</div>
+            <div className={styles.heading}>Total earned</div>
           </Card>
         </div>
       )}
       {roleNames.PATIENT === type && (
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>0</div>
-            <div className={styles.heading}>Transactions completed</div>
+            <div className={styles.count}>
+              {dashboard.patient.thisWeekData}/{dashboard.patient.lastWeekData}
+            </div>
+            <div className={styles.heading}>Interactions participated in</div>
           </Card>
           <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>0</div>
-            <div className={styles.heading}>Transactions Failed</div>
+            <div className={styles.count}>{`${
+              dashboard.patient.overall
+            } ${currency.toString().toUpperCase()}`}</div>
+            <div className={styles.heading}>Total earned</div>
           </Card>
         </div>
       )}
@@ -271,22 +273,22 @@ function HandleViews({ type, transactions }) {
 
 export default function Dashboard() {
   const [{ address, loginType }, , getWalletDetails] = useWeb3();
-  const [{ users, interactions }, fetchData] = useData();
+  const [{ users, interactions, dashboard }, fetchData] = useData();
 
+  console.log(dashboard.chw);
   useEffect(() => {
+    const loadData = async () => {
+      await getWalletDetails();
+      await fetchData();
+    };
     loadData();
   }, [loginType]);
-
-  const loadData = async () => {
-    await getWalletDetails();
-    await fetchData();
-  };
 
   return (
     <>
       {address && typeof loginType === "number" ? (
         <>
-          <Stats type={Number(loginType)} users={users} />
+          <Stats type={Number(loginType)} users={users} dashboard={dashboard} />
           {loginType !== null && (
             <HandleViews transactions={interactions} type={loginType} />
           )}

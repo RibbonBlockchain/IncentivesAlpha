@@ -5,16 +5,17 @@ export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
   let { patient, practitioner, user, amount, serviceRatings } = data;
 
-  let practitionerAmount =
-    (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount;
+  let practitionerAmount = Number(
+    (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount
+  ).toFixed(10);
 
-  let chwAmount = amount * 0.15;
+  let chwAmount = Number(amount * 0.15).toFixed(10);
 
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
-    patientAmount: amount,
+    patientAmount: Number(amount).toFixed(10),
     practitionerAmount,
     chwAmount
   };
@@ -27,7 +28,7 @@ export const recordInteraction = async data => {
       } else {
         console.log(tx);
         return {
-          error: `An error occured. Please try again`
+          error: tx.code ? tx.message : tx
         };
       }
     } else {
@@ -42,9 +43,9 @@ export const recordInteraction = async data => {
   }
 };
 
-const sumRatings = ratings => {
-  return ratings.length > 0
-    ? Object.keys(ratings).reduce((acc, value) => acc + ratings[value], 0)
+const sumRatings = serviceRatings => {
+  return typeof serviceRatings !== "undefined"
+    ? Object.entries(serviceRatings).reduce((acc, curVal) => acc + curVal[1], 0)
     : 0;
 };
 
@@ -64,15 +65,11 @@ export const recordInteractionOnDB = async ({
     chw: user._id,
     activities:
       activities.length > 0
-        ? activities.map(activity => ({
-            activityId: activity.value
-          }))
+        ? activities.map(activity => activity.data._id)
         : activities,
     prescriptions:
       prescriptions.length > 0
-        ? prescriptions.map(prescription => ({
-            prescriptionId: prescription.value
-          }))
+        ? prescriptions.map(prescription => prescription.value)
         : prescriptions,
     rewards: [
       {

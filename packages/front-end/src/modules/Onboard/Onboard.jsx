@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import useForm from "react-hook-form";
 import DatePicker from "react-datepicker";
 import { ethers } from "ethers";
-import "react-datepicker/dist/react-datepicker.css";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import QRScanner from "qr-code-scanner";
 import * as moment from "moment";
@@ -158,16 +157,29 @@ export default function Onboard() {
         windowClassName={styles.modalWindow}
       >
         <div className={styles.cnt}>
-          <h4>Pick a profile</h4>
+          <h4>Create a User</h4>
           {loginType == Number(roleNames.SUPER_ADMIN) && (
             <>
-              <Button onClick={showAdminForm} text="Add Administrator" />
-              <Button onClick={showCHWForm} text="Health Worker Profile" />
               <Button
-                onClick={showPractitionerForm}
-                text="Practitioner Profile"
+                classNames={styles.button}
+                onClick={showAdminForm}
+                text="Administrator"
               />
-              <Button onClick={showPatientForm} text="Patient Profile" />
+              <Button
+                classNames={styles.button}
+                onClick={showCHWForm}
+                text="Community Health Worker"
+              />
+              <Button
+                classNames={styles.button}
+                onClick={showPractitionerForm}
+                text="Practitioner"
+              />
+              <Button
+                classNames={styles.button}
+                onClick={showPatientForm}
+                text="Patient"
+              />
             </>
           )}
           {loginType == Number(roleNames.HEALTH_WORKER) && (
@@ -175,8 +187,13 @@ export default function Onboard() {
               <Button
                 onClick={showPractitionerForm}
                 text="Practitioner Profile"
+                classNames={styles.button}
               />
-              <Button onClick={showPatientForm} text="Patient Profile" />
+              <Button
+                classNames={styles.button}
+                onClick={showPatientForm}
+                text="Patient Profile"
+              />
             </>
           )}
         </div>
