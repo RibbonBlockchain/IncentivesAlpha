@@ -168,17 +168,17 @@ export default function Onboard() {
               <Button
                 classNames={styles.button}
                 onClick={showCHWForm}
-                text="Health Worker Profile"
+                text="Community Health Worker"
               />
               <Button
                 classNames={styles.button}
                 onClick={showPractitionerForm}
-                text="Practitioner Profile"
+                text="Practitioner"
               />
               <Button
                 classNames={styles.button}
                 onClick={showPatientForm}
-                text="Patient Profile"
+                text="Patient"
               />
             </>
           )}

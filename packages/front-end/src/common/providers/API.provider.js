@@ -133,21 +133,11 @@ export const useData = () => {
         },
         patient: await getPatientData(listInteractions, address),
         practitioner: await getPractitionerData(listInteractions, address),
-        chw: user._id
-          ? {
-              patients: await getCHWStats(
-                listUsers,
-                roleNames.PATIENT,
-                user._id
-              ),
-              practitioner: await getCHWStats(
-                listUsers,
-                roleNames.PATIENT,
-                user._id
-              ),
-              interactions: await getCHWData(listInteractions, address)
-            }
-          : {}
+        chw: {
+          patients: await getCHWStats(listUsers, roleNames.PATIENT, user),
+          practitioner: await getCHWStats(listUsers, roleNames.PATIENT, user),
+          interactions: await getCHWData(listInteractions, address)
+        }
       },
       interactions:
         listInteractions.length > 0
@@ -186,15 +176,15 @@ export const useData = () => {
     }
   };
 
-  const getCHWStats = async (users, type, id) => {
+  const getCHWStats = async (users, type, user) => {
     let lastWeek = moment()
       .subtract(7, "days")
       .startOf("day");
     let thisWeekData = [];
     let lastWeekData = [];
-    if (users.length > 0) {
+    if (user && user._id && users.length > 0) {
       await users
-        .filter(user => user.role === type && user.onBoardedBy === id)
+        .filter(user => user.role === type && user.onBoardedBy === user._id)
         .map(user => {
           if (moment(user.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(user);
