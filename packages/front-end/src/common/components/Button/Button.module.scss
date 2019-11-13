@@ -1,0 +1,17 @@
+@import "../../styles/variables";
+
+.button {
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  padding: calculateRem(12) calculateRem(32);
+  cursor: pointer;
+  &:disabled {
+    background: $background;
+    padding: calculateRem(12) calculateRem(32) !important;
+    cursor: default;
+  }
+  &_small {
+    padding: calculateRem(10);
+  }
+}

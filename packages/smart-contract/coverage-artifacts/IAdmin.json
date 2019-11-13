@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "2.0.0",
+  "contractName": "IAdmin",
+  "compilerOutput": {
+    "abi": [
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "donateFunds",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_user",
+            "type": "address"
+          }
+        ],
+        "name": "removeUserFromRegistry",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [],
+        "name": "kill",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ],
+    "evm": {
+      "bytecode": {
+        "linkReferences": {},
+        "object": "0x",
+        "opcodes": "",
+        "sourceMap": ""
+      },
+      "deployedBytecode": {
+        "linkReferences": {},
+        "object": "0x",
+        "opcodes": "",
+        "sourceMap": ""
+      }
+    }
+  },
+  "sources": {
+    "AdminDAO/IAdmin.sol": {
+      "id": 1
+    }
+  },
+  "sourceCodes": {
+    "AdminDAO/IAdmin.sol": "pragma solidity 0.5.10;\n\ninterface IAdmin {\n\n    enum UserRole { INACTIVE, ADMIN, CHW, PAT, PRAC }\n\n    /**\n      * @notice Sends funds to the vault.\n      */\n    function donateFunds() external payable;\n\n    /**\n      * @notice Allows the admin contract to remove a user.\n      */\n    function removeUserFromRegistry(address _user) external;\n\n    /**\n      * @notice Allows the admin of the admin contract to kill the eco-system.\n      *         This will send all remaining collateral in the vault to the\n      *         admin as well as burning all the tokens. This function will kill\n      *         the vault and the registry.\n      */\n    function kill() external;\n}"
+  },
+  "sourceTreeHashHex": "0xba84fe80329ba904674400bb1f5b85e57a81e0e64815f5ab709a74f485252272",
+  "compiler": {
+    "name": "solc",
+    "version": "soljson-v0.5.10+commit.5a6ea5b1.js",
+    "settings": {
+      "optimizer": {
+        "enabled": true,
+        "runs": 999
+      },
+      "outputSelection": {
+        "*": {
+          "*": ["abi", "evm.bytecode.object", "evm.deployedBytecode.object"]
+        }
+      },
+      "remappings": []
+    }
+  },
+  "networks": {}
+}

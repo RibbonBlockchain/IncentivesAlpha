@@ -1,0 +1,40 @@
+@import "../../styles/variables";
+
+.address {
+  background-color: $background;
+  color: $text-color;
+  border-radius: calculateRem(100);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: calculateRem(18);
+  align-self: center;
+  width: calculateRem(220);
+  padding: calculateRem(12) calculateRem(5);
+  &:hover {
+    background-color: #1f222d;
+  }
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: calculateRem(12);
+    text-overflow: ellipsis;
+    padding: 0 calculateRem(10);
+  }
+}
+
+.avatar {
+  width: 10px !important;
+  height: 30px !important;
+  border-radius: calculateRem(20);
+  margin: 0 calculateRem(10);
+}
+
+@media (max-width: $desktop) {
+  .address {
+    .avatar {
+      width: 10px !important;
+      height: 30px !important;
+    }
+  }
+}

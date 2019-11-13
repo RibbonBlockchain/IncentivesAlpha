@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  MONGO_DB: Ribbon-Incentives-API-DB
+  MONGO_PORT: "27017"
+  MONGO_HOSTNAME: "mongodb"
+kind: ConfigMap
+metadata:
+  name: incentives-api-env

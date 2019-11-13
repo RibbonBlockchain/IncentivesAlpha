@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: incentives-api
+spec:
+  type: LoadBalancer
+  ports:
+    - name: "2053"
+      port: 2053
+      targetPort: 2053
+  selector:
+    io.kompose.service: incentives-api
+status:
+  loadBalancer: {}

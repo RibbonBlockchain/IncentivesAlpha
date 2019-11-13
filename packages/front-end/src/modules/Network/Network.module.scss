@@ -1,0 +1,96 @@
+@import "../../common/styles/variables";
+
+.modalWindow {
+  background: #313541;
+  color: #ffffff;
+}
+
+.cnt {
+  font-family: $font;
+  padding: calculateRem(20);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  .banner {
+    .blockies {
+      border-radius: calculateRem(20);
+      height: 80px;
+      width: 80px;
+    }
+  }
+}
+
+.header {
+  font-size: calculateRem(22);
+  line-height: calculateRem(22);
+  margin-bottom: calculateRem(4);
+  margin-top: calculateRem(12);
+  cursor: pointer;
+}
+
+.heading {
+  color: $text-color;
+  font-size: calculateRem(13);
+  line-height: calculateRem(18);
+  margin-bottom: calculateRem(2);
+  margin-top: 0;
+  max-height: calculateRem(40);
+  overflow-y: hidden;
+  cursor: pointer;
+}
+
+.wallet {
+  display: flex;
+  flex-direction: column;
+  margin: calculateRem(10) 0;
+  span {
+    margin-top: calculateRem(10);
+  }
+  a {
+    color: $link-color;
+  }
+}
+
+.information {
+  display: flex;
+  flex-direction: column;
+  margin: calculateRem(10) 0 0 0;
+}
+
+.description {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.07);
+  margin-top: calculateRem(30);
+  padding: calculateRem(10) 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dob {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.07);
+  padding: calculateRem(10) 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  margin-top: calculateRem(8);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding: calculateRem(10) calculateRem(20);
+
+  .button {
+    cursor: pointer;
+  }
+
+  .button:first-child {
+    margin-right: calculateRem(20);
+  }
+}

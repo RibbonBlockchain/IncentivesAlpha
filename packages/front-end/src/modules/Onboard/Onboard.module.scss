@@ -1,0 +1,122 @@
+@import "../../common/styles/variables";
+
+.modalWindow {
+  background: #313541;
+  color: #ffffff;
+}
+
+.modalFormWindow {
+  width: 80%;
+  height: 80vh;
+  background: #313541;
+  color: #ffffff;
+}
+
+.cnt {
+  font-family: $font;
+  padding: calculateRem(30);
+  display: flex;
+  flex-direction: column;
+  h4 {
+    align-self: center;
+  }
+  .button {
+    margin: calculateRem(10) 0;
+  }
+}
+
+.form_heading {
+  text-align: center;
+}
+
+a {
+  color: #dc5a60;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: calculateRem(10);
+}
+
+.button {
+  margin-right: calculateRem(5);
+}
+
+.close {
+  position: absolute !important;
+}
+
+.container {
+  padding: calculateRem(20);
+}
+
+.input_area {
+  color: #ffffff;
+}
+
+.count {
+  margin-bottom: calculateRem(20);
+  font-size: calculateRem(20);
+  font-weight: 500;
+}
+
+.form {
+  display: grid;
+  grid-template-rows: 0fr 0fr 3fr 0fr;
+}
+
+.form_body {
+  small {
+    color: $red;
+  }
+}
+
+.form_input {
+  color: $text-color;
+  input {
+    background: transparent;
+    border: none;
+    color: $text-color;
+    background-color: none !important;
+  }
+}
+
+.datepicker {
+  background-color: transparent;
+  font-family: $font;
+  border: 1px solid $background;
+  color: $text-color;
+  outline: none;
+  padding: calculateRem(10);
+}
+
+.heading {
+  color: $background;
+}
+
+.card__light {
+  background: #ffffff;
+}
+
+.card__light_blue {
+  background: $blue-bg;
+}
+
+.card__light_pink {
+  background: $pink-bg;
+}
+
+.card__light_purple {
+  background: $purple-bg;
+}
+
+.react-phone-number-input__input:-webkit-autofill {
+  box-shadow: none !important;
+}

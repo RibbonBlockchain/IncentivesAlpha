@@ -17,20 +17,27 @@ Ribbon channels donated, pledged or sponsored funding directly to patients, comm
 
 Our Incentives are distributed in DAI, an asset-backed, decentralized stablecoin on the Ethereum blockchain.
 
-This monorepo contains JavaScript tools and applications that interact with RibbonBlockchain's smart contracts.
-
-<!-- hide-on-docup-start -->
-
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [Packages](#packages)
 - [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Contributing](#contributing)
-- [Packages](#packages)
 - [Resources](#resources)
 
-<!-- hide-on-docup-stop -->
+## Packages
+
+This monorepo contains JavaScript tools and applications that interact with RibbonBlockchain's smart contracts. The ribbon platform consists of 3 key components right now. this will change in time. These are as follows:
+
+
+| Name                                                 | Description                                                                                                                         |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [`@ribbonblockchain/api`](/packages/back-end)             | Backend API built with Node, typscript express restful API that handles data capture for patients and all system wide interactions. |
+| [`@ribbonblockchain/frontend`](/packages/front-end)   | Frontend react application that patients, CHW, practitioners and admins interact with. [Link](https://alpha.ribbonblockchain.com)   |
+| [`@ribbonblockchain/blockchain`](/packages/smart-contract) | Solidity Smart contracts that control the funding distribution, allocation and assignment within the Ribbon ecosystem.              |
+
+Each section has it's own package and has it's own readme within the package that explains how to set it up and get running with that spesific component.
 
 ## Requirements
 
@@ -53,10 +60,27 @@ yarn
 For development purposes there's a top-level `start` script that will watch and continuously compile all packages concurrently:
 
 ```bash
-yarn start
+yarn frontend:start
 ```
 
-For next steps, take a look at documentation for the individual package(s) you want to run and/or develop.
+For next steps, take a look at documentation for the individual package(s) you want to run and/or develop. Each package can be run from the root directory using Lerna. The main things you can do are outlined below:
+
+```bash
+    yarn frontend:start         # start run the front end server
+    yarn frontend:build         # build front end for production
+
+    yarn contracts:build        # compile the smart contracts
+    yarn contracts:deploy:local # deploy smart contract to local ganage instance
+    yarn contracts:deploy:sokol # deploy contract to sokol test POA network
+    yarn contracts:start        # start a local ganache-cli instance
+    yarn contracts:test         # run contract unit tests
+    yarn contracts:cover        # generate coverage report
+
+    yarn backend:test           # run API unit tests
+    yarn backend:build:         # build API for production
+    yarn backend:dev            # start API in development mode
+    yarn backend:prod           # start API in production mode
+```
 
 ## Contributing
 
@@ -66,61 +90,11 @@ Thanks for your interest in RibbonBlockchain. There are many ways you can contri
 
 We happily await your pull requests and/or involvement in our [issues page](https://github.com/RibbonBlockchain/IncentivesAlpha/issues) and hope to see your username on our [list of contributors](https://github.com/RibbonBlockchain/IncentivesAlpha/graphs/contributors) 🎉🎉🎉
 
-## Packages
-
-| Name                                                                                                                  | Description                                                                                                                                                                                   |
-| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@ribbonblockchain/api`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/api)               | A module for interacting with RibbonBlockchain's smart contracts. A core dependency of most RibbonBlockchain projects.                                                                        |
-| [`@ribbonblockchain/incentives`](https://github.com/RibbonBlockchain/IncentivesAlpha/tree/master/packages/incentives) | An interface to consume our apis. It allows users to see communicate with the smart contracts through our apis. See it live at [dapp.ribbonblockchain.com](https://dapp.ribbonblockchain.com) |
-
 ## Resources
 
-To get a full idea of what RibbonBlockchain is about, be sure to take a look at these other resources:
-=======
-# InsensitivesAlpha-
-Ribbon Blockchain incentives alpha monorepo.
-There are 3 main folders:
-[Blockchain](#blockchain)
-[WebApp](#webapp)
-[API](#api)
+To get a full idea of what RibbonBlockchain is about, be sure to take a look at these other resources
 
-## Blockchain
-This folder contains all the smart contracts as well as tests.
-
-### Set up
-In command line within this directory, run the following to set up all package dependencies. 
-```
-npm install
-```
-To compile the contracts and run the tests run:
-```
-npm run-script build
-```
-
-## WebApp
-This folder is for all the front end content.
-
-### Set up
-In command line within this directory, run the following to set up all package dependencies. 
-```
-npm install
-```
-To start the app run...
-```
-???
-```
-
-## API
-This folder is for all the API's connecting the front end to the contracts. 
-
-### Set up
-In command line within this directory, run the following to set up all package dependencies. 
-```
-npm install
-```
-To start the API's run...
-```
-???
-```
-
-
+1. [Website](https://ribbonblockchain.com)
+2. [Alpha DApp](https://alpha.ribbonblockchian.com)
+   <!-- 3. [Incentives Proof of Concept](https://incentives.ribbonblockchain.com) -->
+3. [Twitter](https://twitter.com/RibbonPlatform)

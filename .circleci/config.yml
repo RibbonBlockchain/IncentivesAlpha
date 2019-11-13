@@ -16,7 +16,7 @@ jobs:
       - docker/build:
           dockerfile: Dockerfile
           image: ribbonblockchain/incentives-alpha-api
-          path: ./API
+          path: ./packages/back-end
           tag: staging-$(echo $CIRCLE_SHA1 | cut -c -7)
       - docker/push:
           image: ribbonblockchain/incentives-alpha-api
@@ -32,7 +32,7 @@ jobs:
       - docker/build:
           dockerfile: Dockerfile
           image: ribbonblockchain/incentives-alpha-api
-          path: ./API
+          path: ./packages/back-end
           tag: latest
       - docker/push:
           image: ribbonblockchain/incentives-alpha-api
@@ -64,25 +64,27 @@ workflows:
     jobs:
       - build-publish-image-staging:
           filters:
-              branches:
-                only:
-                  - staging
+            branches:
+              only:
+                - staging
+                - /back-end.*/
       - build-publish-image-production:
           filters:
-              branches:
-                only:
-                  - master
+            branches:
+              only:
+                - master
       - deploy-kubernetes-staging:
           filters:
-              branches:
-                only:
-                  - staging
+            branches:
+              only:
+                - staging
+                - /back-end.*/
           requires:
             - build-publish-image-staging
       - deploy-kubernetes-production:
           filters:
-              branches:
-                only:
-                  - master
+            branches:
+              only:
+                - master
           requires:
             - build-publish-image-production

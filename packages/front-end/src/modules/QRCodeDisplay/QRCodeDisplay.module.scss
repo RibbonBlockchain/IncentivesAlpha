@@ -1,0 +1,49 @@
+@import "../../common/styles/variables";
+
+.modalWindow {
+  width: 30rem;
+  background: $text-color;
+}
+
+.cnt {
+  font-family: $font;
+  padding: calculateRem(20);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  font-size: calculateRem(14);
+  line-height: calculateRem(22);
+  margin: calculateRem(12) 0;
+  text-align: center;
+  h3 {
+    margin-bottom: calculateRem(30);
+    font-weight: 500;
+    font-size: calculateRem(20);
+  }
+}
+
+.heading {
+  font-size: calculateRem(13);
+  line-height: calculateRem(18);
+  margin-bottom: calculateRem(2);
+  margin-top: 0;
+  max-height: calculateRem(40);
+  overflow-y: hidden;
+  cursor: pointer;
+}
+
+.qrWallet {
+  margin: calculateRem(20) 0;
+  background-color: $text-color;
+}
+
+.button {
+  cursor: pointer;
+}
