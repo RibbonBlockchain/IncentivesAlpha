@@ -1,9 +1,19 @@
-[![CircleCI](https://circleci.com/gh/RibbonBlockchain/IncentivesAlpha/tree/master.svg?style=svg)]
+API CI: [![CircleCI](https://circleci.com/gh/RibbonBlockchain/IncentivesAlpha/tree/master.svg?style=svg)](https://circleci.com/gh/RibbonBlockchain/IncentivesAlpha/tree/master)
 
-[The RibbonBlockchain Website](https://ribbonblockchain.com)
-(https://circleci.com/gh/RibbonBlockchain/IncentivesAlpha/tree/master)
+Front End CI production: [![Netlify Status](https://api.netlify.com/api/v1/badges/8e408883-24d7-44eb-a1d0-d003a94035cb/deploy-status)](https://app.netlify.com/sites/ribbon-dapp-production/deploys)
+
+Front End CI staging: [![Netlify Status](https://api.netlify.com/api/v1/badges/3bc37cd8-bca1-48ef-b5b9-2e6252c86ae7/deploy-status)](https://app.netlify.com/sites/ribbon-dapp-staging/deploys)
+
+
+Home page: [ribbonblockchain.com](https://ribbonblockchain.com)
+
+Staging: [dapp-staging.ribbonblockchain.com](https://dapp-staging.ribbonblockchain.com)
+
+Production: [dapp.ribbonblockchain.com](https://dapp.ribbonblockchain.com)
 
 [![RibbonBlockchain](https://d33wubrfki0l68.cloudfront.net/acc4bad7b8baf69c0a595a8887e51c474aeb5491/998d2/img/logo.png)](https://ribbonblockchain.com)
+
+
 
 ---
 
