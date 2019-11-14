@@ -21,6 +21,7 @@ yarn-error.log
 
 #kube
 *secret.yaml
+*pemstore.yaml
 
 .idea
 .vscode
