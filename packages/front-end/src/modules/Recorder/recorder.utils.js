@@ -5,17 +5,17 @@ export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
   let { patient, practitioner, user, amount, serviceRatings } = data;
 
-  let practitionerAmount = Number(
+  let practitionerAmount = parseInt(
     (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount
-  ).toFixed(10);
+  ).toString();
 
-  let chwAmount = Number(amount * 0.15).toFixed(10);
+  let chwAmount = parseInt(amount * 0.15).toString();
 
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
-    patientAmount: Number(amount).toFixed(10),
+    patientAmount: parseInt(amount).toString(),
     practitionerAmount,
     chwAmount
   };
