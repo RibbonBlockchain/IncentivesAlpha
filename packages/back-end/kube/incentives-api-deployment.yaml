@@ -31,7 +31,7 @@ spec:
                 secretKeyRef:
                   name: mongodb-secret
                   key: MONGO_USERNAME
-          image: ribbonblockchain/incentives-alpha-api:latest
+          image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:latest
           name: incentives-api
           volumeMounts:
             - name: ca-pemstore
