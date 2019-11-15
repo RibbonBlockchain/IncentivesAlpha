@@ -2,6 +2,7 @@ import React from "react";
 import { Link, NavLink, Switch, Route, Redirect } from "react-router-dom";
 import Logo from "../../common/components/Logo";
 import User from "../../common/components/User";
+import Button from "../../common/components/Button";
 import WalletModal from "../Wallet";
 import DonateModal from "../Donate";
 import SendModal from "../Send";
@@ -40,8 +41,8 @@ function IsAllowedRoute({ component: C, appProps, ...rest }) {
 }
 
 function Home() {
-  const [{ loginType, user }] = useWeb3();
-  const [{}, toggleModal] = useModal();
+  const [{ loginType, user, address }] = useWeb3();
+  const [, toggleModal] = useModal();
 
   function showWallet() {
     toggleModal({
@@ -51,6 +52,27 @@ function Home() {
     });
   }
 
+  function showSendModal() {
+    toggleModal({
+      isVisible: true,
+      data: null,
+      modal: "send"
+    });
+  }
+
+  function showQRCodeModal() {
+    toggleModal({
+      isVisible: true,
+      data: {
+        details: {
+          publicAddress: address,
+          type: "receive"
+        },
+        message: ""
+      },
+      modal: "qr"
+    });
+  }
   return (
     <>
       <div className={styles.admin}>
@@ -62,8 +84,31 @@ function Home() {
             <div></div>
             {user && user.publicaddress ? (
               <div className={styles.actions}>
+                {loginType > roleNames.HEALTH_WORKER && (
+                  <>
+                    <Button
+                      classNames={[
+                        styles.button,
+                        styles.button_small,
+                        styles.button_primary
+                      ].join(" ")}
+                      text="Send"
+                      onClick={showSendModal}
+                    />
+                    <Button
+                      classNames={[
+                        styles.button,
+                        styles.button_small,
+                        styles.button_primary
+                      ].join(" ")}
+                      text="Receive"
+                      onClick={showQRCodeModal}
+                    />
+                  </>
+                )}
                 {loginType < roleNames.PATIENT && (
                   <>
+                    {loginType === roleNames.SUPER_ADMIN && <DonateModal />}
                     <Onboard />
                     <Recorder />
                   </>
@@ -165,7 +210,6 @@ function Home() {
             <Redirect from="*" to="/app/home" />
           </Switch>
           <WalletModal />
-          <DonateModal />
           <SendModal />
         </main>
       </div>

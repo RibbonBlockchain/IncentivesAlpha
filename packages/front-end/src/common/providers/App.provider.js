@@ -14,7 +14,7 @@ const AppContext = createContext();
 const useAppContext = () => useContext(AppContext);
 
 const initialState = () => ({
-  currency: "poa",
+  currency: "xdai",
   activityList: [],
   prescriptionList: [],
   ratings: []
