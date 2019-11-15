@@ -265,11 +265,15 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
-                  <div className={styles.count_item__data}>{0}</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.interactions.thisMonthData}
+                  </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
-                  <div className={styles.count_item__data}>{0}</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.interactions.thisWeekData}
+                  </div>
                 </div>
               </div>
               <div className={styles.total}>

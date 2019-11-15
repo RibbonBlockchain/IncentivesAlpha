@@ -3,7 +3,6 @@ import React, {
   useContext,
   useReducer,
   useMemo,
-  useEffect,
   useCallback
 } from "react";
 import moment from "moment";
@@ -24,45 +23,59 @@ const initialState = () => ({
     admin: {
       admin: {
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0,
+        ratings: 0,
+        overall: 0
       },
       chw: {
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       },
       patients: {
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       },
       practitioners: {
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
+      },
+      interactions: {
+        thisWeekData: 0,
+        thisMonthData: 0
       }
     },
     chw: {
       interactions: {
         overall: 0,
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       },
       patients: {
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       },
       practitioners: {
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
+      },
+      chw: {
+        thisWeekData: 0,
+        thisMonthData: 0,
+        overall: 0,
+        ratings: 0
       }
     },
     patient: {
       overall: 0,
       thisWeekData: 0,
-      lastWeekData: 0
+      thisMonthData: 0,
+      ratings: 0
     },
     practitioner: {
       overall: 0,
       thisWeekData: 0,
-      lastWeekData: 0
+      thisMonthData: 0,
+      ratings: 0
     }
   }
 });
@@ -115,37 +128,56 @@ export const useData = () => {
   let address = getItem("address");
 
   const fetchData = async () => {
-    let listUsers = await usersAPI.listUsers();
-    let listInteractions = await interactionsAPI.listInteractionByAddress(
-      address,
-      {
-        role: loginType
-      }
-    );
-    update({
-      users: listUsers,
-      dashboard: {
-        admin: {
-          patients: await getAdminStats(listUsers, roleNames.PATIENT),
-          practitioners: await getAdminStats(listUsers, roleNames.PRACTITIONER),
-          chw: await getAdminStats(listUsers, roleNames.HEALTH_WORKER),
-          admin: await getAdminStats(listUsers, roleNames.SUPER_ADMIN)
-        },
-        patient: await getPatientData(listInteractions, address),
-        practitioner: await getPractitionerData(listInteractions, address),
-        chw: {
-          patients: await getCHWStats(listUsers, roleNames.PATIENT, user),
-          practitioners: await getCHWStats(listUsers, roleNames.PATIENT, user),
-          interactions: await getCHWData(listInteractions, address)
+    if (loginType > 0) {
+      let listUsers = await usersAPI.listUsers();
+      let listInteractions = await interactionsAPI.listInteractionByAddress(
+        address,
+        {
+          role: loginType
         }
-      },
-      interactions:
-        listInteractions.length > 0
-          ? listInteractions.sort(
-              (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
-            )
-          : []
-    });
+      );
+      update({
+        users: listUsers,
+        dashboard: {
+          admin: {
+            patients: await getAdminStats(listUsers, roleNames.PATIENT),
+            practitioners: await getAdminStats(
+              listUsers,
+              roleNames.PRACTITIONER
+            ),
+            chw: await getAdminStats(listUsers, roleNames.HEALTH_WORKER),
+            admin: await getAdminStats(listUsers, roleNames.SUPER_ADMIN),
+            interactions: {
+              thisMonthData: 0,
+              thisWeekData: 0
+            }
+          },
+          patient: await getPatientData(listInteractions, address),
+          practitioner: await getPractitionerData(listInteractions, address),
+          chw: {
+            patients: await getCHWStats(listUsers, roleNames.PATIENT, user),
+            practitioners: await getCHWStats(
+              listUsers,
+              roleNames.PATIENT,
+              user
+            ),
+            interactions: await getCHWData(listInteractions, address),
+            chw: {
+              ratings: 0,
+              overall: 0,
+              thisWeekData: 0,
+              thisMonthData: 0
+            }
+          }
+        },
+        interactions:
+          listInteractions.length > 0
+            ? listInteractions.sort(
+                (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+              )
+            : []
+      });
+    }
   };
 
   const getAdminStats = async (users, type) => {
@@ -153,7 +185,7 @@ export const useData = () => {
       .subtract(7, "days")
       .startOf("day");
     let thisWeekData = [];
-    let lastWeekData = [];
+    let thisMonthData = [];
     if (users.length > 0) {
       await users
         .filter(user => user.role === type)
@@ -161,17 +193,17 @@ export const useData = () => {
           if (moment(user.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(user);
           } else if (lastWeek.isSame()) {
-            lastWeekData.push(user);
+            thisMonthData.push(user);
           }
         });
       return {
         thisWeekData: thisWeekData.length,
-        lastWeekData: lastWeekData.length
+        thisMonthData: thisMonthData.length
       };
     } else {
       return {
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       };
     }
   };
@@ -181,7 +213,7 @@ export const useData = () => {
       .subtract(7, "days")
       .startOf("day");
     let thisWeekData = [];
-    let lastWeekData = [];
+    let thisMonthData = [];
     if (users.length > 0) {
       await users
         .filter(user => user.role === type && user.onBoardedBy === user._id)
@@ -189,17 +221,17 @@ export const useData = () => {
           if (moment(user.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(user);
           } else if (lastWeek.isSame()) {
-            lastWeekData.push(user);
+            thisMonthData.push(user);
           }
         });
       return {
         thisWeekData: thisWeekData.length,
-        lastWeekData: lastWeekData.length
+        thisMonthData: thisMonthData.length
       };
     } else {
       return {
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       };
     }
   };
@@ -209,7 +241,7 @@ export const useData = () => {
       .subtract(7, "days")
       .startOf("day");
     let thisWeekData = [];
-    let lastWeekData = [];
+    let thisMonthData = [];
     if (data.length > 0) {
       data
         .filter(user => user.patient.publicAddress === address)
@@ -217,7 +249,7 @@ export const useData = () => {
           if (moment(interactions.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(interactions);
           } else if (lastWeek.isSame(interactions.createdDate)) {
-            lastWeekData.push(interactions);
+            thisMonthData.push(interactions);
           }
           return interactions;
         });
@@ -229,13 +261,13 @@ export const useData = () => {
           )
         ).toFixed(5),
         thisWeekData: thisWeekData.length,
-        lastWeekData: lastWeekData.length
+        thisMonthData: thisMonthData.length
       };
     } else {
       return {
         overall: 0,
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       };
     }
   };
@@ -245,7 +277,7 @@ export const useData = () => {
       .subtract(7, "days")
       .startOf("day");
     let thisWeekData = [];
-    let lastWeekData = [];
+    let thisMonthData = [];
     if (data.length > 0) {
       data
         .filter(user => user.practitioner.publicAddress === address)
@@ -253,7 +285,7 @@ export const useData = () => {
           if (moment(interactions.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(interactions);
           } else if (lastWeek.isSame(interactions.createdDate)) {
-            lastWeekData.push(interactions);
+            thisMonthData.push(interactions);
           }
         });
       return {
@@ -264,13 +296,13 @@ export const useData = () => {
           )
         ).toFixed(5),
         thisWeekData: thisWeekData.length,
-        lastWeekData: lastWeekData.length
+        thisMonthData: thisMonthData.length
       };
     } else {
       return {
         overall: 0,
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       };
     }
   };
@@ -280,7 +312,7 @@ export const useData = () => {
       .subtract(7, "days")
       .startOf("day");
     let thisWeekData = [];
-    let lastWeekData = [];
+    let thisMonthData = [];
     if (data.length > 0) {
       data
         .filter(user => user.chw.publicAddress === address)
@@ -288,7 +320,7 @@ export const useData = () => {
           if (moment(interactions.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(interactions);
           } else if (lastWeek.isSame(interactions.createdDate)) {
-            lastWeekData.push(interactions);
+            thisMonthData.push(interactions);
           }
         });
       return {
@@ -299,13 +331,13 @@ export const useData = () => {
           )
         ).toFixed(5),
         thisWeekData: thisWeekData.length,
-        lastWeekData: lastWeekData.length
+        thisMonthData: thisMonthData.length
       };
     } else {
       return {
         overall: 0,
         thisWeekData: 0,
-        lastWeekData: 0
+        thisMonthData: 0
       };
     }
   };
