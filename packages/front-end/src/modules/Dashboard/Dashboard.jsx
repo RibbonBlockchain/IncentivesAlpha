@@ -51,7 +51,7 @@ function DashboardTable({ data, type }) {
         rowIndex={rowIndex}
       >
         {rowData.activities.length > 0 ? (
-          <div style={{ whiteSpace: "normal", padding: '1px' }}>
+          <div style={{ whiteSpace: "normal", padding: "1px" }}>
             {rowData.activities
               .map(activity => activity.activityTitle)
               .join(", ")}
@@ -265,15 +265,11 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
-                  <div className={styles.count_item__data}>
-                    {dashboard.admin.interactions.thisMonthData}
-                  </div>
+                  <div className={styles.count_item__data}>{0}</div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
-                  <div className={styles.count_item__data}>
-                    {dashboard.admin.interactions.thisWeekData}
-                  </div>
+                  <div className={styles.count_item__data}>{0}</div>
                 </div>
               </div>
               <div className={styles.total}>
@@ -504,6 +500,8 @@ export default function Dashboard() {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginType]);
+
+  console.log(dashboard.admin.interactions.thisMonthData);
 
   return (
     <>
