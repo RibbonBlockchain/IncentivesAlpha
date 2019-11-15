@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
@@ -9,10 +9,11 @@ import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
 import Modal from "../../../common/components/Modal";
 import { generateReport } from "../../Dashboard/dashboard.utils";
+import { roleNames } from "../../../common/constants/roles";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
 import { useAlert } from "../../../common/providers/Modal.provider";
-
+import { useWeb3 } from "../../../common/providers/Web3.provider";
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
   const [loading, setLoading] = useState(false);
@@ -115,6 +116,7 @@ function DownloadCSV({ isOpen, onDismiss }) {
 
 export default function() {
   const [{ interactions }] = useData();
+  const [{ user, loginType }] = useWeb3();
   const [state, setState] = useState([]);
   const [search, setSearch] = useState();
   const [visible, setVisible] = useState(false);
@@ -123,6 +125,21 @@ export default function() {
     minMatchCharLength: 3,
     keys: ["firstName", "lastName"]
   });
+
+  useEffect(() => {
+    fetchMyInteractions();
+  }, []);
+
+  async function fetchMyInteractions() {
+    if (loginType === roleNames.SUPER_ADMIN) {
+      setState(interactions);
+    } else {
+      let data = interactions.filter(
+        interaction => interaction.chw._id === user._id
+      );
+      setState(data);
+    }
+  }
 
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
@@ -163,9 +180,7 @@ export default function() {
   }
 
   function renderDate({ rowData }) {
-    return (
-      <div>{moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}</div>
-    );
+    return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
   function renderTotalTokenSent({ rowData }) {
@@ -206,53 +221,55 @@ export default function() {
               />
             </div>
           </div>
-          <AutoSizer disableHeight>
-            {({ width }) => (
-              <Table
-                width={width}
-                height={500}
-                headerHeight={40}
-                noRowsRenderer={_noRowsRenderer}
-                rowHeight={40}
-                rowCount={interactions.length}
-                rowGetter={({ index }) => interactions[index]}
-                headerClassName={[
-                  styles.ReactVirtualized__Table__headerColumn
-                ].join(" ")}
-              >
-                <Column
-                  label="Practitioner"
-                  cellRenderer={renderPractitioner}
-                  dataKey="practitionerAddress"
-                  width={300}
-                />
-                <Column
-                  label="Patient"
-                  cellRenderer={renderPatient}
-                  dataKey="patientAddress"
-                  width={300}
-                />
-                <Column
-                  label="Registered By"
-                  cellRenderer={renderHealthWorker}
-                  dataKey="chwAddress"
-                  width={200}
-                />
-                <Column
-                  label="Total tokens sent"
-                  cellRenderer={renderTotalTokenSent}
-                  dataKey="rewards"
-                  width={200}
-                />
-                <Column
-                  label="Date"
-                  cellRenderer={renderDate}
-                  dataKey="createdDate"
-                  width={300}
-                />
-              </Table>
-            )}
-          </AutoSizer>
+          <div style={{ flex: "1 1 auto", height: "79vh" }}>
+            <AutoSizer>
+              {({ height, width }) => (
+                <Table
+                  width={width}
+                  height={height}
+                  headerHeight={40}
+                  noRowsRenderer={_noRowsRenderer}
+                  rowHeight={40}
+                  rowCount={interactions.length}
+                  rowGetter={({ index }) => interactions[index]}
+                  headerClassName={[
+                    styles.ReactVirtualized__Table__headerColumn
+                  ].join(" ")}
+                >
+                  <Column
+                    label="Practitioner"
+                    cellRenderer={renderPractitioner}
+                    dataKey="practitionerAddress"
+                    width={300}
+                  />
+                  <Column
+                    label="Patient"
+                    cellRenderer={renderPatient}
+                    dataKey="patientAddress"
+                    width={300}
+                  />
+                  <Column
+                    label="Registered By"
+                    cellRenderer={renderHealthWorker}
+                    dataKey="chwAddress"
+                    width={200}
+                  />
+                  <Column
+                    label="Total tokens sent"
+                    cellRenderer={renderTotalTokenSent}
+                    dataKey="rewards"
+                    width={200}
+                  />
+                  <Column
+                    label="Date"
+                    cellRenderer={renderDate}
+                    dataKey="createdDate"
+                    width={300}
+                  />
+                </Table>
+              )}
+            </AutoSizer>
+          </div>
         </Card>
       ) : (
         <DesktopLoader />

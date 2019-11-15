@@ -20,3 +20,15 @@
   outline: none;
   padding: calculateRem(10);
 }
+
+.head_actions {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  justify-items: flex-end;
+  &_action {
+    display: flex;
+    input {
+      margin-left: calculateRem(10);
+    }
+  }
+}

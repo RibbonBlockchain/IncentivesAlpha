@@ -50,11 +50,15 @@ function DashboardTable({ data, type }) {
         parent={parent}
         rowIndex={rowIndex}
       >
-        <div style={{ whiteSpace: "normal" }}>
-          {rowData.activities
-            .map(activity => activity.activityTitle)
-            .join(", ")}
-        </div>
+        {rowData.activities.length > 0 ? (
+          <div style={{ whiteSpace: "normal", padding: '1px' }}>
+            {rowData.activities
+              .map(activity => activity.activityTitle)
+              .join(", ")}
+          </div>
+        ) : (
+          <div>Not available</div>
+        )}
       </CellMeasurer>
     );
   }
@@ -120,7 +124,6 @@ function DashboardTable({ data, type }) {
             {({ height, width }) => {
               return (
                 <Table
-                  deferredMeasurementCache={cache}
                   width={width}
                   height={height}
                   headerHeight={40}
@@ -133,14 +136,12 @@ function DashboardTable({ data, type }) {
                     styles.ReactVirtualized__Table__headerColumn
                   ].join(" ")}
                 >
-                  {type > roleNames.SUPER_ADMIN && (
-                    <Column
-                      label="Interactions"
-                      cellRenderer={renderInteractions}
-                      dataKey="activities"
-                      width={width - 200}
-                    />
-                  )}
+                  <Column
+                    label="Interactions"
+                    cellRenderer={renderInteractions}
+                    dataKey="activities"
+                    width={width - 200}
+                  />
                   {type < roleNames.HEALTH_WORKER && (
                     <Column
                       label="Registered By"
@@ -165,12 +166,14 @@ function DashboardTable({ data, type }) {
                       width={width - 200}
                     />
                   )}
-                  <Column
-                    label="Tokens earned"
-                    cellRenderer={renderRewards}
-                    dataKey="rewards"
-                    width={width - 200}
-                  />
+                  {type !== roleNames.SUPER_ADMIN && (
+                    <Column
+                      label="Tokens earned"
+                      cellRenderer={renderRewards}
+                      dataKey="rewards"
+                      width={width - 200}
+                    />
+                  )}
                   <Column
                     label="Date"
                     dataKey="createdDate"
@@ -194,34 +197,90 @@ function Stats({ type, dashboard }) {
       {roleNames.SUPER_ADMIN === type && (
         <div className={styles.layout}>
           <Card classNames={styles.card__light_orange}>
-            <div className={styles.count}>
-              <span>{dashboard.admin.patients.thisWeekData}</span>
-              <span>{dashboard.admin.patients.lastWeekData}</span>
-            </div>
-            <div className={styles.div}>Patients Registered</div>
-          </Card>
-          <Card classNames={styles.card__light_blue}>
-            <div className={styles.count}>
-              {dashboard.admin.practitioners.thisWeekData}/
-              {dashboard.admin.practitioners.lastWeekData}
-            </div>
-            <div className={styles.div}>Practitioners Registered</div>
-          </Card>
-          <Card classNames={styles.card__light_pink}>
-            <div className={styles.count}>
-              {dashboard.admin.chw.thisWeekData}/
-              {dashboard.admin.chw.lastWeekData}
-            </div>
             <div className={styles.div}>
-              Community Health Workers Registered
+              <div className={styles.count}>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__heading}>This month</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.patients.thisMonthData}
+                  </div>
+                </div>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__heading}>This week</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.patients.thisWeekData}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.total}>
+                {dashboard.admin.patients.overall}
+              </div>
             </div>
+            <div className={styles.title}>Patients Registered</div>
           </Card>
-          <Card classNames={styles.card__light_purple}>
-            <div className={styles.count}>
-              {dashboard.admin.admin.thisWeekData}/
-              {dashboard.admin.admin.lastWeekData}
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.div}>
+              <div className={styles.count}>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__heading}>This month</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.practitioners.thisMonthData}
+                  </div>
+                </div>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__heading}>This week</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.practitioners.thisWeekData}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.total}>
+                {dashboard.admin.practitioners.overall}
+              </div>
             </div>
-            <div className={styles.div}>Administrators</div>
+            <div className={styles.title}>Practitioners Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.div}>
+              <div className={styles.count}>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__heading}>This month</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.chw.thisMonthData}
+                  </div>
+                </div>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__heading}>This week</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.chw.thisWeekData}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.total}>{dashboard.admin.chw.overall}</div>
+            </div>
+            <div className={styles.title}>Health Workers Registered</div>
+          </Card>
+          <Card classNames={styles.card__light_orange}>
+            <div className={styles.div}>
+              <div className={styles.count}>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__heading}>This month</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.interactions.thisMonthData}
+                  </div>
+                </div>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__heading}>This week</div>
+                  <div className={styles.count_item__data}>
+                    {dashboard.admin.interactions.thisWeekData}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.total}>
+                {dashboard.admin.interactions.overall}
+              </div>
+            </div>
+            <div className={styles.title}>Interactions recorded</div>
           </Card>
         </div>
       )}
@@ -233,7 +292,7 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.patients.lastWeekData}
+                    {dashboard.chw.patients.thisMonthData}
                   </div>
                 </div>
                 <div className={styles.count_item}>
@@ -255,7 +314,7 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.practitioners.lastWeekData}
+                    {dashboard.chw.practitioners.thisMonthData}
                   </div>
                 </div>
                 <div className={styles.count_item}>
@@ -277,7 +336,7 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.interactions.lastWeekData}
+                    {dashboard.chw.interactions.thisMonthData}
                   </div>
                 </div>
                 <div className={styles.count_item}>
@@ -298,7 +357,7 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__data}>
-                    {`${dashboard.chw.interactions.overall}%`}
+                    {`${dashboard.chw.chw.ratings}%`}
                   </div>
                 </div>
               </div>
@@ -315,7 +374,7 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.practitioner.lastWeekData}
+                    {dashboard.practitioner.thisMonthData}
                   </div>
                 </div>
                 <div className={styles.count_item}>
@@ -370,7 +429,7 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.patient.lastWeekData}
+                    {dashboard.patient.thisMonthData}
                   </div>
                 </div>
                 <div className={styles.count_item}>

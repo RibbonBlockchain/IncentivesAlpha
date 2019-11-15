@@ -7,6 +7,7 @@
   background: #313541;
   color: #ffffff;
 }
+
 .heading {
   display: flex;
   justify-content: space-between;
@@ -19,4 +20,16 @@
   color: $text-color;
   outline: none;
   padding: calculateRem(10);
+}
+
+.head_actions {
+  display: grid;
+  grid-template-columns: 3fr 3fr;
+  justify-items: flex-end;
+  &_action {
+    display: flex;
+    input {
+      margin-left: calculateRem(10);
+    }
+  }
 }

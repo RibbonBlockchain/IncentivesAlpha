@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
 import * as moment from "moment";
 import Card from "../../../common/components/Card";
-import { Link } from "../../../common/theme";
 import { useData } from "../../../common/providers/API.provider";
-import { getBlockscoutLink } from "../../../common/utils";
 import { roleNames } from "../../../common/constants/roles";
 import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
@@ -17,13 +14,6 @@ import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
 import { useAlert } from "../../../common/providers/Modal.provider";
 import { useWeb3 } from "../../../common/providers/Web3.provider";
-
-const StyledTitle = styled.h3`
-  font-weight: 300;
-`;
-const StyledDate = styled(StyledTitle)``;
-
-const StyledAddress = styled(Link)``;
 
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
@@ -142,14 +132,7 @@ export default function ListPractitioners() {
   }, []);
 
   async function fetchCHWOnly() {
-    let chw = [];
-    await users.map(user => {
-      if (user.role === roleNames.HEALTH_WORKER) {
-        chw.push(user);
-      } else {
-        return;
-      }
-    });
+    let chw = users.filter(user => user.role === roleNames.HEALTH_WORKER);
     setState(chw);
   }
 
@@ -159,32 +142,22 @@ export default function ListPractitioners() {
 
   function renderName({ rowData }) {
     return (
-      <StyledTitle>
+      <div>
         {rowData && rowData.firstName && rowData.lastName
           ? `${rowData.firstName} ${rowData.lastName} `
           : `Not Available`}
-      </StyledTitle>
-    );
-  }
-
-  function renderAddress({ rowData }) {
-    return (
-      <StyledTitle>
-        <StyledAddress
-          href={getBlockscoutLink(rowData.publicAddress, "address")}
-        >
-          {rowData.publicAddress}
-        </StyledAddress>
-      </StyledTitle>
+      </div>
     );
   }
 
   function renderDate({ rowData }) {
     return (
-      <StyledDate>
-        {moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}
-      </StyledDate>
+      <div>{moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}</div>
     );
+  }
+
+  function renderIDNumber({ rowData }) {
+    return <div>{rowData.idNumber}</div>;
   }
 
   async function handleSearch(e) {
@@ -203,7 +176,8 @@ export default function ListPractitioners() {
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              <Button className={styles.csv_button} text="Download" />
+              {/* <Button className={styles.csv_button} text="Download" /> */}
+              <div></div>
               <input
                 className={[styles.form_input].join(" ")}
                 type="text"
@@ -213,44 +187,43 @@ export default function ListPractitioners() {
               />
             </div>
           </div>
-          <AutoSizer disableHeight>
-            {({ width }) => (
-              <Table
-                width={width}
-                height={500}
-                headerHeight={40}
-                noRowsRenderer={_noRowsRenderer}
-                rowHeight={40}
-                rowCount={state.length}
-                rowGetter={({ index }) => state[index]}
-                headerClassName={[
-                  styles.ReactVirtualized__Table__headerColumn
-                ].join(" ")}
-              >
-                <Column
-                  label="Community Health Worker"
-                  cellRenderer={renderName}
-                  dataKey="chwAddress"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={300}
-                />
-                <Column
-                  label="Wallet Address"
-                  cellRenderer={renderAddress}
-                  dataKey="chwAddress"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={500}
-                />
-                <Column
-                  label="Date Registered"
-                  cellRenderer={renderDate}
-                  dataKey="createdDate"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={300}
-                />
-              </Table>
-            )}
-          </AutoSizer>
+          <div style={{ flex: "1 1 auto", height: "79vh" }}>
+            <AutoSizer>
+              {({ height, width }) => (
+                <Table
+                  width={width}
+                  height={height}
+                  headerHeight={40}
+                  noRowsRenderer={_noRowsRenderer}
+                  rowHeight={40}
+                  rowCount={state.length}
+                  rowGetter={({ index }) => state[index]}
+                  headerClassName={[
+                    styles.ReactVirtualized__Table__headerColumn
+                  ].join(" ")}
+                >
+                  <Column
+                    label="Community Health Worker Number"
+                    cellRenderer={renderIDNumber}
+                    dataKey="idNumber"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Community Health Worker"
+                    cellRenderer={renderName}
+                    dataKey="chwAddress"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Date Registered"
+                    cellRenderer={renderDate}
+                    dataKey="createdDate"
+                    width={width - 200}
+                  />
+                </Table>
+              )}
+            </AutoSizer>
+          </div>
         </Card>
       ) : (
         <DesktopLoader />
