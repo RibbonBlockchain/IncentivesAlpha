@@ -17,7 +17,7 @@ const initialState = () => ({
   currency: "xdai",
   activityList: [],
   prescriptionList: [],
-  ratings: []
+  ratingList: [{ ratingTypes: [] }]
 });
 
 const LOAD_CONFIGURATION = "config/LOAD_CONFIGURATION";
@@ -69,14 +69,17 @@ export const useApp = () => {
   const loadDetails = async () => {
     let activityList = await activityAPI.listActivities();
     let prescriptionList = await prescriptionAPI.listPrescriptions();
-    let ratingList = await ratingAPI.listRatings();
+    let ratings = await ratingAPI.listRatings();
     await update({
       activityList,
       currency: state.currency,
       prescriptionList,
-      ratingList
+      ratingList: ratings.length > 0 ? ratings : state.ratingList
     });
   };
 
-  return [{ currency, activityList, prescriptionList, ratingList }, loadDetails];
+  return [
+    { currency, activityList, prescriptionList, ratingList },
+    loadDetails
+  ];
 };
