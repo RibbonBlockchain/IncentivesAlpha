@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
 import * as moment from "moment";
 import Card from "../../../common/components/Card";
 import { useData } from "../../../common/providers/API.provider";
-import { Link, Heading } from "../../../common/theme";
 import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
 import Modal from "../../../common/components/Modal";
@@ -14,11 +12,6 @@ import { generateReport } from "../../Dashboard/dashboard.utils";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
 import { useAlert } from "../../../common/providers/Modal.provider";
-
-const StyledTitle = styled.h3`
-  font-weight: 300;
-`;
-const StyledDate = styled(StyledTitle)``;
 
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
@@ -137,43 +130,41 @@ export default function() {
 
   function renderPatient({ rowData }) {
     return (
-      <Heading>
+      <div>
         {rowData.patient &&
         rowData.patient.firstName &&
         rowData.patient.lastName
           ? `${rowData.patient.firstName} ${rowData.patient.lastName} `
           : `Not Available`}
-      </Heading>
+      </div>
     );
   }
 
   function renderPractitioner({ rowData }) {
     return (
-      <Heading>
+      <div>
         {rowData.practitioner &&
         rowData.practitioner.firstName &&
         rowData.practitioner.lastName
           ? `${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `
           : `Not Available`}
-      </Heading>
+      </div>
     );
   }
 
   function renderHealthWorker({ rowData }) {
     return (
-      <Heading>
+      <div>
         {rowData.chw && rowData.chw.firstName && rowData.chw.lastName
           ? `${rowData.chw.firstName} ${rowData.chw.lastName} `
           : `Not Available`}
-      </Heading>
+      </div>
     );
   }
 
   function renderDate({ rowData }) {
     return (
-      <StyledDate>
-        {moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}
-      </StyledDate>
+      <div>{moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}</div>
     );
   }
 
@@ -182,7 +173,7 @@ export default function() {
       rowData.rewards[0].chwReward +
       rowData.rewards[0].patientReward +
       rowData.rewards[0].practitionerReward;
-    return <Heading>{totalTokenSent}</Heading>;
+    return <div>{Number(totalTokenSent).toFixed(4)}</div>;
   }
 
   async function handleSearch(e) {
@@ -197,7 +188,7 @@ export default function() {
   return (
     <>
       {interactions ? (
-        <Card classNames={[styles.table, styles.white].join(" ")}>
+        <Card classNames={[styles.table].join(" ")}>
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
