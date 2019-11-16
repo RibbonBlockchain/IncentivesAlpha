@@ -8,6 +8,7 @@ import {
 } from "../validators/authValidation";
 import { UserSchema } from "../models/userModel";
 import { check, validationResult } from "express-validator";
+import {validateUserSchema} from "../validators/userValidation";
 
 const User = mongoose.model("user", UserSchema)
 
@@ -23,7 +24,7 @@ export class UserRoutes {
     app
       .route("/api/v1/users/admin")
       .post(
-        [validJWTNeeded, superAdminOnly],
+        [validJWTNeeded, superAdminOnly, validateUserSchema],
         this.userController.addAdministrator
       );
 
@@ -34,7 +35,8 @@ export class UserRoutes {
         [
           validJWTNeeded,
           superAdminOnly,
-          check("phoneNumber").isLength({ max: 11, min: 11 })
+          check("phoneNumber").isLength({ max: 11, min: 11 }),
+          validateUserSchema
         ],
         this.userController.addNewCommunityHealthWorker
       );
