@@ -44,7 +44,7 @@ function Login() {
       } else {
         toggle({
           isVisible: true,
-          message: result.error.message
+          message: result.error.message ? result.error.message : result.error
         });
       }
     } else {

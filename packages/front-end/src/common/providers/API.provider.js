@@ -69,13 +69,15 @@ const initialState = () => ({
       overall: 0,
       thisWeekData: 0,
       thisMonthData: 0,
-      ratings: 0
+      ratings: 0,
+      earnings: 0
     },
     practitioner: {
       overall: 0,
       thisWeekData: 0,
       thisMonthData: 0,
-      ratings: 0
+      ratings: 0,
+      earnings: 0
     }
   }
 });
@@ -147,10 +149,7 @@ export const useData = () => {
             ),
             chw: await getAdminStats(listUsers, roleNames.HEALTH_WORKER),
             admin: await getAdminStats(listUsers, roleNames.SUPER_ADMIN),
-            interactions: {
-              thisMonthData: 0,
-              thisWeekData: 0
-            }
+            interactions: await getCHWData(listInteractions)
           },
           patient: await getPatientData(listInteractions, address),
           practitioner: await getPractitionerData(listInteractions, address),
@@ -181,27 +180,27 @@ export const useData = () => {
   };
 
   const getAdminStats = async (users, type) => {
-    let lastWeek = moment()
-      .subtract(7, "days")
-      .startOf("day");
     let thisWeekData = [];
     let thisMonthData = [];
     if (users.length > 0) {
-      await users
+      let overall = await users
         .filter(user => user.role === type)
         .map(user => {
           if (moment(user.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(user);
-          } else if (lastWeek.isSame()) {
+          } else if (moment(user.createdDate).isSame(new Date(), "month")) {
             thisMonthData.push(user);
           }
+          return user;
         });
       return {
+        overall: overall.length,
         thisWeekData: thisWeekData.length,
         thisMonthData: thisMonthData.length
       };
     } else {
       return {
+        overall: 0,
         thisWeekData: 0,
         thisMonthData: 0
       };
@@ -209,27 +208,27 @@ export const useData = () => {
   };
 
   const getCHWStats = async (users, type, user) => {
-    let lastWeek = moment()
-      .subtract(7, "days")
-      .startOf("day");
     let thisWeekData = [];
     let thisMonthData = [];
     if (users.length > 0) {
-      await users
+      let overall = await users
         .filter(user => user.role === type && user.onBoardedBy === user._id)
         .map(user => {
           if (moment(user.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(user);
-          } else if (lastWeek.isSame()) {
+          } else if (moment(user.createdDate).isSame(new Date(), "month")) {
             thisMonthData.push(user);
           }
+          return user;
         });
       return {
+        overall: overall.length,
         thisWeekData: thisWeekData.length,
         thisMonthData: thisMonthData.length
       };
     } else {
       return {
+        overall: 0,
         thisWeekData: 0,
         thisMonthData: 0
       };
@@ -237,107 +236,132 @@ export const useData = () => {
   };
 
   const getPatientData = async (data, address) => {
-    let lastWeek = moment()
-      .subtract(7, "days")
-      .startOf("day");
     let thisWeekData = [];
     let thisMonthData = [];
     if (data.length > 0) {
-      data
+      let overall = await data
         .filter(user => user.patient.publicAddress === address)
-        .map(interactions => {
-          if (moment(interactions.createdDate).isSame(new Date(), "week")) {
-            thisWeekData.push(interactions);
-          } else if (lastWeek.isSame(interactions.createdDate)) {
-            thisMonthData.push(interactions);
+        .map(user => {
+          if (moment(user.createdDate).isSame(new Date(), "week")) {
+            thisWeekData.push(user);
+          } else if (moment(user.createdDate).isSame(new Date(), "month")) {
+            thisMonthData.push(user);
           }
-          return interactions;
+          return user;
         });
       return {
-        overall: Number(
+        overall: overall.length,
+        thisWeekData: thisWeekData.length,
+        thisMonthData: thisMonthData.length,
+        ratings: 0,
+        earnings: Number(
           thisWeekData.reduce(
             (acc, curVal) => acc + curVal.rewards[0].patientReward,
             0
           )
-        ).toFixed(5),
-        thisWeekData: thisWeekData.length,
-        thisMonthData: thisMonthData.length
+        ).toFixed(5)
       };
     } else {
       return {
         overall: 0,
         thisWeekData: 0,
-        thisMonthData: 0
+        thisMonthData: 0,
+        ratings: 0,
+        earnings: 0
       };
     }
   };
 
   const getPractitionerData = async (data, address) => {
-    let lastWeek = moment()
-      .subtract(7, "days")
-      .startOf("day");
     let thisWeekData = [];
     let thisMonthData = [];
     if (data.length > 0) {
-      data
+      let overall = await data
         .filter(user => user.practitioner.publicAddress === address)
-        .map(interactions => {
-          if (moment(interactions.createdDate).isSame(new Date(), "week")) {
-            thisWeekData.push(interactions);
-          } else if (lastWeek.isSame(interactions.createdDate)) {
-            thisMonthData.push(interactions);
+        .map(user => {
+          if (moment(user.createdDate).isSame(new Date(), "week")) {
+            thisWeekData.push(user);
+          } else if (
+            moment(user.createdDate).isSame(new Date(), "month")
+          ) {
+            thisMonthData.push(user);
           }
+          return user;
         });
       return {
-        overall: Number(
+        overall: overall.length,
+        thisWeekData: thisWeekData.length,
+        thisMonthData: thisMonthData.length,
+        ratings: 0,
+        earnings: Number(
           thisWeekData.reduce(
             (acc, curVal) => acc + curVal.rewards[0].practitionerReward,
             0
           )
-        ).toFixed(5),
-        thisWeekData: thisWeekData.length,
-        thisMonthData: thisMonthData.length
+        ).toFixed(5)
       };
     } else {
       return {
         overall: 0,
         thisWeekData: 0,
-        thisMonthData: 0
+        thisMonthData: 0,
+        ratings: 0,
+        earnings: 0
       };
     }
   };
 
-  const getCHWData = async (data, address) => {
-    let lastWeek = moment()
-      .subtract(7, "days")
-      .startOf("day");
+  const getCHWData = async (data, address = null) => {
     let thisWeekData = [];
     let thisMonthData = [];
     if (data.length > 0) {
-      data
-        .filter(user => user.chw.publicAddress === address)
-        .map(interactions => {
+      if (address) {
+        data
+          .filter(interaction => interaction.chw.publicAddress === address)
+          .map(interaction => {
+            if (moment(interaction.createdDate).isSame(new Date(), "week")) {
+              thisWeekData.push(interaction);
+            } else if (
+              moment(interaction.createdDate).isSame(new Date(), "month")
+            ) {
+              thisMonthData.push(interaction);
+            }
+            return interaction;
+          });
+        return {
+          overall: Number(
+            thisWeekData.reduce(
+              (acc, curVal) => acc + curVal.rewards[0].chwReward,
+              0
+            )
+          ).toFixed(5),
+          thisWeekData: thisWeekData.length,
+          thisMonthData: thisMonthData.length
+        };
+      } else {
+        let overall = await data.map(interactions => {
           if (moment(interactions.createdDate).isSame(new Date(), "week")) {
             thisWeekData.push(interactions);
-          } else if (lastWeek.isSame(interactions.createdDate)) {
+          } else if (
+            moment(interactions.createdDate).isSame(new Date(), "month")
+          ) {
             thisMonthData.push(interactions);
           }
+          return interactions;
         });
-      return {
-        overall: Number(
-          thisWeekData.reduce(
-            (acc, curVal) => acc + curVal.rewards[0].chwReward,
-            0
-          )
-        ).toFixed(5),
-        thisWeekData: thisWeekData.length,
-        thisMonthData: thisMonthData.length
-      };
+        return {
+          overall: overall.length,
+          thisWeekData: thisWeekData.length,
+          thisMonthData: thisMonthData.length,
+          ratings: 0
+        };
+      }
     } else {
       return {
         overall: 0,
         thisWeekData: 0,
-        thisMonthData: 0
+        thisMonthData: 0,
+        ratings: 0
       };
     }
   };

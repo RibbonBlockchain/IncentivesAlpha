@@ -19,6 +19,7 @@ import { AddressLoader } from "../../common/components/Loader";
 import Onboard from "../Onboard";
 import Recorder from "../Recorder";
 import Profile from "../Profile";
+import UserModal from "../User";
 import styles from "./Home.module.scss";
 import { formatLink } from "../../common/utils";
 import { allowedRoutes, roleNames } from "../../common/constants/roles";
@@ -211,6 +212,7 @@ function Home() {
           </Switch>
           <WalletModal />
           <SendModal />
+          <UserModal />
         </main>
       </div>
     </>

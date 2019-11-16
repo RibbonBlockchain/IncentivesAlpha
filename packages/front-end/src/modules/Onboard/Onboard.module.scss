@@ -1,15 +1,15 @@
 @import "../../common/styles/variables";
 
 .modalWindow {
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: $background;
 }
 
 .modalFormWindow {
   width: 80%;
   height: 80vh;
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: $background;
 }
 
 .cnt {

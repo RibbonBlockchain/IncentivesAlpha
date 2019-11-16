@@ -396,7 +396,7 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__data}>
                     {`${
-                      dashboard.practitioner.overall
+                      dashboard.practitioner.earnings
                     } ${currency.toString().toUpperCase()}`}
                   </div>
                 </div>
@@ -412,7 +412,7 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__data}>
-                    {`${dashboard.practitioner.overall}%`}
+                    {`${dashboard.practitioner.ratings}%`}
                   </div>
                 </div>
               </div>
@@ -449,7 +449,7 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__data}>
                     {`${
-                      dashboard.patient.overall
+                      dashboard.patient.earnings
                     } ${currency.toString().toUpperCase()}`}
                   </div>
                 </div>
@@ -463,7 +463,7 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__data}>
-                    {`${dashboard.patient.overall}%`}
+                    {`${dashboard.patient.ratings}%`}
                   </div>
                 </div>
               </div>
@@ -493,7 +493,7 @@ function HandleViews({ type, transactions }) {
 }
 
 export default function Dashboard() {
-  const [{ address, loginType }, , getWalletDetails] = useWeb3();
+  const [{ address, loginType, user }, , getWalletDetails] = useWeb3();
   const [{ users, interactions, dashboard }, fetchData] = useData();
 
   useEffect(() => {
@@ -505,15 +505,20 @@ export default function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginType]);
 
-  console.log(dashboard.admin.interactions.thisMonthData);
-
   return (
     <>
-      {users && address && typeof loginType === "number" ? (
+      {user ? (
         <>
-          <Stats type={Number(loginType)} dashboard={dashboard} />
-          {loginType !== null && (
-            <HandleViews transactions={interactions} type={loginType} />
+          {users && address && typeof loginType === "number" ? (
+            <>
+              <Stats type={Number(loginType)} dashboard={dashboard} />
+              {loginType !== null && (
+                <HandleViews transactions={interactions} type={loginType} />
+              )}
+            </>
+          ) : (
+            <DesktopLoader />
+            // <>Failed to load</>
           )}
         </>
       ) : (

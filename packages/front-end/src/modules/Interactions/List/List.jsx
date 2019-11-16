@@ -232,6 +232,7 @@ export default function() {
                   rowHeight={40}
                   rowCount={interactions.length}
                   rowGetter={({ index }) => interactions[index]}
+                  rowClassName={styles.ReactVirtualized__Table__rowColumn}
                   headerClassName={[
                     styles.ReactVirtualized__Table__headerColumn
                   ].join(" ")}

@@ -205,6 +205,7 @@ export default function ListPractitioners() {
                   rowHeight={40}
                   rowCount={state.length}
                   rowGetter={({ index }) => state[index]}
+                  rowClassName={styles.ReactVirtualized__Table__rowColumn}
                   headerClassName={[
                     styles.ReactVirtualized__Table__headerColumn
                   ].join(" ")}

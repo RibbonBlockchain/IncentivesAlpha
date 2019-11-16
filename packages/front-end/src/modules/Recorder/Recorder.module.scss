@@ -1,18 +1,25 @@
 @import "../../common/styles/variables";
 
 .modalWindow {
-  background: #313541;
+  background: #ffffff;
+  color: $background;
 }
 
 .modalFormWindow {
-  background: #313541;
-  width: 80%;
+  background: #ffffff;
+  color: $background;
+  width: 100%;
   small {
     color: $red;
   }
 }
 
 fieldset {
+  border: none;
+  margin-top: calculateRem(10);
+  padding-top: calculate(16);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 input,
@@ -38,7 +45,6 @@ textarea {
 
 .form_heading {
   text-align: center;
-  color: #ffffff;
 }
 
 a {
@@ -184,6 +190,6 @@ img {
 
 .col {
   display: grid;
-  grid-template-columns: 4fr 2fr;
+  grid-template-columns: 3fr 2fr;
   grid-gap: calculateRem(10);
 }

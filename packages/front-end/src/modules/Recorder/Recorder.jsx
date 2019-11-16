@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import useForm from "react-hook-form";
 import Select from "react-select";
@@ -127,14 +128,12 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     loadDetails
   ] = useApp();
 
-  console.log(ratingList);
-
   const [
     ,
     checkTransactionStatus,
     closeTransactionStatus
   ] = useTransactionStatus();
-  const [{}, toggle] = useAlert();
+  const [, toggle] = useAlert();
   const [record, setRecord] = useState({
     patient: {},
     practitioner: {},
