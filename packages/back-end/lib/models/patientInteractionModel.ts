@@ -28,6 +28,9 @@ export const PatientInteractionSchema = new Schema({
       ref: "PrescriptionList"
     }
   ],
+  prescriptionNo: {
+    type: String
+  },
   rewards: [
     {
       patientReward: {
