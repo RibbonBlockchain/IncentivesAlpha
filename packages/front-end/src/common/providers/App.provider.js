@@ -3,6 +3,7 @@ import React, {
   useContext,
   useReducer,
   useMemo,
+  useEffect,
   useCallback
 } from "react";
 import PrescriptionAPI from "../services/api/prescription.api";
@@ -15,6 +16,7 @@ const useAppContext = () => useContext(AppContext);
 
 const initialState = () => ({
   currency: "xdai",
+  exchangeRate: 1,
   activityList: [],
   prescriptionList: [],
   ratingList: [{ ratingTypes: [] }]
@@ -64,7 +66,13 @@ export const useApp = () => {
   const prescriptionAPI = new PrescriptionAPI();
   const activityAPI = new ActivityAPI();
   const ratingAPI = new RatingAPI();
-  const { currency, activityList, prescriptionList, ratingList } = state;
+  const {
+    currency,
+    activityList,
+    prescriptionList,
+    ratingList,
+    exchangeRate
+  } = state;
 
   const loadDetails = async () => {
     let activityList = await activityAPI.listActivities();
@@ -72,14 +80,33 @@ export const useApp = () => {
     let ratings = await ratingAPI.listRatings();
     await update({
       activityList,
-      currency: state.currency,
+      currency: currency,
       prescriptionList,
-      ratingList: ratings.length > 0 ? ratings : state.ratingList
+      ratingList: ratings.length > 0 ? ratings : ratingList
     });
   };
 
+  useEffect(() => {
+    const fetchRate = () => {
+      fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=dai&vs_currencies=usd"
+      )
+        .then(response => response.json())
+        .then(response =>
+          update({
+            exchangeRate: response.dai.usd,
+            activityList: activityList,
+            prescriptionList: prescriptionList,
+            ratingList: ratingList,
+            currency: currency
+          })
+        );
+    };
+    fetchRate();
+  }, []);
+
   return [
-    { currency, activityList, prescriptionList, ratingList },
+    { currency, activityList, prescriptionList, ratingList, exchangeRate },
     loadDetails
   ];
 };

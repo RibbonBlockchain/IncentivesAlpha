@@ -131,6 +131,65 @@ export const generateReport = async (date, address, options) => {
   }
 };
 
+export const generatePrescriptionReport = async (date, address) => {
+  let registryContract = new RegistryContract();
+  let interactionAPI = new InteractionAPI();
+  let fields = [
+    {
+      label: "Health Worker",
+      value: row => `${row.chw.firstName} ${row.chw.lastName}`,
+      default: "NULL"
+    },
+    {
+      label: "Patient",
+      value: row => `${row.patient.firstName} ${row.patient.lastName}`,
+      default: "NULL"
+    },
+    {
+      label: "Practitioner",
+      value: row =>
+        `${row.practitioner.firstName} ${row.practitioner.lastName}`,
+      default: "NULL"
+    },
+    {
+      label: "Prescriptions",
+      value: row =>
+        `${row.serviceRatings.map(rating => rating.medicines).join(", ")}`,
+      default: "NULL"
+    },
+    {
+      label: "Date Recorded",
+      value: row => `${moment(row.createdDate).format("DD/MM/YYYY")}`,
+      default: "NULL"
+    }
+  ];
+  let parser = new Parser({ fields });
+  let role = await registryContract.getUserRole(address);
+  try {
+    let data = await interactionAPI.generateReport(
+      address,
+      {
+        to: moment(date.to).format("YYYY-MM-DD"),
+        from: moment(date.from).format("YYYY-MM-DD")
+      },
+      { role }
+    );
+    if (data.length > 0) {
+      let csv = parser.parse(data);
+      exportCSVFile(csv, `${new Date().getTime()}`);
+      return data;
+    } else {
+      return {
+        error: "Could not generate report for specified dates"
+      };
+    }
+  } catch (error) {
+    return {
+      error
+    };
+  }
+};
+
 export const makeDonation = async ({ value, message }) => {
   let vaultContract = new VaultContract();
 

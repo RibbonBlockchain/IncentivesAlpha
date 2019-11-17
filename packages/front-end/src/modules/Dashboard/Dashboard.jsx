@@ -142,7 +142,7 @@ function DashboardTable({ data, type }) {
                     dataKey="activities"
                     width={width - 200}
                   />
-                  {type < roleNames.HEALTH_WORKER && (
+                  {type !== roleNames.HEALTH_WORKER && (
                     <Column
                       label="Registered By"
                       cellRenderer={renderHealthWorker}
@@ -191,7 +191,7 @@ function DashboardTable({ data, type }) {
 }
 
 function Stats({ type, dashboard }) {
-  const [{ currency }] = useApp();
+  const [{ currency, exchangeRate }] = useApp();
   return (
     <div className={styles.dashboard}>
       {roleNames.SUPER_ADMIN === type && (
@@ -357,13 +357,29 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__data}>
+                    {`${
+                      dashboard.chw.chw.earnings
+                    } ${currency.toString().toUpperCase()}`}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.total}>{`${dashboard.chw.chw.earnings *
+                exchangeRate} USD`}</div>
+            </div>
+            <div className={styles.title}>Total earned</div>
+          </Card>
+          {/* <Card classNames={[styles.card__light_pink, styles.card].join(" ")}>
+            <div className={styles.div}>
+              <div className={styles.count}>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__data}>
                     {`${dashboard.chw.chw.ratings}%`}
                   </div>
                 </div>
               </div>
             </div>
             <div className={styles.title}>Rating Score</div>
-          </Card>
+          </Card> */}
         </div>
       )}
       {roleNames.PRACTITIONER === type && (
@@ -402,7 +418,7 @@ function Stats({ type, dashboard }) {
                 </div>
               </div>
               <div className={styles.total}>
-                {dashboard.practitioner.overall}
+                {`${dashboard.practitioner.earnings * exchangeRate} USD`}
               </div>
             </div>
             <div className={styles.title}>Total earned</div>
@@ -454,11 +470,12 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>{dashboard.patient.overall}</div>
+              <div className={styles.total}>{`${dashboard.patient.earnings *
+                exchangeRate} USD`}</div>
             </div>
             <div className={styles.title}>Total earned</div>
           </Card>
-          <Card classNames={[styles.card__light_pink, styles.card].join(" ")}>
+          {/* <Card classNames={[styles.card__light_pink, styles.card].join(" ")}>
             <div className={styles.div}>
               <div className={styles.count}>
                 <div className={styles.count_item}>
@@ -469,7 +486,7 @@ function Stats({ type, dashboard }) {
               </div>
             </div>
             <div className={styles.title}>Rating Score</div>
-          </Card>
+          </Card> */}
         </div>
       )}
     </div>

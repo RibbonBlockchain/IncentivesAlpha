@@ -9,6 +9,8 @@ import SendModal from "../Send";
 import Dashboard from "../Dashboard/Dashboard";
 import CreateInteraction from "../Interactions/Create";
 import ListInteractions from "../Interactions/List";
+import CreatePrescriptions from "../Prescriptions/Create";
+import ListPrescriptions from "../Prescriptions/List";
 import CreatePractitioner from "../Practitioners/Create";
 import ListPractitioners from "../Practitioners/List";
 import CreatePatient from "../Patients/Create";
@@ -169,6 +171,18 @@ function Home() {
               appProps={loginType}
               path="/app/interactions/new"
               component={CreateInteraction}
+            />
+            <IsAllowedRoute
+              exact
+              appProps={loginType}
+              path="/app/prescriptions"
+              component={ListPrescriptions}
+            />
+            <IsAllowedRoute
+              exact
+              appProps={loginType}
+              path="/app/prescriptions/new"
+              component={CreatePrescriptions}
             />
             <IsAllowedRoute
               appProps={loginType}

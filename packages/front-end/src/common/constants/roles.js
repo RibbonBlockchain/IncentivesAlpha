@@ -20,7 +20,8 @@ export const allowedRoutes = [
     "/app/patients",
     "/app/interactions",
     "/app/health-workers",
-    "/app/health-workers/new"
+    "/app/health-workers/new",
+    "/app/prescriptions"
   ],
   ["/app/practitioners", "/app/patients", "/app/interactions"],
   [],
