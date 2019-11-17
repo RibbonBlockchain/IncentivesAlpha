@@ -48,7 +48,6 @@ function Login() {
         });
       }
     } else {
-      console.log(authWithAPI);
       if (
         authWithAPI.token !== null ||
         typeof authWithAPI.token !== "undefined"

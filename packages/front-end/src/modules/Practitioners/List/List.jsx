@@ -13,7 +13,7 @@ import Modal from "../../../common/components/Modal";
 import { generateReport } from "../../Dashboard/dashboard.utils";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
-import { useAlert } from "../../../common/providers/Modal.provider";
+import { useAlert, useModal } from "../../../common/providers/Modal.provider";
 import { useWeb3 } from "../../../common/providers/Web3.provider";
 
 function DownloadCSV({ isOpen, onDismiss }) {
@@ -117,11 +117,12 @@ function DownloadCSV({ isOpen, onDismiss }) {
 }
 
 export default function ListPractitioners() {
-  const [{ users }] = useData();
+  const [{ users, interactions }] = useData();
   const [{ user, loginType }] = useWeb3();
   const [state, setState] = useState([]);
   const [search, setSearch] = useState();
   const [visible, setVisible] = useState(false);
+  const [, toggleModal] = useModal();
   const fuse = new Fuse(state, {
     maxPatternLength: 32,
     minMatchCharLength: 3,
@@ -176,6 +177,20 @@ export default function ListPractitioners() {
     }
   }
 
+  function toggleDetailsModal(data) {
+    let activities = interactions.filter(
+      interaction => interaction.practitioner._id === data._id
+    );
+    toggleModal({
+      isVisible: true,
+      data: {
+        data,
+        activities
+      },
+      modal: "details"
+    });
+  }
+
   return (
     <>
       {state ? (
@@ -205,6 +220,7 @@ export default function ListPractitioners() {
                   rowHeight={40}
                   rowCount={state.length}
                   rowGetter={({ index }) => state[index]}
+                  onRowClick={({ index }) => toggleDetailsModal(state[index])}
                   rowClassName={styles.ReactVirtualized__Table__rowColumn}
                   headerClassName={[
                     styles.ReactVirtualized__Table__headerColumn

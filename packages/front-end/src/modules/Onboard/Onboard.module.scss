@@ -79,11 +79,11 @@ img {
 }
 
 .form_input {
-  color: $text-color;
+  color: $background;
   input {
     background: transparent;
     border: none;
-    color: $text-color;
+    color: $background;
     background-color: none !important;
   }
 }
@@ -92,7 +92,7 @@ img {
   background-color: transparent;
   font-family: $font;
   border: 1px solid $background;
-  color: $text-color;
+  color: $background;
   outline: none;
   padding: calculateRem(10);
 }

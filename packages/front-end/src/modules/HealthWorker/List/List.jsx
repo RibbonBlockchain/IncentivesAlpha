@@ -115,7 +115,7 @@ function DownloadCSV({ isOpen, onDismiss }) {
 }
 
 export default function ListPractitioners() {
-  const [{ users }] = useData();
+  const [{ users, interactions }] = useData();
   const [state, setState] = useState([]);
   const [search, setSearch] = useState();
   const [, toggleModal] = useModal();
@@ -169,9 +169,15 @@ export default function ListPractitioners() {
   }
 
   function toggleDetailsModal(data) {
+    let activities = interactions.filter(
+      interaction => interaction.chw._id === data._id
+    );
     toggleModal({
       isVisible: true,
-      data,
+      data: {
+        data,
+        activities
+      },
       modal: "details"
     });
   }
