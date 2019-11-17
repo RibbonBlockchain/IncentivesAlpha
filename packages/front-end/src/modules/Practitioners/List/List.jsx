@@ -135,7 +135,10 @@ export default function ListPractitioners() {
 
   async function fetchPractionersOnly() {
     if (loginType === roleNames.SUPER_ADMIN) {
-      setState(users);
+      let practitioners = users.filter(
+        practitioner => practitioner.role === roleNames.PRACTITIONER
+      );
+      setState(practitioners);
     } else {
       let practitioners = users.filter(
         practitioner =>
