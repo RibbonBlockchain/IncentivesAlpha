@@ -87,7 +87,7 @@ export const useApp = () => {
   };
 
   useEffect(() => {
-    const fetchRate = () => {
+    const interval = setInterval(() => {
       fetch(
         "https://api.coingecko.com/api/v3/simple/price?ids=dai&vs_currencies=usd"
       )
@@ -101,8 +101,8 @@ export const useApp = () => {
             currency: currency
           })
         );
-    };
-    fetchRate();
+    }, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   return [
