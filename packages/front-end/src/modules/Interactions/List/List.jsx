@@ -12,7 +12,7 @@ import { generateReport } from "../../Dashboard/dashboard.utils";
 import { roleNames } from "../../../common/constants/roles";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
-import { useAlert } from "../../../common/providers/Modal.provider";
+import { useAlert, useModal } from "../../../common/providers/Modal.provider";
 import { useWeb3 } from "../../../common/providers/Web3.provider";
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
@@ -120,6 +120,7 @@ export default function() {
   const [state, setState] = useState([]);
   const [search, setSearch] = useState();
   const [visible, setVisible] = useState(false);
+  const [, toggleModal] = useModal();
   const fuse = new Fuse(state, {
     maxPatternLength: 32,
     minMatchCharLength: 3,
@@ -184,11 +185,17 @@ export default function() {
   }
 
   function renderTotalTokenSent({ rowData }) {
-    let totalTokenSent =
-      rowData.rewards[0].chwReward +
-      rowData.rewards[0].patientReward +
-      rowData.rewards[0].practitionerReward;
-    return <div>{Number(totalTokenSent).toFixed(4)}</div>;
+    return (
+      <div>
+        {rowData.transactionLog.txn_amount
+          ? Number(rowData.transactionLog.txn_amount).toFixed(4)
+          : "Not Available"}
+      </div>
+    );
+  }
+
+  function renderIndex({ rowIndex }) {
+    return <div>{rowIndex + 1}</div>;
   }
 
   async function handleSearch(e) {
@@ -198,6 +205,20 @@ export default function() {
     } else {
       return interactions;
     }
+  }
+
+  function toggleDetailsModal(data) {
+    let activities = interactions.filter(
+      interaction => interaction.practitioner._id === data._id
+    );
+    toggleModal({
+      isVisible: true,
+      data: {
+        data,
+        activities
+      },
+      modal: "interaction_details"
+    });
   }
 
   return (
@@ -230,6 +251,7 @@ export default function() {
                   headerHeight={40}
                   noRowsRenderer={_noRowsRenderer}
                   rowHeight={40}
+                  onRowClick={({ index }) => toggleDetailsModal(state[index])}
                   rowCount={interactions.length}
                   rowGetter={({ index }) => interactions[index]}
                   rowClassName={styles.ReactVirtualized__Table__rowColumn}
@@ -237,6 +259,12 @@ export default function() {
                     styles.ReactVirtualized__Table__headerColumn
                   ].join(" ")}
                 >
+                  <Column
+                    label="S/N"
+                    cellRenderer={renderIndex}
+                    dataKey="practitionerAddress"
+                    width={100}
+                  />
                   <Column
                     label="Practitioner"
                     cellRenderer={renderPractitioner}

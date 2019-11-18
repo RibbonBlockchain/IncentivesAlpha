@@ -9,7 +9,7 @@
 }
 .div {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2fr;
   flex: 1;
   .count {
     display: flex;
@@ -17,12 +17,13 @@
     font-size: calculateRem(16);
     font-weight: 600;
     &_item {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
       margin-bottom: calculateRem(10);
       &__heading {
       }
       &__data {
+        justify-self: flex-end;
       }
     }
   }

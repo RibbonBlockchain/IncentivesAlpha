@@ -247,11 +247,20 @@ export const useData = () => {
           }
           return interaction;
         });
+
+      let rate = overall.map(interaction =>
+        typeof interaction.serviceRatings[0] !== "undefined"
+          ? Object.values(interaction.serviceRatings[0]).reduce(
+              (acc, curVal) => acc + curVal,
+              0
+            )
+          : 0
+      );
       return {
         overall: overall.length,
         thisWeekData: thisWeekData.length,
         thisMonthData: thisMonthData.length,
-        ratings: 0,
+        ratings: rate.reduce((acc, curVal) => acc + curVal, 0) / rate.length,
         earnings: Number(
           overall.reduce((acc, curVal) => acc + curVal.rewards[0].chwReward, 0)
         ).toFixed(5)

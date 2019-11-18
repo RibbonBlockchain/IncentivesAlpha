@@ -9,6 +9,7 @@ import SendModal from "../Send";
 import Dashboard from "../Dashboard/Dashboard";
 import CreateInteraction from "../Interactions/Create";
 import ListInteractions from "../Interactions/List";
+import ViewInteractions from "../Interactions/View";
 import CreatePrescriptions from "../Prescriptions/Create";
 import ListPrescriptions from "../Prescriptions/List";
 import CreatePractitioner from "../Practitioners/Create";
@@ -227,6 +228,7 @@ function Home() {
           <WalletModal />
           <SendModal />
           <UserModal />
+          <ViewInteractions />
         </main>
       </div>
     </>
