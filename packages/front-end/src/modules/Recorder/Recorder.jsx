@@ -186,6 +186,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
       });
     } else {
       await checkTransactionStatus(interaction);
+      data.txHash = interaction;
       let record = await recordInteractionOnDB(data);
       closeTransactionStatus();
       if (record.error) {
