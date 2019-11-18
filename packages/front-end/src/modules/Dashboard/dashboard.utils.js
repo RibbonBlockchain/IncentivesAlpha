@@ -154,7 +154,9 @@ export const generatePrescriptionReport = async (date, address) => {
     {
       label: "Prescriptions",
       value: row =>
-        `${row.serviceRatings.map(rating => rating.medicines).join(", ")}`,
+        `${row.prescriptions
+          .map(prescription => prescription.prescriptionTitle)
+          .join(", ")}`,
       default: "NULL"
     },
     {

@@ -409,7 +409,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                       <textarea
                         name="notes"
                         cols="30"
-                        rows="10"
+                        rows="5"
                         placeholder="Notes (optional)"
                         ref={register}
                       ></textarea>

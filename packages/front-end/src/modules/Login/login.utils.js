@@ -58,7 +58,6 @@ export async function authenticateUser(provider) {
       };
     }
   } catch (error) {
-    console.log(error);
     return {
       error
     };
