@@ -176,23 +176,12 @@ export const useData = () => {
   };
 
   const getAdminStats = async (users, type) => {
-    let thisWeekData = [];
-    let thisMonthData = [];
     if (users.length > 0) {
-      let overall = await users
-        .filter(user => user.role === type)
-        .map(user => {
-          if (moment(user.createdDate).isSame(new Date(), "week")) {
-            thisWeekData.push(user);
-          } else if (moment(user.createdDate).isSame(new Date(), "month")) {
-            thisMonthData.push(user);
-          }
-          return user;
-        });
+      let overall = await users.filter(user => user.role === type);
       return {
         overall: overall.length,
-        thisWeekData: thisWeekData.length,
-        thisMonthData: thisMonthData.length
+        thisWeekData: getByDate(overall, "week"),
+        thisMonthData: getByDate(overall, "month")
       };
     } else {
       return {
@@ -204,23 +193,14 @@ export const useData = () => {
   };
 
   const getCHWStats = async (users, type, user) => {
-    let thisWeekData = [];
-    let thisMonthData = [];
     if (users.length > 0) {
-      let overall = await users
-        .filter(user => user.role === type && user.onBoardedBy === user._id)
-        .map(user => {
-          if (moment(user.createdDate).isSame(new Date(), "week")) {
-            thisWeekData.push(user);
-          } else if (moment(user.createdDate).isSame(new Date(), "month")) {
-            thisMonthData.push(user);
-          }
-          return user;
-        });
+      let overall = await users.filter(
+        user => user.role === type && user.onBoardedBy === user._id
+      );
       return {
         overall: overall.length,
-        thisWeekData: thisWeekData.length,
-        thisMonthData: thisMonthData.length
+        thisWeekData: getByDate(overall, "week"),
+        thisMonthData: getByDate(overall, "month")
       };
     } else {
       return {
@@ -232,22 +212,10 @@ export const useData = () => {
   };
 
   const getCHWDataResult = async (data, address) => {
-    let thisWeekData = [];
-    let thisMonthData = [];
     if (data.length > 0) {
-      let overall = await data
-        .filter(interaction => interaction.chw.publicAddress === address)
-        .map(interaction => {
-          if (moment(interaction.createdDate).isSame(new Date(), "week")) {
-            thisWeekData.push(interaction);
-          } else if (
-            moment(interaction.createdDate).isSame(new Date(), "month")
-          ) {
-            thisMonthData.push(interaction);
-          }
-          return interaction;
-        });
-
+      let overall = await data.filter(
+        interaction => interaction.chw.publicAddress === address
+      );
       let rate = overall.map(interaction =>
         typeof interaction.serviceRatings[0] !== "undefined"
           ? Object.values(interaction.serviceRatings[0]).reduce(
@@ -258,8 +226,8 @@ export const useData = () => {
       );
       return {
         overall: overall.length,
-        thisWeekData: thisWeekData.length,
-        thisMonthData: thisMonthData.length,
+        thisWeekData: getByDate(overall, "week"),
+        thisMonthData: getByDate(overall, "month"),
         ratings: rate.reduce((acc, curVal) => acc + curVal, 0) / rate.length,
         earnings: Number(
           overall.reduce((acc, curVal) => acc + curVal.rewards[0].chwReward, 0)
@@ -277,25 +245,14 @@ export const useData = () => {
   };
 
   const getPatientData = async (data, address) => {
-    let thisWeekData = [];
-    let thisMonthData = [];
     if (data.length > 0) {
-      let overall = await data
-        .filter(interaction => interaction.patient.publicAddress === address)
-        .map(interaction => {
-          if (moment(interaction.createdDate).isSame(new Date(), "week")) {
-            thisWeekData.push(interaction);
-          } else if (
-            moment(interaction.createdDate).isSame(new Date(), "month")
-          ) {
-            thisMonthData.push(interaction);
-          }
-          return interaction;
-        });
+      let overall = await data.filter(
+        interaction => interaction.patient.publicAddress === address
+      );
       return {
         overall: overall.length,
-        thisWeekData: thisWeekData.length,
-        thisMonthData: thisMonthData.length,
+        thisWeekData: getByDate(overall, "week"),
+        thisMonthData: getByDate(overall, "month"),
         ratings: 0,
         earnings: Number(
           overall.reduce(
@@ -316,27 +273,14 @@ export const useData = () => {
   };
 
   const getPractitionerData = async (data, address) => {
-    let thisWeekData = [];
-    let thisMonthData = [];
     if (data.length > 0) {
-      let overall = await data
-        .filter(
-          interaction => interaction.practitioner.publicAddress === address
-        )
-        .map(interaction => {
-          if (moment(interaction.createdDate).isSame(new Date(), "week")) {
-            thisWeekData.push(interaction);
-          } else if (
-            moment(interaction.createdDate).isSame(new Date(), "month")
-          ) {
-            thisMonthData.push(interaction);
-          }
-          return interaction;
-        });
+      let overall = await data.filter(
+        interaction => interaction.practitioner.publicAddress === address
+      );
       return {
         overall: overall.length,
-        thisWeekData: thisWeekData.length,
-        thisMonthData: thisMonthData.length,
+        thisWeekData: getByDate(overall, "week"),
+        thisMonthData: getByDate(overall, "month"),
         ratings: 0,
         earnings: Number(
           overall.reduce(
@@ -356,48 +300,31 @@ export const useData = () => {
     }
   };
 
+  const getByDate = (data, type) => {
+    return data.map(obj => moment(obj.createdDate).isSame(new Date(), type));
+  };
+
   const getCHWData = async (data, address = null) => {
-    let thisWeekData = [];
-    let thisMonthData = [];
     if (data.length > 0) {
       if (address) {
-        let overall = data
-          .filter(interaction => interaction.chw.publicAddress === address)
-          .map(interaction => {
-            if (moment(interaction.createdDate).isSame(new Date(), "week")) {
-              thisWeekData.push(interaction);
-            } else if (
-              moment(interaction.createdDate).isSame(new Date(), "month")
-            ) {
-              thisMonthData.push(interaction);
-            }
-            return interaction;
-          });
+        let myInteractions = data.filter(
+          interaction => interaction.chw.publicAddress === address
+        );
         return {
           overall: Number(
-            overall.reduce(
+            myInteractions.reduce(
               (acc, curVal) => acc + curVal.rewards[0].chwReward,
               0
             )
           ).toFixed(5),
-          thisWeekData: thisWeekData.length,
-          thisMonthData: thisMonthData.length
+          thisWeekData: getByDate(myInteractions, "week"),
+          thisMonthData: getByDate(myInteractions, "month")
         };
       } else {
-        let overall = await data.map(interactions => {
-          if (moment(interactions.createdDate).isSame(new Date(), "week")) {
-            thisWeekData.push(interactions);
-          } else if (
-            moment(interactions.createdDate).isSame(new Date(), "month")
-          ) {
-            thisMonthData.push(interactions);
-          }
-          return interactions;
-        });
         return {
-          overall: overall.length,
-          thisWeekData: thisWeekData.length,
-          thisMonthData: thisMonthData.length,
+          overall: interactions.length,
+          thisWeekData: getByDate(interactions, "week"),
+          thisMonthData: getByDate(interactions, "month"),
           ratings: 0
         };
       }

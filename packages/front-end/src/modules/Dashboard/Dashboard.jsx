@@ -220,13 +220,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.admin.patients.thisMonthData}
+                    {dashboard.admin.patients.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.admin.patients.thisWeekData}
+                    {dashboard.admin.patients.thisWeekData.length}
                   </div>
                 </div>
               </div>
@@ -242,13 +242,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.admin.practitioners.thisMonthData}
+                    {dashboard.admin.practitioners.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.admin.practitioners.thisWeekData}
+                    {dashboard.admin.practitioners.thisWeekData.length}
                   </div>
                 </div>
               </div>
@@ -264,13 +264,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.admin.chw.thisMonthData}
+                    {dashboard.admin.chw.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.admin.chw.thisWeekData}
+                    {dashboard.admin.chw.thisWeekData.length}
                   </div>
                 </div>
               </div>
@@ -284,13 +284,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.admin.interactions.thisMonthData}
+                    {dashboard.admin.interactions.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.admin.interactions.thisWeekData}
+                    {dashboard.admin.interactions.thisWeekData.length}
                   </div>
                 </div>
               </div>
@@ -310,13 +310,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.patients.thisMonthData}
+                    {dashboard.chw.patients.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.patients.thisWeekData}
+                    {dashboard.chw.patients.thisWeekData.length}
                   </div>
                 </div>
               </div>
@@ -332,13 +332,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.practitioners.thisMonthData}
+                    {dashboard.chw.practitioners.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.practitioners.thisWeekData}
+                    {dashboard.chw.practitioners.thisWeekData.length}
                   </div>
                 </div>
               </div>
@@ -354,13 +354,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.interactions.thisMonthData}
+                    {dashboard.chw.interactions.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.chw.interactions.thisWeekData}
+                    {dashboard.chw.interactions.thisWeekData.length}
                   </div>
                 </div>
               </div>
@@ -374,15 +374,15 @@ function Stats({ type, dashboard }) {
             <div className={styles.div}>
               <div className={styles.count}>
                 <div className={styles.count_item}>
-                  <div className={styles.count_item__data}>
+                  <div className={styles.count_item__heading}>
                     {`${
                       dashboard.chw.chw.earnings
                     } ${currency.toString().toUpperCase()}`}
                   </div>
+                  <div className={styles.total}>{`${dashboard.chw.chw.earnings *
+                    exchangeRate} USD`}</div>
                 </div>
               </div>
-              <div className={styles.total}>{`${dashboard.chw.chw.earnings *
-                exchangeRate} USD`}</div>
             </div>
             <div className={styles.title}>Total earned</div>
           </Card>
@@ -408,13 +408,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.practitioner.thisMonthData}
+                    {dashboard.practitioner.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.practitioner.thisWeekData}
+                    {dashboard.practitioner.thisWeekData.length}
                   </div>
                 </div>
               </div>
@@ -463,13 +463,13 @@ function Stats({ type, dashboard }) {
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This month</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.patient.thisMonthData}
+                    {dashboard.patient.thisMonthData.length}
                   </div>
                 </div>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>This week</div>
                   <div className={styles.count_item__data}>
-                    {dashboard.patient.thisWeekData}
+                    {dashboard.patient.thisWeekData.length}
                   </div>
                 </div>
               </div>
