@@ -48,23 +48,10 @@ export const PatientInteractionSchema = new Schema({
     }
   ],
   serviceRatings: [],
-  transactionLogs: [
-    {
-      paying_address: {
-        type: String,
-        required: "A transaction address is required"
-      },
-      recepient_address: {
-        type: String,
-        required: "A transaction address is required"
-      },
+  transactionLog: {
       txn_hash: {
         type: String,
         required: "A transaction address is required"
-      },
-      txn_date: {
-        type: Date,
-        required: "Enter a transaction valid Date"
       },
       txn_amount: {
         type: Number,
@@ -74,8 +61,7 @@ export const PatientInteractionSchema = new Schema({
         type: Number,
         default: 0
       }
-    }
-  ],
+  },
   createdDate: {
     type: Date,
     default: Date.now
