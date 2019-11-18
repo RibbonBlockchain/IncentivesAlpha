@@ -157,6 +157,10 @@ export default function() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }
 
+  function renderPrescriptionNumber({ rowData }) {
+    return rowData.prescriptionNo ? rowData.prescriptionNo : "Not Available";
+  }
+
   function renderPatient({ rowData }) {
     return (
       <div>
@@ -275,6 +279,12 @@ export default function() {
                     label="Prescription"
                     cellRenderer={renderPrescriptions}
                     dataKey="prescriptions"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Prescription Number"
+                    cellRenderer={renderPrescriptionNumber}
+                    dataKey="prescriptionNo"
                     width={width - 200}
                   />
                   <Column

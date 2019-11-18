@@ -387,13 +387,13 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                     )}
                     <div className={styles.layout__item}>
                       <div className={[styles.input].join(" ")}>
-                        <label htmlFor="prescriptionNumber">
+                        <label htmlFor="prescriptionNo">
                           Prescription Number
                         </label>
                         <input
                           className={[styles.form_input].join(" ")}
                           placeholder="Prescription Number"
-                          name="prescriptionNumber"
+                          name="prescriptionNo"
                           type="text"
                           ref={register({
                             required: "Prescription Number is required",
