@@ -3,22 +3,28 @@ import InteractionAPI from "../../common/services/api/interaction.api";
 
 export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
-  let { patient, practitioner, user, amount, serviceRatings } = data;
+  let {
+    patient,
+    practitioner,
+    user,
+    amount,
+    serviceRatings
+  } = data;
 
-  let practitionerAmount = parseInt(
-    (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount
-  ).toString();
+  let practitionerAmount = parseFloat((amount * 0.1 * sumRatings(serviceRatings) / 30 + 0.05 * amount).toFixed(10));
 
-  let chwAmount = parseInt(amount * 0.15).toString();
+  let chwAmount = parseFloat((amount * 0.15).toFixed(10));
 
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
-    patientAmount: parseInt(amount).toString(),
-    practitionerAmount,
-    chwAmount
+    patientAmount: amount,
+    practitionerAmount: practitionerAmount,
+    chwAmount: chwAmount
   };
+
+  console.log("payoutInformation:", payoutInformation)
 
   try {
     if (amount > 0) {
@@ -44,9 +50,9 @@ export const recordInteraction = async data => {
 };
 
 const sumRatings = serviceRatings => {
-  return typeof serviceRatings !== "undefined"
-    ? Object.entries(serviceRatings).reduce((acc, curVal) => acc + curVal[1], 0)
-    : 0;
+  return typeof serviceRatings !== "undefined" ?
+    Object.entries(serviceRatings).reduce((acc, curVal) => acc + curVal[1], 0) :
+    0;
 };
 
 export const recordInteractionOnDB = async ({
@@ -63,21 +69,15 @@ export const recordInteractionOnDB = async ({
     patient: patient.value._id,
     practitioner: practitioner.value._id,
     chw: user._id,
-    activities:
-      activities.length > 0
-        ? activities.map(activity => activity.data._id)
-        : activities,
-    prescriptions:
-      prescriptions.length > 0
-        ? prescriptions.map(prescription => prescription.value)
-        : prescriptions,
-    rewards: [
-      {
-        patientReward: amount,
-        practitionerReward: amount,
-        chwReward: amount
-      }
-    ],
+    activities: activities.length > 0 ?
+      activities.map(activity => activity.data._id) : activities,
+    prescriptions: prescriptions.length > 0 ?
+      prescriptions.map(prescription => prescription.value) : prescriptions,
+    rewards: [{
+      patientReward: amount,
+      practitionerReward: amount,
+      chwReward: amount
+    }],
     serviceRatings
   };
   let interaction = await interactionAPI.createInteraction(details);
