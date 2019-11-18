@@ -74,7 +74,6 @@ export const useWeb3 = () => {
 
   const login = async ({ token, address, loginType }) => {
 	update({ token, address, loginType });
-	console.log(token)
     setItem("token", token);
     setItem("address", address);
 
