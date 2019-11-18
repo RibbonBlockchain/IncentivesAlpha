@@ -14,9 +14,7 @@ import { useData } from "../../../common/providers/API.provider";
 import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
 import Modal from "../../../common/components/Modal";
-import {
-  generatePrescriptionReport
-} from "../../Dashboard/dashboard.utils";
+import { generatePrescriptionReport } from "../../Dashboard/dashboard.utils";
 import { roleNames } from "../../../common/constants/roles";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
@@ -215,14 +213,6 @@ export default function() {
     return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
-  function renderTotalTokenSent({ rowData }) {
-    let totalTokenSent =
-      rowData.rewards[0].chwReward +
-      rowData.rewards[0].patientReward +
-      rowData.rewards[0].practitionerReward;
-    return <div>{Number(totalTokenSent).toFixed(4)}</div>;
-  }
-
   async function handleSearch(e) {
     let data = await fuse.search(e.target.value);
     if (data.length > 0) {
@@ -261,7 +251,7 @@ export default function() {
                   height={height}
                   headerHeight={40}
                   noRowsRenderer={_noRowsRenderer}
-                  rowHeight={40}
+                  rowHeight={cache.rowHeight}
                   rowCount={interactions.length}
                   rowGetter={({ index }) => interactions[index]}
                   rowClassName={styles.ReactVirtualized__Table__rowColumn}

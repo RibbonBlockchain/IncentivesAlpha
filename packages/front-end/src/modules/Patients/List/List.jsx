@@ -237,7 +237,7 @@ export default function ListPractitioners() {
                   ].join(" ")}
                 >
                   <Column
-                    label="Practitioner Number"
+                    label="Patient Number"
                     cellRenderer={renderIDNumber}
                     dataKey="idNumber"
                     width={width - 200}

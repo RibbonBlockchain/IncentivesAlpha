@@ -3,6 +3,7 @@ import * as moment from "moment";
 import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
+import { useExchange } from "../../common/providers/Rates.provider";
 import {
   Table,
   AutoSizer,
@@ -97,6 +98,16 @@ function DashboardTable({ data, type }) {
     );
   }
 
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("HH:mm:ss")
+          : "Not Available"}
+      </div>
+    );
+  }
+
   function renderRewards({ rowData }) {
     let totalTokenSent = "0.00";
     switch (type) {
@@ -180,6 +191,12 @@ function DashboardTable({ data, type }) {
                     width={width - 200}
                     cellRenderer={renderDate}
                   />
+                  <Column
+                    label="Time"
+                    dataKey="createdDate"
+                    width={width - 200}
+                    cellRenderer={renderTime}
+                  />
                 </Table>
               );
             }}
@@ -191,7 +208,8 @@ function DashboardTable({ data, type }) {
 }
 
 function Stats({ type, dashboard }) {
-  const [{ currency, exchangeRate }] = useApp();
+  const [{ currency }] = useApp();
+  const [{ exchangeRate }] = useExchange();
   return (
     <div className={styles.dashboard}>
       {roleNames.SUPER_ADMIN === type && (
@@ -212,9 +230,9 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>
+              {/* <div className={styles.total}>
                 {dashboard.admin.patients.overall}
-              </div>
+              </div> */}
             </div>
             <div className={styles.title}>Patients Registered</div>
           </Card>
@@ -234,9 +252,9 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>
+              {/* <div className={styles.total}>
                 {dashboard.admin.practitioners.overall}
-              </div>
+              </div> */}
             </div>
             <div className={styles.title}>Practitioners Registered</div>
           </Card>
@@ -256,7 +274,7 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>{dashboard.admin.chw.overall}</div>
+              {/* <div className={styles.total}>{dashboard.admin.chw.overall}</div> */}
             </div>
             <div className={styles.title}>Health Workers Registered</div>
           </Card>
@@ -276,9 +294,9 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>
+              {/* <div className={styles.total}>
                 {dashboard.admin.interactions.overall}
-              </div>
+              </div> */}
             </div>
             <div className={styles.title}>Interactions recorded</div>
           </Card>
@@ -302,9 +320,9 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>
+              {/* <div className={styles.total}>
                 {dashboard.chw.patients.overall}
-              </div>
+              </div> */}
             </div>
             <div className={styles.title}>Patients Registered</div>
           </Card>
@@ -324,9 +342,9 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>
+              {/* <div className={styles.total}>
                 {dashboard.chw.practitioners.overall}
-              </div>
+              </div> */}
             </div>
             <div className={styles.title}>Practitioners Registered</div>
           </Card>
@@ -346,9 +364,9 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>
+              {/* <div className={styles.total}>
                 {dashboard.chw.interactions.overall}
-              </div>
+              </div> */}
             </div>
             <div className={styles.title}>Interactions recorded</div>
           </Card>
@@ -400,9 +418,9 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>
+              {/* <div className={styles.total}>
                 {dashboard.practitioner.overall}
-              </div>
+              </div> */}
             </div>
             <div className={styles.title}>Interactions participated in</div>
           </Card>
