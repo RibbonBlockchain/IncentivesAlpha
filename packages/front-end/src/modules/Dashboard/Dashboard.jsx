@@ -14,6 +14,7 @@ import {
 import { roleNames } from "../../common/constants/roles";
 import Card from "../../common/components/Card";
 import { DesktopLoader } from "../../common/components/Loader";
+import { formatCurrency } from "../../common/utils";
 import styles from "./Dashboard.module.scss";
 
 const cache = new CellMeasurerCache({
@@ -375,12 +376,17 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__heading}>
-                    {`${
-                      dashboard.chw.chw.earnings
-                    } ${currency.toString().toUpperCase()}`}
+                    {`${Number(dashboard.chw.chw.earnings).toFixed(
+                      4
+                    )} ${currency.toString().toUpperCase()}`}
                   </div>
-                  <div className={styles.total}>{`${dashboard.chw.chw.earnings *
-                    exchangeRate} USD`}</div>
+                </div>
+                <div className={[styles.count_item]}>
+                  <div className={styles.count_item__heading}>
+                    {`${formatCurrency(
+                      dashboard.chw.chw.earnings * exchangeRate
+                    )} USD`}
+                  </div>
                 </div>
               </div>
             </div>
@@ -429,14 +435,18 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__data}>
-                    {`${
-                      dashboard.practitioner.earnings
-                    } ${currency.toString().toUpperCase()}`}
+                    {`${Number(dashboard.practitioner.earnings).toFixed(
+                      4
+                    )} ${currency.toString().toUpperCase()}`}
                   </div>
                 </div>
-              </div>
-              <div className={styles.total}>
-                {`${dashboard.practitioner.earnings * exchangeRate} USD`}
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__data}>
+                    {`${formatCurrency(
+                      dashboard.practitioner.earnings * exchangeRate
+                    )} USD`}
+                  </div>
+                </div>
               </div>
             </div>
             <div className={styles.title}>Total earned</div>
@@ -473,7 +483,6 @@ function Stats({ type, dashboard }) {
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>{dashboard.patient.overall}</div>
             </div>
             <div className={styles.title}>Interactions participated in</div>
           </Card>
@@ -482,14 +491,20 @@ function Stats({ type, dashboard }) {
               <div className={styles.count}>
                 <div className={styles.count_item}>
                   <div className={styles.count_item__data}>
-                    {`${
-                      dashboard.patient.earnings
-                    } ${currency.toString().toUpperCase()}`}
+                    {`${Number(dashboard.patient.earnings).toFixed(
+                      4
+                    )} ${currency.toString().toUpperCase()}`}
+                  </div>
+                </div>
+                <div className={styles.count_item}>
+                  <div className={styles.count_item__data}>
+                    {`${formatCurrency(
+                      dashboard.patient.earnings * exchangeRate
+                    )} USD`}
                   </div>
                 </div>
               </div>
-              <div className={styles.total}>{`${dashboard.patient.earnings *
-                exchangeRate} USD`}</div>
+              <div className={styles.total}></div>
             </div>
             <div className={styles.title}>Total earned</div>
           </Card>

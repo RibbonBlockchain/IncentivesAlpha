@@ -3,7 +3,7 @@
 .modalWindow {
   background: #313541;
   color: #ffffff;
-  width: 35%;
+  width: 60%;
 }
 
 .cnt {
@@ -43,14 +43,17 @@
 }
 
 .wallet {
-  display: flex;
-  flex-direction: column;
-  margin: calculateRem(10) 0;
-  span {
-    margin-top: calculateRem(10);
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr;
+  margin: calculateRem(10) 0 0 0;
+  small {
+    align-self: center;
   }
   a {
-    color: $link-color;
+    text-align: center;
+    padding: 0;
+    align-self: center;
+    padding: 0.5rem 2rem;
   }
 }
 
@@ -60,13 +63,15 @@
   margin: calculateRem(10) 0 0 0;
 }
 
+.flex {
+  margin-top: calculateRem(30);
+}
+
 .description {
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.07);
-  margin-top: calculateRem(30);
   padding: calculateRem(10) 0;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
 }
 
 .status {

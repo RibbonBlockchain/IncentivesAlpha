@@ -77,7 +77,7 @@ export const useWeb3 = () => {
     setItem("token", token);
     setItem("address", address);
 
-    // window.location.reload();
+    window.location.reload();
   };
 
   const getWalletDetails = async () => {

@@ -1,6 +1,7 @@
 import React from "react";
 import * as moment from "moment";
 import Modal from "../../../common/components/Modal";
+import Card from "../../../common/components/Card";
 import { useModal } from "../../../common/providers/Modal.provider";
 import { useWeb3 } from "../../../common/providers/Web3.provider";
 import { useApp } from "../../../common/providers/App.provider";
@@ -9,12 +10,101 @@ import styles from "./View.module.scss";
 function ViewInteractionModal({ data: { data }, currency, type }) {
   return (
     <div className={styles.container}>
+      <div className={styles.flex}>
+        <div className={styles.title}>
+          Patient: {`${data.patient.firstName} ${data.patient.lastName}`}
+        </div>
+        <div className={styles.description}>
+          <span className={styles.heading}>
+            Tokens earned:{" "}
+            {`${data.rewards[0].patientReward} ${
+              data.rewards[0].patientReward ? currency : ""
+            }`}
+          </span>
+          <span className={styles.heading}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              className={[styles.link].join(" ")}
+              href={`https://blockscout.com/poa/sokol/address/${data.patient.publicAddress}`}
+            >
+              View Address
+            </a>
+          </span>
+        </div>
+      </div>
+      <div className={styles.flex}>
+        <div className={styles.title}>
+          Practitioner:{" "}
+          {`${data.practitioner.firstName} ${data.practitioner.lastName}`}
+        </div>
+        <div className={styles.description}>
+          <span className={styles.heading}>
+            Tokens earned:{" "}
+            {`${data.rewards[0].practitionerReward} ${
+              data.rewards[0].practitionerReward ? currency : ""
+            }`}
+          </span>
+          <span className={styles.heading}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              className={[styles.link].join(" ")}
+              href={`https://blockscout.com/poa/sokol/address/${data.practitioner.publicAddress}`}
+            >
+              View Address
+            </a>
+          </span>
+        </div>
+      </div>
+      <div className={styles.flex}>
+        <div className={styles.title}>
+          Community Health Worker:{" "}
+          {`${data.chw.firstName} ${data.chw.lastName}`}
+        </div>
+        <div className={styles.description}>
+          <span className={styles.heading}>
+            Tokens earned:{" "}
+            {`${data.rewards[0].chwReward} ${
+              data.rewards[0].chwReward ? currency : ""
+            }`}
+          </span>
+          <span className={styles.heading}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              className={[styles.link].join(" ")}
+              href={`https://blockscout.com/poa/sokol/address/${data.chw.publicAddress}`}
+            >
+              View Address
+            </a>
+          </span>
+        </div>
+      </div>
       <div className={styles.wallet}>
-        <small>Transaction Datetime: </small>
-        <strong>
+        <small>
+          Created{" "}
           {`${moment(data.createdDate).format(
             "dddd, Do MMMM YYYY"
           )} at ${moment(data.createdDate).format("hh:mm:ss")}`}
+        </small>
+        <small>
+          Status{" "}
+          {`${data.transactionLog.status === 0 ? "Successful" : "Failed"}`}
+        </small>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          className={[styles.link].join(" ")}
+          href={`https://blockscout.com/poa/sokol/address/${data.transactionLog.txn_hash}`}
+        >
+          View Transaction
+        </a>
+      </div>
+      {/* <div className={styles.wallet}>
+        <small>Transaction Datetime: </small>
+        <strong>
+          
         </strong>
       </div>
       <div className={styles.description}>
@@ -47,7 +137,7 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
             </a>
           </span>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

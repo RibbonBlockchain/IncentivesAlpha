@@ -155,12 +155,8 @@ export const useData = () => {
           patient: await getPatientData(listInteractions, address),
           practitioner: await getPractitionerData(listInteractions, address),
           chw: {
-            patients: await getCHWStats(listUsers, roleNames.PATIENT, user),
-            practitioners: await getCHWStats(
-              listUsers,
-              roleNames.PATIENT,
-              user
-            ),
+            patients: await getCHWStatsPatients(listUsers, user),
+            practitioners: await getCHWStatsPractitioners(listUsers, user),
             interactions: await getCHWData(listInteractions, address),
             chw: await getCHWDataResult(listInteractions, address)
           }
@@ -192,11 +188,24 @@ export const useData = () => {
     }
   };
 
-  const getCHWStats = async (users, type, user) => {
+  const getCHWStatsPatients = async (users, chw) => {
+    let overall = await users.filter(user => {
+      return user.role === roleNames.PATIENT && user.onBoardedBy === chw._id;
+    });
+    return {
+      overall: overall.length,
+      thisWeekData: getByDate(overall, "week"),
+      thisMonthData: getByDate(overall, "month")
+    };
+  };
+
+  const getCHWStatsPractitioners = async (users, chw) => {
     if (users.length > 0) {
-      let overall = await users.filter(
-        user => user.role === type && user.onBoardedBy === user._id
-      );
+      let overall = await users.filter(user => {
+        return (
+          user.role === roleNames.PRACTITIONER && user.onBoardedBy === chw._id
+        );
+      });
       return {
         overall: overall.length,
         thisWeekData: getByDate(overall, "week"),
@@ -206,7 +215,9 @@ export const useData = () => {
       return {
         overall: 0,
         thisWeekData: 0,
-        thisMonthData: 0
+        thisMonthData: 0,
+        ratings: 0,
+        earnings: 0
       };
     }
   };
@@ -216,19 +227,11 @@ export const useData = () => {
       let overall = await data.filter(
         interaction => interaction.chw.publicAddress === address
       );
-      let rate = overall.map(interaction =>
-        typeof interaction.serviceRatings[0] !== "undefined"
-          ? Object.values(interaction.serviceRatings[0]).reduce(
-              (acc, curVal) => acc + curVal,
-              0
-            )
-          : 0
-      );
       return {
         overall: overall.length,
         thisWeekData: getByDate(overall, "week"),
         thisMonthData: getByDate(overall, "month"),
-        ratings: rate.reduce((acc, curVal) => acc + curVal, 0) / rate.length,
+        ratings: 0,
         earnings: Number(
           overall.reduce((acc, curVal) => acc + curVal.rewards[0].chwReward, 0)
         ).toFixed(5)
@@ -277,11 +280,22 @@ export const useData = () => {
       let overall = await data.filter(
         interaction => interaction.practitioner.publicAddress === address
       );
+
+      let rate = overall.map(interaction =>
+        typeof interaction.serviceRatings[0] !== "undefined"
+          ? Object.values(interaction.serviceRatings[0]).reduce(
+              (acc, curVal) => acc + curVal,
+              0
+            )
+          : 0
+      );
       return {
         overall: overall.length,
         thisWeekData: getByDate(overall, "week"),
         thisMonthData: getByDate(overall, "month"),
-        ratings: 0,
+        ratings: parseFloat(
+          rate.reduce((acc, curVal) => acc + curVal, 0) / rate.length
+        ).toFixed(2),
         earnings: Number(
           overall.reduce(
             (acc, curVal) => acc + curVal.rewards[0].practitionerReward,

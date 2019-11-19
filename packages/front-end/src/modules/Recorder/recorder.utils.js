@@ -66,11 +66,8 @@ export const recordInteractionOnDB = async ({
   txHash
 }) => {
   let interactionAPI = new InteractionAPI();
-  let practitionerAmount = parseInt(
-    (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount
-  ).toString();
-
-  let chwAmount = parseInt(amount * 0.15).toString();
+  let practitionerAmount = parseFloat((amount * 0.1 * sumRatings(serviceRatings) / 30 + 0.05 * amount).toFixed(10));
+  let chwAmount = parseFloat((amount * 0.15).toFixed(10));
   let details = {
     patient: patient.value._id,
     practitioner: practitioner.value._id,
