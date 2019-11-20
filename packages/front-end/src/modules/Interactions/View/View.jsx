@@ -9,9 +9,7 @@ import styles from "./View.module.scss";
 function ViewInteractionModal({ data: { data }, currency, type }) {
   function getRatingScore(data) {
     return `${parseFloat(
-      Object.values(data).reduce((acc, curVal) => acc + curVal, 0) /
-        Object.values(data).length /
-        0.2
+      (Object.values(data).reduce((acc, curVal) => acc + curVal, 0) / 30) * 100
     ).toFixed(2)}%`;
   }
 
