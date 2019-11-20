@@ -208,7 +208,6 @@ export default function() {
   }
 
   function toggleDetailsModal(data) {
-    console.log(data);
     let activities = interactions.filter(
       interaction => interaction.practitioner._id === data._id
     );

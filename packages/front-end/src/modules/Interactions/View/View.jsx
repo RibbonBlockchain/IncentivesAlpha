@@ -8,6 +8,13 @@ import { useApp } from "../../../common/providers/App.provider";
 import styles from "./View.module.scss";
 
 function ViewInteractionModal({ data: { data }, currency, type }) {
+  function getRatingScore(data) {
+    return `${parseFloat(
+      Object.values(data).reduce((acc, curVal) => acc + curVal, 0) /
+        Object.values(data).length
+    ).toFixed(2)}%`;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.flex}>
@@ -68,6 +75,9 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
             {`${data.rewards[0].chwReward} ${
               data.rewards[0].chwReward ? currency : ""
             }`}
+          </span>
+          <span>
+            Ratings received: {getRatingScore(data.serviceRatings[0])}
           </span>
           <span className={styles.heading}>
             <a
@@ -145,6 +155,17 @@ function UserDetails() {
   const [{ isVisible, data, modal }, toggleModal] = useModal();
   const [{ loginType, balance }] = useWeb3();
   const [{ currency }] = useApp();
+
+  //   let rating =
+  //     typeof data !== "undefined" &&
+  //     data.serviceRatings &&
+  //     data.serviceRatings.length > 0 &&
+  //     typeof data.serviceRatings[0] !== "undefined"
+  //       ? Object.values(data.serviceRatings[0]).reduce(
+  //           (acc, curVal) => acc + curVal,
+  //           0
+  //         )
+  //       : 0;
 
   function onClickClose() {
     toggleModal({
