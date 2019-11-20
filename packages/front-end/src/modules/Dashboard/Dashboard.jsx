@@ -152,14 +152,14 @@ function DashboardTable({ data, type }) {
                     label="Interactions"
                     cellRenderer={renderInteractions}
                     dataKey="activities"
-                    width={width - 200}
+                    width={width - 100}
                   />
                   {type !== roleNames.HEALTH_WORKER && (
                     <Column
                       label="Registered By"
                       cellRenderer={renderHealthWorker}
                       dataKey="chwAddress"
-                      width={width - 200}
+                      width={width - 300}
                     />
                   )}
                   {type !== roleNames.PRACTITIONER && (
@@ -167,7 +167,7 @@ function DashboardTable({ data, type }) {
                       label="Practitioner"
                       cellRenderer={renderPractitioner}
                       dataKey="practitionerAddress"
-                      width={width - 200}
+                      width={width - 300}
                     />
                   )}
                   {type !== roleNames.PATIENT && (
@@ -175,7 +175,7 @@ function DashboardTable({ data, type }) {
                       label="Patient"
                       cellRenderer={renderPatient}
                       dataKey="patientAddress"
-                      width={width - 200}
+                      width={width - 300}
                     />
                   )}
                   {type !== roleNames.SUPER_ADMIN && (
@@ -183,19 +183,19 @@ function DashboardTable({ data, type }) {
                       label="Tokens earned"
                       cellRenderer={renderRewards}
                       dataKey="rewards"
-                      width={width - 200}
+                      width={width - 300}
                     />
                   )}
                   <Column
                     label="Date"
                     dataKey="createdDate"
-                    width={width - 200}
+                    width={width - 300}
                     cellRenderer={renderDate}
                   />
                   <Column
                     label="Time"
                     dataKey="createdDate"
-                    width={width - 200}
+                    width={width - 300}
                     cellRenderer={renderTime}
                   />
                 </Table>

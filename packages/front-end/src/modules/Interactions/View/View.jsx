@@ -1,7 +1,6 @@
 import React from "react";
 import * as moment from "moment";
 import Modal from "../../../common/components/Modal";
-import Card from "../../../common/components/Card";
 import { useModal } from "../../../common/providers/Modal.provider";
 import { useWeb3 } from "../../../common/providers/Web3.provider";
 import { useApp } from "../../../common/providers/App.provider";
@@ -11,12 +10,14 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
   function getRatingScore(data) {
     return `${parseFloat(
       Object.values(data).reduce((acc, curVal) => acc + curVal, 0) /
-        Object.values(data).length
+        Object.values(data).length /
+        0.2
     ).toFixed(2)}%`;
   }
 
   return (
     <div className={styles.container}>
+      <div className={styles.title}>Interaction Number: {data._id}</div>
       <div className={styles.flex}>
         <div className={styles.title}>
           Patient: {`${data.patient.firstName} ${data.patient.lastName}`}
@@ -52,6 +53,9 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
               data.rewards[0].practitionerReward ? currency : ""
             }`}
           </span>
+          <span>
+            Ratings received: {getRatingScore(data.serviceRatings[0])}
+          </span>
           <span className={styles.heading}>
             <a
               target="_blank"
@@ -75,9 +79,6 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
             {`${data.rewards[0].chwReward} ${
               data.rewards[0].chwReward ? currency : ""
             }`}
-          </span>
-          <span>
-            Ratings received: {getRatingScore(data.serviceRatings[0])}
           </span>
           <span className={styles.heading}>
             <a
@@ -111,43 +112,6 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
           View Transaction
         </a>
       </div>
-      {/* <div className={styles.wallet}>
-        <small>Transaction Datetime: </small>
-        <strong>
-          
-        </strong>
-      </div>
-      <div className={styles.description}>
-        <span className={styles.heading}>
-          Total Amount Sent:{" "}
-          {`${
-            data.transactionLog.txn_amount
-              ? data.transactionLog.txn_amount
-              : "Not available"
-          } ${data.transactionLog.txn_amount ? currency : ""}`}
-        </span>
-        <span className={styles.wrapper}></span>
-      </div>
-      <div className={styles.status}>
-        <span className={styles.wrapper}>
-          Transaction Status:{" "}
-          {data.transactionLog.status === 0 ? "Successful" : "Failed"}
-        </span>
-      </div>
-      {data.transactionLog.txn_hash && (
-        <div className={styles.description}>
-          <span className={styles.heading}>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              className={[styles.link].join(" ")}
-              href={`https://blockscout.com/poa/sokol/tx/${data.transactionLog.txn_hash}`}
-            >
-              View Transaction
-            </a>
-          </span>
-        </div>
-      )} */}
     </div>
   );
 }
@@ -155,17 +119,6 @@ function UserDetails() {
   const [{ isVisible, data, modal }, toggleModal] = useModal();
   const [{ loginType, balance }] = useWeb3();
   const [{ currency }] = useApp();
-
-  //   let rating =
-  //     typeof data !== "undefined" &&
-  //     data.serviceRatings &&
-  //     data.serviceRatings.length > 0 &&
-  //     typeof data.serviceRatings[0] !== "undefined"
-  //       ? Object.values(data.serviceRatings[0]).reduce(
-  //           (acc, curVal) => acc + curVal,
-  //           0
-  //         )
-  //       : 0;
 
   function onClickClose() {
     toggleModal({

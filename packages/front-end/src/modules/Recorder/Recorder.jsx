@@ -29,7 +29,7 @@ const SelectStyle = {
   menu: base => ({
     ...base,
     borderRadius: 0,
-    background: "#313541",
+    background: "#F5F5F3",
     cursor: "pointer",
     marginTop: 0
   }),

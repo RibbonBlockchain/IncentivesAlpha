@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, AutoSizer, Column } from "react-virtualized";
+import { Table, AutoSizer, Column, CellMeasurerCache } from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
 import * as moment from "moment";
@@ -114,6 +114,14 @@ function DownloadCSV({ isOpen, onDismiss }) {
   );
 }
 
+const cache = new CellMeasurerCache({
+  defaultHeight: 100,
+  defaultWidth: 100,
+  minHeight: 40,
+  minWidth: 100,
+  fixedWidth: true
+});
+
 export default function() {
   const [{ interactions }] = useData();
   const [{ user, loginType }] = useWeb3();
@@ -194,8 +202,8 @@ export default function() {
     );
   }
 
-  function renderIndex({ rowIndex }) {
-    return <div>{rowIndex + 1}</div>;
+  function renderIndex({ rowData }) {
+    return <div>{rowData._id}</div>;
   }
 
   async function handleSearch(e) {
@@ -205,6 +213,16 @@ export default function() {
     } else {
       return interactions;
     }
+  }
+
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("HH:mm:ss")
+          : "Not Available"}
+      </div>
+    );
   }
 
   function toggleDetailsModal(data) {
@@ -259,41 +277,42 @@ export default function() {
                     styles.ReactVirtualized__Table__headerColumn
                   ].join(" ")}
                 >
-                  <Column
-                    label="S/N"
-                    cellRenderer={renderIndex}
-                    dataKey="practitionerAddress"
-                    width={100}
-                  />
+                  <Column label="S/N" dataKey="_id" width={width - 100} />
                   <Column
                     label="Practitioner"
                     cellRenderer={renderPractitioner}
                     dataKey="practitionerAddress"
-                    width={300}
+                    width={width - 500}
                   />
                   <Column
                     label="Patient"
                     cellRenderer={renderPatient}
                     dataKey="patientAddress"
-                    width={300}
+                    width={width - 500}
                   />
                   <Column
                     label="Registered By"
                     cellRenderer={renderHealthWorker}
                     dataKey="chwAddress"
-                    width={200}
+                    width={width - 500}
                   />
                   <Column
                     label="Total tokens sent"
                     cellRenderer={renderTotalTokenSent}
                     dataKey="rewards"
-                    width={200}
+                    width={width - 500}
                   />
                   <Column
                     label="Date"
                     cellRenderer={renderDate}
                     dataKey="createdDate"
-                    width={300}
+                    width={width - 500}
+                  />
+                  <Column
+                    label="Time"
+                    dataKey="createdDate"
+                    width={width - 500}
+                    cellRenderer={renderTime}
                   />
                 </Table>
               )}

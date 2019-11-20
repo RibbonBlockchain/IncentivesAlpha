@@ -9,6 +9,7 @@ import moment from "moment";
 import UserAPI from "../services/api/user.api";
 import InteractionsAPI from "../services/api/interaction.api";
 import { useWeb3 } from "./Web3.provider";
+import { useApp } from "./App.provider";
 import { getItem } from "../utils/storage";
 import { roleNames } from "../constants/roles";
 
@@ -128,6 +129,7 @@ export const useData = () => {
   const interactionsAPI = new InteractionsAPI();
   const [{ users, interactions, dashboard }, { update }] = useAPIContext();
   const [{ loginType, user }] = useWeb3();
+  const [{ ratingList }] = useApp();
   let address = getItem("address");
 
   const fetchData = async () => {
@@ -294,7 +296,7 @@ export const useData = () => {
         thisWeekData: getByDate(overall, "week"),
         thisMonthData: getByDate(overall, "month"),
         ratings: parseFloat(
-          rate.reduce((acc, curVal) => acc + curVal, 0) / rate.length
+          rate.reduce((acc, curVal) => acc + curVal, 0) / rate.length / 0.3
         ).toFixed(2),
         earnings: Number(
           overall.reduce(
