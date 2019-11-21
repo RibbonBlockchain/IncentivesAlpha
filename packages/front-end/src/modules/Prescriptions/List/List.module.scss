@@ -1,16 +1,17 @@
 @import "../../Dashboard/Dashboard.module.scss";
+
 .modalFormWindow {
   width: 100%;
   display: flex;
   flex-direction: column;
   height: 50vh;
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
 }
 
 .modalWindow {
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
 }
 
 .cnt {
@@ -18,6 +19,7 @@
   padding: calculateRem(30);
   display: flex;
   flex-direction: column;
+
   h4 {
     align-self: center;
   }
@@ -41,15 +43,19 @@
   display: grid;
   grid-template-columns: 3fr 3fr;
   justify-items: flex-end;
+
   &_action {
     display: flex;
+
     input {
       margin-left: calculateRem(10);
     }
+
     h4 {
       margin: 0;
       align-self: center;
     }
+
     .csv_button {
       margin: 0;
     }

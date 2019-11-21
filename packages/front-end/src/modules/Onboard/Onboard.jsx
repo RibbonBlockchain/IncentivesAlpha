@@ -34,7 +34,7 @@ const SelectStyle = {
   menu: base => ({
     ...base,
     borderRadius: 0,
-    background: "#313541",
+    background: "#F4F6FA",
     cursor: "pointer",
     marginTop: 0
   }),
@@ -235,7 +235,11 @@ export default function Onboard() {
   return (
     <>
       <div className={styles.actions}>
-        <Button onClick={() => setOnboardOptions(true)} text="New Account" />
+        <Button
+          classNames={styles.button_primary}
+          onClick={() => setOnboardOptions(true)}
+          text="New Account"
+        />
       </div>
       <Modal
         visible={visible}
@@ -272,7 +276,7 @@ export default function Onboard() {
                       borderRadius: 0,
                       colors: {
                         ...theme.colors,
-                        neutral30: "#313541",
+                        neutral30: "#F4F6FA",
                         primary: "black"
                       }
                     })}

@@ -1,8 +1,8 @@
 @import "../../../common/styles/variables";
 
 .modalWindow {
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
   width: 60%;
 }
 
@@ -14,6 +14,7 @@
 .container {
   display: flex;
   flex-direction: column;
+
   .banner {
     .blockies {
       border-radius: calculateRem(20);
@@ -46,9 +47,11 @@
   display: grid;
   grid-template-columns: 3fr 2fr 2fr;
   margin: calculateRem(10) 0 0 0;
+
   small {
     align-self: center;
   }
+
   a {
     text-align: center;
     padding: 0;

@@ -1,12 +1,14 @@
 @import "../../Dashboard/Dashboard.module.scss";
+
 .modalFormWindow {
   width: 100%;
   display: flex;
   flex-direction: column;
   height: 50vh;
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
 }
+
 .heading {
   display: flex;
   justify-content: space-between;
@@ -20,9 +22,11 @@
   outline: none;
   padding: calculateRem(10);
 }
+
 .head_actions {
   display: grid;
   grid-template-columns: 2fr 3fr;
+
   &_action {
     display: flex;
     justify-content: space-between;

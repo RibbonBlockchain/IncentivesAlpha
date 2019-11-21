@@ -1,8 +1,10 @@
 @import "../../common/styles/variables";
+
 .form {
   small {
     color: $red;
   }
+
   input {
     // background: transparent;
     // border: none;
@@ -12,5 +14,5 @@
 }
 
 .background {
-  background: #313541;
+  background: #F4F6FA;
 }

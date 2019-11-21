@@ -1,8 +1,8 @@
 @import "../../common/styles/variables";
 
 .modalWindow {
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
 }
 
 .cnt {
@@ -13,6 +13,7 @@
 .container {
   display: flex;
   flex-direction: column;
+
   .banner {
     .blockies {
       border-radius: calculateRem(20);
@@ -45,9 +46,11 @@
   display: flex;
   flex-direction: column;
   margin: calculateRem(10) 0;
+
   span {
     margin-top: calculateRem(10);
   }
+
   a {
     color: $link-color;
   }

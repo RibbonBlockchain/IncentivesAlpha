@@ -47,6 +47,8 @@ $text-color: #ffffff;
 $headline-color: #000000;
 $background: #818384;
 $sub-background: #2d2d2d;
+$menu-grey: #F4F7FA;
+$menu-grey-dark: rgb(184, 184, 184);
 
 .card__light_orange {
   background: $orange-bg;
@@ -66,4 +68,8 @@ $sub-background: #2d2d2d;
 
 .card__white {
   background: $text-color;
+}
+
+.card__grey {
+  background: $menu-grey;
 }

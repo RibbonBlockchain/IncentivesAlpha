@@ -266,7 +266,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                             borderRadius: 0,
                             colors: {
                               ...theme.colors,
-                              neutral30: "#313541",
+                              neutral30: "#F4F6FA",
                               primary: "black"
                             }
                           })}
@@ -298,7 +298,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                             borderRadius: 0,
                             colors: {
                               ...theme.colors,
-                              neutral30: "#313541",
+                              neutral30: "#F4F6FA",
                               primary: "black"
                             }
                           })}
@@ -333,7 +333,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                           borderRadius: 0,
                           colors: {
                             ...theme.colors,
-                            neutral30: "#313541",
+                            neutral30: "#F4F6FA",
                             primary: "black"
                           }
                         })}
@@ -368,7 +368,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                               borderRadius: 0,
                               colors: {
                                 ...theme.colors,
-                                neutral30: "#313541",
+                                neutral30: "#F4F6FA",
                                 primary: "black"
                               }
                             })}

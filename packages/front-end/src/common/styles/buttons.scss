@@ -1,6 +1,13 @@
 .button_primary {
-  background-color: #4360df;
-  color: #ffffff;
+  background-color: $menu-grey;
+  color: $background;
+  transition: 0.4s;
+}
+
+.button_primary:hover {
+  opacity: 1;
+  background-color: $menu-grey-dark;
+  color: $text-color;
 }
 .button_secondary {
 }

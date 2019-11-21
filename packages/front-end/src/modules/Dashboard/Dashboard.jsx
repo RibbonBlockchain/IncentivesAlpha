@@ -130,7 +130,7 @@ function DashboardTable({ data, type }) {
 
   return (
     <>
-      <Card classNames={[styles.table].join(" ")}>
+      <Card classNames={([styles.table].join(" "))}>
         <div style={{ flex: "1 1 auto", height: "60vh" }}>
           <AutoSizer>
             {({ height, width }) => {

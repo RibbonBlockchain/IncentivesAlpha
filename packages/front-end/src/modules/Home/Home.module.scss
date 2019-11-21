@@ -33,7 +33,7 @@
   &__nav {
     flex: 0 0 $dashboard-nav-width;
     grid-area: nav;
-    background-color: #313541;
+    background-color: #F4F6FA;
   }
 
   .actions {
@@ -48,8 +48,9 @@
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    padding-top: 0px;
 
-    background-color: #f4f7fa;
+    background-color: white;
   }
 }
 
@@ -79,28 +80,33 @@ img {
 }
 
 .menu {
-  list-style-type: none;
+list-style-type: none;
   padding: 0;
   margin-top: calculateRem(70);
+  transition: 0.4s;
 
   &__item {
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   }
+
   &_logout {
     position: absolute;
     padding: calculateRem(20) calculateRem(50);
     bottom: 0;
   }
+
   &__link {
     display: flex;
     padding: 1rem 2rem;
-    color: #76808f;
     text-decoration: none;
+    transition: 0.4s;
+    color: $background;
 
     span {
       align-self: center;
       font-size: calculateRem(14);
     }
+
     svg {
       margin-right: calculateRem(10);
       align-self: center;
@@ -108,14 +114,14 @@ img {
 
     &:hover {
       color: #fff;
-      background-color: #1f222d;
+      background-color: #BABABA;
     }
   }
 }
 
 .active {
   color: #fff;
-  background-color: #1f222d;
+  background-color: #BABABA;
 }
 
 .card {
@@ -132,6 +138,7 @@ img {
   display: inline-block;
   border: 0;
   padding: calculateRem(20);
+
   &__primary {
     color: #fff;
     background-color: #56bf89;
@@ -170,6 +177,7 @@ li {
       display: none;
     }
   }
+
   .logo {
     padding: 0 calculateRem(10);
   }

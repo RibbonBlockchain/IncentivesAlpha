@@ -1,8 +1,8 @@
 @import "../../styles/variables";
 
 .address {
-  background-color: $background;
-  color: $text-color;
+  background-color: $menu-grey;
+  color: $background;
   border-radius: calculateRem(100);
   cursor: pointer;
   display: flex;
@@ -11,9 +11,14 @@
   align-self: center;
   width: calculateRem(220);
   padding: calculateRem(12) calculateRem(5);
+  transition: 0.4s;
+
   &:hover {
-    background-color: #1f222d;
+    opacity: 1;
+    background-color: $menu-grey-dark;
+    color: $text-color;
   }
+
   span {
     white-space: nowrap;
     overflow: hidden;
