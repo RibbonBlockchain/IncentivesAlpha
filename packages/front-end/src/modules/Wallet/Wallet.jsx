@@ -97,7 +97,7 @@ function Profile({
           onClick={handleProfileNavigation}
         />
         <Button
-          classNames={[styles.button].join(" ")}
+          classNames={[styles.button, styles.button_primar].join(" ")}
           text="Sign out"
           onClick={handleSignOut}
         />
