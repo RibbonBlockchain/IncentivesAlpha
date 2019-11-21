@@ -338,9 +338,9 @@ export const useData = () => {
         };
       } else {
         return {
-          overall: interactions.length,
-          thisWeekData: getByDate(interactions, "week"),
-          thisMonthData: getByDate(interactions, "month"),
+          overall: data.length,
+          thisWeekData: getByDate(data, "week"),
+          thisMonthData: getByDate(data, "month"),
           ratings: 0
         };
       }
