@@ -20,3 +20,11 @@
   outline: none;
   padding: calculateRem(10);
 }
+.head_actions {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  &_action {
+    display: flex;
+    justify-content: space-between;
+  }
+}

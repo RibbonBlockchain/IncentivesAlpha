@@ -1,14 +1,14 @@
 @import "../../common/styles/variables";
 
 .modalWindow {
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: $background;
   width: 30%;
 }
 
 .modalFormWindow {
-  background: #313541;
-  color: #ffffff;
+  background: #ffffff;
+  color: $background;
   small {
     color: $red;
   }
@@ -30,7 +30,7 @@
 
 input,
 textarea {
-  color: $text-color;
+  color: $background;
 }
 
 textarea {

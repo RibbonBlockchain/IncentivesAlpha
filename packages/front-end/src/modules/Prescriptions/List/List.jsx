@@ -1,19 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { Table, AutoSizer, Column } from "react-virtualized";
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  AutoSizer,
+  Column,
+  CellMeasurer,
+  CellMeasurerCache
+} from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
 import * as moment from "moment";
 import Card from "../../../common/components/Card";
 import { useData } from "../../../common/providers/API.provider";
-import { roleNames } from "../../../common/constants/roles";
 import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
 import Modal from "../../../common/components/Modal";
-import { generateReport } from "../../Dashboard/dashboard.utils";
+import { generatePrescriptionReport } from "../../Dashboard/dashboard.utils";
+import { roleNames } from "../../../common/constants/roles";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
-import { useAlert, useModal } from "../../../common/providers/Modal.provider";
+import { useAlert } from "../../../common/providers/Modal.provider";
 import { useWeb3 } from "../../../common/providers/Web3.provider";
+const cache = new CellMeasurerCache({
+  defaultHeight: 100,
+  defaultWidth: 100,
+  minHeight: 40,
+  minWidth: 100,
+  fixedWidth: true
+});
 
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
@@ -24,11 +37,9 @@ function DownloadCSV({ isOpen, onDismiss }) {
     to: new Date(new Date().getTime() + 60 * 60 * 24 * 1000)
   });
 
-  const header = ["firstName", "lastName", "gender"];
-
   async function generateReportAndDownload() {
     setLoading(true);
-    let result = await generateReport(date, address, { header });
+    let result = await generatePrescriptionReport(date, address);
     if (result.length > 0) {
       setLoading(false);
       onDismiss();
@@ -115,13 +126,12 @@ function DownloadCSV({ isOpen, onDismiss }) {
   );
 }
 
-export default function ListPractitioners() {
-  const [{ users, interactions }] = useData();
-  const [state, setState] = useState([]);
+export default function() {
+  const [{ interactions }] = useData();
   const [{ user, loginType }] = useWeb3();
+  const [state, setState] = useState([]);
   const [search, setSearch] = useState();
   const [visible, setVisible] = useState(false);
-  const [, toggleModal] = useModal();
   const fuse = new Fuse(state, {
     maxPatternLength: 32,
     minMatchCharLength: 3,
@@ -129,30 +139,17 @@ export default function ListPractitioners() {
   });
 
   useEffect(() => {
-    fetchPatientsOnly();
+    fetchMyInteractions();
   }, []);
 
-  async function fetchPatientsOnly() {
-    let patients = [];
-    await users.map(user => {
-      if (user.role === roleNames.PATIENT) {
-        patients.push(user);
-      } else {
-        return;
-      }
-    });
-    setState(patients);
+  async function fetchMyInteractions() {
     if (loginType === roleNames.SUPER_ADMIN) {
-      let patients = users.filter(
-        patient => patient.role === roleNames.PATIENT
-      );
-      setState(patients);
+      setState(interactions);
     } else {
-      let patients = users.filter(
-        patient =>
-          patient.role === roleNames.PATIENT && patient.onBoardedBy === user._id
+      let data = interactions.filter(
+        interaction => interaction.chw._id === user._id
       );
-      setState(patients);
+      setState(data);
     }
   }
 
@@ -160,18 +157,60 @@ export default function ListPractitioners() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }
 
-  function renderName({ rowData }) {
+  function renderPrescriptionNumber({ rowData }) {
+    return rowData.prescriptionNo ? rowData.prescriptionNo : "Not Available";
+  }
+
+  function renderPatient({ rowData }) {
     return (
       <div>
-        {rowData && rowData.firstName && rowData.lastName
-          ? `${rowData.firstName} ${rowData.lastName} `
+        {rowData.patient &&
+        rowData.patient.firstName &&
+        rowData.patient.lastName
+          ? `${rowData.patient.firstName} ${rowData.patient.lastName} `
           : `Not Available`}
       </div>
     );
   }
 
-  function renderIDNumber({ rowData }) {
-    return <div>{rowData.idNumber}</div>;
+  function renderPractitioner({ rowData }) {
+    return (
+      <div>
+        {rowData.practitioner &&
+        rowData.practitioner.firstName &&
+        rowData.practitioner.lastName
+          ? `${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `
+          : `Not Available`}
+      </div>
+    );
+  }
+
+  function renderPrescriptions({
+    rowData,
+    columnIndex,
+    key,
+    parent,
+    rowIndex
+  }) {
+    return (
+      <CellMeasurer
+        cache={cache}
+        columnIndex={columnIndex}
+        key={key}
+        parent={parent}
+        rowIndex={rowIndex}
+      >
+        {rowData.prescriptions.length > 0 ? (
+          <div style={{ whiteSpace: "normal", padding: "1px" }}>
+            {rowData.prescriptions
+              .map(prescription => prescription.prescriptionTitle)
+              .join(", ")}
+          </div>
+        ) : (
+          <div>Not available</div>
+        )}
+      </CellMeasurer>
+    );
   }
 
   function renderDate({ rowData }) {
@@ -183,33 +222,22 @@ export default function ListPractitioners() {
     if (data.length > 0) {
       setState(data);
     } else {
-      fetchPatientsOnly();
+      return interactions;
     }
-  }
-
-  function toggleDetailsModal(data) {
-    let activities = interactions.filter(
-      interaction => interaction.patient._id === data._id
-    );
-    toggleModal({
-      isVisible: true,
-      data: {
-        data,
-        activities
-      },
-      modal: "details"
-    });
   }
 
   return (
     <>
-      {state ? (
-        <Card classNames={[styles.table, styles.white].join(" ")}>
+      {interactions ? (
+        <Card classNames={[styles.table].join(" ")}>
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              {/* <Button className={styles.csv_button} text="Download" /> */}
-              <div></div>
+              <Button
+                onClick={() => setVisible(true)}
+                className={styles.csv_button}
+                text="Download"
+              />
               <input
                 className={[styles.form_input].join(" ")}
                 type="text"
@@ -227,29 +255,40 @@ export default function ListPractitioners() {
                   height={height}
                   headerHeight={40}
                   noRowsRenderer={_noRowsRenderer}
-                  rowHeight={40}
-                  rowCount={state.length}
-                  rowGetter={({ index }) => state[index]}
-                  onRowClick={({ index }) => toggleDetailsModal(state[index])}
+                  rowHeight={cache.rowHeight}
+                  rowCount={interactions.length}
+                  rowGetter={({ index }) => interactions[index]}
                   rowClassName={styles.ReactVirtualized__Table__rowColumn}
                   headerClassName={[
                     styles.ReactVirtualized__Table__headerColumn
                   ].join(" ")}
                 >
                   <Column
-                    label="Patient Number"
-                    cellRenderer={renderIDNumber}
-                    dataKey="idNumber"
+                    label="Practitioner"
+                    cellRenderer={renderPractitioner}
+                    dataKey="practitionerAddress"
                     width={width - 200}
                   />
                   <Column
                     label="Patient"
-                    cellRenderer={renderName}
+                    cellRenderer={renderPatient}
                     dataKey="patientAddress"
                     width={width - 200}
                   />
                   <Column
-                    label="Date Registered"
+                    label="Prescription"
+                    cellRenderer={renderPrescriptions}
+                    dataKey="prescriptions"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Prescription Number"
+                    cellRenderer={renderPrescriptionNumber}
+                    dataKey="prescriptionNo"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Date"
                     cellRenderer={renderDate}
                     dataKey="createdDate"
                     width={width - 200}

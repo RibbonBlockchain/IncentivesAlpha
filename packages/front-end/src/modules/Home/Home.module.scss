@@ -66,15 +66,8 @@ img {
 .logo {
   display: flex;
   flex: 0 0 $dashboard-nav-width;
-  width: calculateRem(160);
   height: calculateRem(60);
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  position: relative;
   padding: 0 calculateRem(10);
-  margin: 0;
-  font-size: 1rem;
 }
 
 .toolbar {

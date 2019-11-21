@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Table, AutoSizer, Column } from "react-virtualized";
+import React, { useState, useEffect } from "react";
+import { Table, AutoSizer, Column, CellMeasurerCache } from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
 import * as moment from "moment";
 import Card from "../../../common/components/Card";
 import { useData } from "../../../common/providers/API.provider";
-import { Link, Heading } from "../../../common/theme";
 import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
 import Modal from "../../../common/components/Modal";
 import { generateReport } from "../../Dashboard/dashboard.utils";
+import { roleNames } from "../../../common/constants/roles";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
-import { useAlert } from "../../../common/providers/Modal.provider";
-
-const StyledTitle = styled.h3`
-  font-weight: 300;
-`;
-const StyledDate = styled(StyledTitle)``;
-
+import { useAlert, useModal } from "../../../common/providers/Modal.provider";
+import { useWeb3 } from "../../../common/providers/Web3.provider";
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
   const [loading, setLoading] = useState(false);
@@ -120,16 +114,41 @@ function DownloadCSV({ isOpen, onDismiss }) {
   );
 }
 
+const cache = new CellMeasurerCache({
+  defaultHeight: 100,
+  defaultWidth: 100,
+  minHeight: 40,
+  minWidth: 100,
+  fixedWidth: true
+});
+
 export default function() {
   const [{ interactions }] = useData();
+  const [{ user, loginType }] = useWeb3();
   const [state, setState] = useState([]);
   const [search, setSearch] = useState();
   const [visible, setVisible] = useState(false);
+  const [, toggleModal] = useModal();
   const fuse = new Fuse(state, {
     maxPatternLength: 32,
     minMatchCharLength: 3,
     keys: ["firstName", "lastName"]
   });
+
+  useEffect(() => {
+    fetchMyInteractions();
+  }, []);
+
+  async function fetchMyInteractions() {
+    if (loginType === roleNames.SUPER_ADMIN) {
+      setState(interactions);
+    } else {
+      let data = interactions.filter(
+        interaction => interaction.chw._id === user._id
+      );
+      setState(data);
+    }
+  }
 
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
@@ -137,52 +156,54 @@ export default function() {
 
   function renderPatient({ rowData }) {
     return (
-      <Heading>
+      <div>
         {rowData.patient &&
         rowData.patient.firstName &&
         rowData.patient.lastName
           ? `${rowData.patient.firstName} ${rowData.patient.lastName} `
           : `Not Available`}
-      </Heading>
+      </div>
     );
   }
 
   function renderPractitioner({ rowData }) {
     return (
-      <Heading>
+      <div>
         {rowData.practitioner &&
         rowData.practitioner.firstName &&
         rowData.practitioner.lastName
           ? `${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `
           : `Not Available`}
-      </Heading>
+      </div>
     );
   }
 
   function renderHealthWorker({ rowData }) {
     return (
-      <Heading>
+      <div>
         {rowData.chw && rowData.chw.firstName && rowData.chw.lastName
           ? `${rowData.chw.firstName} ${rowData.chw.lastName} `
           : `Not Available`}
-      </Heading>
+      </div>
     );
   }
 
   function renderDate({ rowData }) {
-    return (
-      <StyledDate>
-        {moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}
-      </StyledDate>
-    );
+    return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
   function renderTotalTokenSent({ rowData }) {
-    let totalTokenSent =
-      rowData.rewards[0].chwReward +
-      rowData.rewards[0].patientReward +
-      rowData.rewards[0].practitionerReward;
-    return <Heading>{totalTokenSent}</Heading>;
+    return (
+      <div>
+        {rowData.transactionLog.txn_amount
+          ? Number(rowData.transactionLog.txn_amount).toFixed(4)
+          : "Not Available"}
+      </div>
+    );
+  }
+
+  function renderIndex({ rowData }) {
+    return <div>{rowData._id}</div>;
   }
 
   async function handleSearch(e) {
@@ -194,10 +215,34 @@ export default function() {
     }
   }
 
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("HH:mm:ss")
+          : "Not Available"}
+      </div>
+    );
+  }
+
+  function toggleDetailsModal(data) {
+    let activities = interactions.filter(
+      interaction => interaction.practitioner._id === data._id
+    );
+    toggleModal({
+      isVisible: true,
+      data: {
+        data,
+        activities
+      },
+      modal: "interaction_details"
+    });
+  }
+
   return (
     <>
       {interactions ? (
-        <Card classNames={[styles.table, styles.white].join(" ")}>
+        <Card classNames={[styles.table].join(" ")}>
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
@@ -215,53 +260,64 @@ export default function() {
               />
             </div>
           </div>
-          <AutoSizer disableHeight>
-            {({ width }) => (
-              <Table
-                width={width}
-                height={500}
-                headerHeight={40}
-                noRowsRenderer={_noRowsRenderer}
-                rowHeight={40}
-                rowCount={interactions.length}
-                rowGetter={({ index }) => interactions[index]}
-                headerClassName={[
-                  styles.ReactVirtualized__Table__headerColumn
-                ].join(" ")}
-              >
-                <Column
-                  label="Practitioner"
-                  cellRenderer={renderPractitioner}
-                  dataKey="practitionerAddress"
-                  width={300}
-                />
-                <Column
-                  label="Patient"
-                  cellRenderer={renderPatient}
-                  dataKey="patientAddress"
-                  width={300}
-                />
-                <Column
-                  label="Registered By"
-                  cellRenderer={renderHealthWorker}
-                  dataKey="chwAddress"
-                  width={200}
-                />
-                <Column
-                  label="Total tokens sent"
-                  cellRenderer={renderTotalTokenSent}
-                  dataKey="rewards"
-                  width={200}
-                />
-                <Column
-                  label="Date"
-                  cellRenderer={renderDate}
-                  dataKey="createdDate"
-                  width={300}
-                />
-              </Table>
-            )}
-          </AutoSizer>
+          <div style={{ flex: "1 1 auto", height: "79vh" }}>
+            <AutoSizer>
+              {({ height, width }) => (
+                <Table
+                  width={width}
+                  height={height}
+                  headerHeight={40}
+                  noRowsRenderer={_noRowsRenderer}
+                  rowHeight={40}
+                  onRowClick={({ index }) => toggleDetailsModal(state[index])}
+                  rowCount={interactions.length}
+                  rowGetter={({ index }) => interactions[index]}
+                  rowClassName={styles.ReactVirtualized__Table__rowColumn}
+                  headerClassName={[
+                    styles.ReactVirtualized__Table__headerColumn
+                  ].join(" ")}
+                >
+                  <Column label="S/N" dataKey="_id" width={width - 100} />
+                  <Column
+                    label="Practitioner"
+                    cellRenderer={renderPractitioner}
+                    dataKey="practitionerAddress"
+                    width={width - 500}
+                  />
+                  <Column
+                    label="Patient"
+                    cellRenderer={renderPatient}
+                    dataKey="patientAddress"
+                    width={width - 500}
+                  />
+                  <Column
+                    label="Registered By"
+                    cellRenderer={renderHealthWorker}
+                    dataKey="chwAddress"
+                    width={width - 500}
+                  />
+                  <Column
+                    label="Total tokens sent"
+                    cellRenderer={renderTotalTokenSent}
+                    dataKey="rewards"
+                    width={width - 500}
+                  />
+                  <Column
+                    label="Date"
+                    cellRenderer={renderDate}
+                    dataKey="createdDate"
+                    width={width - 500}
+                  />
+                  <Column
+                    label="Time"
+                    dataKey="createdDate"
+                    width={width - 500}
+                    cellRenderer={renderTime}
+                  />
+                </Table>
+              )}
+            </AutoSizer>
+          </div>
         </Card>
       ) : (
         <DesktopLoader />
