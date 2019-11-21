@@ -47,3 +47,23 @@ $text-color: #ffffff;
 $headline-color: #000000;
 $background: #818384;
 $sub-background: #2d2d2d;
+
+.card__light_orange {
+  background: $orange-bg;
+}
+
+.card__light_blue {
+  background: $blue-bg;
+}
+
+.card__light_pink {
+  background: $pink-bg;
+}
+
+.card__light_purple {
+  background: $purple-bg;
+}
+
+.card__white {
+  background: $text-color;
+}

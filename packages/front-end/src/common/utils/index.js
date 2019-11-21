@@ -261,3 +261,7 @@ export function formatToUsd(price) {
   //   });
   //   return usdPrice;
 }
+
+export const formatCurrency = amount => {
+  return new Intl.NumberFormat().format(amount);
+};

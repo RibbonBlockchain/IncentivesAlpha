@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useForm from "react-hook-form";
 import DatePicker from "react-datepicker";
+import Select from "react-select";
 import { ethers } from "ethers";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import QRScanner from "qr-code-scanner";
@@ -16,8 +17,37 @@ import { useAlert } from "../../common/providers/Modal.provider";
 import { useTransactionStatus } from "../../common/providers/TransactionStatus.provider";
 import { useData } from "../../common/providers/API.provider";
 
+const titles = [
+  { value: "MR", label: "MR" },
+  { value: "MRS", label: "MRS" },
+  { value: "MISS", label: "MISS" },
+  { value: "MS", label: "MS" },
+  { value: "PROF", label: "PROF" },
+  { value: "DR", label: "DR" },
+  { value: "NURSE", label: "NURSE" },
+  { value: "ENGR", label: "ENGR" }
+];
+const SelectStyle = {
+  control: (base, state) => ({
+    ...base
+  }),
+  menu: base => ({
+    ...base,
+    borderRadius: 0,
+    background: "#313541",
+    cursor: "pointer",
+    marginTop: 0
+  }),
+  menuList: base => ({
+    ...base,
+    borderRadius: 0,
+    cursor: "pointer",
+    padding: 0
+  })
+};
 export default function Onboard() {
   const [onboardOptions, setOnboardOptions] = useState(false);
+  const [record, setRecord] = useState({});
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
   const [, fetchData] = useData();
@@ -79,6 +109,7 @@ export default function Onboard() {
       ...values,
       dateOfBirth: moment(date).format("YYYY/M/D"),
       role: type,
+      title: record.title.value,
       phoneNumber: phoneNumber.value
     };
     setLoading(true);
@@ -229,6 +260,35 @@ export default function Onboard() {
               ></Button>
             </div>
             <div className={styles.form_body}>
+              <div className={[styles.layout].join(" ")}>
+                <div className={styles.layout__item}>
+                  <label htmlFor="title">Title</label>
+                  <Select
+                    isSearchable
+                    value={record.title}
+                    placeholder="Title"
+                    theme={theme => ({
+                      ...theme,
+                      borderRadius: 0,
+                      colors: {
+                        ...theme.colors,
+                        neutral30: "#313541",
+                        primary: "black"
+                      }
+                    })}
+                    onChange={title => {
+                      setRecord({
+                        title
+                      });
+                    }}
+                    options={titles}
+                    styles={SelectStyle}
+                  />
+                </div>
+                <div className={styles.layout__item}></div>
+                <div className={styles.layout__item}></div>
+                <div className={styles.layout__item}></div>
+              </div>
               <div className={[styles.layout].join(" ")}>
                 <div className={styles.layout__item}>
                   <div className={[styles.input].join(" ")}>

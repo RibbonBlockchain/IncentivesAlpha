@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import useForm from "react-hook-form";
 import Select from "react-select";
@@ -28,7 +29,7 @@ const SelectStyle = {
   menu: base => ({
     ...base,
     borderRadius: 0,
-    background: "#313541",
+    background: "#F5F5F3",
     cursor: "pointer",
     marginTop: 0
   }),
@@ -132,7 +133,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     checkTransactionStatus,
     closeTransactionStatus
   ] = useTransactionStatus();
-  const [{}, toggle] = useAlert();
+  const [, toggle] = useAlert();
   const [record, setRecord] = useState({
     patient: {},
     practitioner: {},
@@ -185,6 +186,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
       });
     } else {
       await checkTransactionStatus(interaction);
+      data.txHash = interaction;
       let record = await recordInteractionOnDB(data);
       closeTransactionStatus();
       if (record.error) {
@@ -246,183 +248,215 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className={[styles.container, styles.form].join(" ")}>
             <h2 className={styles.form_heading}>Record Interaction</h2>
-            <div className={styles.form_body}>
-              <div className={[styles.layout].join(" ")}>
-                <div className={styles.layout__item}>
-                  <div className={[styles.input].join(" ")}>
-                    <label htmlFor="patientIDNumber">Patient ID Number</label>
-                    <Select
-                      isSearchable
-                      value={record.patient}
-                      placeholder="Patient ID Number"
-                      theme={theme => ({
-                        ...theme,
-                        borderRadius: 0,
-                        colors: {
-                          ...theme.colors,
-                          neutral30: "#313541",
-                          primary: "black"
-                        }
-                      })}
-                      formatOptionLabel={formatUserOptionLabel}
-                      onChange={patient =>
-                        setRecord({
-                          practitioner: record.practitioner,
-                          patient,
-                          prescriptions: record.prescriptions,
-                          activities: record.activities
-                        })
-                      }
-                      options={patients}
-                      styles={SelectStyle}
-                    />
+            <div className={styles.col}>
+              <div className="">
+                <div className={styles.form_body}>
+                  <div className={[styles.layout].join(" ")}>
+                    <div className={styles.layout__item}>
+                      <div className={[styles.input].join(" ")}>
+                        <label htmlFor="patientIDNumber">
+                          Patient ID Number
+                        </label>
+                        <Select
+                          isSearchable
+                          value={record.patient}
+                          placeholder="Patient ID Number"
+                          theme={theme => ({
+                            ...theme,
+                            borderRadius: 0,
+                            colors: {
+                              ...theme.colors,
+                              neutral30: "#313541",
+                              primary: "black"
+                            }
+                          })}
+                          formatOptionLabel={formatUserOptionLabel}
+                          onChange={patient =>
+                            setRecord({
+                              practitioner: record.practitioner,
+                              patient,
+                              prescriptions: record.prescriptions,
+                              activities: record.activities
+                            })
+                          }
+                          options={patients}
+                          styles={SelectStyle}
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.layout__item}>
+                      <div className={[styles.input].join(" ")}>
+                        <label htmlFor="practitionerIDNumber">
+                          Practitioner ID Number
+                        </label>
+                        <Select
+                          isSearchable
+                          value={record.practitioner}
+                          placeholder="Practitioner ID Number"
+                          theme={theme => ({
+                            ...theme,
+                            borderRadius: 0,
+                            colors: {
+                              ...theme.colors,
+                              neutral30: "#313541",
+                              primary: "black"
+                            }
+                          })}
+                          formatOptionLabel={formatUserOptionLabel}
+                          onChange={practitioner => {
+                            setRecord({
+                              practitioner,
+                              patient: record.patient,
+                              prescriptions: record.prescriptions,
+                              activities: record.activities
+                            });
+                          }}
+                          options={practitioners}
+                          styles={SelectStyle}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className={styles.layout__item}>
-                  <div className={[styles.input].join(" ")}>
-                    <label htmlFor="practitionerIDNumber">
-                      Practitioner ID Number
-                    </label>
-                    <Select
-                      isSearchable
-                      value={record.practitioner}
-                      placeholder="Practitioner ID Number"
-                      theme={theme => ({
-                        ...theme,
-                        borderRadius: 0,
-                        colors: {
-                          ...theme.colors,
-                          neutral30: "#313541",
-                          primary: "black"
+                  {activities.length > 0 && (
+                    <div className={styles.layout__item}>
+                      <label htmlFor="activity">Activity</label>
+                      <Select
+                        isSearchable
+                        value={record.activities}
+                        placeholder="Select Activity"
+                        formatOptionLabel={formatActivityOptionLabel}
+                        name={`activities`}
+                        components={animatedComponents}
+                        isMulti
+                        theme={theme => ({
+                          ...theme,
+                          borderRadius: 0,
+                          colors: {
+                            ...theme.colors,
+                            neutral30: "#313541",
+                            primary: "black"
+                          }
+                        })}
+                        onChange={activities =>
+                          setRecord({
+                            practitioner: record.practitioner,
+                            patient: record.patient,
+                            prescriptions: record.prescriptions,
+                            activities
+                          })
                         }
-                      })}
-                      formatOptionLabel={formatUserOptionLabel}
-                      onChange={practitioner => {
-                        setRecord({
-                          practitioner,
-                          patient: record.patient,
-                          prescriptions: record.prescriptions,
-                          activities: record.activities
-                        });
-                      }}
-                      options={practitioners}
-                      styles={SelectStyle}
-                    />
+                        options={activities}
+                        styles={SelectStyle}
+                      />
+                    </div>
+                  )}
+                  <div className={styles.layout}>
+                    {prescriptions.length > 0 && (
+                      <div className={styles.layout__item}>
+                        <div className={[styles.input].join(" ")}>
+                          <label htmlFor="prescriptions">Prescriptions</label>
+                          <Select
+                            isSearchable
+                            value={record.prescriptions}
+                            placeholder="Select prescriptions"
+                            name={`prescriptions`}
+                            isMulti
+                            formatOptionLabel={formatPrescriptionOptionLabel}
+                            components={animatedComponents}
+                            theme={theme => ({
+                              ...theme,
+                              borderRadius: 0,
+                              colors: {
+                                ...theme.colors,
+                                neutral30: "#313541",
+                                primary: "black"
+                              }
+                            })}
+                            onChange={prescriptions =>
+                              setRecord({
+                                practitioner: record.practitioner,
+                                patient: record.patient,
+                                prescriptions,
+                                activities: record.activities
+                              })
+                            }
+                            options={prescriptions}
+                            styles={SelectStyle}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    <div className={styles.layout__item}>
+                      <div className={[styles.input].join(" ")}>
+                        <label htmlFor="prescriptionNo">
+                          Prescription Number
+                        </label>
+                        <input
+                          className={[styles.form_input].join(" ")}
+                          placeholder="Prescription Number"
+                          name="prescriptionNo"
+                          type="text"
+                          ref={register({
+                            required: "Prescription Number is required",
+                            pattern: {}
+                          })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className={styles.layout__item}>
+                    <div className={[styles.input].join(" ")}>
+                      <label htmlFor="notes">Additional notes</label>
+                      <textarea
+                        name="notes"
+                        cols="30"
+                        rows="5"
+                        placeholder="Notes (optional)"
+                        ref={register}
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
-              {activities.length > 0 && (
-                <div className={styles.layout__item}>
-                  <label htmlFor="activity">Activity</label>
-                  <Select
-                    isSearchable
-                    value={record.activities}
-                    placeholder="Select Activity"
-                    formatOptionLabel={formatActivityOptionLabel}
-                    name={`activities`}
-                    components={animatedComponents}
-                    isMulti
-                    theme={theme => ({
-                      ...theme,
-                      borderRadius: 0,
-                      colors: {
-                        ...theme.colors,
-                        neutral30: "#313541",
-                        primary: "black"
-                      }
-                    })}
-                    onChange={activities =>
-                      setRecord({
-                        practitioner: record.practitioner,
-                        patient: record.patient,
-                        prescriptions: record.prescriptions,
-                        activities
-                      })
-                    }
-                    options={activities}
-                    styles={SelectStyle}
-                  />
-                </div>
-              )}
-              {prescriptions.length > 0 && (
-                <div className={styles.layout__item}>
-                  <label htmlFor="prescriptions">Prescriptions</label>
-                  <Select
-                    isSearchable
-                    value={record.prescriptions}
-                    placeholder="Select prescriptions"
-                    name={`prescriptions`}
-                    isMulti
-                    formatOptionLabel={formatPrescriptionOptionLabel}
-                    components={animatedComponents}
-                    theme={theme => ({
-                      ...theme,
-                      borderRadius: 0,
-                      colors: {
-                        ...theme.colors,
-                        neutral30: "#313541",
-                        primary: "black"
-                      }
-                    })}
-                    onChange={prescriptions =>
-                      setRecord({
-                        practitioner: record.practitioner,
-                        patient: record.patient,
-                        prescriptions,
-                        activities: record.activities
-                      })
-                    }
-                    options={prescriptions}
-                    styles={SelectStyle}
-                  />
-                </div>
-              )}
-              {ratingList &&
-                ratingList[0].ratingTypes &&
-                ratingList[0].ratingTypes.length > 0 && (
-                  <div className={styles.layout__item}>
-                    <fieldset>
-                      <legend>Rate the services</legend>
-                      {ratingList[0].ratingTypes.map((rating, index) => (
-                        <div className={styles.rating} key={index}>
-                          <StarRatingComponent
-                            starCount={5}
-                            name={index}
-                            starColor="#ffb400"
-                            emptyStarColor="#ffb400"
-                            value={ratings[index] ? ratings[index] : 0}
-                            onStarClick={e => handleRating(index, e)}
-                            renderStarIcon={(index, value) => {
-                              return (
-                                <span>
-                                  <i
-                                    className={
-                                      index <= value
-                                        ? "fas fa-star"
-                                        : "far fa-star"
-                                    }
-                                  />
-                                </span>
-                              );
-                            }}
-                          />
-                          <label htmlFor={index}>{rating.title}</label>
-                        </div>
-                      ))}
-                    </fieldset>
-                  </div>
-                )}
-              <div className={styles.layout__item}>
-                <div className={[styles.input].join(" ")}>
-                  <label htmlFor="notes">Additional notes</label>
-                  <textarea
-                    name="notes"
-                    cols="30"
-                    rows="10"
-                    placeholder="Notes (optional)"
-                    ref={register}
-                  ></textarea>
-                </div>
+              <div className="">
+                {ratingList &&
+                  ratingList[0].ratingTypes &&
+                  ratingList[0].ratingTypes.length > 0 && (
+                    <div className={styles.layout__item}>
+                      <fieldset>
+                        <legend>Rate the services</legend>
+                        {ratingList &&
+                          ratingList[0] &&
+                          ratingList[0].ratingTypes.length > 0 &&
+                          ratingList[0].ratingTypes.map((rating, index) => (
+                            <div className={styles.rating} key={index}>
+                              <StarRatingComponent
+                                starCount={5}
+                                name={index}
+                                starColor="#ffb400"
+                                emptyStarColor="#ffb400"
+                                value={ratings[index] ? ratings[index] : 0}
+                                onStarClick={e => handleRating(index, e)}
+                                renderStarIcon={(index, value) => {
+                                  return (
+                                    <span>
+                                      <i
+                                        className={
+                                          index <= value
+                                            ? "fas fa-star"
+                                            : "far fa-star"
+                                        }
+                                      />
+                                    </span>
+                                  );
+                                }}
+                              />
+                              <label htmlFor={index}>{rating.title}</label>
+                            </div>
+                          ))}
+                      </fieldset>
+                    </div>
+                  )}
               </div>
             </div>
             <div className={styles.actions}>

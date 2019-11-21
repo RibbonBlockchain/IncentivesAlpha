@@ -35,6 +35,9 @@ export const UserSchema = new Schema({
   gender: {
     type: String
   },
+  title: {
+    type: String
+  },
   phoneNumber: {
     type: String,
     required: "Please Enter a Mobile Number",

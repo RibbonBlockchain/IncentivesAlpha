@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import IRegistry from "../../common/services/blockchain/apps/registry";
 import AuthAPI from "../../common/services/api/auth.api";
-import { setItem } from "../../common/utils/storage";
+import { setItem, clear } from "../../common/utils/storage";
 
 export async function authenticateUser(provider) {
   let contract = new IRegistry();
@@ -32,7 +32,7 @@ export async function authenticateUser(provider) {
           error: authWithAPI.error,
           publicAddress
         };
-      } else {
+      } else if (authWithAPI.token) {
         let loginType = await contract.getUserRole(publicAddress);
         if (loginType) {
           return {
@@ -45,6 +45,12 @@ export async function authenticateUser(provider) {
             error: "Failed to retrieve user login role"
           };
         }
+      } else {
+        clear();
+        return {
+          error:
+            "Looks like connection to server timed out. Please try again later"
+        };
       }
     } catch (error) {
       return {
@@ -52,7 +58,6 @@ export async function authenticateUser(provider) {
       };
     }
   } catch (error) {
-    console.log(error);
     return {
       error
     };

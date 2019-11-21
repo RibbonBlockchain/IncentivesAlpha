@@ -1,13 +1,11 @@
+/* eslint-disable jsx-a11y/heading-has-content */
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
 import * as moment from "moment";
 import Card from "../../../common/components/Card";
-import { Link } from "../../../common/theme";
 import { useData } from "../../../common/providers/API.provider";
-import { getBlockscoutLink } from "../../../common/utils";
 import { roleNames } from "../../../common/constants/roles";
 import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
@@ -15,14 +13,8 @@ import Modal from "../../../common/components/Modal";
 import { generateReport } from "../../Dashboard/dashboard.utils";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
-import { useAlert } from "../../../common/providers/Modal.provider";
-
-const StyledTitle = styled.h3`
-  font-weight: 300;
-`;
-const StyledDate = styled(StyledTitle)``;
-
-const StyledAddress = styled(Link)``;
+import { useAlert, useModal } from "../../../common/providers/Modal.provider";
+import { useWeb3 } from "../../../common/providers/Web3.provider";
 
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
@@ -125,10 +117,12 @@ function DownloadCSV({ isOpen, onDismiss }) {
 }
 
 export default function ListPractitioners() {
-  const [{ users }] = useData();
+  const [{ users, interactions }] = useData();
+  const [{ user, loginType }] = useWeb3();
   const [state, setState] = useState([]);
   const [search, setSearch] = useState();
   const [visible, setVisible] = useState(false);
+  const [, toggleModal] = useModal();
   const fuse = new Fuse(state, {
     maxPatternLength: 32,
     minMatchCharLength: 3,
@@ -140,15 +134,19 @@ export default function ListPractitioners() {
   }, []);
 
   async function fetchPractionersOnly() {
-    let practitioners = [];
-    await users.map(user => {
-      if (user.role === roleNames.PRACTITIONER) {
-        practitioners.push(user);
-      } else {
-        return;
-      }
-    });
-    setState(practitioners);
+    if (loginType === roleNames.SUPER_ADMIN) {
+      let practitioners = users.filter(
+        practitioner => practitioner.role === roleNames.PRACTITIONER
+      );
+      setState(practitioners);
+    } else {
+      let practitioners = users.filter(
+        practitioner =>
+          practitioner.role === roleNames.PRACTITIONER &&
+          practitioner.onBoardedBy === user._id
+      );
+      setState(practitioners);
+    }
   }
 
   function _noRowsRenderer() {
@@ -157,32 +155,20 @@ export default function ListPractitioners() {
 
   function renderName({ rowData }) {
     return (
-      <StyledTitle>
+      <div>
         {rowData && rowData.firstName && rowData.lastName
           ? `${rowData.firstName} ${rowData.lastName} `
           : `Not Available`}
-      </StyledTitle>
+      </div>
     );
   }
 
-  function renderAddress({ rowData }) {
-    return (
-      <StyledTitle>
-        <StyledAddress
-          href={getBlockscoutLink(rowData.publicAddress, "address")}
-        >
-          {rowData.publicAddress}
-        </StyledAddress>
-      </StyledTitle>
-    );
+  function renderIDNumber({ rowData }) {
+    return <div>{rowData.idNumber}</div>;
   }
 
   function renderDate({ rowData }) {
-    return (
-      <StyledDate>
-        {moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}
-      </StyledDate>
-    );
+    return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
   async function handleSearch(e) {
@@ -194,6 +180,20 @@ export default function ListPractitioners() {
     }
   }
 
+  function toggleDetailsModal(data) {
+    let activities = interactions.filter(
+      interaction => interaction.practitioner._id === data._id
+    );
+    toggleModal({
+      isVisible: true,
+      data: {
+        data,
+        activities
+      },
+      modal: "details"
+    });
+  }
+
   return (
     <>
       {state ? (
@@ -201,10 +201,8 @@ export default function ListPractitioners() {
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              <Button
-                className={styles.csv_button}
-                text="Download"
-              />
+              {/* <Button className={styles.csv_button} text="Download" /> */}
+              <div></div>
               <input
                 className={[styles.form_input].join(" ")}
                 type="text"
@@ -214,44 +212,45 @@ export default function ListPractitioners() {
               />
             </div>
           </div>
-          <AutoSizer disableHeight>
-            {({ width }) => (
-              <Table
-                width={width}
-                height={500}
-                headerHeight={40}
-                noRowsRenderer={_noRowsRenderer}
-                rowHeight={40}
-                rowCount={state.length}
-                rowGetter={({ index }) => state[index]}
-                headerClassName={[
-                  styles.ReactVirtualized__Table__headerColumn
-                ].join(" ")}
-              >
-                <Column
-                  label="Practitioner"
-                  cellRenderer={renderName}
-                  dataKey="practitionerAddress"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={300}
-                />
-                <Column
-                  label="Wallet Address"
-                  cellRenderer={renderAddress}
-                  dataKey="practitionerAddress"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={500}
-                />
-                <Column
-                  label="Date Registered"
-                  cellRenderer={renderDate}
-                  dataKey="createdDate"
-                  className={styles.ReactVirtualized__Table__rowColumn_ticker}
-                  width={300}
-                />
-              </Table>
-            )}
-          </AutoSizer>
+          <div style={{ flex: "1 1 auto", height: "79vh" }}>
+            <AutoSizer>
+              {({ height, width }) => (
+                <Table
+                  width={width}
+                  height={height}
+                  headerHeight={40}
+                  noRowsRenderer={_noRowsRenderer}
+                  rowHeight={40}
+                  rowCount={state.length}
+                  rowGetter={({ index }) => state[index]}
+                  onRowClick={({ index }) => toggleDetailsModal(state[index])}
+                  rowClassName={styles.ReactVirtualized__Table__rowColumn}
+                  headerClassName={[
+                    styles.ReactVirtualized__Table__headerColumn
+                  ].join(" ")}
+                >
+                  <Column
+                    label="Practitioner Number"
+                    cellRenderer={renderIDNumber}
+                    dataKey="idNumber"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Practitioner"
+                    cellRenderer={renderName}
+                    dataKey="practitionerAddress"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Date Registered"
+                    cellRenderer={renderDate}
+                    dataKey="createdDate"
+                    width={width - 200}
+                  />
+                </Table>
+              )}
+            </AutoSizer>
+          </div>
         </Card>
       ) : (
         <DesktopLoader />

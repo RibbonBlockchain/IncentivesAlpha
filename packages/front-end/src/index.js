@@ -15,6 +15,7 @@ import Web3Provider from "./common/providers/Web3.provider";
 import ModalProvider from "./common/providers/Modal.provider";
 import APIProvider from "./common/providers/API.provider";
 import AppProvider from "./common/providers/App.provider";
+import RatesProvider from "./common/providers/Rates.provider";
 import TransactionStatusProvider from "./common/providers/TransactionStatus.provider";
 
 const Updaters = () => (
@@ -25,17 +26,21 @@ const Updaters = () => (
 
 const ContextProviders = ({ children }) => (
   <>
-    <StorageProvider>
-      <AppProvider>
-        <Web3Provider>
-          <ModalProvider>
-            <APIProvider>
-              <TransactionStatusProvider>{children}</TransactionStatusProvider>
-            </APIProvider>
-          </ModalProvider>
-        </Web3Provider>
-      </AppProvider>
-    </StorageProvider>
+    <RatesProvider>
+      <StorageProvider>
+        <AppProvider>
+          <Web3Provider>
+            <ModalProvider>
+              <APIProvider>
+                <TransactionStatusProvider>
+                  {children}
+                </TransactionStatusProvider>
+              </APIProvider>
+            </ModalProvider>
+          </Web3Provider>
+        </AppProvider>
+      </StorageProvider>
+    </RatesProvider>
   </>
 );
 

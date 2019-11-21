@@ -3,22 +3,28 @@ import InteractionAPI from "../../common/services/api/interaction.api";
 
 export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
-  let { patient, practitioner, user, amount, serviceRatings } = data;
+  let {
+    patient,
+    practitioner,
+    user,
+    amount,
+    serviceRatings
+  } = data;
 
-  let practitionerAmount = Number(
-    (amount * 0.1 + sumRatings(serviceRatings) / 30) * 0.05 * amount
-  ).toFixed(10);
+  let practitionerAmount = parseFloat((amount * 0.1 * sumRatings(serviceRatings) / 30 + 0.05 * amount).toFixed(10));
 
-  let chwAmount = Number(amount * 0.15).toFixed(10);
+  let chwAmount = parseFloat((amount * 0.15).toFixed(10));
 
   let payoutInformation = {
     patient: patient.value.publicAddress,
     practitioner: practitioner.value.publicAddress,
     chw: user.publicaddress,
-    patientAmount: Number(amount).toFixed(10),
-    practitionerAmount,
-    chwAmount
+    patientAmount: amount,
+    practitionerAmount: practitionerAmount,
+    chwAmount: chwAmount
   };
+
+  console.log("payoutInformation:", payoutInformation)
 
   try {
     if (amount > 0) {
@@ -44,9 +50,9 @@ export const recordInteraction = async data => {
 };
 
 const sumRatings = serviceRatings => {
-  return typeof serviceRatings !== "undefined"
-    ? Object.entries(serviceRatings).reduce((acc, curVal) => acc + curVal[1], 0)
-    : 0;
+  return typeof serviceRatings !== "undefined" ?
+    Object.entries(serviceRatings).reduce((acc, curVal) => acc + curVal[1], 0) :
+    0;
 };
 
 export const recordInteractionOnDB = async ({
@@ -56,9 +62,12 @@ export const recordInteractionOnDB = async ({
   amount,
   activities,
   prescriptions,
-  serviceRatings
+  serviceRatings,
+  txHash
 }) => {
   let interactionAPI = new InteractionAPI();
+  let practitionerAmount = parseFloat((amount * 0.1 * sumRatings(serviceRatings) / 30 + 0.05 * amount).toFixed(10));
+  let chwAmount = parseFloat((amount * 0.15).toFixed(10));
   let details = {
     patient: patient.value._id,
     practitioner: practitioner.value._id,
@@ -74,10 +83,14 @@ export const recordInteractionOnDB = async ({
     rewards: [
       {
         patientReward: amount,
-        practitionerReward: amount,
-        chwReward: amount
+        practitionerReward: practitionerAmount,
+        chwReward: chwAmount
       }
     ],
+    transactionLog: {
+      txn_hash: txHash,
+      txn_amount: practitionerAmount + chwAmount + amount
+    },
     serviceRatings
   };
   let interaction = await interactionAPI.createInteraction(details);
