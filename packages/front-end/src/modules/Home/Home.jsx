@@ -77,6 +77,21 @@ function Home() {
       modal: "qr"
     });
   }
+
+  function showOffRampModal() {
+    toggleModal({
+      isVisible: true,
+      data: {
+        details: {
+          publicAddress: address,
+          type: "offramp"
+        },
+        message: ""
+      },
+      modal: "qr"
+    });
+  }
+
   return (
     <>
       <div className={styles.admin}>
@@ -113,6 +128,17 @@ function Home() {
                 {loginType < roleNames.PATIENT && (
                   <>
                     {loginType === roleNames.SUPER_ADMIN && <DonateModal />}
+                    {loginType === roleNames.HEALTH_WORKER && (
+                      <Button
+                        classNames={[
+                          styles.button,
+                          styles.button_small,
+                          styles.button_primary
+                        ].join(" ")}
+                        text="Off ramp Asset"
+                        onClick={showOffRampModal}
+                      />
+                    )}
                     <Onboard />
                     <Recorder />
                   </>
