@@ -47,6 +47,7 @@
     "react-virtualized": "^9.21.1",
     "styled-components": "^4.4.1",
     "truffle-contract": "^4.0.31",
+    "web3": "^1.2.4",
     "web3connect": "^1.0.0-beta.22"
   },
   "scripts": {

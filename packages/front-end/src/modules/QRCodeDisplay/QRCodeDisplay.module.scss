@@ -1,7 +1,7 @@
 @import "../../common/styles/variables";
 
 .modalWindow {
-  width: 30rem;
+  width: 25rem;
   background: $text-color;
 }
 
@@ -42,6 +42,10 @@
 .qrWallet {
   margin: calculateRem(20) 0;
   background-color: $text-color;
+  svg {
+    height: 200px;
+    width: 200px;
+  }
 }
 
 .button {

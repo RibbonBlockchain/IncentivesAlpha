@@ -20,6 +20,7 @@ import CreateHealthWorker from "../HealthWorker/Create";
 import ListHealthWorker from "../HealthWorker/List";
 import { AddressLoader } from "../../common/components/Loader";
 import Onboard from "../Onboard";
+import Offboard from "../Offboard";
 import Recorder from "../Recorder";
 import Profile from "../Profile";
 import UserModal from "../User";
@@ -86,7 +87,7 @@ function Home() {
           publicAddress: address,
           type: "offramp"
         },
-        message: ""
+        message: "Send Tokens"
       },
       modal: "qr"
     });
@@ -128,17 +129,7 @@ function Home() {
                 {loginType < roleNames.PATIENT && (
                   <>
                     {loginType === roleNames.SUPER_ADMIN && <DonateModal />}
-                    {loginType === roleNames.HEALTH_WORKER && (
-                      <Button
-                        classNames={[
-                          styles.button,
-                          styles.button_small,
-                          styles.button_primary
-                        ].join(" ")}
-                        text="Off ramp Asset"
-                        onClick={showOffRampModal}
-                      />
-                    )}
+                    {loginType === roleNames.HEALTH_WORKER && <Offboard />}
                     <Onboard />
                     <Recorder />
                   </>

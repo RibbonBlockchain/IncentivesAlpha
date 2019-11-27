@@ -1,63 +1,62 @@
 import React, { useState, useEffect } from "react";
 import * as qrImage from "qr-image";
 import Modal from "../../common/components/Modal";
-import { useModal } from "../../common/providers/Modal.provider";
-import styles from "./QRCodeDisplay.module.scss";
+import { useWeb3 } from "../../common/providers/Web3.provider";
+import styles from "./Offboard.module.scss";
+import Button from "../../common/components/Button";
+import { watchTransfers } from "../../common/services/blockchain/utils";
 
 export default function RegisterWithQR() {
   const [qr, setQR] = useState({
     image: "",
     data: ""
   });
-  const [{ isVisible, data, modal }, toggleModal] = useModal();
+  const [{ address }] = useWeb3();
+  const [onboardOptions, setOnboardOptions] = useState(false);
 
   useEffect(() => {
-    updateQRCodeImage();
-  }, [data]);
-
-  async function updateQRCodeImage() {
-    let address = null;
-    setQR({ image: "" });
-    if (data && data.details && data.details.publicAddress) {
-      if (data.details.type === "onboard") {
-        address = data.details.publicAddress;
-      } else if (data.details.type === "receive") {
-        address = `ethereum:${data.details.publicAddress}`;
-      } else if (data.details.type === "offramp") {
-        address = `ethereum:${data.details.publicAddress}`;
-      }
-      let image = await qrImage.imageSync(address, { type: "svg" });
-      setQR({ image, data });
+    async function updateQRCodeImage() {
+      setQR({ image: "" });
+      let formattedAddress = `ethereum:${address}`;
+      let image = await qrImage.imageSync(formattedAddress, { type: "svg" });
+      setQR({ image, data: address });
     }
-  }
+    updateQRCodeImage();
+  }, [address]);
 
   return (
-    <Modal
-      visible={isVisible && modal === "qr"}
-      windowClassName={styles.modalWindow}
-      onClickClose={() => {
-        toggleModal({
-          isVisible: false,
-          data: null,
-          modal: ""
-        });
-      }}
-    >
-      <div className={styles.cnt}>
-        <div className={styles.header}>
-          {qr.image ? (
-            <>
-              {data && data && <h3>{data.message}</h3>}
-              <div
-                className={styles.qrWallet}
-                dangerouslySetInnerHTML={{ __html: qr.image.toString() }}
-                {...qr.data.details.publicAddress}
-              ></div>
-              <span>{qr.data.details.publicAddress}</span>
-            </>
-          ) : null}
-        </div>
+    <>
+      <div className={styles.actions}>
+        <Button
+          classNames={styles.button_primary}
+          onClick={() => setOnboardOptions(true)}
+          text="Offboard assets"
+        />
       </div>
-    </Modal>
+      <Modal
+        visible={onboardOptions}
+        windowClassName={styles.modalWindow}
+        onClickClose={() => {
+          setOnboardOptions(false);
+        }}
+      >
+        <div className={styles.cnt}>
+          <div className={styles.header}>
+            {qr.image ? (
+              <>
+                <div
+                  className={styles.qrWallet}
+                  dangerouslySetInnerHTML={{ __html: qr.image.toString() }}
+                  {...qr.data}
+                ></div>
+                <div>Waiting for transaction</div>
+                <div>Transaction failed.</div>
+                <div>Transaction successful. 10 xdai (10 USD) received</div>
+              </>
+            ) : null}
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 }
