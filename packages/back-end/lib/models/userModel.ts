@@ -35,6 +35,9 @@ export const UserSchema = new Schema({
   gender: {
     type: String
   },
+  location: {
+    type: String
+  },
   title: {
     type: String
   },

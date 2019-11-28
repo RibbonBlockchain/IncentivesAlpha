@@ -15,6 +15,9 @@ export const SettingsSchema = new Schema({
     type: Number,
     required: "chw percentage is required"
   },
+  exchangeRateUSDZAR: {
+    type: Number
+  },
   ratingTypes: [
     {
       title: String

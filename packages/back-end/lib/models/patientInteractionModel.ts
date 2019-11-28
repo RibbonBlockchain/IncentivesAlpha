@@ -1,6 +1,8 @@
 import * as mongoose from "mongoose";
 import { FKHelper } from "./helpers/foreign-key-helper";
 
+const AutoIncrement = require('mongoose-sequence')(mongoose);
+
 const Schema = mongoose.Schema;
 
 export const PatientInteractionSchema = new Schema({
@@ -67,6 +69,8 @@ export const PatientInteractionSchema = new Schema({
     default: Date.now
   }
 });
+
+PatientInteractionSchema.plugin(AutoIncrement, {inc_field: 'counter'});
 
 PatientInteractionSchema.pre("find", autoPopulateForeigns);
 PatientInteractionSchema.pre("findOne", autoPopulateForeigns);
