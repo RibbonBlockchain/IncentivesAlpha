@@ -10,6 +10,7 @@ import { clear } from "../../common/utils/storage";
 import { useModal } from "../../common/providers/Modal.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
+import { useExchange } from "../../common/providers/Rates.provider";
 import styles from "./Wallet.module.scss";
 
 function Profile({
@@ -18,7 +19,8 @@ function Profile({
   handleProfileNavigation,
   showSendModal,
   currency,
-  showQRCodeModal
+  showQRCodeModal,
+  rate
 }) {
   async function handleSignOut() {
     clear();
@@ -53,10 +55,8 @@ function Profile({
             </a>
           </small>
           <>
-            <Balance
-              balance={Number(user.balance).toFixed(4)}
-              ticker={currency.toString().toUpperCase()}
-            />
+            <span>{Number(user.balance * rate).toFixed(4)} ZAR</span>
+            {/* <Balance balance={} ticker="ZAR" /> */}
             <div className={styles.actions}>
               <Button
                 classNames={[
@@ -109,6 +109,7 @@ function Wallet({ history }) {
   const [{ isVisible, data, modal }, toggleModal] = useModal();
   const [{ loginType, balance }] = useWeb3();
   const [{ currency }] = useApp();
+  const [{ exchangeRate }] = useExchange();
 
   function onClickClose() {
     toggleModal({
@@ -160,6 +161,7 @@ function Wallet({ history }) {
         <Profile
           user={details}
           data={data}
+          rate={exchangeRate}
           currency={currency}
           showQRCodeModal={handleQRCodeModal}
           showSendModal={handleSendWalletModal}

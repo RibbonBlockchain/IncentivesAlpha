@@ -22,4 +22,10 @@ export default class RatingAPI extends HTTP {
       authorization: `Bearer ${getItem("token")}`
     });
   }
+
+  async fetchExchangeRate() {
+    return await this.getRequest(`exchangerates`, {
+      authorization: `Bearer ${getItem("token")}`
+    });
+  }
 }

@@ -70,6 +70,7 @@ export default function Onboard() {
     mode: "onChange"
   });
 
+  console.log(formState);
   const [date, setDate] = useState(new Date());
   const [phoneNumber, setPhoneNumber] = useState({
     value: null,
@@ -285,9 +286,16 @@ export default function Onboard() {
                     styles={SelectStyle}
                   />
                 </div>
-                <div className={styles.layout__item}></div>
-                <div className={styles.layout__item}></div>
-                <div className={styles.layout__item}></div>
+                {type === Number(roleNames.PATIENT) && (
+                  <div className={styles.layout__item}>
+                    <div className={[styles.input].join(" ")}>
+                      <label htmlFor="minor">
+                        <input type="checkbox" name="minor" ref={register} />
+                        Is Patient a minor?
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className={[styles.layout].join(" ")}>
                 <div className={styles.layout__item}>

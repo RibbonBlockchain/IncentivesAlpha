@@ -5,6 +5,7 @@ import { useWeb3 } from "../../common/providers/Web3.provider";
 import styles from "./Offboard.module.scss";
 import Button from "../../common/components/Button";
 import { watchTransfers } from "../../common/services/blockchain/utils";
+import { config } from "../../common/constants/config";
 
 export default function RegisterWithQR() {
   const [qr, setQR] = useState({
@@ -17,9 +18,9 @@ export default function RegisterWithQR() {
   useEffect(() => {
     async function updateQRCodeImage() {
       setQR({ image: "" });
-      let formattedAddress = `ethereum:${address}`;
+      let formattedAddress = `ethereum:${config.VAULT_CONTRACT_ADDRESS}`;
       let image = await qrImage.imageSync(formattedAddress, { type: "svg" });
-      setQR({ image, data: address });
+      setQR({ image, data: config.VAULT_CONTRACT_ADDRESS });
     }
     updateQRCodeImage();
   }, [address]);
@@ -49,9 +50,6 @@ export default function RegisterWithQR() {
                   dangerouslySetInnerHTML={{ __html: qr.image.toString() }}
                   {...qr.data}
                 ></div>
-                <div>Waiting for transaction</div>
-                <div>Transaction failed.</div>
-                <div>Transaction successful. 10 xdai (10 USD) received</div>
               </>
             ) : null}
           </div>

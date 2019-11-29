@@ -27,6 +27,7 @@ const cache = new CellMeasurerCache({
 
 function DashboardTable({ data, type }) {
   const [{ currency }] = useApp();
+  const [{ exchangeRate }] = useExchange();
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }
@@ -125,7 +126,10 @@ function DashboardTable({ data, type }) {
         totalTokenSent = 0.0;
         break;
     }
-    return <div>{`${Number(totalTokenSent).toFixed(4)} ${currency}`}</div>;
+    return (
+      <div>{`${Number(totalTokenSent * exchangeRate).toFixed(4)} ZAR`}</div>
+    );
+    // return <div>{`${Number(totalTokenSent).toFixed(4)} ${currency}`}</div>;
   }
 
   return (
@@ -385,7 +389,7 @@ function Stats({ type, dashboard }) {
                   <div className={styles.count_item__heading}>
                     {`${formatCurrency(
                       dashboard.chw.chw.earnings * exchangeRate
-                    )} USD`}
+                    )} ZAR`}
                   </div>
                 </div>
               </div>
@@ -444,7 +448,7 @@ function Stats({ type, dashboard }) {
                   <div className={styles.count_item__data}>
                     {`${formatCurrency(
                       dashboard.practitioner.earnings * exchangeRate
-                    )} USD`}
+                    )} ZAR`}
                   </div>
                 </div>
               </div>
@@ -500,7 +504,7 @@ function Stats({ type, dashboard }) {
                   <div className={styles.count_item__data}>
                     {`${formatCurrency(
                       dashboard.patient.earnings * exchangeRate
-                    )} USD`}
+                    )} ZAR`}
                   </div>
                 </div>
               </div>

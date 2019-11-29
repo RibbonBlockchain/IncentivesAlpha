@@ -21,10 +21,11 @@ export const allowedRoutes = [
     "/app/interactions",
     "/app/health-workers",
     "/app/health-workers/new",
-    "/app/prescriptions"
+    "/app/prescriptions",
+    "/app/administrators"
   ],
   ["/app/practitioners", "/app/patients", "/app/interactions"],
-  [],
+  ["/app/minors"],
   []
 ];
 

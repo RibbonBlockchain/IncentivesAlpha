@@ -1,4 +1,6 @@
 import React from "react";
+import QRScanner from "qr-code-scanner";
+import { ethers } from "ethers";
 import useForm from "react-hook-form";
 import { sendTokens } from "../Dashboard/dashboard.utils";
 import { useModal, useAlert } from "../../common/providers/Modal.provider";
@@ -12,7 +14,14 @@ export default function Send() {
   const [{ modal, isVisible }, toggleModal] = useModal();
   const [, toggle] = useAlert();
   const [{ currency }] = useApp();
-  const { handleSubmit, register, errors, formState } = useForm({
+  const {
+    handleSubmit,
+    register,
+    errors,
+    formState,
+    setValue,
+    triggerValidation
+  } = useForm({
     mode: "onChange"
   });
   const [, checkTransactionStatus] = useTransactionStatus();
@@ -39,6 +48,26 @@ export default function Send() {
       e.target.reset();
     }
   }
+
+  function captureAddressFromQRCodeDisplay() {
+    QRScanner.initiate({
+      onResult: address => {
+        console.log(address);
+        // if (ethers.utils.getAddress(address)) {
+        //   setValue("receipient", address);
+        //   triggerValidation({ name: "receipient", value: address });
+        // } else {
+        //   toggle({
+        //     isVisible: true,
+        //     message: `Address ${address} does not match checksum`,
+        //     data: {}
+        //   });
+        // }
+      },
+      timeout: 20000
+    });
+  }
+
   return (
     <Modal
       visible={isVisible && modal === "send"}
@@ -50,6 +79,14 @@ export default function Send() {
           onSubmit={handleSubmit(onSubmit)}
           className={styles.modalFormWindow}
         >
+          <div className={styles.actions}>
+            <Button
+              text="Capture Address"
+              classNames={[styles.button, styles.button_primary].join(" ")}
+              onClick={captureAddressFromQRCodeDisplay}
+              button="button"
+            ></Button>
+          </div>
           <div className={styles.layout__item}>
             <div className={[styles.input].join(" ")}>
               <label htmlFor="receipient">Receipient Address</label>

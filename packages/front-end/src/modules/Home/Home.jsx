@@ -18,6 +18,8 @@ import CreatePatient from "../Patients/Create";
 import ListPatients from "../Patients/List";
 import CreateHealthWorker from "../HealthWorker/Create";
 import ListHealthWorker from "../HealthWorker/List";
+import ListMinors from "../Minors/List";
+import ListAdministrators from "../Administrators/List";
 import { AddressLoader } from "../../common/components/Loader";
 import Onboard from "../Onboard";
 import Offboard from "../Offboard";
@@ -27,7 +29,6 @@ import UserModal from "../User";
 import styles from "./Home.module.scss";
 import { formatLink } from "../../common/utils";
 import { allowedRoutes, roleNames } from "../../common/constants/roles";
-
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useModal } from "../../common/providers/Modal.provider";
 
@@ -74,20 +75,6 @@ function Home() {
           type: "receive"
         },
         message: ""
-      },
-      modal: "qr"
-    });
-  }
-
-  function showOffRampModal() {
-    toggleModal({
-      isVisible: true,
-      data: {
-        details: {
-          publicAddress: address,
-          type: "offramp"
-        },
-        message: "Send Tokens"
       },
       modal: "qr"
     });
@@ -226,12 +213,23 @@ function Home() {
               path="/app/patients/new"
               component={CreatePatient}
             />
-
             <IsAllowedRoute
               appProps={loginType}
               exact
               path="/app/health-workers"
               component={ListHealthWorker}
+            />
+            <IsAllowedRoute
+              appProps={loginType}
+              exact
+              path="/app/administrators"
+              component={ListAdministrators}
+            />
+            <IsAllowedRoute
+              appProps={loginType}
+              exact
+              path="/app/minors"
+              component={ListMinors}
             />
             <IsAllowedRoute
               appProps={loginType}

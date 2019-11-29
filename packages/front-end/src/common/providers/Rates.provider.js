@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useCallback
 } from "react";
+import RatesAPI from "../services/api/rating.api";
 
 const ExchangeRateContext = createContext();
 
@@ -52,20 +53,16 @@ export default function Provider({ children }) {
 
 export const useExchange = () => {
   const [{ exchangeRate }, { update }] = useExchangeRateContext();
+  const rateAPI = new RatesAPI();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=dai&vs_currencies=usd"
-      )
-        .then(response => response.json())
-        .then(response =>
-          update({
-            exchangeRate: response.dai.usd
-          })
-        );
-    }, 10000);
-    return () => clearInterval(interval);
+    const loadExchangeRate = async () => {
+      let data = await rateAPI.fetchExchangeRate();
+      await update({
+        exchangeRate: data
+      });
+    };
+    loadExchangeRate();
   }, []);
 
   return [{ exchangeRate }];

@@ -15,6 +15,7 @@ const useAppContext = () => useContext(AppContext);
 
 const initialState = () => ({
   currency: "xdai",
+  currencyRate: 0,
   activityList: [],
   prescriptionList: [],
   ratingList: [{ ratingTypes: [] }]
@@ -23,12 +24,19 @@ const initialState = () => ({
 const LOAD_CONFIGURATION = "config/LOAD_CONFIGURATION";
 
 const reducer = (state, { type, payload }) => {
-  const { currency, activityList, prescriptionList, ratingList } = payload;
+  const {
+    currency,
+    currencyRate,
+    activityList,
+    prescriptionList,
+    ratingList
+  } = payload;
   switch (type) {
     case LOAD_CONFIGURATION:
       return {
         ...state,
         currency,
+        currencyRate,
         activityList,
         prescriptionList,
         ratingList
@@ -64,22 +72,30 @@ export const useApp = () => {
   const prescriptionAPI = new PrescriptionAPI();
   const activityAPI = new ActivityAPI();
   const ratingAPI = new RatingAPI();
-  const { currency, activityList, prescriptionList, ratingList } = state;
+  const {
+    currency,
+    currencyRate,
+    activityList,
+    prescriptionList,
+    ratingList
+  } = state;
 
   const loadDetails = async () => {
     let activityList = await activityAPI.listActivities();
     let prescriptionList = await prescriptionAPI.listPrescriptions();
     let ratings = await ratingAPI.listRatings();
+    let currencyRate = await ratingAPI.fetchExchangeRate();
     await update({
       activityList,
       currency: currency,
+      currencyRate: currencyRate,
       prescriptionList,
       ratingList: ratings.length > 0 ? ratings : ratingList
     });
   };
 
   return [
-    { currency, activityList, prescriptionList, ratingList },
+    { currency, activityList, currencyRate, prescriptionList, ratingList },
     loadDetails
   ];
 };
