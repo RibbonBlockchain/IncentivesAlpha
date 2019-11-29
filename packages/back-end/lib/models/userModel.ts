@@ -17,12 +17,14 @@ export const UserSchema = new Schema({
   },
   publicAddress: {
     type: String,
-    required: true,
     index: { unique: true }
   },
   role: {
     type: Number,
     required: "Enter a number between 0 and 3"
+  },
+  category: {
+    type: Number,
   },
   dateOfBirth: {
     type: Date,
@@ -43,10 +45,13 @@ export const UserSchema = new Schema({
   },
   phoneNumber: {
     type: String,
-    required: "Please Enter a Mobile Number",
     index: { unique: true }
   },
   onBoardedBy: {
+    type: Schema.ObjectId,
+    ref: "User"
+  },
+  relatedTo: {
     type: Schema.ObjectId,
     ref: "User"
   },
@@ -55,3 +60,14 @@ export const UserSchema = new Schema({
     default: Date.now
   }
 });
+
+UserSchema.pre("find", autoPopulateForeigns);
+UserSchema.pre("findOne", autoPopulateForeigns);
+
+function autoPopulateForeigns(next) {
+  this.populate("relatedTo", ["firstName", "lastName", "publicAddress"])
+    .populate("onBoardedBy", ["firstName", "lastName", "publicAddress"])
+  next();
+
+}
+
