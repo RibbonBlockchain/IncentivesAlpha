@@ -153,16 +153,6 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
   let activities = formatActivityOptions(activityList);
   let prescriptions = formatPrescriptionOptions(prescriptionList);
 
-  function isValid() {
-    let { patient, practitioner, activities, prescriptions } = record;
-    let state =
-      patient.hasOwnProperty("_id") &&
-      practitioner.hasOwnProperty("_id") &&
-      activities.length > 0 &&
-      prescriptions.length > 0;
-    return state ? true : false;
-  }
-
   async function onSubmit(values) {
     let data = {
       ...values,

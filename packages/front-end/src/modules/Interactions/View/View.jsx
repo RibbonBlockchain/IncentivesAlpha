@@ -23,7 +23,7 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
         <div className={styles.description}>
           <span className={styles.heading}>
             Tokens earned:{" "}
-            {`${data.rewards[0].patientReward} ${
+            {`${Number(data.rewards[0].patientReward).toFixed(4)} ${
               data.rewards[0].patientReward ? currency : ""
             }`}
           </span>
@@ -47,7 +47,7 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
         <div className={styles.description}>
           <span className={styles.heading}>
             Tokens earned:{" "}
-            {`${data.rewards[0].practitionerReward} ${
+            {`${Number(data.rewards[0].practitionerReward).toFixed(4)} ${
               data.rewards[0].practitionerReward ? currency : ""
             }`}
           </span>
@@ -74,7 +74,7 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
         <div className={styles.description}>
           <span className={styles.heading}>
             Tokens earned:{" "}
-            {`${data.rewards[0].chwReward} ${
+            {`${Number(data.rewards[0].chwReward).toFixed(4)} ${
               data.rewards[0].chwReward ? currency : ""
             }`}
           </span>
@@ -88,6 +88,12 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
               View Address
             </a>
           </span>
+        </div>
+      </div>
+      <div className={styles.flex}>
+        <div className={styles.title}>Interactions recorded</div>
+        <div className={styles.description}>
+          {data.activities.map(activity => activity.activityTitle).join(", ")}
         </div>
       </div>
       <div className={styles.wallet}>

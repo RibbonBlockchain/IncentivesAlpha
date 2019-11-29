@@ -21,13 +21,19 @@ function Login() {
   const loginUser = async provider => {
     setIsLoading(true);
     let result = await authenticateUser(provider);
+    console.log(result);
     let { authWithAPI, publicAddress, loginType } = result;
     if (result.error) {
       setIsLoading(false);
-      if (result.error.code == -32603) {
+      if (result.error.code === -32603) {
         toggle({
           isVisible: true,
-          message: result.error.stack.split(".")[0].split(":")[2]
+          message: result.error.message || result.error.stack.split(".")[0].split(":")[2]
+        });
+      } else if (result.error === "SIG_FAIL_ERR") {
+        toggle({
+          isVisible: true,
+          message: "Signature verification failed. Please try again"
         });
       } else if (result.error === "USER_NOT_FOUND_ERR") {
         toggleModal({
@@ -78,6 +84,7 @@ function Login() {
             </div>
             <div className={styles.login_box}>
               <Web3Connect.Button
+                network="mainnet"
                 providerOptions={{
                   walletconnect: {
                     package: WalletConnectProvider,

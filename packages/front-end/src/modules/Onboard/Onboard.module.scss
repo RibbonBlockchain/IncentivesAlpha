@@ -69,7 +69,7 @@ img {
 
 .form {
   display: grid;
-  grid-template-rows: 0fr 0fr 3fr 0fr;
+  grid-template-rows: 0fr 0fr 5fr 0fr;
 }
 
 .form_body {
@@ -99,6 +99,31 @@ img {
 
 .heading {
   color: $background;
+}
+
+.checkbox {
+  padding-top: calculateRem(15);
+}
+
+.optionLabel {
+  display: flex;
+  flex-direction: column;
+  color: #939ba1;
+  &_user {
+    &__heading {
+      display: flex;
+      justify-content: space-between;
+    }
+    span {
+      font-size: calculateRem(14);
+      font-family: $font;
+      font-weight: 600;
+    }
+  }
+  small {
+    color: #939ba1;
+    text-align: right;
+  }
 }
 
 .card__light {

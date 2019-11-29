@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import useForm from "react-hook-form";
 import styles from "./Profile.module.scss";
 import Card from "../../common/components/Card";
@@ -10,6 +11,10 @@ import { useWeb3 } from "../../common/providers/Web3.provider";
 export default function Profile() {
   const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
+  });
+  const [phoneNumber, setPhoneNumber] = useState({
+    value: null,
+    isValid: false
   });
   const [, toggle] = useAlert();
   const [{ address, user }] = useWeb3();
@@ -39,7 +44,7 @@ export default function Profile() {
     <>
       <h2>Profile</h2>
       <div className={styles.layout__item__full}>
-        <Card classNames={[styles.card, styles.background].join(" ")}>
+        <Card classNames={[styles.card].join(" ")}>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className={styles.form}
@@ -81,6 +86,40 @@ export default function Profile() {
                   })}
                 />
                 <small> {errors.lastName && errors.lastName.message}</small>
+              </div>
+            </div>
+            <div className={styles.layout}>
+              <div className={styles.layout__item}>
+                <div className={[styles.input].join(" ")}>
+                  <label htmlFor="phoneNumber">Phone Number</label>
+                  <PhoneInput
+                    className={[styles.form_input].join(" ")}
+                    placeholder="phone number"
+                    value={user.phoneNumber}
+                    onChange={value => {
+                      setPhoneNumber({
+                        isValid: isValidPhoneNumber(value),
+                        value
+                      });
+                    }}
+                  />
+                  {phoneNumber.value && !phoneNumber.isValid && (
+                    <small>invalid phone number</small>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className={styles.layout__item}>
+              <div className={[styles.input].join(" ")}>
+                <label htmlFor="address">House Address</label>
+                <textarea
+                  name="houseAddress"
+                  cols="30"
+                  rows="3"
+                  defaultValue={user.address}
+                  placeholder="Your home Address"
+                  ref={register}
+                ></textarea>
               </div>
             </div>
             <div className={styles.layout__item}>

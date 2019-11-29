@@ -5,12 +5,14 @@ import Select from "react-select";
 import { ethers } from "ethers";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import QRScanner from "qr-code-scanner";
+import ReactiveQR from "reactive-qr";
 import * as moment from "moment";
 import "react-phone-number-input/style.css";
 import { createNewUser, recordNewUser } from "./onboard.utils";
 import { roleNames, roles } from "../../common/constants/roles";
 import Button from "../../common/components/Button";
 import Modal from "../../common/components/Modal";
+import { getByRole } from "../Dashboard/dashboard.utils";
 import styles from "./Onboard.module.scss";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useAlert } from "../../common/providers/Modal.provider";
@@ -45,13 +47,34 @@ const SelectStyle = {
     padding: 0
   })
 };
+
+const formatUserOptionLabel = ({ label, value }) => {
+  return (
+    <>
+      {value && (
+        <>
+          <div className={styles.optionLabel}>
+            <div className={styles.optionLabel_user__heading}>
+              <span>{`${value.firstName} ${value.lastName}`}</span>
+              <span>{label}</span>
+            </div>
+            <small>{value.publicAddress}</small>
+          </div>
+        </>
+      )}
+    </>
+  );
+};
 export default function Onboard() {
   const [onboardOptions, setOnboardOptions] = useState(false);
-  const [record, setRecord] = useState({});
+  const [record, setRecord] = useState({
+    title: "",
+    relatedTo: ""
+  });
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
-  const [, fetchData] = useData();
-  const [{ loginType }] = useWeb3();
+  const [{ users }, fetchData] = useData();
+  const [{ user, loginType }] = useWeb3();
   const [loading, setLoading] = useState(false);
   const [
     ,
@@ -70,12 +93,14 @@ export default function Onboard() {
     mode: "onChange"
   });
 
-  console.log(formState);
   const [date, setDate] = useState(new Date());
+  const [isChecked, setIsChecked] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState({
     value: null,
     isValid: false
   });
+
+  let patients = getByRole(users, roleNames.PATIENT);
 
   function showAdminForm() {
     setOnboardOptions(false);
@@ -113,6 +138,13 @@ export default function Onboard() {
       title: record.title.value,
       phoneNumber: phoneNumber.value
     };
+    if (isChecked) {
+      data.relatedTo = record.relatedTo.value._id;
+      data.onBoardedBy = user._id;
+      data.publicAddress = record.relatedTo.value.publicAddress;
+      data.category = 0;
+    }
+
     setLoading(true);
     let newUser = await createNewUser(data);
     if (newUser.error) {
@@ -124,6 +156,10 @@ export default function Onboard() {
       });
     } else {
       await checkTransactionStatus(newUser);
+      if (isChecked) {
+        delete data.publicAddress;
+        delete data.phoneNumber;
+      }
       let record = await recordNewUser(data);
       closeTransactionStatus();
       if (record.error) {
@@ -165,20 +201,39 @@ export default function Onboard() {
 
   function captureAddressFromQRCodeDisplay() {
     QRScanner.initiate({
-      onResult: address => {
-        if (ethers.utils.getAddress(address)) {
-          setValue("publicAddress", address);
-          triggerValidation({ name: "publicAddress", value: address });
-        } else {
-          toggle({
-            isVisible: true,
-            message: `Address ${address} does not match checksum`,
-            data: {}
-          });
-        }
+      match: /^[a-zA-Z0-9]{16,18}$/, // optional
+      onResult: function(result) {
+        console.info("DONE: ", result);
       },
-      timeout: 20000
+      onError: function(err) {
+        console.error("ERR :::: ", err);
+      }, // optional
+      onTimeout: function() {
+        console.warn("TIMEOUT");
+      } // optional
     });
+    // QRScanner.initiate({
+    //   onResult: address => {
+    //     console.log(address);
+    // if (ethers.utils.getAddress(address)) {
+    //   setValue("publicAddress", address);
+    //   triggerValidation({ name: "publicAddress", value: address });
+    // } else {
+    //   toggle({
+    //     isVisible: true,
+    //     message: `Address ${address} does not match checksum`,
+    //     data: {}
+    //   });
+    // }
+    //   },
+    //   timeout: 20000
+    // });
+  }
+
+  function handleIsMinor() {
+    setIsChecked(!isChecked);
+    register({ name: "publicAddress" }, { required: false });
+    setPhoneNumber({ value: "", isValid: true });
   }
 
   const OnboardOptions = ({ visible, onClickClose }) => {
@@ -257,6 +312,7 @@ export default function Onboard() {
                 text="Capture Wallet Address"
                 classNames={[styles.button, styles.button_primary].join(" ")}
                 onClick={captureAddressFromQRCodeDisplay}
+                disabled={isChecked}
                 button="button"
               ></Button>
             </div>
@@ -279,7 +335,8 @@ export default function Onboard() {
                     })}
                     onChange={title => {
                       setRecord({
-                        title
+                        title,
+                        relatedTo: record.relatedTo
                       });
                     }}
                     options={titles}
@@ -288,10 +345,14 @@ export default function Onboard() {
                 </div>
                 {type === Number(roleNames.PATIENT) && (
                   <div className={styles.layout__item}>
-                    <div className={[styles.input].join(" ")}>
+                    <div className={[styles.input, styles.checkbox].join(" ")}>
                       <label htmlFor="minor">
-                        <input type="checkbox" name="minor" ref={register} />
-                        Is Patient a minor?
+                        <input
+                          type="checkbox"
+                          value={isChecked}
+                          onChange={handleIsMinor}
+                        />
+                        &nbsp; Is Patient a minor?
                       </label>
                     </div>
                   </div>
@@ -382,46 +443,91 @@ export default function Onboard() {
                     <small>{errors.idNumber && errors.idNumber.message}</small>
                   </div>
                 </div>
-                <div className={styles.layout__item}>
-                  <div className={[styles.input].join(" ")}>
-                    <label htmlFor="publicAddress">Wallet Address</label>
-                    <input
-                      className={[styles.form_input].join(" ")}
-                      placeholder="0x0..."
-                      ref={register({
-                        required: "Wallet Address is required",
-                        pattern: {
-                          value: /^0x[a-fA-F0-9]{40}$/i,
-                          message: "invalid wallet address"
+                {!isChecked ? (
+                  <div className={styles.layout__item}>
+                    <div className={[styles.input].join(" ")}>
+                      <label htmlFor="publicAddress">Wallet Address</label>
+                      <input
+                        className={[styles.form_input].join(" ")}
+                        placeholder="0x0..."
+                        ref={register({
+                          required: "Wallet Address is required",
+                          pattern: {
+                            value: /^0x[a-fA-F0-9]{40}$/i,
+                            message: "invalid wallet address"
+                          }
+                        })}
+                        name="publicAddress"
+                        type="text"
+                      />
+                      <small>
+                        {errors.publicAddress && errors.publicAddress.message}
+                      </small>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.layout__item}>
+                    <div className={[styles.input].join(" ")}>
+                      <label htmlFor="guardianIDNumber">Select Guardian</label>
+                      <Select
+                        isSearchable
+                        value={record.relatedTo}
+                        placeholder="Select Guardian"
+                        theme={theme => ({
+                          ...theme,
+                          borderRadius: 0,
+                          colors: {
+                            ...theme.colors,
+                            neutral30: "#313541",
+                            primary: "black"
+                          }
+                        })}
+                        formatOptionLabel={formatUserOptionLabel}
+                        onChange={relatedTo =>
+                          setRecord({
+                            title: record.title,
+                            relatedTo
+                          })
                         }
-                      })}
-                      name="publicAddress"
-                      type="text"
-                    />
-                    <small>
-                      {errors.publicAddress && errors.publicAddress.message}
-                    </small>
+                        options={patients}
+                        styles={SelectStyle}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              {!isChecked && (
+                <div className={styles.layout}>
+                  <div className={styles.layout__item}>
+                    <div className={[styles.input].join(" ")}>
+                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <PhoneInput
+                        className={[styles.form_input].join(" ")}
+                        placeholder="phone number"
+                        onChange={value => {
+                          setPhoneNumber({
+                            isValid: isValidPhoneNumber(value),
+                            value
+                          });
+                        }}
+                      />
+                      {phoneNumber.value && !phoneNumber.isValid && (
+                        <small>invalid phone number</small>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className={styles.layout}>
-                <div className={styles.layout__item}>
-                  <div className={[styles.input].join(" ")}>
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <PhoneInput
-                      className={[styles.form_input].join(" ")}
-                      placeholder="phone number"
-                      onChange={value => {
-                        setPhoneNumber({
-                          isValid: isValidPhoneNumber(value),
-                          value
-                        });
-                      }}
-                    />
-                    {phoneNumber.value && !phoneNumber.isValid && (
-                      <small>invalid phone number</small>
-                    )}
-                  </div>
+              )}
+              <div className={styles.layout__item}>
+                <div className={[styles.input].join(" ")}>
+                  <label htmlFor="address">House Address</label>
+                  <textarea
+                    name="address"
+                    cols="30"
+                    rows="3"
+                    placeholder="Your home Address"
+                    ref={register}
+                  ></textarea>
                 </div>
               </div>
             </div>
