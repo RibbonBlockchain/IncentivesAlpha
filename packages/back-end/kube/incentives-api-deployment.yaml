@@ -32,6 +32,7 @@ spec:
                   name: mongodb-secret
                   key: MONGO_USERNAME
           image: registry.hub.docker.com/ribbonblockchain/incentives-alpha-api:latest
+          imagePullPolicy: "Always"
           name: incentives-api
           volumeMounts:
             - name: ca-pemstore
