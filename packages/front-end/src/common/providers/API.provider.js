@@ -192,7 +192,11 @@ export const useData = () => {
 
   const getCHWStatsPatients = async (users, chw) => {
     let overall = await users.filter(user => {
-      return user.role === roleNames.PATIENT && user.onBoardedBy === chw._id;
+      return (
+        user.role === roleNames.PATIENT &&
+        user.onBoardedBy &&
+        user.onBoardedBy._id === chw._id
+      );
     });
     return {
       overall: overall.length,
@@ -205,7 +209,8 @@ export const useData = () => {
     if (users.length > 0) {
       let overall = await users.filter(user => {
         return (
-          user.role === roleNames.PRACTITIONER && user.onBoardedBy === chw._id
+          user.role === roleNames.PRACTITIONER &&
+          user.onBoardedBy._id === chw._id
         );
       });
       return {

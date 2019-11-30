@@ -50,22 +50,25 @@ export default function Send() {
   }
 
   function captureAddressFromQRCodeDisplay() {
-    QRScanner.initiate({
-      onResult: address => {
-        console.log(address);
-        // if (ethers.utils.getAddress(address)) {
-        //   setValue("receipient", address);
-        //   triggerValidation({ name: "receipient", value: address });
-        // } else {
-        //   toggle({
-        //     isVisible: true,
-        //     message: `Address ${address} does not match checksum`,
-        //     data: {}
-        //   });
-        // }
-      },
-      timeout: 20000
-    });
+    try {
+      QRScanner.initiate({
+        onResult: address => {
+          if (ethers.utils.getAddress(address)) {
+            setValue("receipient", address);
+            triggerValidation({ name: "receipient", value: address });
+          } else {
+            toggle({
+              isVisible: true,
+              message: `Address ${address} does not match checksum`,
+              data: {}
+            });
+          }
+        },
+        timeout: 100000
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

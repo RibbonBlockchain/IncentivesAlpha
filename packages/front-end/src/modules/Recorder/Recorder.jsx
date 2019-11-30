@@ -414,6 +414,18 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                   ratingList[0].ratingTypes.length > 0 && (
                     <div className={styles.layout__item}>
                       <fieldset>
+                        <legend>
+                          <div>
+                            <span>Key:</span>
+                            <div className="">
+                              <small>1 Star = Poor Service </small>
+                              <small>3 Star = Average Service </small>
+                              <small>5 Star = Excellent Service </small>
+                            </div>
+                          </div>
+                        </legend>
+                      </fieldset>
+                      <fieldset>
                         <legend>Rate the services</legend>
                         {ratingList &&
                           ratingList[0] &&

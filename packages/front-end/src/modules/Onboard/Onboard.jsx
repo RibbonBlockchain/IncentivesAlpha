@@ -200,34 +200,25 @@ export default function Onboard() {
   }
 
   function captureAddressFromQRCodeDisplay() {
-    QRScanner.initiate({
-      match: /^[a-zA-Z0-9]{16,18}$/, // optional
-      onResult: function(result) {
-        console.info("DONE: ", result);
-      },
-      onError: function(err) {
-        console.error("ERR :::: ", err);
-      }, // optional
-      onTimeout: function() {
-        console.warn("TIMEOUT");
-      } // optional
-    });
-    // QRScanner.initiate({
-    //   onResult: address => {
-    //     console.log(address);
-    // if (ethers.utils.getAddress(address)) {
-    //   setValue("publicAddress", address);
-    //   triggerValidation({ name: "publicAddress", value: address });
-    // } else {
-    //   toggle({
-    //     isVisible: true,
-    //     message: `Address ${address} does not match checksum`,
-    //     data: {}
-    //   });
-    // }
-    //   },
-    //   timeout: 20000
-    // });
+    try {
+      QRScanner.initiate({
+        onResult: address => {
+          if (ethers.utils.getAddress(address)) {
+            setValue("publicAddress", address);
+            triggerValidation({ name: "publicAddress", value: address });
+          } else {
+            toggle({
+              isVisible: true,
+              message: `Address ${address} does not match checksum`,
+              data: {}
+            });
+          }
+        },
+        timeout: 100000
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function handleIsMinor() {
@@ -520,9 +511,9 @@ export default function Onboard() {
               )}
               <div className={styles.layout__item}>
                 <div className={[styles.input].join(" ")}>
-                  <label htmlFor="address">House Address</label>
+                  <label htmlFor="location">House Address</label>
                   <textarea
-                    name="address"
+                    name="location"
                     cols="30"
                     rows="3"
                     placeholder="Your home Address"

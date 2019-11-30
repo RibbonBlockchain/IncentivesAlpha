@@ -21,7 +21,6 @@ function Login() {
   const loginUser = async provider => {
     setIsLoading(true);
     let result = await authenticateUser(provider);
-    console.log(result);
     let { authWithAPI, publicAddress, loginType } = result;
     if (result.error) {
       setIsLoading(false);

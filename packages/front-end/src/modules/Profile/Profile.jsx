@@ -111,12 +111,12 @@ export default function Profile() {
             </div>
             <div className={styles.layout__item}>
               <div className={[styles.input].join(" ")}>
-                <label htmlFor="address">House Address</label>
+                <label htmlFor="location">House Address</label>
                 <textarea
-                  name="houseAddress"
+                  name="location"
                   cols="30"
                   rows="3"
-                  defaultValue={user.address}
+                  defaultValue={user.location}
                   placeholder="Your home Address"
                   ref={register}
                 ></textarea>
