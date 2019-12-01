@@ -5,12 +5,26 @@ import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
 import { useExchange } from "../../common/providers/Rates.provider";
 import { useModal } from "../../common/providers/Modal.provider";
-import { Table, AutoSizer, Column } from "react-virtualized";
+import {
+  Table,
+  AutoSizer,
+  Column,
+  CellMeasurer,
+  CellMeasurerCache
+} from "react-virtualized";
 import { roleNames } from "../../common/constants/roles";
 import Card from "../../common/components/Card";
 import { DesktopLoader } from "../../common/components/Loader";
 import { formatCurrency } from "../../common/utils";
 import styles from "./Dashboard.module.scss";
+
+const cache = new CellMeasurerCache({
+  defaultHeight: 100,
+  defaultWidth: 100,
+  minHeight: 40,
+  minWidth: 100,
+  fixedWidth: true
+});
 
 function DashboardTable({ data, type }) {
   const [{ exchangeRate }] = useExchange();
@@ -43,6 +57,28 @@ function DashboardTable({ data, type }) {
       },
       modal: "interaction_details"
     });
+  }
+
+  function renderInteractions({ rowData, columnIndex, key, parent, rowIndex }) {
+    return (
+      <CellMeasurer
+        cache={cache}
+        columnIndex={columnIndex}
+        key={key}
+        parent={parent}
+        rowIndex={rowIndex}
+      >
+        {rowData.activities.length > 0 ? (
+          <div style={{ whiteSpace: "normal", padding: "1px" }}>
+            {rowData.activities
+              .map(activity => activity.activityTitle)
+              .join(", ")}
+          </div>
+        ) : (
+          <div>Not available</div>
+        )}
+      </CellMeasurer>
+    );
   }
 
   function renderPractitioner({ rowData }) {
@@ -123,15 +159,20 @@ function DashboardTable({ data, type }) {
                   height={height}
                   headerHeight={40}
                   noRowsRenderer={_noRowsRenderer}
-                  rowHeight={40}
+                  rowHeight={cache.rowHeight}
                   rowCount={data.length}
-                  onRowClick={({ index }) => toggleDetailsModal(data[index])}
                   rowGetter={({ index }) => data[index]}
                   rowClassName={styles.ReactVirtualized__Table__rowColumn}
                   headerClassName={[
                     styles.ReactVirtualized__Table__headerColumn
                   ].join(" ")}
                 >
+                  <Column
+                    label="Interactions"
+                    cellRenderer={renderInteractions}
+                    dataKey="activities"
+                    width={width - 100}
+                  />
                   {type !== roleNames.HEALTH_WORKER && (
                     <Column
                       label="Registered By"
