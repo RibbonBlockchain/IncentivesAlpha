@@ -61,13 +61,13 @@ export const UserSchema = new Schema({
   }
 });
 
-UserSchema.pre("find", autoPopulateForeigns);
-UserSchema.pre("findOne", autoPopulateForeigns);
+// UserSchema.pre("find", autoPopulateForeigns);
+// UserSchema.pre("findOne", autoPopulateForeigns);
 
-function autoPopulateForeigns(next) {
-  this.populate("minors", ["firstName", "lastName"])
-      .populate("onBoardedBy", ["firstName", "lastName", "publicAddress"])
-  next();
+// function autoPopulateForeigns(next) {
+//   this.populate("minors", ["firstName", "lastName"])
+//       .populate("onBoardedBy", ["firstName", "lastName", "publicAddress"])
+//   next();
 
-}
+// }
 

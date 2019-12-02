@@ -207,11 +207,25 @@ export class UserController {
   }
 
   public getUsers = async (req: Request, res: Response) => {
-    await this.usermodel.find({}, (err, users) => {
+    await this.usermodel.find({})
+    .populate("minors", ["firstName", "lastName"])
+    .populate("onBoardedBy", ["firstName", "lastName", "publicAddress"])
+    .then(async users => {
+      res.json({ status: 200, data: users });
+    })
+    .catch(error => {
+      res.status(404).json({
+        status: 404,
+      });
+    })
+  }
+
+  public getMinors = async (req: Request, res: Response) => {
+    await this.minormodel.find({}, (err, minors) => {
       if (err) {
         res.send({ message: err });
       }
-      res.json({ status: 200, data: users });
+      res.json({ status: 200, data: minors });
     });
   }
 

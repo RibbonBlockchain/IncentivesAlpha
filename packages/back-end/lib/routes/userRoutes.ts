@@ -56,6 +56,7 @@ export class UserRoutes {
     app
       .route("/api/v1/users/minors")
       .post([validJWTNeeded], this.userController.addNewMinor)
+      .get([validJWTNeeded], this.userController.getMinors)
 
     app
       .route("/api/v1/users/:userAddress")
