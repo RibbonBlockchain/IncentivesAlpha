@@ -211,7 +211,7 @@ export class UserController {
 
   public getUsers = async (req: Request, res: Response) => {
     await this.usermodel.find({})
-    .populate("minors", ["firstName", "lastName", "idNumber", "role"])
+    .populate("minors", ["firstName", "lastName", "idNumber", "role", "createdDate"])
     .populate("onBoardedBy", ["firstName", "lastName", "publicAddress"])
     .then(async users => {
       res.json({ status: 200, data: users });
