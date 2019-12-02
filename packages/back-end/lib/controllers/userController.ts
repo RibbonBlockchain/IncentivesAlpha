@@ -171,10 +171,13 @@ export class UserController {
 
   public addNewMinor = async (req: Request, res: Response) => {
     let minorData = {
+      relatedTo: req.body.parent_id,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       dateOfBirth: req.body.dateOfBirth,
-      gender: req.body.gender
+      gender: req.body.gender,
+      idNumber: req.body.idNumber,
+      role: req.body.role
     }
     let newMinor = new this.minormodel(minorData)
     try {
@@ -221,12 +224,16 @@ export class UserController {
   }
 
   public getMinors = async (req: Request, res: Response) => {
-    await this.minormodel.find({}, (err, minors) => {
-      if (err) {
-        res.send({ message: err });
-      }
+    await this.minormodel.find({})
+    .populate("relatedTo", ["firstName", "lastName", "publicAddress"])
+    .then(async minors => {
       res.json({ status: 200, data: minors });
-    });
+    })
+    .catch(error => {
+      res.status(404).json({
+        status: 404,
+      });
+    })
   }
 
   public getUserByWalletAddress = async (req: Request, res: Response) => {

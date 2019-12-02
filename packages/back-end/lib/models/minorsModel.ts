@@ -3,6 +3,10 @@ import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const MinorsSchema = new Schema({
+  relatedTo: {
+    type: Schema.ObjectId,
+    ref: "User"
+  },
   firstName: {
     type: String,
     required: "Enter a user's first name"
@@ -20,6 +24,9 @@ export const MinorsSchema = new Schema({
   },
   location: {
     type: String
+  },
+  role: {
+    type: Number
   },
   idNumber: {
     type: String
