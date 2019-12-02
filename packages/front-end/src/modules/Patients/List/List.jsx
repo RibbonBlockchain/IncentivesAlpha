@@ -148,10 +148,16 @@ export default function ListPractitioners() {
       );
       setState(patients);
     } else {
-      let patients = users.filter(
-        patient =>
-          patient.role === roleNames.PATIENT && patient.onBoardedBy === user._id
-      );
+      let patients = users.filter(patient => {
+        if (
+          patient.role === roleNames.PATIENT &&
+          typeof patient.onBoardedBy !== "undefined" &&
+          patient.onBoardedBy !== null &&
+          patient.onBoardedBy._id === user._id
+        ) {
+          return patient;
+        }
+      });
       setState(patients);
     }
   }

@@ -140,11 +140,16 @@ export default function ListPractitioners() {
       );
       setState(practitioners);
     } else {
-      let practitioners = users.filter(
-        practitioner =>
+      let practitioners = users.filter(practitioner => {
+        if (
           practitioner.role === roleNames.PRACTITIONER &&
-          practitioner.onBoardedBy === user._id
-      );
+          typeof practitioner.onBoardedBy !== "undefined" &&
+          practitioner.onBoardedBy !== null &&
+          practitioner.onBoardedBy._id === user._id
+        ) {
+          return practitioner;
+        }
+      });
       setState(practitioners);
     }
   }

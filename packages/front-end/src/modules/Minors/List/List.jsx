@@ -13,6 +13,7 @@ import { generateReport } from "../../Dashboard/dashboard.utils";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
 import { useAlert, useModal } from "../../../common/providers/Modal.provider";
+import { useWeb3 } from "../../../common/providers/Web3.provider";
 
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
@@ -116,9 +117,10 @@ function DownloadCSV({ isOpen, onDismiss }) {
 
 export default function ListPractitioners() {
   const [{ users, interactions }] = useData();
-  const [state, setState] = useState([]);
+  const [state, setState] = useState();
   const [search, setSearch] = useState();
   const [, toggleModal] = useModal();
+  const [user] = useWeb3();
   const [visible, setVisible] = useState(false);
   const fuse = new Fuse(state, {
     maxPatternLength: 32,
@@ -127,12 +129,14 @@ export default function ListPractitioners() {
   });
 
   useEffect(() => {
-    fetchCHWOnly();
+    fetchMyMinorsOnly();
   }, []);
 
-  async function fetchCHWOnly() {
-    let chw = users.filter(user => user.role === roleNames.HEALTH_WORKER);
-    setState(chw);
+  async function fetchMyMinorsOnly() {
+    let myMinors = users.filter(data => data._id === user.user._id);
+    console.log(myMinors);
+    setState(myMinors);
+    console.log(state);
   }
 
   function _noRowsRenderer() {
@@ -164,7 +168,7 @@ export default function ListPractitioners() {
     if (data.length > 0) {
       setState(data);
     } else {
-      fetchCHWOnly();
+      fetchMyMinorsOnly();
     }
   }
 
@@ -201,7 +205,7 @@ export default function ListPractitioners() {
             </div>
           </div>
           <div style={{ flex: "1 1 auto", height: "79vh" }}>
-            <AutoSizer>
+            {/* <AutoSizer>
               {({ height, width }) => (
                 <Table
                   width={width}
@@ -209,9 +213,9 @@ export default function ListPractitioners() {
                   headerHeight={40}
                   noRowsRenderer={_noRowsRenderer}
                   rowHeight={40}
-                  rowCount={state.length}
-                  rowGetter={({ index }) => state[index]}
-                  onRowClick={({ index }) => toggleDetailsModal(state[index])}
+                  rowCount={users.minors.length}
+                  rowGetter={({ index }) => users.minors[index]}
+                  //   onRowClick={({ index }) => toggleDetailsModal(users.minors[index])}
                   rowClassName={styles.ReactVirtualized__Table__rowColumn}
                   headerClassName={[
                     styles.ReactVirtualized__Table__headerColumn
@@ -237,7 +241,7 @@ export default function ListPractitioners() {
                   />
                 </Table>
               )}
-            </AutoSizer>
+            </AutoSizer> */}
           </div>
         </Card>
       ) : (

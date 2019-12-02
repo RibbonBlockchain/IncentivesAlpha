@@ -29,6 +29,11 @@ const titles = [
   { value: "NURSE", label: "NURSE" },
   { value: "ENGR", label: "ENGR" }
 ];
+
+const gender = [
+  { value: "Male", label: "MALE" },
+  { value: "Female", label: "FEMALE" }
+];
 const SelectStyle = {
   control: (base, state) => ({
     ...base
@@ -69,7 +74,8 @@ export default function Onboard() {
   const [onboardOptions, setOnboardOptions] = useState(false);
   const [record, setRecord] = useState({
     title: "",
-    relatedTo: ""
+    relatedTo: "",
+    gender: "Male"
   });
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
@@ -136,13 +142,14 @@ export default function Onboard() {
       dateOfBirth: moment(date).format("YYYY/M/D"),
       role: type,
       title: record.title.value,
-      phoneNumber: phoneNumber.value
+      phoneNumber: phoneNumber.value,
+      gender: record.title.value
     };
     if (isChecked) {
-      data.relatedTo = record.relatedTo.value._id;
+      data.parent_id = record.relatedTo.value._id;
       data.onBoardedBy = user._id;
       data.publicAddress = record.relatedTo.value.publicAddress;
-      data.category = 0;
+      //   data.category = 0;
     }
 
     setLoading(true);
@@ -159,6 +166,8 @@ export default function Onboard() {
       if (isChecked) {
         delete data.publicAddress;
         delete data.phoneNumber;
+        delete data.role;
+        delete data.title;
       }
       let record = await recordNewUser(data);
       closeTransactionStatus();
@@ -176,7 +185,9 @@ export default function Onboard() {
         setLoading(false);
         toggle({
           isVisible: true,
-          message: `${formatRoleName(type)} has been registered successfully`,
+          message: `${
+            record.relatedTo ? "Minor" : formatRoleName(type)
+          } has been registered successfully`,
           data: {}
         });
       }
@@ -327,6 +338,7 @@ export default function Onboard() {
                     onChange={title => {
                       setRecord({
                         title,
+                        gender: record.gender,
                         relatedTo: record.relatedTo
                       });
                     }}
@@ -334,6 +346,7 @@ export default function Onboard() {
                     styles={SelectStyle}
                   />
                 </div>
+
                 {type === Number(roleNames.PATIENT) && (
                   <div className={styles.layout__item}>
                     <div className={[styles.input, styles.checkbox].join(" ")}>
@@ -477,6 +490,7 @@ export default function Onboard() {
                         onChange={relatedTo =>
                           setRecord({
                             title: record.title,
+                            gender: record.gender,
                             relatedTo
                           })
                         }
@@ -487,8 +501,36 @@ export default function Onboard() {
                   </div>
                 )}
               </div>
-              {!isChecked && (
-                <div className={styles.layout}>
+              <div className={styles.layout}>
+                <div className={styles.layout__item}>
+                  <div className={[styles.input].join(" ")}>
+                    <label htmlFor="gender">Gender</label>
+                    <Select
+                      isSearchable
+                      value={record.gender}
+                      placeholder="Gender"
+                      theme={theme => ({
+                        ...theme,
+                        borderRadius: 0,
+                        colors: {
+                          ...theme.colors,
+                          neutral30: "#313541",
+                          primary: "black"
+                        }
+                      })}
+                      onChange={gender => {
+                        setRecord({
+                          title: record.title,
+                          gender,
+                          relatedTo: record.relatedTo
+                        });
+                      }}
+                      options={gender}
+                      styles={SelectStyle}
+                    />
+                  </div>
+                </div>
+                {!isChecked && (
                   <div className={styles.layout__item}>
                     <div className={[styles.input].join(" ")}>
                       <label htmlFor="phoneNumber">Phone Number</label>
@@ -507,8 +549,8 @@ export default function Onboard() {
                       )}
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
               <div className={styles.layout__item}>
                 <div className={[styles.input].join(" ")}>
                   <label htmlFor="location">House Address</label>
