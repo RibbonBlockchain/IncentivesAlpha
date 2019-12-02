@@ -36,3 +36,12 @@ export const MinorsSchema = new Schema({
     default: Date.now
   }
 })
+
+MinorsSchema.pre("find", autoPopulateForeigns);
+MinorsSchema.pre("findOne", autoPopulateForeigns);
+
+function autoPopulateForeigns(next) {
+  this.populate("relatedTo", ["firstName", "lastName", "publicAddress", "location"])
+  next();
+
+}

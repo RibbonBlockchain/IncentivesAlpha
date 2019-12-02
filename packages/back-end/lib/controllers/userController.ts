@@ -225,7 +225,6 @@ export class UserController {
 
   public getMinors = async (req: Request, res: Response) => {
     await this.minormodel.find({})
-    .populate("relatedTo", ["firstName", "lastName", "publicAddress"])
     .then(async minors => {
       res.json({ status: 200, data: minors });
     })
