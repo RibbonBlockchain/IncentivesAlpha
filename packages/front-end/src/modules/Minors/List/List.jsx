@@ -134,9 +134,7 @@ export default function ListPractitioners() {
 
   async function fetchMyMinorsOnly() {
     let myMinors = users.filter(data => data._id === user.user._id);
-    console.log(myMinors);
     setState(myMinors);
-    console.log(state);
   }
 
   function _noRowsRenderer() {
@@ -160,7 +158,7 @@ export default function ListPractitioners() {
   }
 
   function renderIDNumber({ rowData }) {
-    return <div>{rowData.idNumber}</div>;
+    return <div>{rowData._id}</div>;
   }
 
   async function handleSearch(e) {
@@ -205,7 +203,7 @@ export default function ListPractitioners() {
             </div>
           </div>
           <div style={{ flex: "1 1 auto", height: "79vh" }}>
-            {/* <AutoSizer>
+            <AutoSizer>
               {({ height, width }) => (
                 <Table
                   width={width}
@@ -213,8 +211,8 @@ export default function ListPractitioners() {
                   headerHeight={40}
                   noRowsRenderer={_noRowsRenderer}
                   rowHeight={40}
-                  rowCount={users.minors.length}
-                  rowGetter={({ index }) => users.minors[index]}
+                  rowCount={state[0].minors.length}
+                  rowGetter={({ index }) => state[0].minors[index]}
                   //   onRowClick={({ index }) => toggleDetailsModal(users.minors[index])}
                   rowClassName={styles.ReactVirtualized__Table__rowColumn}
                   headerClassName={[
@@ -241,7 +239,7 @@ export default function ListPractitioners() {
                   />
                 </Table>
               )}
-            </AutoSizer> */}
+            </AutoSizer>
           </div>
         </Card>
       ) : (
