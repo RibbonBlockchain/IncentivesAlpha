@@ -256,9 +256,11 @@ export const useData = () => {
 
   const getPatientData = async (data, address) => {
     if (data.length > 0) {
-      let overall = await data.filter(
-        interaction => interaction.patient.publicAddress === address
-      );
+      let overall = await data.filter(interaction => {
+        if (interaction.patient !== null) {
+          return interaction.patient.publicAddress === address;
+        }
+      });
       return {
         overall: overall.length,
         thisWeekData: getByDate(overall, "week"),
