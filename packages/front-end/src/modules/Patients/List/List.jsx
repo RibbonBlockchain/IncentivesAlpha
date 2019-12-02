@@ -133,31 +133,25 @@ export default function ListPractitioners() {
   }, []);
 
   async function fetchPatientsOnly() {
-    let patients = [];
-    await users.map(user => {
-      if (user.role === roleNames.PATIENT) {
-        patients.push(user);
-      } else {
-        return;
-      }
-    });
-    setState(patients);
+    let minors = users
+      .map(user => user.minors)
+      .filter(minor => minor.length > 0 && minor);
+    let flattenedMinorsMap = [].concat(...minors);
     if (loginType === roleNames.SUPER_ADMIN) {
-      let patients = users.filter(
-        patient => patient.role === roleNames.PATIENT
-      );
-      setState(patients);
+      let patients = users
+        .filter(patient => patient.role === roleNames.PATIENT)
+        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+      setState([...patients, ...flattenedMinorsMap]);
     } else {
-      let patients = users.filter(patient => {
-        if (
-          patient.role === roleNames.PATIENT &&
-          typeof patient.onBoardedBy !== "undefined" &&
-          patient.onBoardedBy !== null &&
-          patient.onBoardedBy._id === user._id
-        ) {
-          return patient;
-        }
-      });
+      let patients = users
+        .filter(
+          patient =>
+            patient.role === roleNames.PATIENT &&
+            typeof patient.onBoardedBy !== "undefined" &&
+            patient.onBoardedBy !== null &&
+            patient.onBoardedBy._id === user._id
+        )
+        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
       setState(patients);
     }
   }
@@ -184,6 +178,16 @@ export default function ListPractitioners() {
     return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("hh:mm:ss A")
+          : "Not Available"}
+      </div>
+    );
+  }
+
   async function handleSearch(e) {
     let data = await fuse.search(e.target.value);
     if (data.length > 0) {
@@ -193,9 +197,10 @@ export default function ListPractitioners() {
     }
   }
 
-  function toggleDetailsModal(data) {
+  async function toggleDetailsModal(data) {
     let activities = interactions.filter(
-      interaction => interaction.patient._id === data._id
+      interaction =>
+        interaction.patient !== null && interaction.patient._id === data._id
     );
     toggleModal({
       isVisible: true,
@@ -255,10 +260,16 @@ export default function ListPractitioners() {
                     width={width - 200}
                   />
                   <Column
-                    label="Date Registered"
+                    label="Date"
                     cellRenderer={renderDate}
                     dataKey="createdDate"
-                    width={width - 200}
+                    width={width - 300}
+                  />
+                  <Column
+                    label="Time"
+                    cellRenderer={renderTime}
+                    dataKey="createdDate"
+                    width={width - 300}
                   />
                 </Table>
               )}

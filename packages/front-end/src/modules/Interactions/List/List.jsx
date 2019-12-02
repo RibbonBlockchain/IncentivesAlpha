@@ -224,7 +224,7 @@ export default function() {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate).format("HH:mm:ss")
+          ? moment(rowData.createdDate).format("hh:mm:ss A")
           : "Not Available"}
       </div>
     );

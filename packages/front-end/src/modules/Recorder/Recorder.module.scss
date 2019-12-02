@@ -192,5 +192,14 @@ img {
 .col {
   display: grid;
   grid-template-columns: 2fr 2fr;
+  grid-template-rows: unset;
   grid-gap: calculateRem(10);
+}
+
+@media (max-width: $desktop) {
+  .col {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: unset;
+    overflow-y: scroll;
+  }
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import useForm from "react-hook-form";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import styles from "./Profile.module.scss";
 import Card from "../../common/components/Card";
 import { updateUserProfile } from "./profile.utils";
@@ -9,6 +10,7 @@ import { useAlert } from "../../common/providers/Modal.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 
 export default function Profile() {
+  const [record, setRecord] = useState();
   const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
   });
@@ -22,7 +24,8 @@ export default function Profile() {
   async function onSubmit(values, e) {
     let data = {
       ...values,
-      address
+      address,
+      location: record
     };
     let user = await updateUserProfile(data);
     if (user.error) {
@@ -112,14 +115,12 @@ export default function Profile() {
             <div className={styles.layout__item}>
               <div className={[styles.input].join(" ")}>
                 <label htmlFor="location">House Address</label>
-                <textarea
-                  name="location"
-                  cols="30"
-                  rows="3"
-                  defaultValue={user.location}
-                  placeholder="Your home Address"
-                  ref={register}
-                ></textarea>
+                <GooglePlacesAutocomplete
+                  initialValue={user.location}
+                  onSelect={location => {
+                    setRecord(location);
+                  }}
+                />
               </div>
             </div>
             <div className={styles.layout__item}>

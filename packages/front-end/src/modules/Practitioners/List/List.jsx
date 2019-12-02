@@ -176,6 +176,16 @@ export default function ListPractitioners() {
     return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("hh:mm:ss A")
+          : "Not Available"}
+      </div>
+    );
+  }
+
   async function handleSearch(e) {
     let data = await fuse.search(e.target.value);
     if (data.length > 0) {
@@ -186,9 +196,9 @@ export default function ListPractitioners() {
   }
 
   function toggleDetailsModal(data) {
-    let activities = interactions.filter(
-      interaction => interaction.practitioner._id === data._id
-    );
+    let activities = interactions
+      .filter(interaction => interaction.practitioner._id === data._id)
+      .sort((a, b) => new Date(a.createdDate) - new Date(b.createdDate));
     toggleModal({
       isVisible: true,
       data: {
@@ -250,7 +260,13 @@ export default function ListPractitioners() {
                     label="Date Registered"
                     cellRenderer={renderDate}
                     dataKey="createdDate"
-                    width={width - 200}
+                    width={width - 300}
+                  />
+                  <Column
+                    label="Time"
+                    cellRenderer={renderTime}
+                    dataKey="createdDate"
+                    width={width - 300}
                   />
                 </Table>
               )}

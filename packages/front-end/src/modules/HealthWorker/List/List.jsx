@@ -150,8 +150,16 @@ export default function ListPractitioners() {
   }
 
   function renderDate({ rowData }) {
+    return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
+  }
+
+  function renderTime({ rowData }) {
     return (
-      <div>{moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}</div>
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("hh:mm:ss A")
+          : "Not Available"}
+      </div>
     );
   }
 
@@ -230,8 +238,14 @@ export default function ListPractitioners() {
                     width={width - 200}
                   />
                   <Column
-                    label="Date Registered"
+                    label="Date"
                     cellRenderer={renderDate}
+                    dataKey="createdDate"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Time"
+                    cellRenderer={renderTime}
                     dataKey="createdDate"
                     width={width - 200}
                   />

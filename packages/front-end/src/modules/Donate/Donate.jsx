@@ -4,11 +4,13 @@ import { makeDonation } from "../Dashboard/dashboard.utils";
 import { useModal, useAlert } from "../../common/providers/Modal.provider";
 import Modal from "../../common/components/Modal";
 import Button from "../../common/components/Button";
+import { useApp } from "../../common/providers/App.provider";
 import styles from "./Donate.module.scss";
 import { useTransactionStatus } from "../../common/providers/TransactionStatus.provider";
 
 export default function DonationModal() {
   const [{ modal, isVisible }, toggleModal] = useModal();
+  const [{ currency }] = useApp();
   const [, toggle] = useAlert();
   const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
@@ -64,7 +66,7 @@ export default function DonationModal() {
           >
             <div className={styles.layout__item}>
               <div className={[styles.input].join(" ")}>
-                <label htmlFor="amount">Amount in (eth)</label>
+                <label htmlFor="amount">Amount in ({currency})</label>
                 <input
                   className={[styles.form_input].join(" ")}
                   placeholder="amount"

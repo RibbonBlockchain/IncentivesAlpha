@@ -36,6 +36,7 @@
     "react-device-detect": "^1.9.10",
     "react-dom": "^16.9.0",
     "react-feather": "^2.0.3",
+    "react-google-places-autocomplete": "^1.5.3",
     "react-hook-form": "^3.24.1",
     "react-icons": "^3.8.0",
     "react-image-fallback": "^8.0.0",

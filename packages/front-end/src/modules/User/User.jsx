@@ -40,13 +40,19 @@ function Profile({ data: { data, activities }, currency, type }) {
     );
   }
 
-  function renderInteractions({ rowData, columnIndex, key, parent, rowIndex }) {
+  function renderInteractions({
+    rowData,
+    columnIndex,
+    key,
+    relatedTo,
+    rowIndex
+  }) {
     return (
       <CellMeasurer
         cache={cache}
         columnIndex={columnIndex}
         key={key}
-        parent={parent}
+        relatedTo={relatedTo}
         rowIndex={rowIndex}
       >
         {rowData.activities.length > 0 ? (
@@ -85,12 +91,14 @@ function Profile({ data: { data, activities }, currency, type }) {
   }
 
   function renderDate({ rowData }) {
+    return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
+  }
+
+  function renderTime({ rowData }) {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate)
-              .utc()
-              .format("DD/MM/YYYY")
+          ? moment(rowData.createdDate).format("hh:mm:ss A")
           : "Not Available"}
       </div>
     );
@@ -117,10 +125,16 @@ function Profile({ data: { data, activities }, currency, type }) {
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
-        {data.publicAddress && (
+        {data.publicAddress ? (
           <Blockies
             className={styles.blockies}
             address={data.publicAddress}
+            imageSize={40}
+          />
+        ) : (
+          <Blockies
+            className={styles.blockies}
+            address={data.relatedTo.publicAddress}
             imageSize={40}
           />
         )}
@@ -137,16 +151,22 @@ function Profile({ data: { data, activities }, currency, type }) {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href={`https://blockscout.com/poa/sokol/address/${data.publicaddress}`}
+              href={`https://blockscout.com/poa/sokol/address/${
+                data.publicAddress
+                  ? data.publicAddress
+                  : data.relatedTo.publicAddress
+              }`}
             >
-              {data.publicAddress}
+              {data.publicAddress
+                ? data.publicAddress
+                : data.relatedTo.publicAddress}
             </a>
           </small>
         </div>
         <div className={styles.description}>
           <span className={styles.heading}>Role: </span>
           <span className={styles.wrapper}>
-            {roles[data.role].replace("_", " ")}
+            {data.role && roles[data.role].replace("_", " ")}
           </span>
         </div>
         <div className={styles.dob}>
@@ -216,6 +236,12 @@ function Profile({ data: { data, activities }, currency, type }) {
                   dataKey="createdDate"
                   width={width - 200}
                   cellRenderer={renderDate}
+                />
+                <Column
+                  label="Time"
+                  dataKey="createdDate"
+                  width={width - 500}
+                  cellRenderer={renderTime}
                 />
               </Table>
             );

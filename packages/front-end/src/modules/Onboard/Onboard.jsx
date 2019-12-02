@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import useForm from "react-hook-form";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
 import { ethers } from "ethers";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import QRScanner from "qr-code-scanner";
-import ReactiveQR from "reactive-qr";
 import * as moment from "moment";
 import "react-phone-number-input/style.css";
 import { createNewUser, recordNewUser } from "./onboard.utils";
@@ -75,7 +75,8 @@ export default function Onboard() {
   const [record, setRecord] = useState({
     title: "",
     relatedTo: "",
-    gender: "Male"
+    gender: "Male",
+    location: {}
   });
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
@@ -143,13 +144,14 @@ export default function Onboard() {
       role: type,
       title: record.title.value,
       phoneNumber: phoneNumber.value,
-      gender: record.title.value
+      gender: record.title.value,
+      location: record.location
     };
     if (isChecked) {
       data.parent_id = record.relatedTo.value._id;
       data.onBoardedBy = user._id;
       data.publicAddress = record.relatedTo.value.publicAddress;
-      //   data.category = 0;
+      data.category = 0;
     }
 
     setLoading(true);
@@ -166,7 +168,6 @@ export default function Onboard() {
       if (isChecked) {
         delete data.publicAddress;
         delete data.phoneNumber;
-        delete data.role;
         delete data.title;
       }
       let record = await recordNewUser(data);
@@ -338,6 +339,7 @@ export default function Onboard() {
                     onChange={title => {
                       setRecord({
                         title,
+                        location: record.location,
                         gender: record.gender,
                         relatedTo: record.relatedTo
                       });
@@ -490,6 +492,7 @@ export default function Onboard() {
                         onChange={relatedTo =>
                           setRecord({
                             title: record.title,
+                            location: record.location,
                             gender: record.gender,
                             relatedTo
                           })
@@ -522,6 +525,7 @@ export default function Onboard() {
                         setRecord({
                           title: record.title,
                           gender,
+                          location: record.location,
                           relatedTo: record.relatedTo
                         });
                       }}
@@ -554,13 +558,26 @@ export default function Onboard() {
               <div className={styles.layout__item}>
                 <div className={[styles.input].join(" ")}>
                   <label htmlFor="location">House Address</label>
-                  <textarea
+                  <GooglePlacesAutocomplete
+                    onSelect={location => {
+                      console.log(location);
+                      setRecord({
+                        location: location.description
+                          ? location.description
+                          : location,
+                        title: record.title,
+                        gender: record.gender,
+                        relatedTo: record.relatedTo
+                      });
+                    }}
+                  />
+                  {/* <input
+                    className={[styles.form_input].join(" ")}
+                    placeholder="your home address"
                     name="location"
-                    cols="30"
-                    rows="3"
-                    placeholder="Your home Address"
+                    type="text"
                     ref={register}
-                  ></textarea>
+                  /> */}
                 </div>
               </div>
             </div>

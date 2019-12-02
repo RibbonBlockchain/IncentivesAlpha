@@ -217,6 +217,16 @@ export default function() {
     return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("hh:mm:ss A")
+          : "Not Available"}
+      </div>
+    );
+  }
+
   async function handleSearch(e) {
     let data = await fuse.search(e.target.value);
     if (data.length > 0) {
@@ -292,6 +302,12 @@ export default function() {
                     cellRenderer={renderDate}
                     dataKey="createdDate"
                     width={width - 200}
+                  />
+                  <Column
+                    label="Time"
+                    cellRenderer={renderTime}
+                    dataKey="createdDate"
+                    width={width - 500}
                   />
                 </Table>
               )}

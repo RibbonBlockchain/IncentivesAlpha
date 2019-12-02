@@ -20,6 +20,8 @@
   .window {
     line-height: normal;
     position: relative;
+    display: flex;
+    flex-direction: column;
     border-radius: 16px;
     box-shadow: 0px 2px 16px rgba(0, 9, 26, 0.12);
     overflow-x: hidden;
@@ -32,6 +34,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    align-self: flex-end;
     position: absolute;
     right: 8px;
     top: 8px;

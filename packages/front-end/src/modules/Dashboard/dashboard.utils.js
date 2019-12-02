@@ -242,6 +242,30 @@ export const formatPrescriptionOptions = options => {
   );
 };
 
+export const getPatientsRole = (users, role, minors) => {
+  let data = [];
+  [].concat(...minors).map(minor =>
+    data.push({
+      label: minor._id,
+      value: {
+        ...minor,
+        publicAddress: minor.relatedTo.publicAddress,
+        location: minor.relatedTo.location
+      }
+    })
+  );
+  users.length > 0 &&
+    users.map(user => {
+      if (user.role === role) {
+        data.push({
+          label: user.idNumber,
+          value: user
+        });
+      }
+    });
+  return data;
+};
+
 export const getByRole = (users, role) => {
   let data = [];
   users.length > 0 &&

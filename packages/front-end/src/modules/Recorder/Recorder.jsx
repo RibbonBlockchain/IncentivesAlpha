@@ -9,6 +9,7 @@ import Modal from "../../common/components/Modal";
 import styles from "./Recorder.module.scss";
 import {
   getByRole,
+  getPatientsRole,
   formatActivityOptions,
   formatPrescriptionOptions
 } from "../Dashboard/dashboard.utils";
@@ -51,7 +52,7 @@ const formatUserOptionLabel = ({ label, value }) => {
               <span>{`${value.firstName} ${value.lastName}`}</span>
               <span>{label}</span>
             </div>
-            <small>{value.publicAddress}</small>
+            <small>{value.publicAddress && value.publicAddress}</small>
           </div>
         </>
       )}
@@ -148,7 +149,10 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     loadDetails();
   }, []);
 
-  let patients = getByRole(users, roleNames.PATIENT);
+  let minors = users
+    .map(user => user.minors)
+    .filter(minor => minor.length > 0 && minor);
+  let patients = getPatientsRole(users, roleNames.PATIENT, minors);
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
   let activities = formatActivityOptions(activityList);
   let prescriptions = formatPrescriptionOptions(prescriptionList);

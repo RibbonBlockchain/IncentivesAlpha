@@ -18,7 +18,10 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
       <div className={styles.title}>Interaction Number: {data._id}</div>
       <div className={styles.flex}>
         <div className={styles.title}>
-          Patient: {`${data.patient.firstName} ${data.patient.lastName}`}
+          Patient:{" "}
+          {data.patient
+            ? `${data.patient.firstName} ${data.patient.lastName}`
+            : "Not available"}
         </div>
         <div className={styles.description}>
           <span className={styles.heading}>
@@ -32,7 +35,10 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
               target="_blank"
               rel="noopener noreferrer"
               className={[styles.link].join(" ")}
-              href={`https://blockscout.com/poa/sokol/address/${data.patient.publicAddress}`}
+              href={
+                data.patient &&
+                `https://blockscout.com/poa/sokol/address/${data.patient.publicAddress}`
+              }
             >
               View Address
             </a>
@@ -101,7 +107,7 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
           Created{" "}
           {`${moment(data.createdDate).format(
             "dddd, Do MMMM YYYY"
-          )} at ${moment(data.createdDate).format("hh:mm:ss")}`}
+          )} at ${moment(data.createdDate).format("hh:mm:ss A")}`}
         </small>
         <small>
           Status{" "}
