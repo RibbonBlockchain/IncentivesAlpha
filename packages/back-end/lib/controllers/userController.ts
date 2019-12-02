@@ -7,9 +7,11 @@ import { getCurrentUserAddress } from "../validators/authValidation";
 
 export class UserController {
   public usermodel: any;
+  public minormodel: any;
 
-  constructor(User: any){
+  constructor(User: any, Minors: any){
     this.usermodel = User
+    this.minormodel = Minors
   }
 
   public addAdministrator = async (req: Request, res: Response) => {
@@ -162,6 +164,43 @@ export class UserController {
               });
           });
       }
+    } catch {
+      res.status(500).json({ status: 500, message: "Server Error" });
+    }
+  }
+
+  public addNewMinor = async (req: Request, res: Response) => {
+    let minorData = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      dateOfBirth: req.body.dateOfBirth,
+      gender: req.body.gender
+    }
+    let newMinor = new this.minormodel(minorData)
+    try {
+      await newMinor
+          .save()
+          .then(async minor => {
+            await this.usermodel.updateOne(
+              { _id: req.body.parent_id },
+              {
+                $set: {
+                  minors: minor._id
+                }
+              })
+              .catch(error => {
+                res.status(400).json({error: error})
+              })
+            res.status(201).json({ status: 201, data: minor });
+          })
+        .catch(error => {
+          res
+            .status(400)
+            .json({
+              status: 400,
+              message: "Invalid patient ID"
+            });
+        });
     } catch {
       res.status(500).json({ status: 500, message: "Server Error" });
     }
