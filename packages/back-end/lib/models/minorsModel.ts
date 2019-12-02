@@ -21,4 +21,11 @@ export const MinorsSchema = new Schema({
   location: {
     type: String
   },
+  idNumber: {
+    type: String
+  },
+  createdDate: {
+    type: Date,
+    default: Date.now
+  }
 })
