@@ -7,8 +7,18 @@ const Schema = mongoose.Schema;
 
 export const PatientInteractionSchema = new Schema({
   patient: {
-    type: Schema.ObjectId,
-    ref: "User"
+    _id: {
+      type: String
+    },
+    firstName: {
+      type: String
+    },
+    lastName: {
+      type: String
+    },
+    publicAddress: {
+      type: String
+    }
   },
   practitioner: {
     type: Schema.ObjectId,

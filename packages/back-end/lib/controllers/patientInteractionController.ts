@@ -1,10 +1,13 @@
 import * as mongoose from "mongoose";
 import { UserSchema } from "../models/userModel";
+import {MinorsSchema} from "../models/minorsModel";
 import { PatientInteractionSchema } from "../models/patientInteractionModel";
 import {filters} from "./helpers/helpers"
 import { Request, Response } from "express";
 
 const User = mongoose.model("User", UserSchema);
+
+const Minors = mongoose.model("Minors", MinorsSchema);
 
 const patientInteractionList = mongoose.model(
   "InteractionList",
@@ -14,7 +17,39 @@ const patientInteractionList = mongoose.model(
 export class PatientInteractionListController {
   public async addPatientInteraction(req: Request, res: Response) {
     try {
-      let newPatientInteraction = new patientInteractionList(req.body);
+      let interaction_data = req.body
+      let patient = {
+        _id: "",
+        firstName: "",
+        lastName: "",
+        publicAddress: ""
+      }
+      try{
+        await User.findOne(
+          {
+            _id: req.body.patient
+          }
+        ).then(async user => {
+          patient._id = req.body.patient,
+          patient.firstName = user.firstName,
+          patient.lastName = user.lastName,
+          patient.publicAddress= user.publicAddress
+        })
+      }catch{
+        await Minors.findOne(
+          {
+            _id: req.body.patient
+          }
+        ).then(async minor => {
+          patient._id = req.body.patient,
+          patient.firstName = minor.firstName,
+          patient.lastName = minor.lastName
+        })
+      }
+
+      interaction_data.patient = patient
+
+      let newPatientInteraction = new patientInteractionList(interaction_data);
 
       await newPatientInteraction
         .save()
