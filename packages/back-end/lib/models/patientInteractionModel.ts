@@ -88,7 +88,6 @@ PatientInteractionSchema.pre("findOne", autoPopulateForeigns);
 function autoPopulateForeigns(next) {
   this.populate("activities", ["activityTitle"])
     .populate("prescriptions", ["prescriptionTitle"])
-    .populate("patient", ["firstName", "lastName", "publicAddress"])
     .populate("chw", ["firstName", "lastName", "publicAddress"])
     .populate("practitioner", ["firstName", "lastName", "publicAddress"]);
   next();
