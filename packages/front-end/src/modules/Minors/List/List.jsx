@@ -159,7 +159,7 @@ export default function ListPractitioners() {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate).format("hh:mm:ss")
+          ? moment(rowData.createdDate).format("HH:mm:ss")
           : "Not Available"}
       </div>
     );

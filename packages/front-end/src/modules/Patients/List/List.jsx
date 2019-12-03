@@ -133,34 +133,34 @@ export default function ListPractitioners() {
   }, []);
 
   async function fetchPatientsOnly() {
-    let minors = users
-      .map(
-        parent =>
-          parent.role === roleNames.PATIENT &&
-          typeof parent.onBoardedBy !== "undefined" &&
-          parent.onBoardedBy !== null &&
-          parent.onBoardedBy._id === user._id &&
-          parent.minors
-      )
-      .filter(minor => minor.length > 0 && minor);
-    let flattenedMinorsMap = [].concat(...minors);
     if (loginType === roleNames.SUPER_ADMIN) {
-      let patients = users
-        .filter(patient => patient.role === roleNames.PATIENT)
+      let minors = users
+        .map(parent => parent.role === roleNames.PATIENT && parent.minors)
+        .filter(minor => minor.length > 0 && minor);
+      let flattenedMinorsMap = [].concat(...minors);
+      let patients = users.filter(
+        patient => patient.role === roleNames.PATIENT
+      );
+      let data = [...patients, ...flattenedMinorsMap]
+        .map(record => record)
         .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
-      setState([...patients, ...flattenedMinorsMap]);
+
+      setState(data);
     } else {
-      let patients = users
-        .filter(
-          patient =>
-            patient.role === roleNames.PATIENT &&
-            typeof patient.onBoardedBy !== "undefined" &&
-            patient.onBoardedBy !== null &&
-            patient.onBoardedBy._id === user._id
-        )
-        .sort((a, b) => new Date(a.createdDate) - new Date(b.createdDate));
-      setState([...patients, ...flattenedMinorsMap]);
-      console.log(JSON.stringify(state));
+      let patients = users.filter(
+        patient =>
+          patient.role === roleNames.PATIENT &&
+          typeof patient.onBoardedBy !== "undefined" &&
+          patient.onBoardedBy !== null &&
+          patient.onBoardedBy._id === user._id
+      );
+      let minors = patients.filter(minor => minor.length > 0 && minor);
+      let flattenedMinorsMap = [].concat(...minors);
+      let data = [...patients, ...flattenedMinorsMap]
+        .map(record => record)
+        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+
+      setState(data);
     }
   }
 
@@ -190,7 +190,7 @@ export default function ListPractitioners() {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate).format("hh:mm:ss")
+          ? moment(rowData.createdDate).format("HH:mm:ss")
           : "Not Available"}
       </div>
     );

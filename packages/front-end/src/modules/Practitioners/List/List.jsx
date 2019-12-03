@@ -135,21 +135,20 @@ export default function ListPractitioners() {
 
   async function fetchPractionersOnly() {
     if (loginType === roleNames.SUPER_ADMIN) {
-      let practitioners = users.filter(
-        practitioner => practitioner.role === roleNames.PRACTITIONER
-      );
+      let practitioners = users
+        .filter(practitioner => practitioner.role === roleNames.PRACTITIONER)
+        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
       setState(practitioners);
     } else {
-      let practitioners = users.filter(practitioner => {
-        if (
-          practitioner.role === roleNames.PRACTITIONER &&
-          typeof practitioner.onBoardedBy !== "undefined" &&
-          practitioner.onBoardedBy !== null &&
-          practitioner.onBoardedBy._id === user._id
-        ) {
-          return practitioner;
-        }
-      });
+      let practitioners = users
+        .filter(
+          practitioner =>
+            practitioner.role === roleNames.PRACTITIONER &&
+            typeof practitioner.onBoardedBy !== "undefined" &&
+            practitioner.onBoardedBy !== null &&
+            practitioner.onBoardedBy._id === user._id
+        )
+        .sort((a, b) => new Date(a.createdDate) - new Date(b.createdDate));
       setState(practitioners);
     }
   }
@@ -180,7 +179,7 @@ export default function ListPractitioners() {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate).format("hh:mm:ss")
+          ? moment(rowData.createdDate).format("HH:mm:ss")
           : "Not Available"}
       </div>
     );

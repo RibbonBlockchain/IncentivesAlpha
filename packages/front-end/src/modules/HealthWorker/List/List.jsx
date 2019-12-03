@@ -131,7 +131,9 @@ export default function ListPractitioners() {
   }, []);
 
   async function fetchCHWOnly() {
-    let chw = users.filter(user => user.role === roleNames.HEALTH_WORKER);
+    let chw = users
+      .filter(user => user.role === roleNames.HEALTH_WORKER)
+      .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
     setState(chw);
   }
 
@@ -157,7 +159,7 @@ export default function ListPractitioners() {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate).format("hh:mm:ss")
+          ? moment(rowData.createdDate).format("HH:mm:ss")
           : "Not Available"}
       </div>
     );

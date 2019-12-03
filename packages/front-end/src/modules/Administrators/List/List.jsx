@@ -131,7 +131,9 @@ export default function ListPractitioners() {
   }, []);
 
   async function fetchAdminsOnly() {
-    let admins = users.filter(user => user.role === roleNames.SUPER_ADMIN);
+    let admins = users
+      .filter(user => user.role === roleNames.SUPER_ADMIN)
+      .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
     setState(admins);
   }
 
@@ -157,7 +159,7 @@ export default function ListPractitioners() {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate).format("hh:mm:ss")
+          ? moment(rowData.createdDate).format("HH:mm:ss")
           : "Not Available"}
       </div>
     );
