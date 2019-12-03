@@ -145,7 +145,7 @@ export class PatientInteractionListController {
           await User.findOne({
             publicAddress: req.params.userAddress
           }).then(async user => {
-            options["patient"] = user._id
+            options["patient._id"] = user._id
             await patientInteractionList
               .find(options)
               .then(async interactions => {
@@ -162,7 +162,7 @@ export class PatientInteractionListController {
         }).then(async user => {
           await patientInteractionList
             .find({
-              patient: user._id
+              patient: {_id: user._id}
             })
             .then(async interactions => {
               res.json({ status: 200, data: interactions });
