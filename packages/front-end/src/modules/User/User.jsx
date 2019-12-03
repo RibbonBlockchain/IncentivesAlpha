@@ -98,7 +98,7 @@ function Profile({ data: { data, activities }, currency, type }) {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate).format("hh:mm:ss A")
+          ? moment(rowData.createdDate).format("hh:mm:ss")
           : "Not Available"}
       </div>
     );

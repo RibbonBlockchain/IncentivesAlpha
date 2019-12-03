@@ -107,7 +107,7 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
           Created{" "}
           {`${moment(data.createdDate).format(
             "dddd, Do MMMM YYYY"
-          )} at ${moment(data.createdDate).format("hh:mm:ss A")}`}
+          )} at ${moment(data.createdDate).format("hh:mm:ss")}`}
         </small>
         <small>
           Status{" "}

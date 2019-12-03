@@ -175,11 +175,21 @@ export const useData = () => {
 
   const getAdminStats = async (users, type) => {
     if (users.length > 0) {
+      let minors = users
+        .map(user => user.minors)
+        .filter(minor => minor.length > 0 && minor);
+      let flattenedMinorsMap = [].concat(...minors);
       let overall = await users.filter(user => user.role === type);
+      let thisWeekData =
+        getByDate(overall, "week").length +
+        getByDate(flattenedMinorsMap, "week").length;
+      let thisMonthData =
+        getByDate(overall, "month").length +
+        getByDate(flattenedMinorsMap, "month").length;
       return {
-        overall: overall.length,
-        thisWeekData: getByDate(overall, "week"),
-        thisMonthData: getByDate(overall, "month")
+        overall: overall.length + flattenedMinorsMap.length,
+        thisWeekData,
+        thisMonthData
       };
     } else {
       return {
@@ -198,10 +208,21 @@ export const useData = () => {
         user.onBoardedBy._id === chw._id
       );
     });
+    let minors = await overall
+      .map(user => user.minors)
+      .filter(minor => minor.length > 0);
+    let flattenedMinorsMap = [].concat(...minors);
+    let thisMonthData =
+      getByDate(overall, "month").length +
+      getByDate(flattenedMinorsMap, "month").length;
+
+    let thisWeekData =
+      getByDate(overall, "week").length +
+      getByDate(flattenedMinorsMap, "week").length;
     return {
-      overall: overall.length,
-      thisWeekData: getByDate(overall, "week"),
-      thisMonthData: getByDate(overall, "month")
+      overall: overall.length + flattenedMinorsMap.length,
+      thisWeekData,
+      thisMonthData
     };
   };
 
@@ -215,8 +236,8 @@ export const useData = () => {
       });
       return {
         overall: overall.length,
-        thisWeekData: getByDate(overall, "week"),
-        thisMonthData: getByDate(overall, "month")
+        thisWeekData: getByDate(overall, "week").length,
+        thisMonthData: getByDate(overall, "month").length
       };
     } else {
       return {
@@ -236,8 +257,8 @@ export const useData = () => {
       );
       return {
         overall: overall.length,
-        thisWeekData: getByDate(overall, "week"),
-        thisMonthData: getByDate(overall, "month"),
+        thisWeekData: getByDate(overall, "week").length,
+        thisMonthData: getByDate(overall, "month").length,
         ratings: 0,
         earnings: Number(
           overall.reduce((acc, curVal) => acc + curVal.rewards[0].chwReward, 0)
@@ -256,15 +277,15 @@ export const useData = () => {
 
   const getPatientData = async (data, address) => {
     if (data.length > 0) {
-      let overall = await data.filter(interaction => {
-        if (interaction.patient !== null) {
-          return interaction.patient.publicAddress === address;
-        }
-      });
+      let overall = await data.filter(
+        interaction =>
+          interaction.patient !== null &&
+          interaction.patient.publicAddress === address
+      );
       return {
         overall: overall.length,
-        thisWeekData: getByDate(overall, "week"),
-        thisMonthData: getByDate(overall, "month"),
+        thisWeekData: getByDate(overall, "week").length,
+        thisMonthData: getByDate(overall, "month").length,
         ratings: 0,
         earnings: Number(
           overall.reduce(
@@ -300,8 +321,8 @@ export const useData = () => {
       );
       return {
         overall: overall.length,
-        thisWeekData: getByDate(overall, "week"),
-        thisMonthData: getByDate(overall, "month"),
+        thisWeekData: getByDate(overall, "week").length,
+        thisMonthData: getByDate(overall, "month").length,
         ratings: parseFloat(
           rate.reduce((acc, curVal) => acc + curVal, 0) / rate.length / 0.3
         ).toFixed(2),
@@ -324,7 +345,7 @@ export const useData = () => {
   };
 
   const getByDate = (data, type) => {
-    return data.map(obj => moment(obj.createdDate).isSame(new Date(), type));
+    return data.filter(obj => moment(obj.createdDate).isSame(new Date(), type));
   };
 
   const getCHWData = async (data, address = null) => {
@@ -340,14 +361,14 @@ export const useData = () => {
               0
             )
           ).toFixed(5),
-          thisWeekData: getByDate(myInteractions, "week"),
-          thisMonthData: getByDate(myInteractions, "month")
+          thisWeekData: getByDate(myInteractions, "week").length,
+          thisMonthData: getByDate(myInteractions, "month").length
         };
       } else {
         return {
           overall: data.length,
-          thisWeekData: getByDate(data, "week"),
-          thisMonthData: getByDate(data, "month"),
+          thisWeekData: getByDate(data, "week").length,
+          thisMonthData: getByDate(data, "month").length,
           ratings: 0
         };
       }

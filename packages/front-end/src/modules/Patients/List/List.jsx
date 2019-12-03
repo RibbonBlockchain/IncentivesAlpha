@@ -134,7 +134,14 @@ export default function ListPractitioners() {
 
   async function fetchPatientsOnly() {
     let minors = users
-      .map(user => user.minors)
+      .map(
+        parent =>
+          parent.role === roleNames.PATIENT &&
+          typeof parent.onBoardedBy !== "undefined" &&
+          parent.onBoardedBy !== null &&
+          parent.onBoardedBy._id === user._id &&
+          parent.minors
+      )
       .filter(minor => minor.length > 0 && minor);
     let flattenedMinorsMap = [].concat(...minors);
     if (loginType === roleNames.SUPER_ADMIN) {
@@ -151,8 +158,9 @@ export default function ListPractitioners() {
             patient.onBoardedBy !== null &&
             patient.onBoardedBy._id === user._id
         )
-        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
-      setState(patients);
+        .sort((a, b) => new Date(a.createdDate) - new Date(b.createdDate));
+      setState([...patients, ...flattenedMinorsMap]);
+      console.log(JSON.stringify(state));
     }
   }
 
@@ -182,7 +190,7 @@ export default function ListPractitioners() {
     return (
       <div>
         {rowData.createdDate
-          ? moment(rowData.createdDate).format("hh:mm:ss A")
+          ? moment(rowData.createdDate).format("hh:mm:ss")
           : "Not Available"}
       </div>
     );

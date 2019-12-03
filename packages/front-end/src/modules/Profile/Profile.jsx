@@ -118,7 +118,9 @@ export default function Profile() {
                 <GooglePlacesAutocomplete
                   initialValue={user.location}
                   onSelect={location => {
-                    setRecord(location);
+                    setRecord(
+                      location.description ? location.description : location
+                    );
                   }}
                 />
               </div>

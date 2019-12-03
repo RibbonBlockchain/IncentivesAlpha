@@ -149,10 +149,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     loadDetails();
   }, []);
 
-  let minors = users
-    .map(user => user.minors)
-    .filter(minor => minor.length > 0 && minor);
-  let patients = getPatientsRole(users, roleNames.PATIENT, minors);
+  let patients = getPatientsRole(users, roleNames.PATIENT);
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
   let activities = formatActivityOptions(activityList);
   let prescriptions = formatPrescriptionOptions(prescriptionList);

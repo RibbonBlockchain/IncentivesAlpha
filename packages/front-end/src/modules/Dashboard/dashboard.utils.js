@@ -242,8 +242,11 @@ export const formatPrescriptionOptions = options => {
   );
 };
 
-export const getPatientsRole = (users, role, minors) => {
+export const getPatientsRole = (users, role) => {
   let data = [];
+  let minors = users
+    .map(user => user.minors)
+    .filter(minor => minor.length > 0 && minor);
   [].concat(...minors).map(minor =>
     data.push({
       label: minor._id,

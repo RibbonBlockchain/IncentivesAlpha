@@ -560,7 +560,6 @@ export default function Onboard() {
                   <label htmlFor="location">House Address</label>
                   <GooglePlacesAutocomplete
                     onSelect={location => {
-                      console.log(location);
                       setRecord({
                         location: location.description
                           ? location.description
@@ -571,13 +570,6 @@ export default function Onboard() {
                       });
                     }}
                   />
-                  {/* <input
-                    className={[styles.form_input].join(" ")}
-                    placeholder="your home address"
-                    name="location"
-                    type="text"
-                    ref={register}
-                  /> */}
                 </div>
               </div>
             </div>
