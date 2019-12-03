@@ -64,9 +64,7 @@ export const getNetworkDetails = async (provider, signer, contract) => {
       }
     } else {
       return {
-        error: `Network error occured. Please make sure you are on ${await getNetworkName(
-          Number(config.DEFAULT_NETWORK)
-        )}`
+        error: `Unable to detect Web3 on the browser.`
       };
     }
   } catch (error) {
