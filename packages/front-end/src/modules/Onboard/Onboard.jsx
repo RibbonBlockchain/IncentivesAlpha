@@ -215,9 +215,10 @@ export default function Onboard() {
     try {
       QRScanner.initiate({
         onResult: address => {
-          if (ethers.utils.getAddress(address)) {
-            setValue("publicAddress", address);
-            triggerValidation({ name: "publicAddress", value: address });
+          let walletAddress = address.split(":")[1];
+          if (ethers.utils.getAddress(walletAddress)) {
+            setValue("publicAddress", walletAddress);
+            triggerValidation({ name: "publicAddress", value: walletAddress });
           } else {
             toggle({
               isVisible: true,
@@ -225,7 +226,7 @@ export default function Onboard() {
               data: {}
             });
           }
-        },
+		},
         timeout: 100000
       });
     } catch (error) {

@@ -137,6 +137,8 @@ export default function ListPractitioners() {
     setState(myMinors);
   }
 
+  console.log(state);
+
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }

@@ -53,9 +53,10 @@ export default function Send() {
     try {
       QRScanner.initiate({
         onResult: address => {
-          if (ethers.utils.getAddress(address)) {
-            setValue("receipient", address);
-            triggerValidation({ name: "receipient", value: address });
+          let walletAddress = address.split(":")[1];
+          if (ethers.utils.getAddress(walletAddress)) {
+            setValue("receipient", walletAddress);
+            triggerValidation({ name: "receipient", value: walletAddress });
           } else {
             toggle({
               isVisible: true,
@@ -106,7 +107,7 @@ export default function Send() {
                   }
                 })}
               />
-              <small> {errors.amount && errors.amount.message}</small>
+              <small> {errors.receipient && errors.receipient.message}</small>
             </div>
             <div className={[styles.input].join(" ")}>
               <label htmlFor="amount">Amount in ({currency})</label>

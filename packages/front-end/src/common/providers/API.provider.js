@@ -211,6 +211,7 @@ export const useData = () => {
     let minors = await overall
       .map(user => user.minors)
       .filter(minor => minor.length > 0);
+    console.log(minors);
     let flattenedMinorsMap = [].concat(...minors);
     let thisMonthData =
       getByDate(overall, "month").length +
