@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   createContext,
   useContext,
@@ -25,6 +26,8 @@ const reducer = (state, { type, payload }) => {
         ...state,
         ...payload
       };
+    default:
+      return state;
   }
 };
 

@@ -3,11 +3,11 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
-import { getItem } from "../../utils/storage";
 
 export default class LogAPI extends HTTP {
-  constructor() {
+  constructor(token) {
     super();
+    this.token = token;
   }
 
   /**
@@ -19,7 +19,7 @@ export default class LogAPI extends HTTP {
    */
   async listLogsByUser(address) {
     return await this.getRequest(`transactions/logs/${address}`, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -33,7 +33,7 @@ export default class LogAPI extends HTTP {
    */
   async createLogs(data, url) {
     return await this.postRequest("transactions/logs", data, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 }

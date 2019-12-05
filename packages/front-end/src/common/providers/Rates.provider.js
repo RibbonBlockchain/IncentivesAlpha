@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   createContext,
   useContext,
@@ -7,6 +8,7 @@ import React, {
   useCallback
 } from "react";
 import RatesAPI from "../services/api/rating.api";
+import { useWeb3 } from "./Web3.provider";
 
 const ExchangeRateContext = createContext();
 
@@ -53,7 +55,8 @@ export default function Provider({ children }) {
 
 export const useExchange = () => {
   const [{ exchangeRate }, { update }] = useExchangeRateContext();
-  const rateAPI = new RatesAPI();
+  const [{ token }] = useWeb3();
+  const rateAPI = new RatesAPI(token);
 
   useEffect(() => {
     const loadExchangeRate = async () => {

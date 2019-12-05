@@ -4,12 +4,10 @@ import { withRouter } from "react-router-dom";
 import Modal from "../../common/components/Modal";
 import Blockies from "../../common/components/Blockies";
 import Button from "../../common/components/Button";
-import Balance from "../../common/components/Balance";
 import { roles } from "../../common/constants/roles";
 import { clear } from "../../common/utils/storage";
 import { useModal } from "../../common/providers/Modal.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
-import { useApp } from "../../common/providers/App.provider";
 import { useExchange } from "../../common/providers/Rates.provider";
 import styles from "./Wallet.module.scss";
 
@@ -18,12 +16,18 @@ function Profile({
   data,
   handleProfileNavigation,
   showSendModal,
-  currency,
   showQRCodeModal,
   rate
 }) {
   async function handleSignOut() {
     clear();
+    if (
+      window.web3 &&
+      window.web3.currentProvider &&
+      window.web3.currentProvider.close
+    ) {
+      await window.web3.currentProvider.close();
+    }
     window.location.reload();
   }
   return (
@@ -56,7 +60,6 @@ function Profile({
           </small>
           <>
             <span>{Number(user.balance * rate).toFixed(4)} ZAR</span>
-            {/* <Balance balance={} ticker="ZAR" /> */}
             <div className={styles.actions}>
               <Button
                 classNames={[
@@ -108,7 +111,6 @@ function Profile({
 function Wallet({ history }) {
   const [{ isVisible, data, modal }, toggleModal] = useModal();
   const [{ loginType, balance }] = useWeb3();
-  const [{ currency }] = useApp();
   const [{ exchangeRate }] = useExchange();
 
   function onClickClose() {
@@ -162,7 +164,6 @@ function Wallet({ history }) {
           user={details}
           data={data}
           rate={exchangeRate}
-          currency={currency}
           showQRCodeModal={handleQRCodeModal}
           showSendModal={handleSendWalletModal}
           handleProfileNavigation={handleProfileNavigation}

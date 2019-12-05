@@ -3,13 +3,11 @@ import React, {
   useContext,
   useReducer,
   useMemo,
-  useEffect,
   useCallback
 } from "react";
 import RegistryContract from "../services/blockchain/apps/registry";
 import UserAPI from "../services/api/user.api";
 import { useAlert } from "./Modal.provider";
-import { setItem, getItem } from "../utils/storage";
 import { getNetworkDetails } from "../utils";
 
 const Web3Context = createContext();
@@ -73,17 +71,13 @@ export const useWeb3 = () => {
   const [, toggleModal] = useAlert();
 
   const login = async ({ token, address, loginType }) => {
-	update({ token, address, loginType });
-    setItem("token", token);
-    setItem("address", address);
-
-    window.location.reload();
+    update({ token, address, loginType });
   };
 
   const getWalletDetails = async () => {
     let registryContract = new RegistryContract();
-    const userAPI = new UserAPI();
-    let { provider, ethers, signer } = await registryContract.getInstance();
+    const userAPI = new UserAPI(token);
+    let { provider, ethers } = await registryContract.getInstance();
 
     let {
       networkAddress,
@@ -91,14 +85,13 @@ export const useWeb3 = () => {
       currentNetwork,
       loginType,
       error
-    } = await getNetworkDetails(provider, signer, registryContract);
+    } = await getNetworkDetails(provider, address, registryContract);
     if (error) {
       toggleModal({
         isVisible: true,
         message: error
       });
     } else {
-      let token = getItem("token") || null;
       let user = await userAPI.getUserByAddress(networkAddress);
       await update({
         address: networkAddress,

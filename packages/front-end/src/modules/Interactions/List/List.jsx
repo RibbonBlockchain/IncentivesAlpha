@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/heading-has-content */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Table, AutoSizer, Column, CellMeasurerCache } from "react-virtualized";
+import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
 import * as moment from "moment";
@@ -116,14 +118,6 @@ function DownloadCSV({ isOpen, onDismiss }) {
   );
 }
 
-const cache = new CellMeasurerCache({
-  defaultHeight: 100,
-  defaultWidth: 100,
-  minHeight: 40,
-  minWidth: 100,
-  fixedWidth: true
-});
-
 export default function() {
   const [{ interactions }] = useData();
   const [{ user, loginType }] = useWeb3();
@@ -139,19 +133,18 @@ export default function() {
   });
 
   useEffect(() => {
-    fetchMyInteractions();
-  }, []);
-
-  async function fetchMyInteractions() {
-    if (loginType === roleNames.SUPER_ADMIN) {
-      setState(interactions);
-    } else {
-      let data = interactions.filter(
-        interaction => interaction.chw._id === user._id
-      );
-      setState(data);
+    async function fetchMyInteractions() {
+      if (loginType === roleNames.SUPER_ADMIN) {
+        setState(interactions);
+      } else {
+        let data = interactions.filter(
+          interaction => interaction.chw._id === user._id
+        );
+        setState(data);
+      }
     }
-  }
+    fetchMyInteractions();
+  }, [interactions, loginType, user._id]);
 
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
@@ -205,10 +198,6 @@ export default function() {
           : "Not Available"}
       </div>
     );
-  }
-
-  function renderIndex({ rowData }) {
-    return <div>{rowData._id}</div>;
   }
 
   async function handleSearch(e) {

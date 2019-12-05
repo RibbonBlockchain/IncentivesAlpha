@@ -1,21 +1,10 @@
 import { ethers } from "ethers";
-import { config } from "../../constants/config";
-
-const { POA_RPC } = config;
 
 const init = async function() {
-  let provider = window && window.web3 && window.web3.currentProvider;
-  let providerEngine =
-    typeof provider != "undefined" && provider.hasOwnProperty("selectedAddress")
-      ? new ethers.providers.Web3Provider(provider)
-      : new ethers.providers.JsonRpcProvider({
-          url: POA_RPC
-        });
-
-  let signer = await providerEngine.getSigner();
-
+  let provider = new ethers.providers.Web3Provider(window.web3.currentProvider);
+  let signer = await provider.getSigner();
   return {
-    provider: providerEngine,
+    provider,
     signer,
     ethers
   };

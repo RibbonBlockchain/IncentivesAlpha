@@ -3,7 +3,6 @@
  * @author RibbonBlockchain engineers
  */
 
-import axios from "axios";
 import { config } from "../../constants/config";
 
 const DEFAULT_HEADERS = {

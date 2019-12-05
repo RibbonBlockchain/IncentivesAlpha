@@ -3,11 +3,11 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
-import { getItem } from "../../utils/storage";
 
 export default class PrescriptionAPI extends HTTP {
-  constructor() {
+  constructor(token) {
     super();
+    this.token = token;
   }
 
   /**
@@ -19,7 +19,7 @@ export default class PrescriptionAPI extends HTTP {
    */
   async listPrescriptions() {
     return await this.getRequest(`prescriptions`, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -33,7 +33,7 @@ export default class PrescriptionAPI extends HTTP {
    */
   async addPrescription(data, url) {
     return await this.postRequest("prescriptions", data, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 }

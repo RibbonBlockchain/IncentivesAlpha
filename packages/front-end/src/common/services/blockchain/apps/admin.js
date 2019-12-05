@@ -1,8 +1,6 @@
 import BlockchainService from "../index";
 import Admin from "../abis/Admin.json";
-
 import { config } from "../../../constants/config";
-import { waitForConfirmation } from "../utils";
 
 let adminAddress = config.ADMIN_CONTRACT_ADDRESS;
 
@@ -18,7 +16,6 @@ export default class AdminContract extends BlockchainService {
   }
 
   async addUser(address, role) {
-    let { provider } = await this.getInstance();
     let contract = await this.contract;
     try {
       return await contract.addUser(address, role);

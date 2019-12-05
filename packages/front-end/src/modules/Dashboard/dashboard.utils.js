@@ -209,7 +209,7 @@ export const makeDonation = async ({ value, message }) => {
 
 export const sendTokens = async ({ amount, receipient, message }) => {
   let vaultContract = new VaultContract();
-  let memo = message ? message : `Sending ${amount} tokens to ${receipient}`;
+  //   let memo = message ? message : `Sending ${amount} tokens to ${receipient}`;
 
   let tx = await vaultContract.sendTokens({ amount, receipient });
   if (tx.hash) {
@@ -258,27 +258,27 @@ export const getPatientsRole = (users, role) => {
     })
   );
   users.length > 0 &&
-    users.map(user => {
-      if (user.role === role) {
+    users.map(
+      user =>
+        user.role === role &&
         data.push({
           label: user.idNumber,
           value: user
-        });
-      }
-    });
+        })
+    );
   return data;
 };
 
 export const getByRole = (users, role) => {
   let data = [];
   users.length > 0 &&
-    users.map(user => {
-      if (user.role === role) {
+    users.map(
+      user =>
+        user.role === role &&
         data.push({
           label: user.idNumber,
           value: user
-        });
-      }
-    });
+        })
+    );
   return data;
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import * as qrImage from "qr-image";
 import Modal from "../../common/components/Modal";

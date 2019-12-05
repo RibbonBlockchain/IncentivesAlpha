@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/heading-has-content */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
@@ -5,7 +8,6 @@ import Fuse from "fuse.js";
 import * as moment from "moment";
 import Card from "../../../common/components/Card";
 import { useData } from "../../../common/providers/API.provider";
-import { roleNames } from "../../../common/constants/roles";
 import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
 import Modal from "../../../common/components/Modal";
@@ -137,8 +139,6 @@ export default function ListPractitioners() {
     setState(myMinors);
   }
 
-  console.log(state);
-
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }
@@ -201,7 +201,6 @@ export default function ListPractitioners() {
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              {/* <Button className={styles.csv_button} text="Download" /> */}
               <div></div>
               <input
                 className={[styles.form_input].join(" ")}

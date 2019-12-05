@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import useForm from "react-hook-form";
+import QrReader from "react-qr-reader";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
-import { ethers } from "ethers";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-import QRScanner from "qr-code-scanner";
 import * as moment from "moment";
 import "react-phone-number-input/style.css";
 import { createNewUser, recordNewUser } from "./onboard.utils";
@@ -81,22 +80,17 @@ export default function Onboard() {
   const [visible, setVisible] = useState(false);
   const [type, setType] = useState(null);
   const [{ users }, fetchData] = useData();
-  const [{ user, loginType }] = useWeb3();
+  const [{ user, loginType, token }] = useWeb3();
   const [loading, setLoading] = useState(false);
+  const [openQR, setOpenQR] = useState(false);
+  const [walletAddress, setWalletAddress] = useState("");
   const [
     ,
     checkTransactionStatus,
     closeTransactionStatus
   ] = useTransactionStatus();
-  const [{}, toggle] = useAlert();
-  const {
-    handleSubmit,
-    register,
-    errors,
-    formState,
-    setValue,
-    triggerValidation
-  } = useForm({
+  const [, toggle] = useAlert();
+  const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
   });
 
@@ -135,6 +129,11 @@ export default function Onboard() {
 
   function hideForm() {
     setVisible(false);
+    setPhoneNumber({
+      isValid: false,
+      value: null
+    });
+    setIsChecked(false);
   }
 
   async function onSubmit(values, e) {
@@ -145,7 +144,8 @@ export default function Onboard() {
       title: record.title.value,
       phoneNumber: phoneNumber.value,
       gender: record.title.value,
-      location: record.location
+      location: record.location,
+      publicAddress: walletAddress
     };
     if (isChecked) {
       data.parent_id = record.relatedTo.value._id;
@@ -170,7 +170,7 @@ export default function Onboard() {
         delete data.phoneNumber;
         delete data.title;
       }
-      let record = await recordNewUser(data);
+      let record = await recordNewUser(data, token);
       closeTransactionStatus();
       if (record.error) {
         setLoading(false);
@@ -201,6 +201,8 @@ export default function Onboard() {
       isValid: false,
       value: null
     });
+    setIsChecked(false);
+    setWalletAddress("");
   }
 
   function formatRoleName(type) {
@@ -211,27 +213,18 @@ export default function Onboard() {
     return formState.isValid && phoneNumber.isValid ? false : true;
   }
 
-  function captureAddressFromQRCodeDisplay() {
-    try {
-      QRScanner.initiate({
-        onResult: address => {
-          let walletAddress = address.split(":")[1];
-          if (ethers.utils.getAddress(walletAddress)) {
-            setValue("publicAddress", walletAddress);
-            triggerValidation({ name: "publicAddress", value: walletAddress });
-          } else {
-            toggle({
-              isVisible: true,
-              message: `Address ${address} does not match checksum`,
-              data: {}
-            });
-          }
-		},
-        timeout: 100000
-      });
-    } catch (error) {
-      console.log(error);
+  function handleScan(data) {
+    console.log("Data ", data);
+    if (data !== null) {
+      let walletAddress = data.split(":")[1];
+      console.log(walletAddress);
+      setWalletAddress(walletAddress);
+      setOpenQR(false);
     }
+  }
+
+  function handleError(error) {
+    console.log("Errr");
   }
 
   function handleIsMinor() {
@@ -249,7 +242,7 @@ export default function Onboard() {
       >
         <div className={styles.cnt}>
           <h4>Create a User</h4>
-          {loginType == Number(roleNames.SUPER_ADMIN) && (
+          {loginType === Number(roleNames.SUPER_ADMIN) && (
             <>
               <Button
                 classNames={styles.button}
@@ -273,7 +266,7 @@ export default function Onboard() {
               />
             </>
           )}
-          {loginType == Number(roleNames.HEALTH_WORKER) && (
+          {loginType === Number(roleNames.HEALTH_WORKER) && (
             <>
               <Button
                 onClick={showPractitionerForm}
@@ -303,216 +296,32 @@ export default function Onboard() {
         windowClassName={styles.modalFormWindow}
         closeClassName={styles.close}
       >
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <div className={[styles.container, styles.form].join(" ")}>
-            <h2 className={styles.form_heading}>
-              Register new{" "}
-              {formatRoleName(type)
-                .toString()
-                .toLowerCase()}
-            </h2>
-            <div className={styles.actions}>
-              <Button
-                text="Capture Wallet Address"
-                classNames={[styles.button, styles.button_primary].join(" ")}
-                onClick={captureAddressFromQRCodeDisplay}
-                disabled={isChecked}
-                button="button"
-              ></Button>
-            </div>
-            <div className={styles.form_body}>
-              <div className={[styles.layout].join(" ")}>
-                <div className={styles.layout__item}>
-                  <label htmlFor="title">Title</label>
-                  <Select
-                    isSearchable
-                    value={record.title}
-                    placeholder="Title"
-                    theme={theme => ({
-                      ...theme,
-                      borderRadius: 0,
-                      colors: {
-                        ...theme.colors,
-                        neutral30: "#313541",
-                        primary: "black"
-                      }
-                    })}
-                    onChange={title => {
-                      setRecord({
-                        title,
-                        location: record.location,
-                        gender: record.gender,
-                        relatedTo: record.relatedTo
-                      });
-                    }}
-                    options={titles}
-                    styles={SelectStyle}
-                  />
-                </div>
-
-                {type === Number(roleNames.PATIENT) && (
-                  <div className={styles.layout__item}>
-                    <div className={[styles.input, styles.checkbox].join(" ")}>
-                      <label htmlFor="minor">
-                        <input
-                          type="checkbox"
-                          value={isChecked}
-                          onChange={handleIsMinor}
-                        />
-                        &nbsp; Is Patient a minor?
-                      </label>
-                    </div>
-                  </div>
-                )}
+        {!openQR && (
+          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+            <div className={[styles.container, styles.form].join(" ")}>
+              <h2 className={styles.form_heading}>
+                Register new{" "}
+                {formatRoleName(type)
+                  .toString()
+                  .toLowerCase()}
+              </h2>
+              <div className={styles.actions}>
+                <Button
+                  text="Capture Wallet Address"
+                  classNames={[styles.button, styles.button_primary].join(" ")}
+                  onClick={() => setOpenQR(true)}
+                  disabled={isChecked}
+                  button="button"
+                ></Button>
               </div>
-              <div className={[styles.layout].join(" ")}>
-                <div className={styles.layout__item}>
-                  <div className={[styles.input].join(" ")}>
-                    <label htmlFor="firstName">First Name</label>
-                    <input
-                      className={[styles.form_input].join(" ")}
-                      placeholder="first name"
-                      name="firstName"
-                      type="text"
-                      ref={register({
-                        required: "First name is required",
-                        pattern: {
-                          value: /^[a-zA-Z ]+$/i,
-                          message: "invalid first name"
-                        }
-                      })}
-                    />
-                    <small>
-                      {" "}
-                      {errors.firstName && errors.firstName.message}
-                    </small>
-                  </div>
-                </div>
-                <div className={styles.layout__item}>
-                  <div className={[styles.input].join(" ")}>
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                      className={[styles.form_input].join(" ")}
-                      placeholder="last name"
-                      ref={register({
-                        required: "Last name is required",
-                        pattern: {
-                          value: /^[a-zA-Z ]+$/i,
-                          message: "invalid last name"
-                        }
-                      })}
-                      name="lastName"
-                      type="text"
-                    />
-                    <small> {errors.lastName && errors.lastName.message}</small>
-                  </div>
-                </div>
-              </div>
-              <div className={[styles.layout].join(" ")}>
-                <div className={styles.layout__full}>
-                  <div className={styles.input}>
-                    <label htmlFor="dateOfBirth">Date of Birth</label>
-                    <DatePicker
-                      dateFormat="yyyy/MM/dd"
-                      selected={date}
-                      name="dateOfBirth"
-                      className={styles.datepicker}
-                      placeholderText="date of birth"
-                      onChange={date => setDate(date)}
-                    />
-                    <small>
-                      {errors.dateOfBirth && errors.dateOfBirth.message}
-                    </small>
-                  </div>
-                </div>
-                <div className={styles.layout__full}>
-                  <div className={[styles.input].join(" ")}>
-                    <label htmlFor="idNumber">
-                      {formatRoleName(type)
-                        .toString()
-                        .toLowerCase()}
-                      {" ID Number"}
-                    </label>
-                    <input
-                      className={[styles.form_input].join(" ")}
-                      placeholder={`${formatRoleName(type)
-                        .toString()
-                        .toLowerCase()} ID Number`}
-                      ref={register({
-                        required: `${formatRoleName(type)
-                          .toString()
-                          .toLowerCase()} ID Number is required`,
-                        pattern: {}
-                      })}
-                      name="idNumber"
-                      type="text"
-                    />
-                    <small>{errors.idNumber && errors.idNumber.message}</small>
-                  </div>
-                </div>
-                {!isChecked ? (
+              <div className={styles.form_body}>
+                <div className={[styles.layout].join(" ")}>
                   <div className={styles.layout__item}>
-                    <div className={[styles.input].join(" ")}>
-                      <label htmlFor="publicAddress">Wallet Address</label>
-                      <input
-                        className={[styles.form_input].join(" ")}
-                        placeholder="0x0..."
-                        ref={register({
-                          required: "Wallet Address is required",
-                          pattern: {
-                            value: /^0x[a-fA-F0-9]{40}$/i,
-                            message: "invalid wallet address"
-                          }
-                        })}
-                        name="publicAddress"
-                        type="text"
-                      />
-                      <small>
-                        {errors.publicAddress && errors.publicAddress.message}
-                      </small>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={styles.layout__item}>
-                    <div className={[styles.input].join(" ")}>
-                      <label htmlFor="guardianIDNumber">Select Guardian</label>
-                      <Select
-                        isSearchable
-                        value={record.relatedTo}
-                        placeholder="Select Guardian"
-                        theme={theme => ({
-                          ...theme,
-                          borderRadius: 0,
-                          colors: {
-                            ...theme.colors,
-                            neutral30: "#313541",
-                            primary: "black"
-                          }
-                        })}
-                        formatOptionLabel={formatUserOptionLabel}
-                        onChange={relatedTo =>
-                          setRecord({
-                            title: record.title,
-                            location: record.location,
-                            gender: record.gender,
-                            relatedTo
-                          })
-                        }
-                        options={patients}
-                        styles={SelectStyle}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className={styles.layout}>
-                <div className={styles.layout__item}>
-                  <div className={[styles.input].join(" ")}>
-                    <label htmlFor="gender">Gender</label>
+                    <label htmlFor="title">Title</label>
                     <Select
                       isSearchable
-                      value={record.gender}
-                      placeholder="Gender"
+                      value={record.title}
+                      placeholder="Title"
                       theme={theme => ({
                         ...theme,
                         borderRadius: 0,
@@ -522,74 +331,273 @@ export default function Onboard() {
                           primary: "black"
                         }
                       })}
-                      onChange={gender => {
+                      onChange={title => {
                         setRecord({
-                          title: record.title,
-                          gender,
+                          title,
                           location: record.location,
+                          gender: record.gender,
                           relatedTo: record.relatedTo
                         });
                       }}
-                      options={gender}
+                      options={titles}
                       styles={SelectStyle}
                     />
                   </div>
+
+                  {type === Number(roleNames.PATIENT) && (
+                    <div className={styles.layout__item}>
+                      <div
+                        className={[styles.input, styles.checkbox].join(" ")}
+                      >
+                        <label htmlFor="minor">
+                          <input
+                            type="checkbox"
+                            value={isChecked}
+                            onChange={handleIsMinor}
+                          />
+                          &nbsp; Is Patient a minor?
+                        </label>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {!isChecked && (
+                <div className={[styles.layout].join(" ")}>
                   <div className={styles.layout__item}>
                     <div className={[styles.input].join(" ")}>
-                      <label htmlFor="phoneNumber">Phone Number</label>
-                      <PhoneInput
+                      <label htmlFor="firstName">First Name</label>
+                      <input
                         className={[styles.form_input].join(" ")}
-                        placeholder="phone number"
-                        onChange={value => {
-                          setPhoneNumber({
-                            isValid: isValidPhoneNumber(value),
-                            value
-                          });
-                        }}
+                        placeholder="first name"
+                        name="firstName"
+                        type="text"
+                        ref={register({
+                          required: "First name is required",
+                          pattern: {
+                            value: /^[a-zA-Z ]+$/i,
+                            message: "invalid first name"
+                          }
+                        })}
                       />
-                      {phoneNumber.value && !phoneNumber.isValid && (
-                        <small>invalid phone number</small>
-                      )}
+                      <small>
+                        {" "}
+                        {errors.firstName && errors.firstName.message}
+                      </small>
                     </div>
                   </div>
-                )}
-              </div>
-              <div className={styles.layout__item}>
-                <div className={[styles.input].join(" ")}>
-                  <label htmlFor="location">House Address</label>
-                  <GooglePlacesAutocomplete
-                    onSelect={location => {
-                      setRecord({
-                        location: location.description
-                          ? location.description
-                          : location,
-                        title: record.title,
-                        gender: record.gender,
-                        relatedTo: record.relatedTo
-                      });
-                    }}
-                  />
+                  <div className={styles.layout__item}>
+                    <div className={[styles.input].join(" ")}>
+                      <label htmlFor="lastName">Last Name</label>
+                      <input
+                        className={[styles.form_input].join(" ")}
+                        placeholder="last name"
+                        ref={register({
+                          required: "Last name is required",
+                          pattern: {
+                            value: /^[a-zA-Z ]+$/i,
+                            message: "invalid last name"
+                          }
+                        })}
+                        name="lastName"
+                        type="text"
+                      />
+                      <small>
+                        {" "}
+                        {errors.lastName && errors.lastName.message}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div className={[styles.layout].join(" ")}>
+                  <div className={styles.layout__full}>
+                    <div className={styles.input}>
+                      <label htmlFor="dateOfBirth">Date of Birth</label>
+                      <DatePicker
+                        dateFormat="yyyy/MM/dd"
+                        selected={date}
+                        name="dateOfBirth"
+                        className={styles.datepicker}
+                        placeholderText="date of birth"
+                        onChange={date => setDate(date)}
+                      />
+                      <small>
+                        {errors.dateOfBirth && errors.dateOfBirth.message}
+                      </small>
+                    </div>
+                  </div>
+                  <div className={styles.layout__full}>
+                    <div className={[styles.input].join(" ")}>
+                      <label htmlFor="idNumber">
+                        {formatRoleName(type)
+                          .toString()
+                          .toLowerCase()}
+                        {" ID Number"}
+                      </label>
+                      <input
+                        className={[styles.form_input].join(" ")}
+                        placeholder={`${formatRoleName(type)
+                          .toString()
+                          .toLowerCase()} ID Number`}
+                        ref={register({
+                          required: `${formatRoleName(type)
+                            .toString()
+                            .toLowerCase()} ID Number is required`,
+                          pattern: {}
+                        })}
+                        name="idNumber"
+                        type="text"
+                      />
+                      <small>
+                        {errors.idNumber && errors.idNumber.message}
+                      </small>
+                    </div>
+                  </div>
+                  {!isChecked ? (
+                    <div className={styles.layout__item}>
+                      <div className={[styles.input].join(" ")}>
+                        <label htmlFor="publicAddress">Wallet Address</label>
+                        <input
+                          className={[styles.form_input].join(" ")}
+                          placeholder="0x0..."
+                          value={walletAddress}
+                          name="publicAddress"
+                          type="text"
+                          onChange={e => setWalletAddress(e.target.value)}
+                        />
+                        <small>
+                          {errors.publicAddress && errors.publicAddress.message}
+                        </small>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={styles.layout__item}>
+                      <div className={[styles.input].join(" ")}>
+                        <label htmlFor="guardianIDNumber">
+                          Select Guardian
+                        </label>
+                        <Select
+                          isSearchable
+                          value={record.relatedTo}
+                          placeholder="Select Guardian"
+                          theme={theme => ({
+                            ...theme,
+                            borderRadius: 0,
+                            colors: {
+                              ...theme.colors,
+                              neutral30: "#313541",
+                              primary: "black"
+                            }
+                          })}
+                          formatOptionLabel={formatUserOptionLabel}
+                          onChange={relatedTo =>
+                            setRecord({
+                              title: record.title,
+                              location: record.location,
+                              gender: record.gender,
+                              relatedTo
+                            })
+                          }
+                          options={patients}
+                          styles={SelectStyle}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.layout}>
+                  <div className={styles.layout__item}>
+                    <div className={[styles.input].join(" ")}>
+                      <label htmlFor="gender">Gender</label>
+                      <Select
+                        isSearchable
+                        value={record.gender}
+                        placeholder="Gender"
+                        theme={theme => ({
+                          ...theme,
+                          borderRadius: 0,
+                          colors: {
+                            ...theme.colors,
+                            neutral30: "#313541",
+                            primary: "black"
+                          }
+                        })}
+                        onChange={gender => {
+                          setRecord({
+                            title: record.title,
+                            gender,
+                            location: record.location,
+                            relatedTo: record.relatedTo
+                          });
+                        }}
+                        options={gender}
+                        styles={SelectStyle}
+                      />
+                    </div>
+                  </div>
+                  {!isChecked && (
+                    <div className={styles.layout__item}>
+                      <div className={[styles.input].join(" ")}>
+                        <label htmlFor="phoneNumber">Phone Number</label>
+                        <PhoneInput
+                          className={[styles.form_input].join(" ")}
+                          placeholder="phone number"
+                          onChange={value => {
+                            setPhoneNumber({
+                              isValid: isValidPhoneNumber(value),
+                              value
+                            });
+                          }}
+                        />
+                        {phoneNumber.value && !phoneNumber.isValid && (
+                          <small>invalid phone number</small>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.layout__item}>
+                  <div className={[styles.input].join(" ")}>
+                    <label htmlFor="location">House Address</label>
+                    <GooglePlacesAutocomplete
+                      onSelect={location => {
+                        setRecord({
+                          location: location.description
+                            ? location.description
+                            : location,
+                          title: record.title,
+                          gender: record.gender,
+                          relatedTo: record.relatedTo
+                        });
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
+              <div className={styles.actions}>
+                <Button
+                  type="button"
+                  text={"Exit"}
+                  classNames={[styles.button].join(" ")}
+                  onClick={hideForm}
+                ></Button>
+                <Button
+                  text="Save"
+                  classNames={[styles.button, styles.button_primary].join(" ")}
+                  disabled={checkValidation() || loading}
+                  button="submit"
+                ></Button>
+              </div>
             </div>
-            <div className={styles.actions}>
-              <Button
-                type="button"
-                text={"Exit"}
-                classNames={[styles.button].join(" ")}
-                onClick={hideForm}
-              ></Button>
-              <Button
-                text="Save"
-                classNames={[styles.button, styles.button_primary].join(" ")}
-                disabled={checkValidation() || loading}
-                button="submit"
-              ></Button>
-            </div>
-          </div>
-        </form>
+          </form>
+        )}
+        {openQR && (
+          <QrReader
+            delay={1000}
+            onError={handleError}
+            onScan={handleScan}
+            style={{ width: "100%" }}
+            resolution={1200}
+          />
+        )}
       </Modal>
       <OnboardOptions
         visible={onboardOptions}

@@ -3,11 +3,11 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
-import { getItem } from "../../utils/storage";
 
 export default class ActivityAPI extends HTTP {
-  constructor() {
+  constructor(token) {
     super();
+    this.token = token;
   }
 
   /**
@@ -19,7 +19,7 @@ export default class ActivityAPI extends HTTP {
    */
   async listActivities() {
     return await this.getRequest(`activities`, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -33,7 +33,7 @@ export default class ActivityAPI extends HTTP {
    */
   async addActivity(data, url) {
     return await this.postRequest("activities", data, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 }

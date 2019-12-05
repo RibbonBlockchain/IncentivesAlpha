@@ -1,7 +1,7 @@
+import * as ethUtil from "ethereumjs-util";
 import { config } from "../constants/config";
 import { SUPPORTED_THEMES } from "../constants";
 import { ethers } from "ethers";
-import { getItem } from "./storage";
 export const formatAddress = address => {
   let pre = address.toLowerCase().slice(0, 12);
   let post = address.toLowerCase().slice(address.length - 4);
@@ -34,45 +34,67 @@ export const formatLink = link => {
   );
 };
 
-export const getNetworkDetails = async (provider, signer, contract) => {
+export const getNetworkDetails = async (provider, address, contract) => {
   try {
-    let networkAddress = getItem("address");
+    // let networkAddress = getItem("address");
+    // let accounts = await provider.listAccounts();
     let currentNetwork = await provider.getNetwork();
+    let loginType = null;
+    console.log(address, currentNetwork);
     if (currentNetwork.chainId === Number(config.DEFAULT_NETWORK)) {
-      let currentBalance = await provider.getBalance(networkAddress);
-      let loginType = await contract.getUserRole(networkAddress);
-      if (typeof loginType === "number") {
-        return {
-          currentNetwork,
-          networkAddress,
-          currentBalance,
-          loginType
-        };
-      } else {
-        await window.ethereum.enable();
-        networkAddress = await signer.getAddress();
-        let currentBalance = await provider.getBalance(networkAddress);
-        let loginType = await contract.getUserRole(networkAddress);
-        if (typeof loginType === "number") {
-          return {
-            currentNetwork,
-            networkAddress,
-            currentBalance,
-            loginType
-          };
-        }
-      }
+      loginType = await contract.getUserRole(address);
+      console.log(loginType);
     } else {
       return {
-        error: `Unable to detect Web3 on the browser.`
+        error: `Wrong network selected. Please make sure you are on ${await getNetworkName(
+          Number(config.DEFAULT_NETWORK)
+        )}`
       };
     }
+    // const networkId = await web3.eth.net.getId();
+    // const accounts = await web3.eth.getAccounts();
+    // if (networkId === Number(config.DEFAULT_NETWORK)) {
+    // let currentBalance = await web3.eth.getBalance(accounts[0]);
+    // let loginType = await contract.getUserRole(accounts[0]);
+    // if (typeof loginType === "number") {
+    // return {
+    //   currentNetwork: networkId,
+    //   networkAddress: accounts[0],
+    //   currentBalance,
+    //   loginType
+    // };
+    return {
+      currentNetwork,
+      networkAddress: address,
+      currentBalance: 0,
+      loginType
+    };
+    // } else {
+    // await window.ethereum.enable();
+    // networkAddress = await signer.getAddress();
+    // const accounts = await web3.eth.getAccounts();
+    //   let currentBalance = await web3.eth.getBalance(accounts[0]);
+    //   let loginType = await contract.getUserRole(accounts[0]);
+    //   if (typeof loginType === "number") {
+    //     return {
+    //       currentNetwork: networkId,
+    //       networkAddress: accounts[0],
+    //       currentBalance,
+    //       loginType
+    //     };
+    //   }
+    // }
+    // } else {
+    //   return {
+    //     error: `Network error occured. Please make sure you are on ${await getNetworkName(
+    //       Number(config.DEFAULT_NETWORK)
+    //     )}`
+    //   };
+    // }
   } catch (error) {
     console.log(error);
     return {
-      error: `Network error occured. Please make sure you are on ${await getNetworkName(
-        Number(config.DEFAULT_NETWORK)
-      )}`
+      error: `Unable to detect Web3 on browser`
     };
   }
 };
@@ -263,3 +285,23 @@ export function formatToUsd(price) {
 export const formatCurrency = amount => {
   return new Intl.NumberFormat().format(amount);
 };
+
+export function hashMessage(msg) {
+  const buffer = ethUtil.toBuffer(msg);
+  const result = ethUtil.hashPersonalMessage(buffer);
+  const hash = ethUtil.bufferToHex(result);
+  return hash;
+}
+
+export function recoverPublicKey(sig, hash) {
+  const sigParams = ethUtil.fromRpcSig(sig);
+  const hashBuffer = ethUtil.toBuffer(hash);
+  const result = ethUtil.ecrecover(
+    hashBuffer,
+    sigParams.v,
+    sigParams.r,
+    sigParams.s
+  );
+  const signer = ethUtil.bufferToHex(ethUtil.publicToAddress(result));
+  return signer;
+}

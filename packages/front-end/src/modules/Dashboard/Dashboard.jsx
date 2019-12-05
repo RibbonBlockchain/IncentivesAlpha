@@ -4,7 +4,6 @@ import { useData } from "../../common/providers/API.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import { useApp } from "../../common/providers/App.provider";
 import { useExchange } from "../../common/providers/Rates.provider";
-import { useModal } from "../../common/providers/Modal.provider";
 import {
   Table,
   AutoSizer,
@@ -28,7 +27,6 @@ const cache = new CellMeasurerCache({
 
 function DashboardTable({ data, type }) {
   const [{ exchangeRate }] = useExchange();
-  const [, toggleModal] = useModal();
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }
@@ -43,20 +41,6 @@ function DashboardTable({ data, type }) {
           : `Not Available`}
       </div>
     );
-  }
-
-  function toggleDetailsModal(param) {
-    let activities = data.filter(
-      interaction => interaction.practitioner._id === data._id
-    );
-    toggleModal({
-      isVisible: true,
-      data: {
-        data: param,
-        activities
-      },
-      modal: "interaction_details"
-    });
   }
 
   function renderInteractions({ rowData, columnIndex, key, parent, rowIndex }) {
@@ -573,6 +557,8 @@ export default function Dashboard() {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginType]);
+
+  console.log(loginType);
 
   return (
     <>

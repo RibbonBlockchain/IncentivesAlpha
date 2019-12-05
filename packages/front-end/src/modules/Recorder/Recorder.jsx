@@ -94,7 +94,7 @@ const formatPrescriptionOptionLabel = ({ label, value }) => {
 
 export default function Recorder() {
   const [visible, setVisible] = useState(false);
-  const [{ loginType, user }] = useWeb3();
+  const [{ loginType, user, token }] = useWeb3();
   const [{ users }] = useData();
 
   return (
@@ -113,13 +113,14 @@ export default function Recorder() {
         type={loginType}
         users={users}
         user={user}
+        token={token}
         onDismiss={() => setVisible(false)}
       />
     </>
   );
 }
 
-function RecorderModal({ visible, onDismiss, type, users, user }) {
+function RecorderModal({ visible, onDismiss, type, users, user, token }) {
   const { handleSubmit, register } = useForm({
     mode: "onChange"
   });
@@ -178,7 +179,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     } else {
       await checkTransactionStatus(interaction);
       data.txHash = interaction;
-      let record = await recordInteractionOnDB(data);
+      let record = await recordInteractionOnDB(data, token);
       closeTransactionStatus();
       if (record.error) {
         setLoading(false);

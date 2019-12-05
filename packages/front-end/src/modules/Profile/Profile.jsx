@@ -19,7 +19,7 @@ export default function Profile() {
     isValid: false
   });
   const [, toggle] = useAlert();
-  const [{ address, user }] = useWeb3();
+  const [{ address, user, token }] = useWeb3();
 
   async function onSubmit(values, e) {
     let data = {
@@ -27,7 +27,7 @@ export default function Profile() {
       address,
       location: record
     };
-    let user = await updateUserProfile(data);
+    let user = await updateUserProfile(data, token);
     if (user.error) {
       toggle({
         isVisible: true,

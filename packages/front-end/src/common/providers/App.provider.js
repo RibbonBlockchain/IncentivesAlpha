@@ -8,6 +8,7 @@ import React, {
 import PrescriptionAPI from "../services/api/prescription.api";
 import ActivityAPI from "../services/api/activity.api";
 import RatingAPI from "../services/api/rating.api";
+import { useWeb3 } from "./Web3.provider";
 
 const AppContext = createContext();
 
@@ -68,10 +69,11 @@ export default function Provider({ children }) {
 
 export const useApp = () => {
   const [state, { update }] = useAppContext();
+  const [{ token }] = useWeb3();
 
-  const prescriptionAPI = new PrescriptionAPI();
-  const activityAPI = new ActivityAPI();
-  const ratingAPI = new RatingAPI();
+  const prescriptionAPI = new PrescriptionAPI(token);
+  const activityAPI = new ActivityAPI(token);
+  const ratingAPI = new RatingAPI(token);
   const {
     currency,
     currencyRate,

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/heading-has-content */
 import React, { useEffect, useState } from "react";
 import { Table, AutoSizer, Column } from "react-virtualized";
@@ -215,7 +217,6 @@ export default function ListPractitioners() {
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              {/* <Button className={styles.csv_button} text="Download" /> */}
               <div></div>
               <input
                 className={[styles.form_input].join(" ")}

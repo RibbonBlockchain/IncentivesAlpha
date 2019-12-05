@@ -20,7 +20,7 @@ export default class ErrorBoundary extends React.Component {
   }
 
   render() {
-    const { error, errorInfo } = this.state;
+    const { error } = this.state;
     return error ? (
       <div className={styles.wrapper}>
         <img src={BrokenLink} alt="Broken Link" />

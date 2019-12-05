@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   createContext,
   useContext,
@@ -9,8 +10,6 @@ import moment from "moment";
 import UserAPI from "../services/api/user.api";
 import InteractionsAPI from "../services/api/interaction.api";
 import { useWeb3 } from "./Web3.provider";
-import { useApp } from "./App.provider";
-import { getItem } from "../utils/storage";
 import { roleNames } from "../constants/roles";
 
 const APIContext = createContext();
@@ -125,12 +124,11 @@ export default function Provider({ children }) {
 }
 
 export const useData = () => {
-  const usersAPI = new UserAPI();
-  const interactionsAPI = new InteractionsAPI();
   const [{ users, interactions, dashboard }, { update }] = useAPIContext();
-  const [{ loginType, user }] = useWeb3();
-  const [{ ratingList }] = useApp();
-  let address = getItem("address");
+  const [{ loginType, user, token, address }] = useWeb3();
+
+  const usersAPI = new UserAPI(token);
+  const interactionsAPI = new InteractionsAPI(token);
 
   const fetchData = async () => {
     if (loginType > 0) {
@@ -201,45 +199,62 @@ export const useData = () => {
   };
 
   const getCHWStatsPatients = async (users, chw) => {
-    let overall = await users.filter(user => {
-      return (
-        user.role === roleNames.PATIENT &&
-        user.onBoardedBy &&
-        user.onBoardedBy._id === chw._id
-      );
-    });
-    let minors = await overall
-      .map(user => user.minors)
-      .filter(minor => minor.length > 0);
-    console.log(minors);
-    let flattenedMinorsMap = [].concat(...minors);
-    let thisMonthData =
-      getByDate(overall, "month").length +
-      getByDate(flattenedMinorsMap, "month").length;
-
-    let thisWeekData =
-      getByDate(overall, "week").length +
-      getByDate(flattenedMinorsMap, "week").length;
-    return {
-      overall: overall.length + flattenedMinorsMap.length,
-      thisWeekData,
-      thisMonthData
-    };
-  };
-
-  const getCHWStatsPractitioners = async (users, chw) => {
-    if (users.length > 0) {
+    if (typeof chw !== "undefined") {
       let overall = await users.filter(user => {
         return (
-          user.role === roleNames.PRACTITIONER &&
+          user.role === roleNames.PATIENT &&
+          user.onBoardedBy &&
           user.onBoardedBy._id === chw._id
         );
       });
+      let minors = await overall
+        .map(user => user.minors)
+        .filter(minor => minor.length > 0);
+      let flattenedMinorsMap = [].concat(...minors);
+      let thisMonthData =
+        getByDate(overall, "month").length +
+        getByDate(flattenedMinorsMap, "month").length;
+
+      let thisWeekData =
+        getByDate(overall, "week").length +
+        getByDate(flattenedMinorsMap, "week").length;
       return {
-        overall: overall.length,
-        thisWeekData: getByDate(overall, "week").length,
-        thisMonthData: getByDate(overall, "month").length
+        overall: overall.length + flattenedMinorsMap.length,
+        thisWeekData,
+        thisMonthData
       };
+    } else {
+      return {
+        overall: 0,
+        thisWeekData: 0,
+        thisMonthData: 0
+      };
+    }
+  };
+
+  const getCHWStatsPractitioners = async (users, chw) => {
+    if (typeof chw !== "undefined") {
+      if (users.length > 0) {
+        let overall = await users.filter(user => {
+          return (
+            user.role === roleNames.PRACTITIONER &&
+            user.onBoardedBy._id === chw._id
+          );
+        });
+        return {
+          overall: overall.length,
+          thisWeekData: getByDate(overall, "week").length,
+          thisMonthData: getByDate(overall, "month").length
+        };
+      } else {
+        return {
+          overall: 0,
+          thisWeekData: 0,
+          thisMonthData: 0,
+          ratings: 0,
+          earnings: 0
+        };
+      }
     } else {
       return {
         overall: 0,

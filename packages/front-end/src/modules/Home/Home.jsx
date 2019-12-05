@@ -135,7 +135,7 @@ function Home() {
                 <NavLink
                   activeClassName={styles.active}
                   className={styles.menu__link}
-                  to="/app/home"
+                  to="/"
                 >
                   <span>Home</span>
                 </NavLink>

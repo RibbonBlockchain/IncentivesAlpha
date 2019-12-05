@@ -23,8 +23,8 @@ export async function createNewUser(data) {
   }
 }
 
-export async function recordNewUser(data) {
-  let userAPI = new UserAPI();
+export async function recordNewUser(data, token) {
+  let userAPI = new UserAPI(token);
   let { role } = data;
   let user = null;
 

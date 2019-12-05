@@ -4,7 +4,6 @@ import Modal from "../../common/components/Modal";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 import styles from "./Offboard.module.scss";
 import Button from "../../common/components/Button";
-import { watchTransfers } from "../../common/services/blockchain/utils";
 import { config } from "../../common/constants/config";
 
 export default function RegisterWithQR() {

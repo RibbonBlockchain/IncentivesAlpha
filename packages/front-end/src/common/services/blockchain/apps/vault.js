@@ -1,9 +1,6 @@
 import BlockchainService from "../index";
 import Vault from "../abis/Vault.json";
-import * as unit from "ethjs-unit";
-import {
-  config
-} from "../../../constants/config";
+import { config } from "../../../constants/config";
 
 let vaultAddress = config.VAULT_CONTRACT_ADDRESS;
 
@@ -17,9 +14,7 @@ export default class VaultContract extends BlockchainService {
   async address() {}
 
   async donateFunds(value, message) {
-    let {
-      ethers
-    } = await this.getInstance();
+    let { ethers } = await this.getInstance();
     let contract = await this.contract;
     try {
       return await contract.donateFunds(message, {
@@ -43,19 +38,17 @@ export default class VaultContract extends BlockchainService {
     chwAmount
   }) {
     try {
-      let {
-        ethers,
-        provider
-      } = await this.getInstance();
+      let { provider } = await this.getInstance();
       let contract = await this.contract;
       console.log(patientAmount, practitionerAmount, chwAmount);
-      let patientAmountToBeSent = (Math.ceil(patientAmount * 10 ** 18)).toString();
-      let practitionerAmountToBeSent = (
-        Math.ceil(practitionerAmount *
-          10 ** 18)
+      let patientAmountToBeSent = Math.ceil(
+        patientAmount * 10 ** 18
       ).toString();
-      let chwAmountToBeSent = (Math.ceil(chwAmount * 10 ** 18)).toString();
-      console.log(patient, practitioner, chw)
+      let practitionerAmountToBeSent = Math.ceil(
+        practitionerAmount * 10 ** 18
+      ).toString();
+      let chwAmountToBeSent = Math.ceil(chwAmount * 10 ** 18).toString();
+      console.log(patient, practitioner, chw);
       console.log(
         patientAmountToBeSent,
         practitionerAmountToBeSent,
@@ -67,7 +60,9 @@ export default class VaultContract extends BlockchainService {
         config.VAULT_CONTRACT_ADDRESS
       );
 
-      if (totalAmountToBeTransfered <= parseFloat(currentVaultBalance.toString())) {
+      if (
+        totalAmountToBeTransfered <= parseFloat(currentVaultBalance.toString())
+      ) {
         return await contract.payout(
           patient,
           practitioner,
@@ -77,7 +72,7 @@ export default class VaultContract extends BlockchainService {
           chwAmountToBeSent
         );
       } else {
-        console.log("BALANCE ERROR")
+        console.log("BALANCE ERROR");
         return "Insufficient balance on vault";
       }
     } catch (error) {

@@ -1,65 +1,42 @@
-import { ethers } from "ethers";
 import Web3 from "web3";
-import WalletConnect from "@walletconnect/browser";
-import { convertUtf8ToHex } from "@walletconnect/utils";
-import Portis from "@portis/web3";
-import EthSigUtil from "eth-sig-util";
 import IRegistry from "../../common/services/blockchain/apps/registry";
 import AuthAPI from "../../common/services/api/auth.api";
 import { setItem, clear } from "../../common/utils/storage";
-import { config } from "../../common/constants/config";
+import { hashMessage, recoverPublicKey } from "../../common/utils";
 
 export async function authenticateUser(provider) {
+  const web3 = new Web3(provider);
+  const accounts = await web3.eth.getAccounts();
+  const address = accounts[0];
+  window.web3 = web3;
+  web3.eth.extend({
+    methods: [
+      {
+        name: "chainId",
+        call: "eth_chainId",
+        outputFormatter: web3.utils.hexToNumber
+      }
+    ]
+  });
   try {
     let nonce = `Signing into RibbonBlockchain Dapp`;
-    if (provider.isWalletConnect) {
-      const walletConnector = new WalletConnect({
-        bridge: "https://bridge.walletconnect.org"
-      });
-
-      const accounts = await walletConnector.accounts;
-      const messageParams = [convertUtf8ToHex(nonce), accounts[0]];
-      let signature = await walletConnector.signPersonalMessage(messageParams);
-      let recoveredAddress = await ethers.utils.verifyMessage(nonce, signature);
-      if (recoveredAddress !== accounts[0]) {
+    // hash nonce
+    const hash = hashMessage(nonce);
+    try {
+      // sign message
+      const result = await web3.eth.sign(hash, address);
+      //   verify signature
+      const signer = recoverPublicKey(result, hash);
+      const verified = signer.toLowerCase() === address.toLowerCase();
+      if (verified) {
+        return await loginUser(result, address, provider);
+      } else {
         return {
-          error: `Address recovered do not match, original ${accounts[0]} versus computed ${recoveredAddress}`
+          error: `Address recovered do not match, original ${address} versus computed ${signer}`
         };
       }
-      return await loginUser(signature, accounts[0]);
-    } else if (provider.isPortis) {
-      let portis = new Portis(config.PORTIS, "sokol");
-      let web3 = new Web3(portis.provider);
-      const accounts = await web3.eth.getAccounts();
-      const messageHex = "0x" + new Buffer(nonce, "utf8").toString("hex");
-      const signedMessage = await web3.currentProvider.send("personal_sign", [
-        messageHex,
-        accounts[0]
-      ]);
-
-      const recovered = EthSigUtil.recoverPersonalSignature({
-        data: messageHex,
-        sig: signedMessage
-      });
-      if (recovered.toLowerCase() !== accounts[0].toLowerCase()) {
-        return {
-          error: `Address recovered do not match, original ${accounts[0]} versus computed ${recovered}`
-        };
-      }
-
-      return await loginUser(signedMessage, accounts[0]);
-    } else {
-      let providerEngine = new ethers.providers.Web3Provider(provider);
-      let signer = providerEngine.getSigner();
-      let signature = await signer.signMessage(nonce);
-      let publicAddress = await signer.getAddress();
-      let recoveredAddress = await ethers.utils.verifyMessage(nonce, signature);
-      if (recoveredAddress !== publicAddress) {
-        return {
-          error: `Address recovered do not match, original ${publicAddress} versus computed ${recoveredAddress}`
-        };
-      }
-      return await loginUser(signature, publicAddress);
+    } catch (error) {
+      return { error };
     }
   } catch (error) {
     return {
@@ -112,6 +89,7 @@ export async function approveUser(user) {
   setItem("token", user.authWithAPI.token);
   setItem("address", user.publicAddress);
   setItem("loginType", user.loginType);
+  setItem("web3", user.web3);
   //   todo replace this
-  window.location.reload();
+  //   window.location.reload();
 }
