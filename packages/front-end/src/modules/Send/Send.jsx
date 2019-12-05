@@ -123,9 +123,10 @@ export default function Send() {
                 type="button"
                 text={"Cancel"}
                 classNames={[styles.button].join(" ")}
-                onClick={() =>
-                  toggleModal({ isVisible: false, modal: "", data: null })
-                }
+                onClick={() => {
+                  toggleModal({ isVisible: false, modal: "", data: null });
+                  setWalletAddress("");
+                }}
               ></Button>
               <Button
                 text="Send"

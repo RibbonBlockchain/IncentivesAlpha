@@ -134,6 +134,7 @@ export default function Onboard() {
       value: null
     });
     setIsChecked(false);
+    setWalletAddress("");
   }
 
   async function onSubmit(values, e) {
@@ -214,7 +215,6 @@ export default function Onboard() {
   }
 
   function handleScan(data) {
-    console.log("Data ", data);
     if (data !== null) {
       let walletAddress = data.split(":")[1];
       console.log(walletAddress);
