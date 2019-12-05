@@ -36,14 +36,10 @@ export const formatLink = link => {
 
 export const getNetworkDetails = async (provider, address, contract) => {
   try {
-    // let networkAddress = getItem("address");
-    // let accounts = await provider.listAccounts();
     let currentNetwork = await provider.getNetwork();
     let loginType = null;
-    console.log(address, currentNetwork);
     if (currentNetwork.chainId === Number(config.DEFAULT_NETWORK)) {
       loginType = await contract.getUserRole(address);
-      console.log(loginType);
     } else {
       return {
         error: `Wrong network selected. Please make sure you are on ${await getNetworkName(
@@ -51,48 +47,13 @@ export const getNetworkDetails = async (provider, address, contract) => {
         )}`
       };
     }
-    // const networkId = await web3.eth.net.getId();
-    // const accounts = await web3.eth.getAccounts();
-    // if (networkId === Number(config.DEFAULT_NETWORK)) {
-    // let currentBalance = await web3.eth.getBalance(accounts[0]);
-    // let loginType = await contract.getUserRole(accounts[0]);
-    // if (typeof loginType === "number") {
-    // return {
-    //   currentNetwork: networkId,
-    //   networkAddress: accounts[0],
-    //   currentBalance,
-    //   loginType
-    // };
     return {
       currentNetwork,
       networkAddress: address,
       currentBalance: 0,
       loginType
     };
-    // } else {
-    // await window.ethereum.enable();
-    // networkAddress = await signer.getAddress();
-    // const accounts = await web3.eth.getAccounts();
-    //   let currentBalance = await web3.eth.getBalance(accounts[0]);
-    //   let loginType = await contract.getUserRole(accounts[0]);
-    //   if (typeof loginType === "number") {
-    //     return {
-    //       currentNetwork: networkId,
-    //       networkAddress: accounts[0],
-    //       currentBalance,
-    //       loginType
-    //     };
-    //   }
-    // }
-    // } else {
-    //   return {
-    //     error: `Network error occured. Please make sure you are on ${await getNetworkName(
-    //       Number(config.DEFAULT_NETWORK)
-    //     )}`
-    //   };
-    // }
   } catch (error) {
-    console.log(error);
     return {
       error: `Unable to detect Web3 on browser`
     };
@@ -273,27 +234,20 @@ export function formatTokenBalance(balance, decimal) {
 
 export function formatToUsd(price) {
   return Number(price).toFixed(4);
-  //   const format = { decimalSeparator: ".", groupSeparator: ",", groupSize: 3 };
-  //   const usdPrice = formatFixed(price, {
-  //     decimalPlaces: 2,
-  //     dropTrailingZeros: false,
-  //     format
-  //   });
-  //   return usdPrice;
 }
 
 export const formatCurrency = amount => {
   return new Intl.NumberFormat().format(amount);
 };
 
-export function hashMessage(msg) {
+export function hashPersonalMessage(msg){
   const buffer = ethUtil.toBuffer(msg);
   const result = ethUtil.hashPersonalMessage(buffer);
   const hash = ethUtil.bufferToHex(result);
   return hash;
 }
 
-export function recoverPublicKey(sig, hash) {
+function recoverPublicKey(sig, hash) {
   const sigParams = ethUtil.fromRpcSig(sig);
   const hashBuffer = ethUtil.toBuffer(hash);
   const result = ethUtil.ecrecover(
@@ -303,5 +257,11 @@ export function recoverPublicKey(sig, hash) {
     sigParams.s
   );
   const signer = ethUtil.bufferToHex(ethUtil.publicToAddress(result));
+  return signer;
+}
+
+export function recoverPersonalSignature(sig, msg) {
+  const hash = hashPersonalMessage(msg);
+  const signer = recoverPublicKey(sig, hash);
   return signer;
 }
