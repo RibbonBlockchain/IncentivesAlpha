@@ -1,9 +1,8 @@
 import Web3 from "web3";
-import { convertUtf8ToHex } from "@walletconnect/utils";
 import IRegistry from "../../common/services/blockchain/apps/registry";
 import AuthAPI from "../../common/services/api/auth.api";
 import { setItem, clear } from "../../common/utils/storage";
-import { recoverPersonalSignature } from "../../common/utils";
+import { hashPersonalMessage, recoverPublicKey } from "../../common/utils";
 
 export async function authenticateUser(provider) {
   const web3 = new Web3(provider);
@@ -22,12 +21,13 @@ export async function authenticateUser(provider) {
   try {
     let nonce = `Signing into RibbonBlockchain Dapp`;
     // hash nonce
-    const hexMsg = convertUtf8ToHex(nonce);
+    const hash = hashPersonalMessage(nonce);
+
     try {
       // sign message
-      const result = await web3.eth.personal.sign(hexMsg, address);
+      const result = await web3.eth.sign(hash, address);
       //   verify signature
-      const signer = recoverPersonalSignature(result, nonce);
+      const signer = recoverPublicKey(result, hash);
       const verified = signer.toLowerCase() === address.toLowerCase();
       if (verified) {
         return await loginUser(result, address, provider);

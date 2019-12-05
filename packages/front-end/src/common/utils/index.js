@@ -240,14 +240,14 @@ export const formatCurrency = amount => {
   return new Intl.NumberFormat().format(amount);
 };
 
-export function hashPersonalMessage(msg){
+export function hashPersonalMessage(msg) {
   const buffer = ethUtil.toBuffer(msg);
   const result = ethUtil.hashPersonalMessage(buffer);
   const hash = ethUtil.bufferToHex(result);
   return hash;
 }
 
-function recoverPublicKey(sig, hash) {
+export function recoverPublicKey(sig, hash) {
   const sigParams = ethUtil.fromRpcSig(sig);
   const hashBuffer = ethUtil.toBuffer(hash);
   const result = ethUtil.ecrecover(
