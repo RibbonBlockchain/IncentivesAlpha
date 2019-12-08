@@ -60,7 +60,14 @@ export default function Send() {
   return (
     <Modal
       visible={isVisible && modal === "send"}
-      windowClassName={styles.modalWindow}
+	  windowClassName={styles.modalWindow}
+	  onClickClose={() => {
+        toggleModal({
+          isVisible: false,
+          data: null,
+          modal: ""
+        });
+      }}
     >
       {!openQR && (
         <div className={styles.cnt}>
