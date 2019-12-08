@@ -92,7 +92,7 @@ export const useWeb3 = () => {
         message: error
       });
     } else {
-      let user = await userAPI.getUserByAddress(networkAddress);
+	  let user = await userAPI.getUserByAddress(networkAddress);
       await update({
         address: networkAddress,
         balance: ethers.utils.formatEther(currentBalance),

@@ -50,7 +50,7 @@ export const getNetworkDetails = async (provider, address, contract) => {
     return {
       currentNetwork,
       networkAddress: address,
-      currentBalance: 0,
+      currentBalance: await provider.getBalance(address),
       loginType
     };
   } catch (error) {
