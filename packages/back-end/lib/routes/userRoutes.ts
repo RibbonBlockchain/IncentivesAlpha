@@ -7,13 +7,15 @@ import {
   communityHealthWorkerOnly
 } from "../validators/authValidation";
 import { UserSchema } from "../models/userModel";
+import {MinorsSchema} from "../models/minorsModel";
 import { check, validationResult } from "express-validator";
 import {validateUserSchema} from "../validators/userValidation";
 
 const User = mongoose.model("user", UserSchema)
+const Minors = mongoose.model("Minors", MinorsSchema)
 
 export class UserRoutes {
-  public userController: UserController = new UserController(User);
+  public userController: UserController = new UserController(User, Minors);
 
   public routes(app): void {
     // Users
@@ -50,6 +52,11 @@ export class UserRoutes {
       .route("/api/v1/users/patients")
       // POST endpoint add community health worker
       .post([validJWTNeeded], this.userController.addNewPatient);
+
+    app
+      .route("/api/v1/users/minors")
+      .post([validJWTNeeded], this.userController.addNewMinor)
+      .get([validJWTNeeded], this.userController.getMinors)
 
     app
       .route("/api/v1/users/:userAddress")

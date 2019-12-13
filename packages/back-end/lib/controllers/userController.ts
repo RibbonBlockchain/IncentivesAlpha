@@ -7,9 +7,11 @@ import { getCurrentUserAddress } from "../validators/authValidation";
 
 export class UserController {
   public usermodel: any;
+  public minormodel: any;
 
-  constructor(User: any){
+  constructor(User: any, Minors: any){
     this.usermodel = User
+    this.minormodel = Minors
   }
 
   public addAdministrator = async (req: Request, res: Response) => {
@@ -167,13 +169,70 @@ export class UserController {
     }
   }
 
+  public addNewMinor = async (req: Request, res: Response) => {
+    let minorData = {
+      relatedTo: req.body.parent_id,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      dateOfBirth: req.body.dateOfBirth,
+      gender: req.body.gender,
+      idNumber: req.body.idNumber,
+      role: req.body.role
+    }
+    let newMinor = new this.minormodel(minorData)
+    try {
+      await newMinor
+          .save()
+          .then(async minor => {
+            await this.usermodel.updateOne(
+              { _id: req.body.parent_id },
+              {
+                $set: {
+                  minors: minor._id
+                }
+              })
+              .catch(error => {
+                res.status(400).json({error: error})
+              })
+            res.status(201).json({ status: 201, data: minor });
+          })
+        .catch(error => {
+          res
+            .status(400)
+            .json({
+              status: 400,
+              message: "Invalid patient ID"
+            });
+        });
+    } catch {
+      res.status(500).json({ status: 500, message: "Server Error" });
+    }
+  }
+
   public getUsers = async (req: Request, res: Response) => {
-    await this.usermodel.find({}, (err, users) => {
-      if (err) {
-        res.send({ message: err });
-      }
+    await this.usermodel.find({})
+    .populate("minors", ["firstName", "lastName", "idNumber", "role", "createdDate"])
+    .populate("onBoardedBy", ["firstName", "lastName", "publicAddress"])
+    .then(async users => {
       res.json({ status: 200, data: users });
-    });
+    })
+    .catch(error => {
+      res.status(404).json({
+        status: 404,
+      });
+    })
+  }
+
+  public getMinors = async (req: Request, res: Response) => {
+    await this.minormodel.find({})
+    .then(async minors => {
+      res.json({ status: 200, data: minors });
+    })
+    .catch(error => {
+      res.status(404).json({
+        status: 404,
+      });
+    })
   }
 
   public getUserByWalletAddress = async (req: Request, res: Response) => {

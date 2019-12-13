@@ -41,4 +41,19 @@ export class SettingsController {
       res.status(500).json({ status: 500, message: "Server Error" });
     }
   }
+
+  public async getExchangeRate(req: Request, res: Response){
+    try {
+      await settings
+        .find({})
+        .then(async settings => {
+          res.json({ status: 200, data: settings[0]['exchangeRateUSDZAR'] });
+        })
+        .catch(error => {
+          res.status(404);
+        });
+    } catch {
+      res.status(500).json({ status: 500, message: "Server Error" });
+    }
+  }
 }

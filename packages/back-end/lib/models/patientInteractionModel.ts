@@ -1,12 +1,24 @@
 import * as mongoose from "mongoose";
 import { FKHelper } from "./helpers/foreign-key-helper";
 
+const AutoIncrement = require('mongoose-sequence')(mongoose);
+
 const Schema = mongoose.Schema;
 
 export const PatientInteractionSchema = new Schema({
   patient: {
-    type: Schema.ObjectId,
-    ref: "User"
+    _id: {
+      type: String
+    },
+    firstName: {
+      type: String
+    },
+    lastName: {
+      type: String
+    },
+    publicAddress: {
+      type: String
+    }
   },
   practitioner: {
     type: Schema.ObjectId,
@@ -68,13 +80,14 @@ export const PatientInteractionSchema = new Schema({
   }
 });
 
+PatientInteractionSchema.plugin(AutoIncrement, {inc_field: 'counter'});
+
 PatientInteractionSchema.pre("find", autoPopulateForeigns);
 PatientInteractionSchema.pre("findOne", autoPopulateForeigns);
 
 function autoPopulateForeigns(next) {
   this.populate("activities", ["activityTitle"])
     .populate("prescriptions", ["prescriptionTitle"])
-    .populate("patient", ["firstName", "lastName", "publicAddress"])
     .populate("chw", ["firstName", "lastName", "publicAddress"])
     .populate("practitioner", ["firstName", "lastName", "publicAddress"]);
   next();

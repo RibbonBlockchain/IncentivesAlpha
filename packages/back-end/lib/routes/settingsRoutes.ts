@@ -22,6 +22,11 @@ export class SettingsRoutes {
       .post(
         [validJWTNeeded, superAdminOnly],
         this.settingsController.addSettings
-      );
+      )
+
+    app
+      .route("/api/v1/exchangerates")
+      .get([validJWTNeeded],
+      this.settingsController.getExchangeRate);
   }
 }

@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { stringify } from "querystring";
 
 const Schema = mongoose.Schema;
 
@@ -17,12 +18,11 @@ export const UserSchema = new Schema({
   },
   publicAddress: {
     type: String,
-    required: true,
     index: { unique: true }
   },
   role: {
     type: Number,
-    required: "Enter a number between 0 and 3"
+    required: "Enter a number between 0 and 4"
   },
   dateOfBirth: {
     type: Date,
@@ -35,20 +35,39 @@ export const UserSchema = new Schema({
   gender: {
     type: String
   },
+  location: {
+    type: String
+  },
   title: {
     type: String
   },
   phoneNumber: {
     type: String,
-    required: "Please Enter a Mobile Number",
     index: { unique: true }
   },
   onBoardedBy: {
     type: Schema.ObjectId,
     ref: "User"
   },
+  minors:[
+    {
+        type: Schema.ObjectId,
+        ref: "Minors"
+    }
+  ],
   createdDate: {
     type: Date,
     default: Date.now
   }
 });
+
+// UserSchema.pre("find", autoPopulateForeigns);
+// UserSchema.pre("findOne", autoPopulateForeigns);
+
+// function autoPopulateForeigns(next) {
+//   this.populate("minors", ["firstName", "lastName"])
+//       .populate("onBoardedBy", ["firstName", "lastName", "publicAddress"])
+//   next();
+
+// }
+
