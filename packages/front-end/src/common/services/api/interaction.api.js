@@ -3,11 +3,11 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
-import { getItem } from "../../utils/storage";
 
 export default class InteractionsAPI extends HTTP {
-  constructor() {
+  constructor(token) {
     super();
+    this.token = token;
   }
 
   /**
@@ -19,7 +19,7 @@ export default class InteractionsAPI extends HTTP {
    */
   async listInteractions() {
     return await this.getRequest("interactions", {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -32,7 +32,7 @@ export default class InteractionsAPI extends HTTP {
    */
   async listInteractionByAddress(address, role) {
     return await this.postRequest(`interactions/${address}`, role, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -46,7 +46,7 @@ export default class InteractionsAPI extends HTTP {
    */
   async createInteraction(data) {
     return await this.postRequest("interactions", data, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -60,7 +60,7 @@ export default class InteractionsAPI extends HTTP {
    */
   async updateInteraction(data) {
     return await this.patchRequest(`interactions/${data.address}`, data, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -69,7 +69,7 @@ export default class InteractionsAPI extends HTTP {
       `interactions/${address}?date_from=${date.from}&date_to=${date.to}`,
       data,
       {
-        authorization: `Bearer ${getItem("token")}`
+        authorization: `Bearer ${this.token}`
       }
     );
   }

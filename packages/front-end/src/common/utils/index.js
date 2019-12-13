@@ -1,7 +1,7 @@
+import * as ethUtil from "ethereumjs-util";
 import { config } from "../constants/config";
 import { SUPPORTED_THEMES } from "../constants";
 import { ethers } from "ethers";
-import { getItem } from "./storage";
 export const formatAddress = address => {
   let pre = address.toLowerCase().slice(0, 12);
   let post = address.toLowerCase().slice(address.length - 4);
@@ -34,47 +34,28 @@ export const formatLink = link => {
   );
 };
 
-export const getNetworkDetails = async (provider, signer, contract) => {
+export const getNetworkDetails = async (provider, address, contract) => {
   try {
-    let networkAddress = getItem("address");
     let currentNetwork = await provider.getNetwork();
+    let loginType = null;
     if (currentNetwork.chainId === Number(config.DEFAULT_NETWORK)) {
-      let currentBalance = await provider.getBalance(networkAddress);
-      let loginType = await contract.getUserRole(networkAddress);
-      if (typeof loginType === "number") {
-        return {
-          currentNetwork,
-          networkAddress,
-          currentBalance,
-          loginType
-        };
-      } else {
-        await window.ethereum.enable();
-        networkAddress = await signer.getAddress();
-        let currentBalance = await provider.getBalance(networkAddress);
-        let loginType = await contract.getUserRole(networkAddress);
-        if (typeof loginType === "number") {
-          return {
-            currentNetwork,
-            networkAddress,
-            currentBalance,
-            loginType
-          };
-        }
-      }
+      loginType = await contract.getUserRole(address);
     } else {
       return {
-        error: `Network error occured. Please make sure you are on ${await getNetworkName(
+        error: `Wrong network selected. Please make sure you are on ${await getNetworkName(
           Number(config.DEFAULT_NETWORK)
         )}`
       };
     }
-  } catch (error) {
-    console.log(error);
     return {
-      error: `Network error occured. Please make sure you are on ${await getNetworkName(
-        Number(config.DEFAULT_NETWORK)
-      )}`
+      currentNetwork,
+      networkAddress: address,
+      currentBalance: await provider.getBalance(address),
+      loginType
+    };
+  } catch (error) {
+    return {
+      error: `Unable to detect Web3 on browser`
     };
   }
 };
@@ -253,15 +234,34 @@ export function formatTokenBalance(balance, decimal) {
 
 export function formatToUsd(price) {
   return Number(price).toFixed(4);
-  //   const format = { decimalSeparator: ".", groupSeparator: ",", groupSize: 3 };
-  //   const usdPrice = formatFixed(price, {
-  //     decimalPlaces: 2,
-  //     dropTrailingZeros: false,
-  //     format
-  //   });
-  //   return usdPrice;
 }
 
 export const formatCurrency = amount => {
   return new Intl.NumberFormat().format(amount);
 };
+
+export function hashPersonalMessage(msg) {
+  const buffer = ethUtil.toBuffer(msg);
+  const result = ethUtil.hashPersonalMessage(buffer);
+  const hash = ethUtil.bufferToHex(result);
+  return hash;
+}
+
+export function recoverPublicKey(sig, hash) {
+  const sigParams = ethUtil.fromRpcSig(sig);
+  const hashBuffer = ethUtil.toBuffer(hash);
+  const result = ethUtil.ecrecover(
+    hashBuffer,
+    sigParams.v,
+    sigParams.r,
+    sigParams.s
+  );
+  const signer = ethUtil.bufferToHex(ethUtil.publicToAddress(result));
+  return signer;
+}
+
+export function recoverPersonalSignature(sig, msg) {
+  const hash = hashPersonalMessage(msg);
+  const signer = recoverPublicKey(sig, hash);
+  return signer;
+}

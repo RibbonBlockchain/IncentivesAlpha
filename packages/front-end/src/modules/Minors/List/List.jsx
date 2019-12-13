@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/heading-has-content */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
 import Fuse from "fuse.js";
@@ -11,12 +12,10 @@ import { DesktopLoader } from "../../../common/components/Loader";
 import Button from "../../../common/components/Button";
 import Modal from "../../../common/components/Modal";
 import { generateReport } from "../../Dashboard/dashboard.utils";
-import { roleNames } from "../../../common/constants/roles";
 import styles from "./List.module.scss";
 import { getItem } from "../../../common/utils/storage";
 import { useAlert, useModal } from "../../../common/providers/Modal.provider";
 import { useWeb3 } from "../../../common/providers/Web3.provider";
-import { useExchange } from "../../../common/providers/Rates.provider";
 
 function DownloadCSV({ isOpen, onDismiss }) {
   const [, toggle] = useAlert();
@@ -118,14 +117,13 @@ function DownloadCSV({ isOpen, onDismiss }) {
   );
 }
 
-export default function() {
-  const [{ interactions }] = useData();
-  const [{ user, loginType }] = useWeb3();
-  const [state, setState] = useState([]);
+export default function ListPractitioners() {
+  const [{ users, interactions }] = useData();
+  const [state, setState] = useState();
   const [search, setSearch] = useState();
-  const [visible, setVisible] = useState(false);
   const [, toggleModal] = useModal();
-  const [{ exchangeRate }] = useExchange();
+  const [user] = useWeb3();
+  const [visible, setVisible] = useState(false);
   const fuse = new Fuse(state, {
     maxPatternLength: 32,
     minMatchCharLength: 3,
@@ -133,52 +131,23 @@ export default function() {
   });
 
   useEffect(() => {
-    async function fetchMyInteractions() {
-      if (loginType === roleNames.SUPER_ADMIN) {
-        setState(interactions);
-      } else {
-        let data = interactions.filter(
-          interaction => interaction.chw._id === user._id
-        );
-        setState(data);
-      }
-    }
-    fetchMyInteractions();
-  }, [interactions, loginType, user._id]);
+    fetchMyMinorsOnly();
+  }, []);
+
+  async function fetchMyMinorsOnly() {
+    let myMinors = users.filter(data => data._id === user.user._id);
+    setState(myMinors);
+  }
 
   function _noRowsRenderer() {
     return <div className={styles.noRows}>No transaction recorded yet!</div>;
   }
 
-  function renderPatient({ rowData }) {
+  function renderName({ rowData }) {
     return (
       <div>
-        {rowData.patient &&
-        rowData.patient.firstName &&
-        rowData.patient.lastName
-          ? `${rowData.patient.firstName} ${rowData.patient.lastName} `
-          : `Not Available`}
-      </div>
-    );
-  }
-
-  function renderPractitioner({ rowData }) {
-    return (
-      <div>
-        {rowData.practitioner &&
-        rowData.practitioner.firstName &&
-        rowData.practitioner.lastName
-          ? `${rowData.practitioner.firstName} ${rowData.practitioner.lastName} `
-          : `Not Available`}
-      </div>
-    );
-  }
-
-  function renderHealthWorker({ rowData }) {
-    return (
-      <div>
-        {rowData.chw && rowData.chw.firstName && rowData.chw.lastName
-          ? `${rowData.chw.firstName} ${rowData.chw.lastName} `
+        {rowData && rowData.firstName && rowData.lastName
+          ? `${rowData.firstName} ${rowData.lastName} `
           : `Not Available`}
       </div>
     );
@@ -186,27 +155,6 @@ export default function() {
 
   function renderDate({ rowData }) {
     return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
-  }
-
-  function renderTotalTokenSent({ rowData }) {
-    return (
-      <div>
-        {rowData.transactionLog.txn_amount
-          ? `${Number(rowData.transactionLog.txn_amount * exchangeRate).toFixed(
-              4
-            )} ZAR`
-          : "Not Available"}
-      </div>
-    );
-  }
-
-  async function handleSearch(e) {
-    let data = await fuse.search(e.target.value);
-    if (data.length > 0) {
-      setState(data);
-    } else {
-      return interactions;
-    }
   }
 
   function renderTime({ rowData }) {
@@ -219,9 +167,22 @@ export default function() {
     );
   }
 
+  function renderIDNumber({ rowData }) {
+    return <div>{rowData._id}</div>;
+  }
+
+  async function handleSearch(e) {
+    let data = await fuse.search(e.target.value);
+    if (data.length > 0) {
+      setState(data);
+    } else {
+      fetchMyMinorsOnly();
+    }
+  }
+
   function toggleDetailsModal(data) {
     let activities = interactions.filter(
-      interaction => interaction.practitioner._id === data._id
+      interaction => interaction.chw._id === data._id
     );
     toggleModal({
       isVisible: true,
@@ -229,22 +190,18 @@ export default function() {
         data,
         activities
       },
-      modal: "interaction_details"
+      modal: "details"
     });
   }
 
   return (
     <>
-      {interactions ? (
-        <Card classNames={[styles.table].join(" ")}>
+      {state ? (
+        <Card classNames={[styles.table, styles.white].join(" ")}>
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              <Button
-                onClick={() => setVisible(true)}
-                className={styles.csv_button}
-                text="Download"
-              />
+              <div></div>
               <input
                 className={[styles.form_input].join(" ")}
                 type="text"
@@ -263,50 +220,37 @@ export default function() {
                   headerHeight={40}
                   noRowsRenderer={_noRowsRenderer}
                   rowHeight={40}
-                  onRowClick={({ index }) => toggleDetailsModal(state[index])}
-                  rowCount={interactions.length}
-                  rowGetter={({ index }) => interactions[index]}
+                  rowCount={state[0].minors.length}
+                  rowGetter={({ index }) => state[0].minors[index]}
+                  //   onRowClick={({ index }) => toggleDetailsModal(users.minors[index])}
                   rowClassName={styles.ReactVirtualized__Table__rowColumn}
                   headerClassName={[
                     styles.ReactVirtualized__Table__headerColumn
                   ].join(" ")}
                 >
-                  <Column label="S/N" dataKey="_id" width={width - 100} />
                   <Column
-                    label="Practitioner"
-                    cellRenderer={renderPractitioner}
-                    dataKey="practitionerAddress"
-                    width={width - 500}
+                    label="ID Number"
+                    cellRenderer={renderIDNumber}
+                    dataKey="idNumber"
+                    width={width - 200}
                   />
                   <Column
-                    label="Patient"
-                    cellRenderer={renderPatient}
-                    dataKey="patientAddress"
-                    width={width - 500}
-                  />
-                  <Column
-                    label="Registered By"
-                    cellRenderer={renderHealthWorker}
+                    label="Name"
+                    cellRenderer={renderName}
                     dataKey="chwAddress"
-                    width={width - 500}
-                  />
-                  <Column
-                    label="Total tokens sent"
-                    cellRenderer={renderTotalTokenSent}
-                    dataKey="rewards"
-                    width={width - 500}
+                    width={width - 200}
                   />
                   <Column
                     label="Date"
                     cellRenderer={renderDate}
                     dataKey="createdDate"
-                    width={width - 500}
+                    width={width - 200}
                   />
                   <Column
                     label="Time"
-                    dataKey="createdDate"
-                    width={width - 500}
                     cellRenderer={renderTime}
+                    dataKey="createdDate"
+                    width={width - 200}
                   />
                 </Table>
               )}

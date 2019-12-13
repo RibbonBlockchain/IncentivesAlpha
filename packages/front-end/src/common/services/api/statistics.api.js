@@ -3,11 +3,11 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
-import { getItem } from "../../utils/storage";
 
 export default class StatisticsAPI extends HTTP {
-  constructor() {
+  constructor(token) {
     super();
+    this.token = token;
   }
 
   /**
@@ -19,7 +19,7 @@ export default class StatisticsAPI extends HTTP {
    */
   async queryStats(address, role) {
     return await this.postRequest(`statistics/${address}`, role, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 }

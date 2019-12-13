@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/heading-has-content */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
@@ -128,10 +131,12 @@ export default function ListPractitioners() {
 
   useEffect(() => {
     fetchCHWOnly();
-  }, []);
+  }, [users]);
 
   async function fetchCHWOnly() {
-    let chw = users.filter(user => user.role === roleNames.HEALTH_WORKER);
+    let chw = users
+      .filter(user => user.role === roleNames.HEALTH_WORKER)
+      .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
     setState(chw);
   }
 
@@ -150,8 +155,16 @@ export default function ListPractitioners() {
   }
 
   function renderDate({ rowData }) {
+    return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
+  }
+
+  function renderTime({ rowData }) {
     return (
-      <div>{moment(rowData.createdDate).format("dddd, MMMM Do YYYY")}</div>
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("HH:mm:ss")
+          : "Not Available"}
+      </div>
     );
   }
 
@@ -189,7 +202,6 @@ export default function ListPractitioners() {
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              {/* <Button className={styles.csv_button} text="Download" /> */}
               <div></div>
               <input
                 className={[styles.form_input].join(" ")}
@@ -230,8 +242,14 @@ export default function ListPractitioners() {
                     width={width - 200}
                   />
                   <Column
-                    label="Date Registered"
+                    label="Date"
                     cellRenderer={renderDate}
+                    dataKey="createdDate"
+                    width={width - 200}
+                  />
+                  <Column
+                    label="Time"
+                    cellRenderer={renderTime}
                     dataKey="createdDate"
                     width={width - 200}
                   />

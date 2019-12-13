@@ -9,6 +9,7 @@ import Modal from "../../common/components/Modal";
 import styles from "./Recorder.module.scss";
 import {
   getByRole,
+  getPatientsRole,
   formatActivityOptions,
   formatPrescriptionOptions
 } from "../Dashboard/dashboard.utils";
@@ -51,7 +52,7 @@ const formatUserOptionLabel = ({ label, value }) => {
               <span>{`${value.firstName} ${value.lastName}`}</span>
               <span>{label}</span>
             </div>
-            <small>{value.publicAddress}</small>
+            <small>{value.publicAddress && value.publicAddress}</small>
           </div>
         </>
       )}
@@ -93,7 +94,7 @@ const formatPrescriptionOptionLabel = ({ label, value }) => {
 
 export default function Recorder() {
   const [visible, setVisible] = useState(false);
-  const [{ loginType, user }] = useWeb3();
+  const [{ loginType, user, token }] = useWeb3();
   const [{ users }] = useData();
 
   return (
@@ -112,13 +113,14 @@ export default function Recorder() {
         type={loginType}
         users={users}
         user={user}
+        token={token}
         onDismiss={() => setVisible(false)}
       />
     </>
   );
 }
 
-function RecorderModal({ visible, onDismiss, type, users, user }) {
+function RecorderModal({ visible, onDismiss, type, users, user, token }) {
   const { handleSubmit, register } = useForm({
     mode: "onChange"
   });
@@ -148,20 +150,10 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     loadDetails();
   }, []);
 
-  let patients = getByRole(users, roleNames.PATIENT);
+  let patients = getPatientsRole(users, roleNames.PATIENT);
   let practitioners = getByRole(users, roleNames.PRACTITIONER);
   let activities = formatActivityOptions(activityList);
   let prescriptions = formatPrescriptionOptions(prescriptionList);
-
-  function isValid() {
-    let { patient, practitioner, activities, prescriptions } = record;
-    let state =
-      patient.hasOwnProperty("_id") &&
-      practitioner.hasOwnProperty("_id") &&
-      activities.length > 0 &&
-      prescriptions.length > 0;
-    return state ? true : false;
-  }
 
   async function onSubmit(values) {
     let data = {
@@ -187,7 +179,7 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
     } else {
       await checkTransactionStatus(interaction);
       data.txHash = interaction;
-      let record = await recordInteractionOnDB(data);
+      let record = await recordInteractionOnDB(data, token);
       closeTransactionStatus();
       if (record.error) {
         setLoading(false);
@@ -423,6 +415,18 @@ function RecorderModal({ visible, onDismiss, type, users, user }) {
                   ratingList[0].ratingTypes &&
                   ratingList[0].ratingTypes.length > 0 && (
                     <div className={styles.layout__item}>
+                      <fieldset>
+                        <legend>
+                          <div>
+                            <span>Key:</span>
+                            <div className="">
+                              <small>1 Star = Poor Service </small>
+                              <small>3 Star = Average Service </small>
+                              <small>5 Star = Excellent Service </small>
+                            </div>
+                          </div>
+                        </legend>
+                      </fieldset>
                       <fieldset>
                         <legend>Rate the services</legend>
                         {ratingList &&

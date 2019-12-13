@@ -3,9 +3,12 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
-import { getItem } from "../../utils/storage";
 
 export default class UserAPI extends HTTP {
+  constructor(token) {
+    super();
+    this.token = token;
+  }
   /**
    * List Users Request
    *
@@ -15,7 +18,7 @@ export default class UserAPI extends HTTP {
    */
   async listUsers() {
     return await this.getRequest("users", {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -29,7 +32,7 @@ export default class UserAPI extends HTTP {
    */
   async createUser(data, url) {
     return await this.postRequest(`users/${url}`, data, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 
@@ -43,7 +46,7 @@ export default class UserAPI extends HTTP {
    */
   async getUserByAddress(address) {
     return await this.getRequest(`users/${address}`, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
     });
   }
 

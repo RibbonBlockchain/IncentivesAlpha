@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/heading-has-content */
 import React, { useState, useEffect } from "react";
 import {
   Table,
@@ -217,6 +220,16 @@ export default function() {
     return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("HH:mm:ss")
+          : "Not Available"}
+      </div>
+    );
+  }
+
   async function handleSearch(e) {
     let data = await fuse.search(e.target.value);
     if (data.length > 0) {
@@ -292,6 +305,12 @@ export default function() {
                     cellRenderer={renderDate}
                     dataKey="createdDate"
                     width={width - 200}
+                  />
+                  <Column
+                    label="Time"
+                    cellRenderer={renderTime}
+                    dataKey="createdDate"
+                    width={width - 500}
                   />
                 </Table>
               )}

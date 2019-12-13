@@ -7,7 +7,6 @@ import Login from "../Login";
 import Home from "../Home";
 
 import { useWeb3 } from "../../common/providers/Web3.provider";
-import { getItem } from "../../common/utils/storage";
 
 function AuthenticatedRoute({ component: C, appProps, ...rest }) {
   return (
@@ -44,16 +43,16 @@ export default function Router() {
   const [user, setUser] = useState({ address, loginType, token });
 
   useEffect(() => {
+    const updateState = () => {
+      setUser({
+        address,
+        token,
+        loginType
+      });
+    };
     updateState();
-  }, [address, loginType]);
+  }, [address, loginType, token]);
 
-  const updateState = () => {
-    setUser({
-      address,
-      token: getItem("token") || token,
-      loginType
-    });
-  };
   return (
     <>
       <Switch>

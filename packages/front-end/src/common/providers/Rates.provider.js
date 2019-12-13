@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
   createContext,
   useContext,
@@ -6,6 +7,8 @@ import React, {
   useEffect,
   useCallback
 } from "react";
+import RatesAPI from "../services/api/rating.api";
+import { useWeb3 } from "./Web3.provider";
 
 const ExchangeRateContext = createContext();
 
@@ -52,20 +55,17 @@ export default function Provider({ children }) {
 
 export const useExchange = () => {
   const [{ exchangeRate }, { update }] = useExchangeRateContext();
+  const [{ token }] = useWeb3();
+  const rateAPI = new RatesAPI(token);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=dai&vs_currencies=usd"
-      )
-        .then(response => response.json())
-        .then(response =>
-          update({
-            exchangeRate: response.dai.usd
-          })
-        );
-    }, 10000);
-    return () => clearInterval(interval);
+    const loadExchangeRate = async () => {
+      let data = await rateAPI.fetchExchangeRate();
+      await update({
+        exchangeRate: data
+      });
+    };
+    loadExchangeRate();
   }, []);
 
   return [{ exchangeRate }];

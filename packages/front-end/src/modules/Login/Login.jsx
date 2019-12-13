@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Web3Connect from "web3connect";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import Torus from "@toruslabs/torus-embed";
 import Portis from "@portis/web3";
-import Fortmatic from "fortmatic";
 import { config } from "../../common/constants/config";
 import Logo from "../../common/components/Logo";
 import styles from "./Login.module.scss";
@@ -24,10 +24,17 @@ function Login() {
     let { authWithAPI, publicAddress, loginType } = result;
     if (result.error) {
       setIsLoading(false);
-      if (result.error.code == -32603) {
+      if (result.error.code === -32603) {
         toggle({
           isVisible: true,
-          message: result.error.stack.split(".")[0].split(":")[2]
+          message:
+            result.error.message ||
+            result.error.stack.split(".")[0].split(":")[2]
+        });
+      } else if (result.error === "SIG_FAIL_ERR") {
+        toggle({
+          isVisible: true,
+          message: "Signature verification failed. Please try again"
         });
       } else if (result.error === "USER_NOT_FOUND_ERR") {
         toggleModal({
@@ -53,7 +60,11 @@ function Login() {
         typeof authWithAPI.token !== "undefined"
       ) {
         setIsLoading(false);
-        login({ token: authWithAPI.token, address: publicAddress, loginType });
+        login({
+          token: authWithAPI.token,
+          address: publicAddress,
+          loginType
+        });
       } else {
         toggle({
           isVisible: true,
@@ -65,7 +76,7 @@ function Login() {
     }
   };
 
-  let { WALLET_CONNECT, PORTIS, FORTMATIC } = config;
+  let { WALLET_CONNECT, PORTIS } = config;
   return (
     <>
       {isLoading && <TableLoader />}
@@ -82,19 +93,28 @@ function Login() {
                   walletconnect: {
                     package: WalletConnectProvider,
                     options: {
-                      infuraId: WALLET_CONNECT
+                      infuraId: WALLET_CONNECT,
+                      network: "mainnet"
                     }
                   },
                   portis: {
                     package: Portis,
                     options: {
-                      id: PORTIS
+                      id: PORTIS,
+                      network: "sokol"
                     }
                   },
-                  fortmatic: {
-                    package: Fortmatic,
+                  torus: {
+                    package: Torus, // required
                     options: {
-                      key: FORTMATIC
+                      enableLogging: true, // optional
+                      buttonPosition: "bottom-left", // optional
+                      buildEnv: "production", // optional
+                      showTorusButton: true, // optional
+                      enabledVerifiers: {
+                        // optional
+                        google: true // optional
+                      }
                     }
                   }
                 }}

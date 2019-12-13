@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/heading-has-content */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Table, AutoSizer, Column } from "react-virtualized";
 import DatePicker from "react-datepicker";
@@ -133,26 +136,34 @@ export default function ListPractitioners() {
   }, []);
 
   async function fetchPatientsOnly() {
-    let patients = [];
-    await users.map(user => {
-      if (user.role === roleNames.PATIENT) {
-        patients.push(user);
-      } else {
-        return;
-      }
-    });
-    setState(patients);
     if (loginType === roleNames.SUPER_ADMIN) {
+      let minors = users
+        .map(parent => parent.role === roleNames.PATIENT && parent.minors)
+        .filter(minor => minor.length > 0 && minor);
+      let flattenedMinorsMap = [].concat(...minors);
       let patients = users.filter(
         patient => patient.role === roleNames.PATIENT
       );
-      setState(patients);
+      let data = [...patients, ...flattenedMinorsMap]
+        .map(record => record)
+        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+
+      setState(data);
     } else {
       let patients = users.filter(
         patient =>
-          patient.role === roleNames.PATIENT && patient.onBoardedBy === user._id
+          patient.role === roleNames.PATIENT &&
+          typeof patient.onBoardedBy !== "undefined" &&
+          patient.onBoardedBy !== null &&
+          patient.onBoardedBy._id === user._id
       );
-      setState(patients);
+      let minors = patients.filter(minor => minor.length > 0 && minor);
+      let flattenedMinorsMap = [].concat(...minors);
+      let data = [...patients, ...flattenedMinorsMap]
+        .map(record => record)
+        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+
+      setState(data);
     }
   }
 
@@ -178,6 +189,16 @@ export default function ListPractitioners() {
     return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("HH:mm:ss")
+          : "Not Available"}
+      </div>
+    );
+  }
+
   async function handleSearch(e) {
     let data = await fuse.search(e.target.value);
     if (data.length > 0) {
@@ -187,9 +208,10 @@ export default function ListPractitioners() {
     }
   }
 
-  function toggleDetailsModal(data) {
+  async function toggleDetailsModal(data) {
     let activities = interactions.filter(
-      interaction => interaction.patient._id === data._id
+      interaction =>
+        interaction.patient !== null && interaction.patient._id === data._id
     );
     toggleModal({
       isVisible: true,
@@ -208,7 +230,6 @@ export default function ListPractitioners() {
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              {/* <Button className={styles.csv_button} text="Download" /> */}
               <div></div>
               <input
                 className={[styles.form_input].join(" ")}
@@ -249,10 +270,16 @@ export default function ListPractitioners() {
                     width={width - 200}
                   />
                   <Column
-                    label="Date Registered"
+                    label="Date"
                     cellRenderer={renderDate}
                     dataKey="createdDate"
-                    width={width - 200}
+                    width={width - 300}
+                  />
+                  <Column
+                    label="Time"
+                    cellRenderer={renderTime}
+                    dataKey="createdDate"
+                    width={width - 300}
                   />
                 </Table>
               )}

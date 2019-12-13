@@ -18,12 +18,15 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
       <div className={styles.title}>Interaction Number: {data._id}</div>
       <div className={styles.flex}>
         <div className={styles.title}>
-          Patient: {`${data.patient.firstName} ${data.patient.lastName}`}
+          Patient:{" "}
+          {data.patient
+            ? `${data.patient.firstName} ${data.patient.lastName}`
+            : "Not available"}
         </div>
         <div className={styles.description}>
           <span className={styles.heading}>
             Tokens earned:{" "}
-            {`${data.rewards[0].patientReward} ${
+            {`${Number(data.rewards[0].patientReward).toFixed(4)} ${
               data.rewards[0].patientReward ? currency : ""
             }`}
           </span>
@@ -32,7 +35,10 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
               target="_blank"
               rel="noopener noreferrer"
               className={[styles.link].join(" ")}
-              href={`https://blockscout.com/poa/sokol/address/${data.patient.publicAddress}`}
+              href={
+                data.patient &&
+                `https://blockscout.com/poa/sokol/address/${data.patient.publicAddress}`
+              }
             >
               View Address
             </a>
@@ -47,7 +53,7 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
         <div className={styles.description}>
           <span className={styles.heading}>
             Tokens earned:{" "}
-            {`${data.rewards[0].practitionerReward} ${
+            {`${Number(data.rewards[0].practitionerReward).toFixed(4)} ${
               data.rewards[0].practitionerReward ? currency : ""
             }`}
           </span>
@@ -74,7 +80,7 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
         <div className={styles.description}>
           <span className={styles.heading}>
             Tokens earned:{" "}
-            {`${data.rewards[0].chwReward} ${
+            {`${Number(data.rewards[0].chwReward).toFixed(4)} ${
               data.rewards[0].chwReward ? currency : ""
             }`}
           </span>
@@ -90,12 +96,18 @@ function ViewInteractionModal({ data: { data }, currency, type }) {
           </span>
         </div>
       </div>
+      <div className={styles.flex}>
+        <div className={styles.title}>Interactions recorded</div>
+        <div className={styles.description}>
+          {data.activities.map(activity => activity.activityTitle).join(", ")}
+        </div>
+      </div>
       <div className={styles.wallet}>
         <small>
           Created{" "}
           {`${moment(data.createdDate).format(
             "dddd, Do MMMM YYYY"
-          )} at ${moment(data.createdDate).format("hh:mm:ss")}`}
+          )} at ${moment(data.createdDate).format("HH:mm:ss")}`}
         </small>
         <small>
           Status{" "}

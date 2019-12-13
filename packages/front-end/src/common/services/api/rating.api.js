@@ -3,11 +3,11 @@
  * @author RibbonBlockchain engineers
  */
 import HTTP from "./http";
-import { getItem } from "../../utils/storage";
 
 export default class RatingAPI extends HTTP {
-  constructor() {
+  constructor(token) {
     super();
+    this.token = token;
   }
 
   /**
@@ -19,7 +19,13 @@ export default class RatingAPI extends HTTP {
    */
   async listRatings() {
     return await this.getRequest(`healthcentres/settings`, {
-      authorization: `Bearer ${getItem("token")}`
+      authorization: `Bearer ${this.token}`
+    });
+  }
+
+  async fetchExchangeRate() {
+    return await this.getRequest(`exchangerates`, {
+      authorization: `Bearer ${this.token}`
     });
   }
 }

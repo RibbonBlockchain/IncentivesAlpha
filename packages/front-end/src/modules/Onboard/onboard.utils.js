@@ -23,11 +23,16 @@ export async function createNewUser(data) {
   }
 }
 
-export async function recordNewUser(data) {
-  let userAPI = new UserAPI();
+export async function recordNewUser(data, token) {
+  let userAPI = new UserAPI(token);
   let { role } = data;
+  let user = null;
 
-  let user = await userAPI.createUser(data, getRoleURL(role));
+  if (data.parent_id) {
+    user = await userAPI.createUser(data, "minors");
+  } else {
+    user = await userAPI.createUser(data, getRoleURL(role));
+  }
   if (user.error) {
     return {
       error: user.error

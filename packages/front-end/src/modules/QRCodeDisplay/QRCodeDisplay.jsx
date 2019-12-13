@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import * as qrImage from "qr-image";
 import Modal from "../../common/components/Modal";
@@ -20,8 +21,10 @@ export default function RegisterWithQR() {
     setQR({ image: "" });
     if (data && data.details && data.details.publicAddress) {
       if (data.details.type === "onboard") {
-        address = data.details.publicAddress;
+        address = `ethereum:${data.details.publicAddress}`;
       } else if (data.details.type === "receive") {
+        address = `ethereum:${data.details.publicAddress}`;
+      } else if (data.details.type === "offramp") {
         address = `ethereum:${data.details.publicAddress}`;
       }
       let image = await qrImage.imageSync(address, { type: "svg" });

@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import useForm from "react-hook-form";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import styles from "./Profile.module.scss";
 import Card from "../../common/components/Card";
 import { updateUserProfile } from "./profile.utils";
@@ -8,18 +10,24 @@ import { useAlert } from "../../common/providers/Modal.provider";
 import { useWeb3 } from "../../common/providers/Web3.provider";
 
 export default function Profile() {
+  const [record, setRecord] = useState();
   const { handleSubmit, register, errors, formState } = useForm({
     mode: "onChange"
   });
+  const [phoneNumber, setPhoneNumber] = useState({
+    value: null,
+    isValid: false
+  });
   const [, toggle] = useAlert();
-  const [{ address, user }] = useWeb3();
+  const [{ address, user, token }] = useWeb3();
 
   async function onSubmit(values, e) {
     let data = {
       ...values,
-      address
+      address,
+      location: record
     };
-    let user = await updateUserProfile(data);
+    let user = await updateUserProfile(data, token);
     if (user.error) {
       toggle({
         isVisible: true,
@@ -39,7 +47,7 @@ export default function Profile() {
     <>
       <h2>Profile</h2>
       <div className={styles.layout__item__full}>
-        <Card classNames={[styles.card, styles.background].join(" ")}>
+        <Card classNames={[styles.card].join(" ")}>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className={styles.form}
@@ -81,6 +89,40 @@ export default function Profile() {
                   })}
                 />
                 <small> {errors.lastName && errors.lastName.message}</small>
+              </div>
+            </div>
+            <div className={styles.layout}>
+              <div className={styles.layout__item}>
+                <div className={[styles.input].join(" ")}>
+                  <label htmlFor="phoneNumber">Phone Number</label>
+                  <PhoneInput
+                    className={[styles.form_input].join(" ")}
+                    placeholder="phone number"
+                    value={user.phoneNumber}
+                    onChange={value => {
+                      setPhoneNumber({
+                        isValid: isValidPhoneNumber(value),
+                        value
+                      });
+                    }}
+                  />
+                  {phoneNumber.value && !phoneNumber.isValid && (
+                    <small>invalid phone number</small>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className={styles.layout__item}>
+              <div className={[styles.input].join(" ")}>
+                <label htmlFor="location">House Address</label>
+                <GooglePlacesAutocomplete
+                  initialValue={user.location}
+                  onSelect={location => {
+                    setRecord(
+                      location.description ? location.description : location
+                    );
+                  }}
+                />
               </div>
             </div>
             <div className={styles.layout__item}>

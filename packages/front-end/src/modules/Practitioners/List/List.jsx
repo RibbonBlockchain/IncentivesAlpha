@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/heading-has-content */
 import React, { useEffect, useState } from "react";
 import { Table, AutoSizer, Column } from "react-virtualized";
@@ -135,16 +137,20 @@ export default function ListPractitioners() {
 
   async function fetchPractionersOnly() {
     if (loginType === roleNames.SUPER_ADMIN) {
-      let practitioners = users.filter(
-        practitioner => practitioner.role === roleNames.PRACTITIONER
-      );
+      let practitioners = users
+        .filter(practitioner => practitioner.role === roleNames.PRACTITIONER)
+        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
       setState(practitioners);
     } else {
-      let practitioners = users.filter(
-        practitioner =>
-          practitioner.role === roleNames.PRACTITIONER &&
-          practitioner.onBoardedBy === user._id
-      );
+      let practitioners = users
+        .filter(
+          practitioner =>
+            practitioner.role === roleNames.PRACTITIONER &&
+            typeof practitioner.onBoardedBy !== "undefined" &&
+            practitioner.onBoardedBy !== null &&
+            practitioner.onBoardedBy._id === user._id
+        )
+        .sort((a, b) => new Date(a.createdDate) - new Date(b.createdDate));
       setState(practitioners);
     }
   }
@@ -171,6 +177,16 @@ export default function ListPractitioners() {
     return <div>{moment(rowData.createdDate).format("DD/MM/YYYY")}</div>;
   }
 
+  function renderTime({ rowData }) {
+    return (
+      <div>
+        {rowData.createdDate
+          ? moment(rowData.createdDate).format("HH:mm:ss")
+          : "Not Available"}
+      </div>
+    );
+  }
+
   async function handleSearch(e) {
     let data = await fuse.search(e.target.value);
     if (data.length > 0) {
@@ -181,9 +197,9 @@ export default function ListPractitioners() {
   }
 
   function toggleDetailsModal(data) {
-    let activities = interactions.filter(
-      interaction => interaction.practitioner._id === data._id
-    );
+    let activities = interactions
+      .filter(interaction => interaction.practitioner._id === data._id)
+      .sort((a, b) => new Date(a.createdDate) - new Date(b.createdDate));
     toggleModal({
       isVisible: true,
       data: {
@@ -201,7 +217,6 @@ export default function ListPractitioners() {
           <div className={styles.head_actions}>
             <h4 className={styles.background}></h4>
             <div className={styles.head_actions_action}>
-              {/* <Button className={styles.csv_button} text="Download" /> */}
               <div></div>
               <input
                 className={[styles.form_input].join(" ")}
@@ -245,7 +260,13 @@ export default function ListPractitioners() {
                     label="Date Registered"
                     cellRenderer={renderDate}
                     dataKey="createdDate"
-                    width={width - 200}
+                    width={width - 300}
+                  />
+                  <Column
+                    label="Time"
+                    cellRenderer={renderTime}
+                    dataKey="createdDate"
+                    width={width - 300}
                   />
                 </Table>
               )}

@@ -3,15 +3,13 @@ import InteractionAPI from "../../common/services/api/interaction.api";
 
 export const recordInteraction = async data => {
   let vaultContract = new VaultContract();
-  let {
-    patient,
-    practitioner,
-    user,
-    amount,
-    serviceRatings
-  } = data;
+  let { patient, practitioner, user, amount, serviceRatings } = data;
 
-  let practitionerAmount = parseFloat((amount * 0.1 * sumRatings(serviceRatings) / 30 + 0.05 * amount).toFixed(10));
+  let practitionerAmount = parseFloat(
+    ((amount * 0.1 * sumRatings(serviceRatings)) / 30 + 0.05 * amount).toFixed(
+      10
+    )
+  );
 
   let chwAmount = parseFloat((amount * 0.15).toFixed(10));
 
@@ -24,7 +22,7 @@ export const recordInteraction = async data => {
     chwAmount: chwAmount
   };
 
-  console.log("payoutInformation:", payoutInformation)
+  console.log("payoutInformation:", payoutInformation);
 
   try {
     if (amount > 0) {
@@ -50,23 +48,30 @@ export const recordInteraction = async data => {
 };
 
 const sumRatings = serviceRatings => {
-  return typeof serviceRatings !== "undefined" ?
-    Object.entries(serviceRatings).reduce((acc, curVal) => acc + curVal[1], 0) :
-    0;
+  return typeof serviceRatings !== "undefined"
+    ? Object.entries(serviceRatings).reduce((acc, curVal) => acc + curVal[1], 0)
+    : 0;
 };
 
-export const recordInteractionOnDB = async ({
-  patient,
-  practitioner,
-  user,
-  amount,
-  activities,
-  prescriptions,
-  serviceRatings,
-  txHash
-}) => {
-  let interactionAPI = new InteractionAPI();
-  let practitionerAmount = parseFloat((amount * 0.1 * sumRatings(serviceRatings) / 30 + 0.05 * amount).toFixed(10));
+export const recordInteractionOnDB = async (
+  {
+    patient,
+    practitioner,
+    user,
+    amount,
+    activities,
+    prescriptions,
+    serviceRatings,
+    txHash
+  },
+  token
+) => {
+  let interactionAPI = new InteractionAPI(token);
+  let practitionerAmount = parseFloat(
+    ((amount * 0.1 * sumRatings(serviceRatings)) / 30 + 0.05 * amount).toFixed(
+      10
+    )
+  );
   let chwAmount = parseFloat((amount * 0.15).toFixed(10));
   let details = {
     patient: patient.value._id,
