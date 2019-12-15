@@ -110,3 +110,5 @@ To get a full idea of what RibbonBlockchain is about, be sure to take a look at 
 2. [Alpha DApp](https://alpha.ribbonblockchian.com)
    <!-- 3. [Incentives Proof of Concept](https://incentives.ribbonblockchain.com) -->
 3. [Twitter](https://twitter.com/RibbonPlatform)
+
+![Tech](./NetworkStack.png)
