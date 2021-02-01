@@ -7,10 +7,10 @@ const log = mongoose.model("log", LogSchema);
 export class LogController {
   public async addNewLog(req: Request, res: Response) {
     try {
+  
       let newLog = new log(req.body);
 
-      await newLog
-        .save(newLog)
+      await newLog.save()
         .then(async newlog => {
           res.status(201).json({ status: 201, data: newlog });
         })

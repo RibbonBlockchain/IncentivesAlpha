@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 export const MinorsSchema = new Schema({
   relatedTo: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User"
   },
   firstName: {

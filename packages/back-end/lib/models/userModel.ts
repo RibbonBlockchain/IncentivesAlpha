@@ -46,12 +46,12 @@ export const UserSchema = new Schema({
     index: { unique: true }
   },
   onBoardedBy: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User"
   },
   minors:[
     {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Minors"
     }
   ],

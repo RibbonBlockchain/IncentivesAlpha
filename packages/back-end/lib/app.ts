@@ -19,7 +19,8 @@ const {
   MONGO_PASSWORD,
   MONGO_HOSTNAME,
   MONGO_PORT,
-  MONGO_DB
+  MONGO_DB,
+  MONGO_AUTHSOURCE
 } = process.env;
 
 class App {
@@ -54,7 +55,7 @@ class App {
   };
 
   constructor() {
-    this.mongoUrl = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
+    this.mongoUrl = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=${MONGO_AUTHSOURCE}`;
 
     this.config();
     this.mongoSetup();
@@ -82,7 +83,9 @@ class App {
   }
 
   private mongoSetup(): void {
-    mongoose.Promise = global.Promise;
+
+      type mongooseType = typeof mongoose;
+(mongoose as mongooseType).Promise = global.Promise;
     let mongoUrl = this.mongoUrl;
 
     const connectWithRetry = function() {
@@ -97,7 +100,7 @@ class App {
         function(err) {
           if (err) {
             console.error(
-              "Failed to connect to mongodb on startup - retrying in 1 sec",
+              `Failed to connect to mongodb on startup - retrying in 1 sec. Mongo URL - ${mongoUrl}`,
               err
             );
             setTimeout(connectWithRetry, 5000);

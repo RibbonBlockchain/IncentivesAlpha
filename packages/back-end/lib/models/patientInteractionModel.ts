@@ -21,22 +21,22 @@ export const PatientInteractionSchema = new Schema({
     }
   },
   practitioner: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User"
   },
   chw: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User"
   },
   activities: [
     {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "ActivityList"
     }
   ],
   prescriptions: [
     {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "PrescriptionList"
     }
   ],

@@ -49,7 +49,7 @@ export class WalletController {
   }
 
   public deleteWallet(req: Request, res: Response) {
-    Wallet.remove({ _id: req.params.walletId }, (err, wallet) => {
+    Wallet.remove({ _id: req.params.walletId }, (err) => {
       if (err) {
         res.send(err);
       }
