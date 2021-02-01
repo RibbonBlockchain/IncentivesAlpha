@@ -62,7 +62,7 @@ const deploy = async (network, secret) => {
 
   //add users as admins
   let addUser1Tx = await registryDeployed.addUser(
-    "0x9A8A9958ac1B70c49ccE9693CCb0230f13F63505",
+    "0x1b64eb6C911AA4A189ccea856f2cDBFbd750932b",
     1
   ); //issac 1
   await registryDeployed.verboseWaitForTransaction(
@@ -71,7 +71,7 @@ const deploy = async (network, secret) => {
   );
 
   let addUser2Tx = await registryDeployed.addUser(
-    "0xdb0B020Ab16129983045C80692fa1D1916133471",
+    "0x9F819E3C128045151Cd793A7eE7c79aaC63C8064",
     1
   ); //issac 2
   await registryDeployed.verboseWaitForTransaction(
@@ -80,7 +80,7 @@ const deploy = async (network, secret) => {
   );
 
   let addUser3Tx = await registryDeployed.addUser(
-    "0x1D4f94F90a919EB646D9158Ca3B3ECEF3EBc7941",
+    "0x7d656B1595c40FD19263Ab24a2AE98995063BA52",
     1
   ); //allan
   await registryDeployed.verboseWaitForTransaction(
@@ -89,7 +89,7 @@ const deploy = async (network, secret) => {
   );
 
   let addUser4Tx = await registryDeployed.addUser(
-    "0xd685883dC1532aF422895ed58bc8159D55FDBEe3",
+    "0x52808427D1bF54554ED984716201C0e3F794Bc96",
     1
   ); //gugu
   await registryDeployed.verboseWaitForTransaction(
