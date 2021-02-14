@@ -15,10 +15,11 @@ const patientInteractionList = mongoose.model(
 );
 
 export class PatientInteractionListController {
+ 
   public async addPatientInteraction(req: Request, res: Response) {
     try {
       let interaction_data = req.body
-      let patient = {
+      let patient: any = {
         _id: "",
         firstName: "",
         lastName: "",
@@ -29,7 +30,7 @@ export class PatientInteractionListController {
           {
             _id: req.body.patient
           }
-        ).then(async user => {
+        ).then(async (user : any) => {
           patient._id = req.body.patient,
           patient.firstName = user.firstName,
           patient.lastName = user.lastName,
