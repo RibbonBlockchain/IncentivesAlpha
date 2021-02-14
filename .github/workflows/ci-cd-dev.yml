@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./packages/back-end/aws
+        working-directory: ./packages/back-end/aws/dev
     needs: deploy
 
     steps:
@@ -103,7 +103,7 @@ jobs:
           ECR_REPOSITORY: backend-dev
           IMAGE_TAG: ${{ github.sha }}
         with:
-          task-definition: ecs-task-definition-dev.json
+          task-definition: ecs-task-definition.json
           container-name: backend-dev-c
           image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
