@@ -103,7 +103,7 @@ jobs:
           ECR_REPOSITORY: backend-dev
           IMAGE_TAG: ${{ github.sha }}
         with:
-          task-definition: ecs-task-definition.json
+          task-definition: ecs-task-definition-dev.json
           container-name: backend-dev-c
           image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
