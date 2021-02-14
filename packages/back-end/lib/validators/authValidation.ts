@@ -32,7 +32,7 @@ export const superAdminOnly = async(req, res, next) => {
   try {
     let publicAddress = req.jwt.payload.publicAddress;
     await User.findOne({ publicAddress })
-    .then(async user => {
+    .then(async (user: any) => {
       if (user.role != 1) {
         return res
           .status(401)
@@ -57,7 +57,7 @@ export const superAdminOnly = async(req, res, next) => {
 export const communityHealthWorkerOnly = (req, res, next) => {
   try {
     let publicAddress = req.jwt.payload.publicAddress;
-    User.findOne({ publicAddress }).then(user => {
+    User.findOne({ publicAddress }).then( (user:any) => {
       if (user.role != 2) {
         return res
           .status(401)
@@ -79,7 +79,7 @@ export const communityHealthWorkerOnly = (req, res, next) => {
 export const superAdminAndCommunityHealthWorkerOnly = (req, res, next) => {
   try {
     let publicAddress = req.jwt.payload.publicAddress;
-    User.findOne({ publicAddress }).then(user => {
+    User.findOne({ publicAddress }).then((user :any )  => {
       if (user.role === 2 || user.role === 1) {
         return next();
       } else {

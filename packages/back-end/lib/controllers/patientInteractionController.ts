@@ -41,7 +41,7 @@ export class PatientInteractionListController {
           {
             _id: req.body.patient
           }
-        ).then(async minor => {
+        ).then(async (minor: any) => {
           patient._id = req.body.patient,
           patient.firstName = minor.firstName,
           patient.lastName = minor.lastName
