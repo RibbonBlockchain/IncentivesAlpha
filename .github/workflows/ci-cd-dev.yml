@@ -77,6 +77,13 @@ jobs:
         working-directory: ./packages/back-end/aws
     needs: deploy
     steps:
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: 280938191785.dkr.ecr.eu-central-1.amazonaws.com
+          ECR_REPOSITORY: backend-dev
+          IMAGE_TAG: ${{ github.sha }}
+          
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
