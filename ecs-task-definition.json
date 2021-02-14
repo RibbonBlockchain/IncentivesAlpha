@@ -4,7 +4,7 @@
     "networkMode": "awsvpc",
     "containerDefinitions": [
         {
-            "name": "backend-dev",
+            "name": "backend-dev-c",
             "image": "280938191785.dkr.ecr.eu-central-1.amazonaws.com/backend-dev",
             "portMappings": [
                 {
