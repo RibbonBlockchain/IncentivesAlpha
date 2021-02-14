@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.json",
     "dev": "ts-node ./lib/server.ts",
     "start": "nodemon ./lib/server.ts",
     "prod": "npm run build && npm run start"

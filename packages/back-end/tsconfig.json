@@ -4,9 +4,11 @@
     "moduleResolution": "node",
     "pretty": true,
     "sourceMap": true,
+    "allowJs": true,
     "target": "es6",
     "outDir": "./dist",
-    "baseUrl": "./lib"
+    "baseUrl": "./lib",
+    "skipLibCheck": true
   },
   "include": ["lib/**/*.ts"],
   "exclude": ["node_modules"]
