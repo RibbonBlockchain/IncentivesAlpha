@@ -39,7 +39,7 @@
                 },
                 {
                     "name": "MONGO_DB",
-                    "value": "ribbon_dev"
+                    "value": "ribbondev"
                 },
                 {
                     "name": "MONGO_AUTHSOURCE",
