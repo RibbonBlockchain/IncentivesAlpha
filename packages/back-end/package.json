@@ -26,7 +26,7 @@
     "express-validator": "6.2.0",
     "is-docker": "^2.0.0",
     "jsonwebtoken": "8.5.1",
-    "mocha": "6.2.2",
+    "mocha": "^8.3.0",
     "moment": "2.24.0",
     "mongoose": "^5.4.7",
     "mongoose-sequence": "^5.2.2",

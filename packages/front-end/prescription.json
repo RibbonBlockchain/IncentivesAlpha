@@ -1,0 +1,3 @@
+http://sandbox-cashierapi.opayweb.com/api/v3
+
+curl -X POST --header 'Authorization: Bearer OPAYPUB16010199054930.25713014648450927' --header 'MerchantId: 256620092516012' --header 'content-type: application/json'  -d '{"phoneNumber": "+2349876543210"}' http://sandbox-cashierapi.opayweb.com/api/v3/info/user

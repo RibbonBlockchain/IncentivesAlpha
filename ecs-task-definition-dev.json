@@ -22,16 +22,12 @@
             },
             "environment": [
                 {
-                    "name": "Find",
-                    "value": "VALUE1"
-                },
-                {
                     "name": "MONGO_USERNAME",
-                    "value": "ribbon"
+                    "value": "admin"
                 },
                 {
                     "name": "MONGO_PASSWORD",
-                    "value": "ribbondev"
+                    "value": "ribbon2021"
                 },
                 {
                     "name": "MONGO_HOSTNAME",
@@ -39,7 +35,7 @@
                 },
                 {
                     "name": "MONGO_PORT",
-                    "value": "27017"
+                    "value": "27111"
                 },
                 {
                     "name": "MONGO_DB",
